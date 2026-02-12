@@ -4,6 +4,11 @@ const userSchema = new mongoose.Schema({
   lastName: {type: String, required: true},
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
-  finished: { type: Boolean, default: false },
+  finished_m1: { type: Boolean, default: false }, 
+  finished_m2: { type: Boolean, default: false }, 
+  finished_m3: { type: Boolean, default: false }, 
+  finished_m4: { type: Boolean, default: false }, 
+  finished_m5: { type: Boolean, default: false }, 
+  finished_m6: { type: Boolean, default: false }, 
 });
 module.exports = userSchema;
