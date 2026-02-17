@@ -1,7 +1,7 @@
 import './App.css';
 import Phaser from "phaser";
 import { useEffect, useRef } from 'react';
-import { Home, CreateAccount, Login } from './userCreate/routes.js';
+import { Home, CreateAccount, Login } from './pages/user/routes.js';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
  class Example extends Phaser.Scene
     {
@@ -34,30 +34,6 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
         }
     }
 function App() {
-  const config = {
-        type: Phaser.AUTO,
-        parent: "phaser-container",
-        width: 800,
-        height: 600,
-        scene: Example,
-        physics: {
-            default: 'arcade',
-            arcade: {
-                gravity: { y: 200 }
-            }
-        },
-        audio: {
-          noAudio: true
-        }
-      };
-
-    useEffect(() => {
-      const game = new Phaser.Game(config);
-      return () => {
-        game.destroy(true);
-      }
-    }, [])
-  
   return (
     <BrowserRouter>
       {/* Navigation */}
@@ -66,10 +42,6 @@ function App() {
         <Link to="/createaccount">CreateAccount</Link> |{" "}
         <Link to="/login">Login</Link> |{" "}
       </nav>
-
-      <div>
-        <div id="phaser-container"/>
-      </div>
 
       {/* Routes */}
       <Routes>
