@@ -1,6 +1,8 @@
 import './App.css';
 import Phaser from "phaser";
 import { useEffect, useRef } from 'react';
+import { Home, CreateAccount, Login } from './userCreate/routes.js';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
  class Example extends Phaser.Scene
     {
         preload ()
@@ -57,9 +59,25 @@ function App() {
     }, [])
   
   return (
-    <div>
-      <div id="phaser-container"/>
-    </div>
+    <BrowserRouter>
+      {/* Navigation */}
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/createaccount">CreateAccount</Link> |{" "}
+        <Link to="/login">Login</Link> |{" "}
+      </nav>
+
+      <div>
+        <div id="phaser-container"/>
+      </div>
+
+      {/* Routes */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/createaccount" element={<CreateAccount />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
