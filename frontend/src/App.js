@@ -1,8 +1,11 @@
 import './App.css';
 import Phaser from "phaser";
 import { useEffect, useRef } from 'react';
-import { Home, CreateAccount, Login } from './pages/user/routes.js';
+import { Home } from './pages/user/home.js';
+import { CreateAccount } from './pages/user/createAccount.js';
+import { Login } from './pages/user/login.js';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+
  class Example extends Phaser.Scene
     {
         preload ()
