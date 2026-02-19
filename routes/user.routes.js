@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 
 router.post('/createaccount', async (req, res) => {
@@ -17,38 +18,39 @@ router.post('/createaccount', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-router.get('/login', async (req, res) => {
-    try {
-        const { username, email } = req.query;
-        if (!username || !email) {
-            return res.status(400).json({ message: 'Username and email are required' });
-        }
-        const user = await User.find({ username, email });
-        const token = jwt.sign(
-        {
-          userId: user._id,
-          username: user.username
-        },
-          process.env.JWT_SECRET,
-          { expiresIn: '7d' }
-        );
+router.post('/login', async (req, res) => {
+  try {
+    const { username, email } = req.body;
+
+    if (!username || !email) {
+      return res.status(400).json({ message: 'Username and email are required' });
+    }
+
+    const user = await User.findOne({ username, email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const token = jwt.sign(
+      {
+        userId: user._id,
+        username: user.username
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
 
     res.status(200).json({
       message: 'Login successful',
-      token
+      token,
+      user
     });
-        if (user.length === 0) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        else {
-            return res.status(200).json({ message: 'Login successful with user: ', user });
-        
-        }
-        
-    } catch (error) {
-        console.error('Error during login:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
+
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 module.exports = router;

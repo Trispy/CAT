@@ -1,14 +1,15 @@
 .button {
-  padding: 10px 15px;
   background-color: rgb(245, 192, 123);
-  color: rgb(0, 0, 0);
+  color: black;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   padding: 13px 100px;
-  font-size: 32px;
+  font-size: 24px;
   display: flex;
   justify-content: center;
+  display: inline-block;
+  width: 100%;
 }
 .button:hover {
   opacity: 0.8;
