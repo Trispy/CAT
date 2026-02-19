@@ -33,8 +33,7 @@ function Login() {
     });
     console.log(add)
     if(add.status === 200){
-        alert(add.status);
-        navigate('/', { replace: true });
+        navigate('/module1/symptoms', { replace: true });
         // link to module 1 start
         // Check for jwt token ? Special status for if they have a token?
     }
