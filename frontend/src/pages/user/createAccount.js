@@ -1,48 +1,29 @@
 import './login.css';
 import Button from '../../components/button';
 import { Link } from 'react-router-dom';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function CreateAccount() {
-  const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-
-    const handleEmail = (e) => {
-        setEmail(e.target.value);
-    };
-    const handleUsername = (e) => {
-        setUsername(e.target.value);
-    };
-    const handleFirstName = (e) => {
-        setFirstName(e.target.value);
-    };
-    const handleLastName = (e) => {
-        setLastName(e.target.value);
-    };
+    const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', username: '' })
 
     const handleSubmit = async (e) => {
     e.preventDefault();
-    const userData = {
-      email: email,
-      username: username,
-      firstName: firstName,
-      lastName: lastName,
-    };
 
-   try{
-    const add = await fetch("http://localhost:3000/createaccount", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-    console.log(add)
-   }catch(err){
-     console.error()
-   }
+    try {
+      const response = await fetch('http://localhost:3001/api/users/createaccount', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      
+      if (!response.ok) throw new Error(response.status)
+      
+      const user = await response.json()
+      console.log('Created:', user)
+    } catch (error) {
+      console.error(error)
+      console.error(error.message)
+    }
   };
 
   return <div className='form'>
@@ -50,19 +31,19 @@ function CreateAccount() {
     <form onSubmit={handleSubmit}>
 
         <label class='input' type='text' name="username" placeholder="Your username..">
-        Username: <input name="username" onChange={handleUsername}/>
+        Username: <input name="username" onChange={(e) => setFormData({ ...formData, username: e.target.value })}/>
         </label>
         <label class='input' type='text' name="email" placeholder="Your email..">
-        Email: <input name="email" onChange={handleEmail}/>
+        Email: <input name="email" onChange={(e) => setFormData({ ...formData, email: e.target.value })}/>
         </label>
         <label class='input' type='text' name="firstName" placeholder="Your first name..">
-        First Name: <input name="firstName" onChange={handleFirstName}/>
+        First Name: <input name="firstName" onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}/>
         </label>
         <label class='input' type='text' name="lastName" placeholder="Your last name..">
-        First Name: <input name="lastName" onChange={handleLastName}/>
+        Last Name: <input name="lastName" onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}/>
         </label>
 
-        <input type="submit" value="Create a New Account"/>
+        <Button type="submit" text="Create a New Account"/>
         <p className='home'>Already have an account?</p>
         <div className="home">
         <Link to="/login">

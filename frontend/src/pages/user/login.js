@@ -21,8 +21,8 @@ function Login() {
     };
 
    try{
-    const add = await fetch("http://localhost:3000/login", {
-      method: "POST",
+    const add = await fetch("http://localhost:3001/api/users/login", {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
@@ -30,13 +30,14 @@ function Login() {
     });
     console.log(add)
    }catch(err){
+      alert(err)
      console.error()
    }
   };
 
   return <div className='form'>
     <h1>Log In</h1>
-    <form onSubmit={handleSubmit}>
+    <form action="http://localhost:3001/api/users/login" method="GET">
     <label class='input' type='text' name="username" placeholder="Your username..">
     Username: <input name="username" onChange={handleUsername}/>
     </label>
