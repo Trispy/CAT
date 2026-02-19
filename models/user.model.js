@@ -11,4 +11,4 @@ const userSchema = new mongoose.Schema({
   finished_m5: { type: Boolean, default: false }, 
   finished_m6: { type: Boolean, default: false }, 
 });
-module.exports = userSchema;
+module.exports = mongoose.model("User", userSchema);

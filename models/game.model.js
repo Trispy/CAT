@@ -10,4 +10,4 @@ const module1SummarySchema = new mongoose.Schema({
   strikes: { type: Number, default: 0 },
   completed: { type: Boolean, default: false }
 });
-module.exports = module1SummarySchema;
+module.exports = mongoose.model("module1SummarySchema", module1SummarySchema);
