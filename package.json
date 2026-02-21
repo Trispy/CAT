@@ -18,6 +18,8 @@
     "phaser": "^3.90.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "@vitejs/plugin-react": "^4.7.0",
+    "nodemon": "^3.1.11",
+    "vite": "^6.4.1"
   }
 }

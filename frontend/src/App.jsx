@@ -1,10 +1,10 @@
 import './App.css';
-import { Home } from './pages/user/home.js';
-import { CreateAccount } from './pages/user/createAccount.js';
-import { Login } from './pages/user/login.js';
-import { Symptoms } from './pages/module1/symptoms.js'
+import { Home } from './pages/user/home.jsx';
+import { CreateAccount } from './pages/user/createAccount.jsx';
+import { Login } from './pages/user/login.jsx';
+import { Symptoms } from './pages/module1/symptoms.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import PersonalHygiene from './pages/user/personalHygiene.js';
+import PersonalHygiene from './pages/user/personalHygiene.jsx';
 
 function App() {
   return (

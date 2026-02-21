@@ -1,4 +1,5 @@
 import mascot from '../../assets/GameMascot.png';
+import guy from '../../assets/volunteerguy.png';
 import Button from '../../components/button';
 import { Link } from 'react-router-dom';
 import './home.css';
