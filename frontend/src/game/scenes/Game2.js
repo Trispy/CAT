@@ -1,11 +1,13 @@
 import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
 
-export class Game extends Scene
+export class Game2 extends Scene
 {
+    logoTween;
+
     constructor ()
     {
-        super('Game');
+        super('Game2');
     }
 
     create() {
@@ -17,7 +19,7 @@ export class Game extends Scene
         .setAlpha(0.5)
         .setOrigin(0.5);
 
-    this.add.text(width / 2, height / 2, 'Game 2', {
+    this.add.text(width / 2, height / 2, 'Game 1', {
         fontFamily: 'Arial Black',
         fontSize: 38,
         color: '#ffffff',
@@ -33,6 +35,7 @@ export class Game extends Scene
 
     changeScene ()
     {
-        this.scene.start('Game2');
+        this.scene.start('Game');
     }
+
 }
