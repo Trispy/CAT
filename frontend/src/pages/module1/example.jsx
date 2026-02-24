@@ -28,12 +28,12 @@ function Example ()
 
     return (
         <div id="app">
-            <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-            <div>
+            <PhaserGame ref={phaserRef} currentActiveScene={currentScene} /> 
+           <div>{ /*
                 <div>
                     <button className="button" onClick={changeScene}>Change Scene</button>
-                </div>
-            </div>
+                </div> */}
+            </div> 
         </div>
     )
 }

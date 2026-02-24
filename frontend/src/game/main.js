@@ -1,35 +1,26 @@
 import { Boot } from './scenes/Boot';
-import { Game } from './scenes/Game';
 import Phaser from 'phaser';
 import { Preloader } from './scenes/Preloader';
-import { Game2 } from './scenes/Game2';
+import { Example } from './scenes/Example';
+
 
 
 // Find out more information about the Game Config at:
 // https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config = {
-   type: Phaser.AUTO, // Or Phaser.CANVAS for better performance on older phones [8]
-    width: 800, // Logical width
-    height: 600, // Logical height
-    parent: 'game-container',
-    backgroundColor: '#028af8',
+    type: Phaser.AUTO,
+    backgroundColor: '#000000',
     scale: {
-        mode: Phaser.Scale.FIT, // Ensures game fits within screen [9]
-        autoCenter: Phaser.Scale.CENTER_BOTH, // Centers the game [9]
-        min: {
-            width: 400,
-            height: 300
-        },
-        max: {
-            width: 1600,
-            height: 1200
-        }
+        mode: Phaser.Scale.FIT,
+        parent: 'game-container',
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 1280,
+        height: 720
     },
     scene: [
         Boot,
         Preloader,
-        Game,
-        Game2
+        Example
     ]
 };
 

@@ -2,56 +2,49 @@ import { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
 import StartGame from './game/main';
 import { EventBus } from './game/EventBus';
 
-export const PhaserGame = forwardRef(function PhaserGame ({ currentActiveScene }, ref)
-{
-    const game = useRef();
+export const PhaserGame = forwardRef(function PhaserGame({ currentActiveScene }, ref) {
 
-    // Create the game inside a useLayoutEffect hook to avoid the game being created outside the DOM
+    const game = useRef();
+    const containerRef = useRef(null);
+
     useLayoutEffect(() => {
-        
-        if (game.current === undefined)
-        {
-            game.current = StartGame("game-container");
-            
-            if (ref !== null)
-            {
+
+        if (!game.current) {
+            game.current = StartGame(containerRef.current);
+
+            if (ref) {
                 ref.current = { game: game.current, scene: null };
             }
         }
 
         return () => {
-
-            if (game.current)
-            {
+            if (game.current) {
                 game.current.destroy(true);
                 game.current = undefined;
             }
+        };
 
-        }
-    }, [ref]);
+    }, []);
 
     useEffect(() => {
 
-        EventBus.on('current-scene-ready', (currentScene) => {
-
-            if (currentActiveScene instanceof Function)
-            {
+        const handler = (currentScene) => {
+            if (typeof currentActiveScene === 'function') {
                 currentActiveScene(currentScene);
             }
-            ref.current.scene = currentScene;
-            
-        });
+            if (ref?.current) {
+                ref.current.scene = currentScene;
+            }
+        };
+
+        EventBus.on('current-scene-ready', handler);
 
         return () => {
+            EventBus.off('current-scene-ready', handler);
+        };
 
-            EventBus.removeListener('current-scene-ready');
+    }, [currentActiveScene]);
 
-        }
-        
-    }, [currentActiveScene, ref])
-
-    return (
-        <div id="game-container"></div>
-    );
+    return <div ref={containerRef} style={{ width: '100%', height: '100%' }} />;
 
 });
