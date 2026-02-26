@@ -22,7 +22,9 @@ import pants from "../../assets/Pants.png";
 import shoes from "../../assets/Shoes.png";
 import tieduphair from "../../assets/Tieduphair.png";
 import hairtie from "../../assets/Hairtie.png";
-import 
+import erintextbox from "../../assets/erintextbox.png";
+import TextboxErin from "../../components/textboxerin";
+
 //has multiple scenes for each step of the personal hygiene process. Each scene has its own interactive elements and logic. The main component manages the overall game state and transitions between scenes based on user actions and progress.
 
 function PersonalHygiene() {
@@ -48,7 +50,7 @@ function PersonalHygiene() {
     const [hairTied, setHairTied] = useState(false);
     const [showTyedHairText, setShowTyedHairText] = useState(false);
     const [hairInstructionDismissed, setHairInstructionDismissed] = useState(false);
-    
+    const [showFinalText, setShowFinalText] = useState(false);
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
 
     function useTypewriter(text, isActive, speed = 30) { //this is the type writer that actually types the text out one character at a time. It takes in the text to display, whether it should be active, and the speed of typing.
@@ -117,6 +119,10 @@ function PersonalHygiene() {
     "Great job for tying up the hair! Click the next button to continue.",
     gameStage === "tyehair" && hairTied
     );
+    const finalText = useTypewriter(
+        "I am ready for volunteering! Lets go to the volunteer location and finish up my personal hygiene.",
+        gameStage === "final"
+    );
     const startPhaser = () => {
 
         if (phaserGameRef.current) return; 
@@ -148,6 +154,7 @@ function PersonalHygiene() {
                 this.load.image("cleanClothesOn", cleanClothesOn);
                 this.load.image("tieduphair", tieduphair);
                 this.load.image("hairtie", hairtie);
+                this.load.image("erininstructions", erintextbox); 
 
                 
                 
@@ -223,9 +230,15 @@ function PersonalHygiene() {
                 ).setVisible(true);
                 
                 // Scale ringOnFinger to fit properly
-                const ringOnFingerScale = (width * 0.23) / ringOnFinger.width;
+                const ringOnFingerScale = (width * 0.27) / ringOnFinger.width;
                 ringOnFinger.setScale(ringOnFingerScale);
                 
+                const ringOnFinger2 = this.add.image(
+                width / 2 - width * 0.029,   // more LEFT
+                height / 2 - height * 0.14,
+                "ringonfinger"
+                )
+                ringOnFinger2.setScale((width * 0.28) / ringOnFinger2.width);
                 // Remove temporary image
                 longHandImage.destroy();
                 const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
@@ -315,7 +328,8 @@ function PersonalHygiene() {
 
             create() {
                 const { width, height } = this.scale;
-
+                let ring1InBowl = false;
+                let ring2InBowl = false;
                 this.add.image(width/2, height/2, "bathroombg")
                     .setDisplaySize(width, height);
 
@@ -327,25 +341,77 @@ function PersonalHygiene() {
 
             const scale = (width * 0.6) / trimmedHand.width;
             trimmedHand.setScale(scale);
-
-            const ringOnFinger = this.add.image(
-                    width / 2 + width * 0.005,
-                    height / 2 - height * 0.15, 
-                    "ringonfinger"
+            //ring 1
+           
+            const ringOnFinger1 = this.add.image(
+                width / 2 + width * 0.005,
+                height / 2 - height * 0.15,
+                "ringonfinger"
             ).setInteractive({ useHandCursor: true });
-            const ringOnFingerScale = (width * 0.23) / ringOnFinger.width;
-            ringOnFinger.setScale(ringOnFingerScale);
+
+            ringOnFinger1.setScale((width * 0.27) / ringOnFinger1.width);
+            ringOnFinger1.setDepth(20);
+
             
-            
-            const ring = this.add.image(
-                width/2,
-                height/2 - height * 0.10,
+            const ring1 = this.add.image(
+                ringOnFinger1.x,
+                ringOnFinger1.y,
                 "ring"
-            ).setInteractive({ useHandCursor: true });
-            const ringScale = (width * 0.30) / ring.width;
-            ring.setScale(ringScale);
-            ring.setVisible(false);
+            );
 
+            ring1.setScale((width * 0.30) / ring1.width);
+            ring1.setVisible(false);
+            ring1.setDepth(20);
+
+       
+            ringOnFinger1.on("pointerdown", () => {
+                ringOnFinger1.setVisible(false);  // hide finger ring
+                ring1.setVisible(true);           // show loose ring when user clicks on the ringonfinger
+
+                ring1.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(ring1);
+            });
+
+            // Drag behavior
+            ring1.on("drag", (pointer, dragX, dragY) => {
+                ring1.x = dragX;
+                ring1.y = dragY;
+            });
+           
+
+            //ring 2
+            const ringOnFinger2 = this.add.image(
+                width / 2 - width * 0.029,
+                height / 2 - height * 0.14,
+                "ringonfinger"
+            ).setInteractive({ useHandCursor: true });
+
+            ringOnFinger2.setScale((width * 0.28) / ringOnFinger2.width);
+            ringOnFinger2.setDepth(20);
+
+         
+            const ring2 = this.add.image(
+                ringOnFinger2.x,
+                ringOnFinger2.y,
+                "ring"
+            );
+
+            ring2.setScale((width * 0.30) / ring2.width);
+            ring2.setVisible(false);
+            ring2.setDepth(20);
+
+            ringOnFinger2.on("pointerdown", () => {
+                ringOnFinger2.setVisible(false);   // hide finger ring
+                ring2.setVisible(true);            // show loose ring
+
+                ring2.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(ring2);
+            });
+
+            ring2.on("drag", (pointer, dragX, dragY) => {
+                ring2.x = dragX;
+                ring2.y = dragY;
+            });
             const bowlImage = this.add.image(
                 width/2,
                 height * 0.65,
@@ -353,41 +419,29 @@ function PersonalHygiene() {
             ); 
             const bowlScale = (width * 1) / bowlImage.width;
             bowlImage.setScale(bowlScale);
-            let ringActivated = false; 
-            ringOnFinger.on("pointerdown", () => {
-                if (ringActivated) return; 
-                ringActivated = true; 
-
-                ringOnFinger.setVisible(false);
-                ring.setVisible(true);
-
-                ring.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(ring);
-            });
-        
-
-         
-
-            this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-                if (gameObject !== ring) return;
-                ring.x = dragX;
-                ring.y = dragY;
-                ring.setDepth(10); 
-            });
-
+           
+    
             this.input.on("dragend", (pointer, gameObject) => {
 
                 const bowlBounds = bowlImage.getBounds();
 
-                if (Phaser.Geom.Rectangle.Contains(
-                    bowlBounds,
-                    ring.x,
-                    ring.y
-                )) {
-                    ring.disableInteractive();
-                    ring.setDepth(10);
-                    setShowRingText(true);
-                    setRingRemoved(true);
+                if (Phaser.Geom.Rectangle.Contains(bowlBounds, gameObject.x, gameObject.y)) {
+
+                    gameObject.disableInteractive();
+
+                    if (gameObject === ring1) {
+                        ring1InBowl = true;
+                    }
+
+                    if (gameObject === ring2) {
+                        ring2InBowl = true;
+                    }
+
+                   
+                    if (ring1InBowl && ring2InBowl) {
+                        setShowRingText(true);
+                        setRingRemoved(true);
+                    }
                 }
             });
             this.events.on("shutdown", () => {
@@ -397,6 +451,7 @@ function PersonalHygiene() {
 
         }
     }
+    
     class ClothesScene extends Phaser.Scene {
     constructor() {
         super("ClothesScene");
@@ -700,12 +755,23 @@ class TiedHairScene extends Phaser.Scene {
 
     }
 }
+class FinalScene extends Phaser.Scene {
+    constructor() {
+        super("FinalScene");
+    }
+    create () {
+        const { width, height } = this.scale;
+        this.add.image(width / 2, height / 2, "bg").setDisplaySize(width, height);
+        
+
+    }; 
+}
         const config = { //actually add the scenes here and this starts the phaser game. The scenes will be switched based on the gameStage state in the main component.
                     type: Phaser.AUTO,
                     width: window.innerWidth,
                     height: window.innerHeight,
                     transparent: true,
-                    scene: [ClipperScene, RingScene, ClothesScene, TiedHairScene],
+                    scene: [ClipperScene, RingScene, ClothesScene, TiedHairScene, FinalScene],
                     parent: "phaser-transition-container"
         };
 
@@ -748,9 +814,21 @@ class TiedHairScene extends Phaser.Scene {
         setGameStage("tyehair");
         setShowTyedHairText(true);
         setClothesRemoved(false);
+        
         if (phaserGameRef.current) {
                 phaserGameRef.current.scene.start("TiedHairScene");
         }
+        return;
+    }
+    if (gameStage === "tyehair" && hairTied) {
+        setGameStage("final");
+        setShowTyedHairText(false);
+        setHairTied(false);
+        setShowFinalText(true);
+        if (phaserGameRef.current) {
+                phaserGameRef.current.scene.start("FinalScene");
+        }
+        
         return;
     }
     
@@ -971,8 +1049,28 @@ class TiedHairScene extends Phaser.Scene {
     )}
         
             
-        </div>
+       </div>
             )}
+           {showFinalText && gameStage === "final" && (
+    <div
+        style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 15000,
+        }}
+    >
+        <TextboxErin
+            width="80vw"
+            height="85vh"
+            placeholder={finalText}
+            placeHolderColor="#000000"
+            placeHolderfontSize="1.8vw"
+        />
+    </div>
+)}
+            
         
         </div>
     );
