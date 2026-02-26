@@ -7,7 +7,11 @@ function Textbox({
   placeholder, 
   placeHolderColor, 
   placeHolderfontSize 
-}) {
+
+}) 
+
+
+{
   return (
     <div
       style={{
@@ -32,6 +36,7 @@ function Textbox({
           textAlign: "center",
           color: placeHolderColor || "black",
           fontSize: placeHolderfontSize || "30px",
+          fontWeight: "bold",
           overflow: "hidden",
         }}
       >
