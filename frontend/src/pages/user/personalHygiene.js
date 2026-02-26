@@ -391,7 +391,7 @@ function PersonalHygiene() {
                 }
             });
             this.events.on("shutdown", () => {
-    this.input.removeAllListeners();
+            this.input.removeAllListeners();
 });
         
 
@@ -488,6 +488,7 @@ function PersonalHygiene() {
                 );
             }
         });
+
         // pants on dresser
 
         const pantsIcon = this.add.image(
@@ -538,7 +539,7 @@ function PersonalHygiene() {
         )
         const shoesScale = (width * 0.078) / shoesIcon.width;
         shoesIcon.setScale(shoesScale);
-      shoesIcon.setInteractive({ useHandCursor: true });
+        shoesIcon.setInteractive({ useHandCursor: true });
         this.input.setDraggable(shoesIcon);
 
         this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
@@ -577,7 +578,7 @@ function PersonalHygiene() {
             // Enable shirt only now
             shirtIcon.setInteractive({ useHandCursor: true });
 
-            // NOW create flashing indicator
+            // This creates flashing indicator
             currentIndicator = createClickIndicator(shirtIcon);
 
             });
@@ -595,7 +596,7 @@ class TiedHairScene extends Phaser.Scene {
         const { width, height } = this.scale;
         let currentIndicator = null;
 
-        const createClickIndicator = (target) => {
+        const createClickIndicator = (target) => { //actually highlights which icon to click by creating a flashing circle
 
             const indicatorContainer = this.add.container(target.x, target.y);
 
