@@ -22,8 +22,8 @@ import pants from "../../assets/Pants.png";
 import shoes from "../../assets/Shoes.png";
 import tieduphair from "../../assets/Tieduphair.png";
 import hairtie from "../../assets/Hairtie.png";
-
-
+import 
+//has multiple scenes for each step of the personal hygiene process. Each scene has its own interactive elements and logic. The main component manages the overall game state and transitions between scenes based on user actions and progress.
 
 function PersonalHygiene() {
 
@@ -49,31 +49,31 @@ function PersonalHygiene() {
     const [showTyedHairText, setShowTyedHairText] = useState(false);
     const [hairInstructionDismissed, setHairInstructionDismissed] = useState(false);
     
-    const phaserGameRef = useRef(null); // prevents multiple Phaser instances
+    const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
 
-    function useTypewriter(text, isActive, speed = 30) {
-    const [typedText, setTypedText] = useState("");
-    const hasStarted = useRef(false);
+    function useTypewriter(text, isActive, speed = 30) { //this is the type writer that actually types the text out one character at a time. It takes in the text to display, whether it should be active, and the speed of typing.
+        const [typedText, setTypedText] = useState("");
+        const hasStarted = useRef(false);
 
-    useEffect(() => {
-        if (!text || !isActive || hasStarted.current) return;
+        useEffect(() => {
+            if (!text || !isActive || hasStarted.current) return;
 
-        hasStarted.current = true;   // prevent restarting
-        setTypedText("");
+            hasStarted.current = true;  // this prevent restarting
+            setTypedText("");
 
-        let i = 0;
+            let i = 0;
 
-        const interval = setInterval(() => {
-            setTypedText(prev => {
-                if (i >= text.length) {
-                    clearInterval(interval);
-                    return prev;
-                }
-                return prev + text[i++];
-            });
-        }, speed);
+            const interval = setInterval(() => {
+                setTypedText(prev => {
+                    if (i >= text.length) {
+                        clearInterval(interval);
+                        return prev;
+                    }
+                    return prev + text[i++];
+                });
+            }, speed);
 
-        return () => clearInterval(interval);
+            return () => clearInterval(interval);
 
     }, [text, isActive, speed]);
 
@@ -119,7 +119,7 @@ function PersonalHygiene() {
     );
     const startPhaser = () => {
 
-        if (phaserGameRef.current) return; // already started
+        if (phaserGameRef.current) return; 
         
 
         const setTrimmed = setNailsTrimmed;
@@ -129,7 +129,7 @@ function PersonalHygiene() {
                 super("ClipperScene");
             }
 
-            preload() {
+            preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
                 this.load.image("bg", firstBackground);
                 this.load.image("bathroombg", bathroomSink);
                 this.load.image("hand", hand);
@@ -182,11 +182,11 @@ function PersonalHygiene() {
 
                 longHandImage.setVisible(false);
                 
-                const nailZone = new Phaser.Geom.Rectangle(
-                    width / 2 - width * 0.15,  // left
-                    height / 2 - height * 0.40,  // top
-                    500,              // width
-                    220               // height
+                const nailZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
+                    width / 2 - width * 0.15, 
+                    height / 2 - height * 0.40,  
+                    500,              
+                    220        
                 );
             const gridSize = 20; // size of each cell
             const cells = [];
@@ -210,7 +210,7 @@ function PersonalHygiene() {
                     longHandImage.displayHeight
                 );
 
-                // Draw the hidden long hand into render texture perfectly centered
+                // Draw the hidden long hand into render texture so user can erase it
                 longHandRT.draw(
                     longHandImage,
                     longHandImage.displayWidth / 2,
@@ -302,9 +302,9 @@ function PersonalHygiene() {
             clipper.on("pointerdown", () => {
                 setShowClipperText(false);
             });
-            this.events.on("shutdown", () => {
-    this.input.removeAllListeners();
-});
+        this.events.on("shutdown", () => {
+            this.input.removeAllListeners();
+        });
         }
     }
 
@@ -430,7 +430,7 @@ function PersonalHygiene() {
 
             return indicatorContainer;
         };
-        // Background
+      
         this.add.image(width / 2, height / 2, "dresserbg")
             .setDisplaySize(width, height);
 
@@ -445,49 +445,49 @@ function PersonalHygiene() {
         character.setScale(charScale);
         let currentIndicator = null;
 
-       // SHIRT
-const shirtIcon = this.add.image(
-    width * 0.75 - width * 0.043,
-    height * 0.35 - height * 0.045,
-    "shirt"
-);
-
-const shirtScale = (width * 0.095) / shirtIcon.width;
-shirtIcon.setScale(shirtScale);
-
-// Make draggable immediately
-shirtIcon.setInteractive({ useHandCursor: true });
-this.input.setDraggable(shirtIcon);
-
-this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-    if (gameObject === shirtIcon && clothingStep === 0) {
-        gameObject.x = dragX;
-        gameObject.y = dragY;
-    }
-});
-
-shirtIcon.on("dragend", () => {
-
-    const shirtBounds = shirtIcon.getBounds();
-    const charBounds = character.getBounds();
-
-    if (Phaser.Geom.Intersects.RectangleToRectangle(shirtBounds, charBounds)) {
-
-        character.setTexture("shirtOn");
-        shirtIcon.destroy();
-        clothingStep = 1;
-
-        if (currentIndicator) currentIndicator.destroy();
-        currentIndicator = createClickIndicator(pantsIcon);
-
-    } else {
-
-        shirtIcon.setPosition(
+       // shirt icon on dresser
+        const shirtIcon = this.add.image(
             width * 0.75 - width * 0.043,
-            height * 0.35 - height * 0.045
+            height * 0.35 - height * 0.045,
+            "shirt"
         );
-    }
-});
+
+        const shirtScale = (width * 0.095) / shirtIcon.width;
+        shirtIcon.setScale(shirtScale);
+
+        // Make draggable immediately
+        shirtIcon.setInteractive({ useHandCursor: true });
+        this.input.setDraggable(shirtIcon);
+
+        this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+            if (gameObject === shirtIcon && clothingStep === 0) {
+                gameObject.x = dragX;
+                gameObject.y = dragY;
+            }
+        });
+
+        shirtIcon.on("dragend", () => {
+
+            const shirtBounds = shirtIcon.getBounds();
+            const charBounds = character.getBounds();
+
+            if (Phaser.Geom.Intersects.RectangleToRectangle(shirtBounds, charBounds)) {
+
+                character.setTexture("shirtOn");
+                shirtIcon.destroy();
+                clothingStep = 1;
+
+                if (currentIndicator) currentIndicator.destroy();
+                currentIndicator = createClickIndicator(pantsIcon);
+
+            } else {
+
+                shirtIcon.setPosition(
+                    width * 0.75 - width * 0.043,
+                    height * 0.35 - height * 0.045
+                );
+            }
+        });
         // pants on dresser
 
         const pantsIcon = this.add.image(
@@ -498,38 +498,38 @@ shirtIcon.on("dragend", () => {
         const pantsScale = (width * 0.065) / pantsIcon.width;
         pantsIcon.setScale(pantsScale);
         
-pantsIcon.setInteractive({ useHandCursor: true });
-this.input.setDraggable(pantsIcon);
+        pantsIcon.setInteractive({ useHandCursor: true });
+        this.input.setDraggable(pantsIcon);
 
-this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-    if (gameObject === pantsIcon && clothingStep === 1) {
-        gameObject.x = dragX;
-        gameObject.y = dragY;
-    }
-});
+        this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+            if (gameObject === pantsIcon && clothingStep === 1) {
+                gameObject.x = dragX;
+                gameObject.y = dragY;
+            }
+        });
 
-pantsIcon.on("dragend", () => {
+        pantsIcon.on("dragend", () => {
 
-    const pantsBounds = pantsIcon.getBounds();
-    const charBounds = character.getBounds();
+            const pantsBounds = pantsIcon.getBounds();
+            const charBounds = character.getBounds();
 
-    if (Phaser.Geom.Intersects.RectangleToRectangle(pantsBounds, charBounds)) {
+            if (Phaser.Geom.Intersects.RectangleToRectangle(pantsBounds, charBounds)) {
 
-        character.setTexture("shirtPantsOn");
-        pantsIcon.destroy();
-        clothingStep = 2;
+                character.setTexture("shirtPantsOn");
+                pantsIcon.destroy();
+                clothingStep = 2;
 
-        if (currentIndicator) currentIndicator.destroy();
-        currentIndicator = createClickIndicator(shoesIcon);
+                if (currentIndicator) currentIndicator.destroy();
+                currentIndicator = createClickIndicator(shoesIcon);
 
-    } else {
+            } else {
 
-        pantsIcon.setPosition(
-            width * 0.75 - width * 0.03,
-            height * 0.55
-        );
-    }
-});
+                pantsIcon.setPosition(
+                    width * 0.75 - width * 0.03,
+                    height * 0.55
+                );
+            }
+        });
         // shoes on dresser
          const shoesIcon = this.add.image(
             width * 0.75 + width * 0.078,
@@ -539,51 +539,51 @@ pantsIcon.on("dragend", () => {
         const shoesScale = (width * 0.078) / shoesIcon.width;
         shoesIcon.setScale(shoesScale);
       shoesIcon.setInteractive({ useHandCursor: true });
-this.input.setDraggable(shoesIcon);
+        this.input.setDraggable(shoesIcon);
 
-this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-    if (gameObject === shoesIcon && clothingStep === 2) {
-        gameObject.x = dragX;
-        gameObject.y = dragY;
-    }
-});
+        this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+            if (gameObject === shoesIcon && clothingStep === 2) {
+                gameObject.x = dragX;
+                gameObject.y = dragY;
+            }
+        });
 
-shoesIcon.on("dragend", () => {
+        shoesIcon.on("dragend", () => {
 
-    const shoeBounds = shoesIcon.getBounds();
-    const charBounds = character.getBounds();
+            const shoeBounds = shoesIcon.getBounds();
+            const charBounds = character.getBounds();
 
-    if (Phaser.Geom.Intersects.RectangleToRectangle(shoeBounds, charBounds)) {
+            if (Phaser.Geom.Intersects.RectangleToRectangle(shoeBounds, charBounds)) {
 
-        character.setTexture("cleanClothesOn");
-        shoesIcon.destroy();
-        clothingStep = 3;
+                character.setTexture("cleanClothesOn");
+                shoesIcon.destroy();
+                clothingStep = 3;
 
-        if (currentIndicator) currentIndicator.destroy();
-        setClothesRemoved(true);
+                if (currentIndicator) currentIndicator.destroy();
+                setClothesRemoved(true);
 
-    } else {
+            } else {
 
-        shoesIcon.setPosition(
-            width * 0.75 + width * 0.078,
-            height * 0.75 - height * 0.045
-        );
-    }
-});
-    this.events.on("startClothes", () => {
+                shoesIcon.setPosition(
+                    width * 0.75 + width * 0.078,
+                    height * 0.75 - height * 0.045
+                );
+            }
+        });
+            this.events.on("startClothes", () => {
 
-    clothingStep = 0;
+            clothingStep = 0;
 
-    // Enable shirt only now
-    shirtIcon.setInteractive({ useHandCursor: true });
+            // Enable shirt only now
+            shirtIcon.setInteractive({ useHandCursor: true });
 
-    // NOW create flashing indicator
-    currentIndicator = createClickIndicator(shirtIcon);
+            // NOW create flashing indicator
+            currentIndicator = createClickIndicator(shirtIcon);
 
-    });
-    this.events.on("shutdown", () => {
-    this.input.removeAllListeners();
-});
+            });
+            this.events.on("shutdown", () => {
+            this.input.removeAllListeners();
+        });
     }
 }
 class TiedHairScene extends Phaser.Scene {
@@ -625,11 +625,11 @@ class TiedHairScene extends Phaser.Scene {
         this.time.delayedCall(100, () => {
             this.input.enabled = true;
         });
-        // Background (reuse home background)
+        
         this.add.image(width / 2, height / 2, "dresserbg")
             .setDisplaySize(width, height);
 
-        // Character starts as clean clothes
+        
         const character = this.add.image(
             width / 2,
             height * 0.65,
@@ -639,7 +639,7 @@ class TiedHairScene extends Phaser.Scene {
         const charScale = (height * 0.7) / character.height;
         character.setScale(charScale);
 
-        // Hair tie (draggable)
+        
         const hairTie = this.add.image(
             width * 0.85 - width * 0.10,
             height * 0.75 - height * 0.10,
@@ -699,14 +699,14 @@ class TiedHairScene extends Phaser.Scene {
 
     }
 }
-        const config = {
+        const config = { //actually add the scenes here and this starts the phaser game. The scenes will be switched based on the gameStage state in the main component.
                     type: Phaser.AUTO,
                     width: window.innerWidth,
                     height: window.innerHeight,
                     transparent: true,
                     scene: [ClipperScene, RingScene, ClothesScene, TiedHairScene],
                     parent: "phaser-transition-container"
-                };
+        };
 
                 phaserGameRef.current = new Phaser.Game(config);
 
@@ -715,7 +715,7 @@ class TiedHairScene extends Phaser.Scene {
         };
         
 
-    const handleNextClick = () => {
+    const handleNextClick = () => { //handles the logic for transitioning between scenes based on the current game stage and user actions. It checks the current game stage and relevant state variables to determine if the user has completed the necessary actions to move to the next stage, then updates the game stage and starts the appropriate Phaser scene.
     
     if (gameStage === "intro") {
         startPhaser("clipper");
@@ -844,7 +844,7 @@ class TiedHairScene extends Phaser.Scene {
                     
                 </div>
             )}
-            {nailsTrimmed && (
+        {nailsTrimmed && (
         <div
         style={{
             position: "fixed",
@@ -890,88 +890,88 @@ class TiedHairScene extends Phaser.Scene {
             placeHolderfontSize="1.1vw"
         />)}
         {showClothesText && gameStage === "clothes" && !clothesInstructionsDone && (
-    <div
-        onClick={() => {
-            setClothesInstructionsDone(true);
-            setShowClothesText(false);
-            if (phaserGameRef.current) {
-                const scene = phaserGameRef.current.scene.getScene("ClothesScene");
-                if (scene) {
-                    scene.events.emit("startClothes");
-                }
-            }
-        }}
-        style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            zIndex: 15000,
-            backgroundColor: "rgba(0,0,0,0)", 
-            cursor: "pointer"
-        }}
-    >
         <div
+            onClick={() => {
+                setClothesInstructionsDone(true);
+                setShowClothesText(false);
+                if (phaserGameRef.current) {
+                    const scene = phaserGameRef.current.scene.getScene("ClothesScene");
+                    if (scene) {
+                        scene.events.emit("startClothes");
+                    }
+                }
+            }}
             style={{
                 position: "fixed",
-                right: "10vw",
-                bottom: "25vh"
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                zIndex: 15000,
+                backgroundColor: "rgba(0,0,0,0)", 
+                cursor: "pointer"
             }}
         >
-            <Textbox
-                width="30vw"
-                height="30vh"
-                placeholder={clothesText}
-                placeHolderColor="#000000"
-                placeHolderfontSize="1.1vw"
-            />
+            <div
+                style={{
+                    position: "fixed",
+                    right: "10vw",
+                    bottom: "25vh"
+                }}
+            >
+                <Textbox
+                    width="30vw"
+                    height="30vh"
+                    placeholder={clothesText}
+                    placeHolderColor="#000000"
+                    placeHolderfontSize="1.1vw"
+                />
+            </div>
         </div>
-    </div>
-)}
-{gameStage === "tyehair" && !hairInstructionDismissed && !hairTied && (
-    <div
-        onClick={() => {
-            setHairInstructionDismissed(true);
-            if (phaserGameRef.current) {
-                const scene = phaserGameRef.current.scene.getScene("TiedHairScene");
-                if (scene) {
-                    scene.events.emit("startHairTie");
-                }
-            }
-        }}
-        style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            zIndex: 15000,
-            backgroundColor: "rgba(0,0,0,0)",
-            cursor: "pointer"
-        }}
-    >
+    )}
+    {gameStage === "tyehair" && !hairInstructionDismissed && !hairTied && (
         <div
+            onClick={() => {
+                setHairInstructionDismissed(true);
+                if (phaserGameRef.current) {
+                    const scene = phaserGameRef.current.scene.getScene("TiedHairScene");
+                    if (scene) {
+                        scene.events.emit("startHairTie");
+                    }
+                }
+            }}
             style={{
                 position: "fixed",
-                right: "10vw",
-                bottom: "25vh"
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                zIndex: 15000,
+                backgroundColor: "rgba(0,0,0,0)",
+                cursor: "pointer"
             }}
         >
-            <Textbox
-                width="30vw"
-                height="30vh"
-                placeholder={tiedHairText}
-                placeHolderColor="#000000"
-                placeHolderfontSize="1.1vw"
-            />
+            <div
+                style={{
+                    position: "fixed",
+                    right: "10vw",
+                    bottom: "25vh"
+                }}
+            >
+                <Textbox
+                    width="30vw"
+                    height="30vh"
+                    placeholder={tiedHairText}
+                    placeHolderColor="#000000"
+                    placeHolderfontSize="1.1vw"
+                />
+            </div>
         </div>
-    </div>
-)}
-      
+    )}
         
-    </div>
-        )}
+            
+        </div>
+            )}
         
         </div>
     );
