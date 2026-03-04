@@ -1,30 +1,31 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import Phaser from "phaser";
 
 import bg1 from "../../assets/M1G1/HouseBackground.png";
-import erin from "../../assets/volunteerguy.png";
+import healthy from "../../assets/M1G1/Healthy.png";
 import fever from "../../assets/M1G1/Fever.png";
 import runnyNose from "../../assets/M1G1/RunnyNose.png";
 import nausea from "../../assets/M1G1/Nausea.png";
 import check from "../../assets/M1G1/Check.png";
 import xMark from "../../assets/M1G1/X.png";
-import textbox from "../../assets/TextBox.png";
+import textbox from "../../assets/M1G1/Textbox.png";
+import next from "../../assets/M1G1/nextbutton.png";
 
 export default function Symptoms() {
 
   useEffect(() => {
     class Example extends Phaser.Scene {
-      welcomeTexts = ["Welcome to game! In this module, we will learn good hygiene practices and how to determine whether or not you are fit to volunteer safely.",
-         "Let's start by making sure this volunteer is ready to go!", 
+        erinX = 1300;
+        erinY = 175;
+        erinScale = 1.1;
+        textboxScale = 0.75;
+        textFontSize = 70;
+        markY = 650;
+        welcomeTexts = ["In this module, you will learn how to tell if you are fit to volunteer and about what hygiene practices you should follow before volunteering.",
          "It's important to stay home when you are not feeling well. Let's see if the volunteer is fit for the job today!"];
-      symptomTexts = {
-          "I'm nauseous": "no",
-          "I have a cold": "no",
-          "I have a fever": "no",
-          "I'm great": "yes"
-      };
-      popUpTexts = [ "aaaa", "bbbb", "cccc", "dddd"
-      ];
+        instructions = ["In the following game, the volunteer will share different symptoms with you, and you will determine if they should volunteer or stay home. \n\n If they should stay home, tap the red X, if they can volunteer, tap the green check."];
+        transitions = ["Great job identifying when you should stay home! In the next section, we'll get this volunteer ready for their shift."]
+      
 
       constructor() {
         super("Example");
@@ -32,161 +33,156 @@ export default function Symptoms() {
 
       preload() {
         this.load.image("bg1", bg1);
-        this.load.image("guy", erin);
+        this.load.image("nausea", nausea);
         this.load.image("fever", fever);
         this.load.image("runnyNose", runnyNose);
-        this.load.image("nausea", nausea);
+        this.load.image("healthy", healthy);
         this.load.image("check", check);
         this.load.image("x", xMark);
         this.load.image("textbox", textbox);
+        this.load.image("next", next);
       }
 
       create ()
     {
-        this.bg1 = this.add.image(-5,0, 'bg1').setOrigin(0).setScale(1);
-        this.guy= this.add.image(-125,-155, 'guy').setOrigin(0).setScale(0.9);
-        this.fever= this.add.image(700,50, 'fever').setOrigin(0).setScale(0.9).setVisible(false);
-        this.runnyNose= this.add.image(700,50, 'runnyNose').setOrigin(0).setScale(0.9).setVisible(false);
-        this.nausea= this.add.image(700,50, 'nausea').setOrigin(0).setScale(0.9).setVisible(false);
-        this.xMark = this.add.image(450, 350, 'x').setScale(0.3).setInteractive({ pixelPerfect: true}).setVisible(false);
-        this.check = this.add.image(150,350,'check').setScale(0.3).setInteractive().setVisible(false);
-    
-        this.erinKeys = [this.nausea, this.runnyNose, this.fever, this.guy, this.guy];
+        this.bg1 = this.add.image(0,0, 'bg1').setOrigin(0).setScale(1);
+        this.nausea= this.add.image(this.erinX,this.erinY, 'nausea').setOrigin(0).setScale(this.erinScale).setVisible(false);
+        this.runnyNose= this.add.image(this.erinX,this.erinY, 'runnyNose').setOrigin(0).setScale(this.erinScale).setVisible(false);
+        this.fever= this.add.image(this.erinX,this.erinY, 'fever').setOrigin(0).setScale(this.erinScale).setVisible(false);
+        this.healthy= this.add.image(this.erinX,this.erinY, 'healthy').setOrigin(0).setScale(this.erinScale).setVisible(true);
+        this.xMark = this.add.image(865, this.markY, 'x').setScale(0.3).setInteractive({ pixelPerfect: true}).setVisible(false);
+        this.check = this.add.image(565,this.markY,'check').setScale(0.3).setInteractive().setVisible(false);
+        this.next = this.add.image(this.erinX * 1.25, this.erinY * 4.35, 'next').setOrigin(0).setScale(0.35).setInteractive().setVisible(true);
+        this.volunteerScenario = [
+        {
+            question: "Hey! I have an upset stomach today, and I'm feeling a bit nauseous, am I still good to come in?",
+            correctAnswer: "no",
+            popup: "No! If you are experiencing symptoms like nausea, diarrhea, vomiting, you must be symptom free for at least 24 hours before attempting to volunteer. Illnesses with these symptoms are really contagious and put customer and coworker health at risk.",
+            erinType: this.nausea
+        },
+        {
+            question: "Hey! I've been coughing and sneezing a lot lately, and my throat is feeling sore, am I still good to come in?",
+            correctAnswer: "no",
+            popup: "No! If you are experiencing symptoms like coughing, runny/stuffy nose, or sore throat you must be symptom free for at least 24 hours before attempting to volunteer.",
+            erinType: this.runnyNose
+        },
+        {
+            question: "Hey! I was having chills last night, and today I'm feeling really achey, weak, and feverish, am I good to come in?",
+            correctAnswer: "no",
+            popup: "No! If you are experiencing symptoms like chills and fever with body aches you must be symptom free for at least 24 hours before attempting to volunteer.",
+            erinType: this.fever
+        },
+        {
+            question: "I'm feeling really great today, am I good to volunteer?",
+            correctAnswer: "yes",
+            popup: "Yes! If you've been symptom free of any contagious illness for at least 24 hours and you're feeling great, you are good to volunteer!",
+            erinType: this.healthy
+        }
+      ];
 
-        this.instructContainer = this.add.container(this.bg1.width / 13, this.bg1.height /14);
-        this.instructRect = this.add.rectangle(0,0, this.bg1.width / 2, this.bg1.height /2, 0xFFFFFF).setOrigin(0).setStrokeStyle(6, 0x000000,1).setInteractive();
-        this.instruct = this.add.text(76,100, "In the following game, the volunteer will share different symptoms with you, and you will determine if they should volunteer or stay home.\n\nIf they should stay home, tap the red X, if they can volunteer, tap the green check.", 
-            {wordWrap: 
-                {width: this.instructRect.width * 0.9}, 
-                color: '#000',
-                fontSize: '40px',
-            }).setOrigin(0);
-        this.instructContainer.setSize(this.instructRect.width, this.instructRect.height);
-        this.instructContainer.add([this.instructRect, this.instruct]);
-        this.instructContainer.setVisible(false);
+        this.volunteerScenario[this.volunteerScenario.length - 1].erinType.setVisible(true);
+        this.textbox = this.add.container(145, 112);
+        this.textboxImage = this.add.image(0,0, 'textbox').setOrigin(0);
+        this.textboxText = this.add.text(100, 100, "", {
+        font: '70px Arial',
+        color: '#000',
+        wordWrap: {
+            width: this.textboxImage.width * 0.9
+        }
+    }).setOrigin(0);
+        this.typewriteText("Welcome to the personal hygiene module!");
+        this.textbox.setSize(this.textboxImage.width, this.textboxImage.height);
+        this.textbox.add([this.textboxImage, this.textboxText]);
+        this.textbox.setScale(this.textboxScale);
 
-        this.textbox = this.add.container(-55, -95);
-        this.textboxImage = this.add.image(0,0, 'textbox').setOrigin(0).setInteractive();
-        this.textboxText = this.add.text(45,45, this.welcomeTexts[0], 
-            {wordWrap: 
-                {width: this.textboxImage.width * 0.30}, 
-                color: '#000'
-            }).setOrigin(0);
-        
-        this.textbox.add(this.textboxImage, this.textboxText);
-        this.textbox.setScale(0.40);
 
-        this.i=1; 
-        this.textboxImage.on('pointerdown', () => {
-            if(this.i > 2){
-                this.textboxText.setVisible(false);
-                this.textboxImage.setVisible(false);
-                this.instructContainer.setVisible(true);
-                this.textboxImage.disableInteractive();
-                return;
-            }
-            this.textboxText.setText(this.welcomeTexts[this.i]);
-            this.i++;
+        this.next.on('pointerdown', () => {
+        if(this.welcomeTexts.length > 0) {
+            this.typewriteText(this.welcomeTexts[0]);
+            this.welcomeTexts.shift();
+        }
+        else if (this.instructions.length > 0) {
+            this.textbox.setScale(1.05);
+            this.textboxText.setFontSize(50);
+            this.typewriteText(this.instructions[0]);
+            this.instructions.shift();
+        }
+        else if (this.volunteerScenario.length > 0){
+          this.textbox.setScale(this.textboxScale);
+          this.textboxText.setFontSize(this.textFontSize);
+          this.typewriteText(this.volunteerScenario[0].question);
+          this.volunteerScenario[this.volunteerScenario.length - 1].erinType.setVisible(false);
+          this.volunteerScenario[0].erinType.setVisible(true);
+          this.xMark.setVisible(true);
+          this.check.setVisible(true);
+          this.next.setVisible(false);
+        }
+        else if (this.transitions.length > 0){
+           this.xMark.setVisible(false);
+           this.check.setVisible(false);
+           this.textbox.setScale(1.05);
+           this.textboxText.setColor('#000');
+           this.textboxText.setFontSize(50);
+           this.typewriteText(this.transitions[0]);
+           this.transitions.shift();
+        }
+      
+});
+        this.xMark.on('pointerdown', () => {
+          this.handleAnswer(this.volunteerScenario, this.xMark);
         });
-        this.instructRect.on('pointerdown', () => {
-            this.instructContainer.setVisible(false);
-            this.textboxText.setText(Object.keys(this.symptomTexts)[this.j]);
-            this.textboxText.setVisible(true);
-            this.textboxImage.setVisible(true);
-            this.guy.setVisible(false);
-            this.erinKeys[this.j].setVisible(true);
-            this.check.setVisible(true);
-            this.xMark.setVisible(true);
-            this.instructRect.disableInteractive();
-        });
-  
-        this.j = 0;
-        this.popUpContainer = this.add.container(this.bg1.width / 13, this.bg1.height /14);
-        this.popUpRect = this.add.rectangle(0,0, this.bg1.width / 2, this.bg1.height /2, 0xFFFFFF).setOrigin(0).setStrokeStyle(6, 0x000000,1).setInteractive();
-        this.popUpText = this.add.text(76,100, this.popUpTexts[this.j], 
-            {wordWrap: 
-                {width: this.popUpRect.width * 0.9}, 
-                color: '#000',
-                fontSize: '40px',
-            }).setOrigin(0);
-        this.popUpContainer.setSize(this.popUpRect.width, this.popUpRect.height);
-        this.popUpContainer.add([this.popUpRect, this.popUpText]);
-        this.popUpContainer.setVisible(false);
-
-
         this.check.on('pointerdown', () => {
-        if (Object.values(this.symptomTexts)[this.j] == "yes") {
-            this.erinKeys[this.j].setVisible(false);
-            this.j++;
-        if (this.j >= this.erinKeys.length - 1) {
-            this.erinKeys[this.j].setVisible(true);
-            this.check.disableInteractive();
-            this.check.setVisible(false);
-            this.xMark.disableInteractive();
-            this.xMark.setVisible(false);
-            this.textboxText.setText("transition msg");
-        } else {
-            this.erinKeys[this.j].setVisible(true);
-            this.popUpText.setText(this.popUpTexts[this.j]);
-            this.textboxText.setText(Object.keys(this.symptomTexts)[this.j]);
-        }
-    } else {
-        this.popUpContainer.setVisible(true);
-        this.popUpRect.setInteractive();
-    }
-});
-
-    this.xMark.on('pointerdown', () => {
-    if (Object.values(this.symptomTexts)[this.j] == "no") {
-        this.erinKeys[this.j].setVisible(false);
-        this.j++;
-
-        if (this.j >= this.erinKeys.length - 1) {
-            this.erinKeys[this.j].setVisible(true);
-            this.check.disableInteractive();
-            this.check.setVisible(false);
-            this.xMark.disableInteractive();
-            this.xMark.setVisible(false);
-            this.textboxText.setText("transition msg");
-        } else {
-            this.erinKeys[this.j].setVisible(true);
-            this.popUpText.setText(this.popUpTexts[this.j]);
-            this.textboxText.setText(Object.keys(this.symptomTexts)[this.j]);
-        }
-    } else {
-        this.popUpContainer.setVisible(true);
-        this.popUpRect.setInteractive();
-    }
-});
-
-        this.popUpRect.on('pointerdown', () => {
-            this.popUpContainer.setVisible(false);
-            this.popUpRect.disableInteractive();
+          this.handleAnswer(this.volunteerScenario, this.check);
         });
 
-        this.text = this.add.text(320, 128, 'Please set your\nphone to landscape', { font: '48px Courier', fill: '#00ff00', align: 'center' }).setOrigin(0.5);
+/*
+        this.text = this.add.text(300, 300, 'Please set your\nphone to landscape', { font: '48px Courier', fill: '#00ff00', align: 'center' }).setOrigin(0.5);
         this.checkOriention();
-        this.scale.on('resize', this.checkOriention, this);    
+        this.scale.on('resize', this.checkOriention, this); */   
 }
-typewriteText(targetTextObject, fullText, speed = 30) {
-    targetTextObject.setText("");
-    this.isTyping = true;
 
-    let i = 0;
+typewriteText(text, speed = 5) {
+  this.textboxText.setText("");
+  this.isTyping = true;
+  this.next.disableInteractive();
 
-    this.time.addEvent({
-        delay: speed,
-        repeat: fullText.length - 1,
-        callback: () => {
-            targetTextObject.text += fullText[i];
-            i++;
-
-            if (i === fullText.length) {
-                this.isTyping = false;
-            }
-        }
-    });
+  let i = 0;
+  this.time.addEvent({
+    delay: speed,
+    repeat: text.length - 1,
+    callback: () => {
+      this.textboxText.text += text[i];
+      i++;
+      if (i === text.length) {
+        this.isTyping = false;
+        this.next.setInteractive();
+      }
+    }
+  });
 }
+
+handleAnswer(scenarios, button) {
+  this.scenario = scenarios[0];
+  if (this.scenario.correctAnswer === "no" && button === this.xMark || this.scenario.correctAnswer === "yes" && button === this.check) {
+    scenarios.shift(); 
+    if (scenarios.length > 0) {
+      this.textboxText.setColor('#000');
+      this.textbox.setScale(this.textboxScale);
+      this.textboxText.setFontSize(this.textFontSize);
+      this.typewriteText(scenarios[0].question);
+      scenarios[0].erinType.setVisible(true);
+    }
+
+  } else {
+    this.textboxText.setFontSize(this.textFontSize * 0.8);
+    this.textboxText.setColor('rgb(252, 0, 0)');
+    this.typewriteText(this.scenario.popup);
+  }
+   if (scenarios.length === 0){
+    this.next.setVisible(true);
+  } 
+}
+
 checkOriention ()
 {
     if (window.innerHeight > window.innerWidth)
@@ -209,7 +205,7 @@ const config = {
   parent: "phaser-game",
   scene: [Example],
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.ENVELOP,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   backgroundColor: 0x000000,
