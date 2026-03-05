@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
 import "./login.css";
 import hand from "../../assets/hand-long.png";
 import handTrimmed from "../../assets/hand-trimmed.png";
-import background from '../../assets/Background1.png';
 import Textbox from "../../components/textbox";
 import nextButton from "../../assets/nextbutton.png"; 
 import Phaser from "phaser";
@@ -52,6 +52,7 @@ function PersonalHygiene() {
     const [hairInstructionDismissed, setHairInstructionDismissed] = useState(false);
     const [showFinalText, setShowFinalText] = useState(false);
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
+    const navigate = useNavigate(); // link to next game when finished
 
     function useTypewriter(text, isActive, speed = 30) { //this is the type writer that actually types the text out one character at a time. It takes in the text to display, whether it should be active, and the speed of typing.
         const [typedText, setTypedText] = useState("");
@@ -762,8 +763,6 @@ class FinalScene extends Phaser.Scene {
     create () {
         const { width, height } = this.scale;
         this.add.image(width / 2, height / 2, "bg").setDisplaySize(width, height);
-        
-
     }; 
 }
         const config = { //actually add the scenes here and this starts the phaser game. The scenes will be switched based on the gameStage state in the main component.
@@ -830,6 +829,9 @@ class FinalScene extends Phaser.Scene {
         }
         
         return;
+    }
+    if (gameStage === "final") {
+        navigate('/module1/symptoms', { replace: true });
     }
     
 };
