@@ -11,10 +11,13 @@ import xMark from "../../assets/M1G1/X.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import next from "../../assets/M1G1/nextbutton.png";
 
-export default function Symptoms() {
+import { useNavigate } from "react-router-dom";
 
+export default function Symptoms() {
+  const navigate = useNavigate();
   useEffect(() => {
-    class Example extends Phaser.Scene {
+        window.navigateToPage = navigate;
+        class Symptom extends Phaser.Scene {
         erinX = 1300;
         erinY = 175;
         erinScale = 1.1;
@@ -28,7 +31,7 @@ export default function Symptoms() {
       
 
       constructor() {
-        super("Example");
+        super("Symptom");
       }
 
       preload() {
@@ -117,14 +120,8 @@ export default function Symptoms() {
           this.check.setVisible(true);
           this.next.setVisible(false);
         }
-        else if (this.transitions.length > 0){
-           this.xMark.setVisible(false);
-           this.check.setVisible(false);
-           this.textbox.setScale(1.05);
-           this.textboxText.setColor('#000');
-           this.textboxText.setFontSize(50);
-           this.typewriteText(this.transitions[0]);
-           this.transitions.shift();
+        else{
+          window.navigateToPage("/personalhygiene");
         }
       
 });
@@ -141,7 +138,7 @@ export default function Symptoms() {
         this.scale.on('resize', this.checkOriention, this); */   
 }
 
-typewriteText(text, speed = 5) {
+typewriteText(text, speed = 30) {
   this.textboxText.setText("");
   this.isTyping = true;
   this.next.disableInteractive();
@@ -171,14 +168,27 @@ handleAnswer(scenarios, button) {
       this.textboxText.setFontSize(this.textFontSize);
       this.typewriteText(scenarios[0].question);
       scenarios[0].erinType.setVisible(true);
+      this.check.preFX.clear();
+      this.xMark.preFX.clear();
     }
-
   } else {
+    if(button == this.xMark){
+      this.check.preFX.addShine(1, 0.5, 5);
+    }
+    else{
+      this.xMark.preFX.addShine(1, 0.5, 5);
+    }
     this.textboxText.setFontSize(this.textFontSize * 0.8);
     this.textboxText.setColor('rgb(252, 0, 0)');
     this.typewriteText(this.scenario.popup);
   }
    if (scenarios.length === 0){
+    this.textbox.setScale(1.05);
+    this.textboxText.setColor('#000');
+    this.textboxText.setFontSize(50);
+    this.typewriteText(this.transitions[0]);
+    this.xMark.setVisible(false);
+    this.check.setVisible(false);
     this.next.setVisible(true);
   } 
 }
@@ -203,7 +213,7 @@ const config = {
   width: 1920,
   height: 1080,
   parent: "phaser-game",
-  scene: [Example],
+  scene: [Symptom],
   scale: {
     mode: Phaser.Scale.ENVELOP,
     autoCenter: Phaser.Scale.CENTER_BOTH,
