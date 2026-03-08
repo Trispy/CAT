@@ -1,0 +1,707 @@
+import React, { useEffect, useState, useRef } from "react";
+import module2Background from "../../assets/finalbackground.png"
+import Textbox from "../../components/textbox"; 
+import Phaser from "phaser";
+import thermometerhand from "../../assets/thermometerhand.png"
+import thermometer from "../../assets/thermometer.png"
+import thermometerBackground from "../../assets/thermometerbackground.png"
+import nextButton from "../../assets/nextbutton.png"
+import readymadefood1 from "../../assets/readymadefood1.png"
+import readymadefood2 from "../../assets/readymadefood2.png"
+import yogurt from "../../assets/yogurt.png"
+import onion from "../../assets/onion.png"
+import bellpepper from "../../assets/bellpeppers.png"
+import beefpackage from "../../assets/beefpackage.png"
+import foodbox from "../../assets/foodbox.png"
+import chickenpackage from "../../assets/packagedchicken.png"
+import chicken from "../../assets/chicken.png"
+import fridgeSceneBackground from "../../assets/fridgescene.png"
+import milk from "../../assets/milk.png"
+
+
+function Module2Part1() {
+    const [gameStage, setgameStage] = useState('intro'); 
+    const phaserGameRef = useRef(null);
+    const [thermometerState, setThermometerState] = useState("instructions");
+    const finalAngleRef = useRef(null);
+    const [fridgeState, setFridgeState] = useState("playing");
+    const [fridgefailState, setfridgefailState] = useState('');
+    const [fridgeSuccessState, setfridgeSuccessState] = useState('');
+    const [fridgeInstructionsState, setFridgeInstructionsState] = useState("instructions");
+    const [fridgeSuccess, setfridgeSuccess] = useState(false);
+    
+    
+
+    const backgroundStyle = {
+        backgroundImage: `url(${module2Background})`,
+        minHeight: '100vh',
+        backgroundSize: 'contain',
+        backgroundPosition: 'center center',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: 'black'
+    };
+
+   function useTypewriter(text, isActive, speed = 30) {
+    const [typedText, setTypedText] = useState("");
+    const hasStarted = useRef(false);
+
+    useEffect(() => {
+        if (!text || !isActive) return;
+
+        // reset when text changes
+        hasStarted.current = false;
+        setTypedText("");
+
+        let i = 0;
+
+        const interval = setInterval(() => {
+            setTypedText(prev => {
+                if (i >= text.length) {
+                    clearInterval(interval);
+                    return prev;
+                }
+                return prev + text[i++];
+            });
+        }, speed);
+
+        return () => clearInterval(interval);
+
+    }, [text, isActive, speed]);
+
+    return typedText;
+}
+    const startPhaser = () => {
+        if (phaserGameRef.current) return; 
+
+        class ThermometerScene extends Phaser.Scene {
+            
+            constructor() {
+                super("ThermometerScene");
+            }
+
+            preload() {
+                this.load.image("thermometerhand", thermometerhand);
+                this.load.image("thermometer", thermometer);
+                this.load.image("thermometerBackground", thermometerBackground);
+                
+            }
+
+         create() {
+
+            const { width, height } = this.scale;
+
+            // Background
+            this.add.image(width / 2, height / 2, "thermometerBackground")
+                .setDisplaySize(width, height);
+
+            // Thermometer body
+            const therm = this.add.image(width / 2, height / 2, "thermometer");
+
+            const thermScale = (height * 0.7) / therm.height;
+            therm.setScale(thermScale);
+
+            const centerX = therm.x;
+            const centerY = therm.y;
+
+            const pivot = this.add.container(centerX, centerY);
+
+
+            const hand = this.add.image(0, 0, "thermometerhand");
+
+            // Use true center to avoid PNG padding issues.
+            hand.setOrigin(0.5, 0.5);
+
+            hand.setScale(thermScale);
+
+            // IMPORTANT:
+        
+            hand.setAngle(-90);
+
+            pivot.add(hand);
+
+            // Start fully left
+            pivot.angle = 180;
+
+
+            // Make the hand fully draggable
+        hand.setInteractive({ useHandCursor: true });
+        this.input.setDraggable(hand);
+
+        let finalAngle = null;
+        // When dragging, rotate based on pointer
+        hand.on("drag", (pointer) => {
+            if (thermometerState === "fail") {
+            setThermometerState("playing");
+        }
+            const angleRad = Phaser.Math.Angle.Between(
+                pivot.x,
+                pivot.y,
+                pointer.x,
+                pointer.y
+            );
+
+            let angleDeg = Phaser.Math.RadToDeg(angleRad);
+
+            angleDeg = (angleDeg + 360) % 360;
+
+            // Clamp to right ↔ left only
+            if (angleDeg > 180) return;
+
+            pivot.angle = angleDeg;
+            finalAngle = angleDeg;
+            finalAngleRef.current = finalAngle;
+            
+            /*if (angleDeg <= 70) {
+                setThermometerSuccess(true);
+            }*/
+        });
+
+        hand.on("dragend", (pointer) => {
+        if (finalAngle === null) return;
+        if (finalAngle <= 90) {
+            
+            setThermometerState("success");
+            
+        } else {
+            setThermometerState("fail");
+        }
+
+        });
+        }
+    }
+    class FridgeScene extends Phaser.Scene {
+        constructor() {
+            super("FridgeScene");
+        }
+        preload() {
+            this.load.image("readymadefood1", readymadefood1);
+            this.load.image("readymadefood2", readymadefood2);
+            this.load.image("yogurt", yogurt);
+            this.load.image("onion", onion);
+            this.load.image("beefpackage", beefpackage);
+            this.load.image("chicken", chicken);
+            this.load.image("fridgeScene", fridgeSceneBackground);
+            this.load.image("thermometer", thermometer);
+            this.load.image("thermometerhand", thermometerhand);
+            this.load.image("foodbox", foodbox);
+            this.load.image("chickenpackage", chickenpackage);
+            this.load.image("milk", milk);
+            this.load.image("bellpepper", bellpepper);
+        }
+        create() {
+            const { width, height } = this.scale;
+          
+            // Background
+            this.add.image(width / 2, height / 2, "fridgeScene")
+                .setDisplaySize(width, height);
+            const box = this.add.image(width/2 - width * 0.25, height/2 + height * 0.30, "foodbox")
+            const boxScale = (height * 0.65) / box.height;
+            box.setScale(boxScale);
+        
+
+            const chickenpkg = this.add.image(width/2 - width * 0.25, height/2 + height * 0.30, "chickenpackage")
+            const chickenpkgScale = (height * 0.18) / chickenpkg.height;
+            chickenpkg.setScale(chickenpkgScale);
+            chickenpkg.setVisible(false);
+
+            const beefpkg = this.add.image(width/2, height/2 + height * 0.30, "beefpackage")
+            const beefpkgScale = (height * 0.20) / beefpkg.height;
+            beefpkg.setScale(beefpkgScale);
+            beefpkg.setVisible(false);
+
+            const onion = this.add.image(width/2 + width * 0.25, height/2 + height * 0.30, "onion")
+            const onionScale = (height * 0.20) / onion.height;
+            onion.setScale(onionScale);
+            onion.setVisible(false);
+
+            const ready1 = this.add.image(width/2 - width * 0.25, height/2 + height * 0.05, "readymadefood1")
+            const ready1Scale = (height * 0.20) / ready1.height;
+            ready1.setScale(ready1Scale);
+            ready1.setVisible(false);
+
+            const ready2 = this.add.image(width/2 + width * 0.25, height/2 + height * 0.05, "readymadefood2")
+            const ready2Scale = (height * 0.20) / ready2.height;
+            ready2.setScale(ready2Scale);
+            ready2.setVisible(false);
+
+            const yogurt = this.add.image(width/2, height/2 - height * 0.20, "yogurt")
+            const yogurtScale = (height * 0.20) / yogurt.height;
+            yogurt.setScale(yogurtScale);
+            yogurt.setVisible(false);
+
+            const milk = this.add.image(width/2 + width * 0.25, height/2 - height * 0.20, "milk")
+            const milkScale = (height * 0.20) / milk.height;
+            milk.setScale(milkScale);
+            milk.setVisible(false);
+
+            const bellpepper = this.add.image(width/2 - width * 0.25, height/2 - height * 0.20, "bellpepper")
+            const bellpepperScale = (height * 0.20) / bellpepper.height;
+            bellpepper.setScale(bellpepperScale);
+            bellpepper.setVisible(false);
+            let foodItems = [
+                {key:"chickenpackage", sprite: chickenpkg},
+                {key:"beefpackage", sprite: beefpkg},
+                {key:"onion", sprite: onion},
+                {key:"readymadefood1", sprite: ready1},
+                {key:"readymadefood2", sprite: ready2},
+                {key:"yogurt", sprite: yogurt},
+                {key:"milk", sprite: milk},
+                {key:"bellpepper", sprite: bellpepper}
+            ];
+
+            let fooditems = [chickenpkg, beefpkg, onion, ready1, ready2, yogurt, milk, bellpepper];
+            const correctShelf = {
+                chickenpackage: "bottom",
+                beefpackage: "bottom",
+
+                bellpepper: "drawer",
+                onion: "drawer",
+
+                readymadefood1: "top",
+                readymadefood2: "top",
+
+                yogurt: "middle",
+                milk: "middle"
+            };
+
+
+            
+
+
+            const zoneTop = new Phaser.Geom.Rectangle(
+                width * 0.59,
+                height * 0.04,
+                width * 0.28,
+                height * 0.24
+            );
+
+
+            const zoneShelf1 = new Phaser.Geom.Rectangle(
+                width * 0.59,
+                height * 0.30,
+                width * 0.28,
+                height * 0.28
+            );
+
+
+            const zoneShelf2 = new Phaser.Geom.Rectangle(
+                width * 0.59,
+                height * 0.60,
+                width * 0.28,
+                height * 0.12
+            );
+
+
+            const zoneShelf3 = new Phaser.Geom.Rectangle(
+                width * 0.59,
+                height * 0.73,
+                width * 0.28,
+                height * 0.10
+            );
+            
+            const therm = this.add.image(width /2 + width * 0.24, height /2 - height * 0.415, "thermometer")
+            const thermScale = (height * 0.10) / therm.height;
+            therm.setScale(thermScale);
+
+            const thermhHand = this.add.image(width /2 + width * 0.24, height /2 - height * 0.415, "thermometerhand")
+            const thermHandScale = (height * 0.10) / thermhHand.height;
+            thermhHand.setScale(thermHandScale);
+            thermhHand.setAngle(-finalAngleRef.current);
+
+            box.setInteractive({ useHandCursor: true });
+            let currentFood = null;
+            let currentSprite = null;
+            box.on("pointerdown", () => {
+
+        if (currentFood !== null) return;
+        if (fridgeState !== "playing") return;
+        if (foodItems.length === 0) return;
+
+        const randomFood = Phaser.Utils.Array.GetRandom(foodItems);
+
+        const sprite = randomFood.sprite;
+
+        sprite.setVisible(true);
+
+        sprite.startX = width/2 - width*0.25;
+        sprite.startY = height/2 + height*0.30;
+
+        sprite.x = sprite.startX;
+        sprite.y = sprite.startY;
+
+        sprite.setInteractive();
+        this.input.setDraggable(sprite);
+
+        sprite.foodKey = randomFood.key;
+
+        currentFood = randomFood;
+        currentSprite = sprite;
+
+    });
+this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+
+    gameObject.x = dragX;
+    gameObject.y = dragY;
+
+});
+this.input.on("dragend", (pointer, gameObject) => {
+
+    const x = gameObject.x;
+    const y = gameObject.y;
+
+    let droppedShelf = null;
+
+    if (Phaser.Geom.Rectangle.Contains(zoneTop, x, y)) {
+        droppedShelf = "top";
+    }
+
+    else if (Phaser.Geom.Rectangle.Contains(zoneShelf1, x, y)) {
+        droppedShelf = "middle";
+    }
+
+    else if (Phaser.Geom.Rectangle.Contains(zoneShelf2, x, y)) {
+        droppedShelf = "bottom";
+    }
+
+    else if (Phaser.Geom.Rectangle.Contains(zoneShelf3, x, y)) {
+        droppedShelf = "drawer";
+    }
+
+    const correct = correctShelf[gameObject.foodKey];
+
+    if (droppedShelf === correct) {
+        setFridgeState("success");
+        foodItems = foodItems.filter(item => item !== currentFood);
+        currentFood = null;
+        if (droppedShelf === "drawer") {
+            setfridgeSuccessState("Thats correct! Veggies go in the crisper draw to mantain freshness.")
+            gameObject.destroy();
+        } 
+        if (droppedShelf === "bottom") {
+            setfridgeSuccessState("Thats correct! Meat goes on the bottom shelf to prevent cross-contamination.")
+            gameObject.disableInteractive();
+        }
+        if (droppedShelf === "top") {
+            setfridgeSuccessState("Thats correct! Ready made food goes on the top shelf because it is usually precooked.")
+            gameObject.disableInteractive();
+        }
+        if (droppedShelf === "middle") {
+            setfridgeSuccessState("Thats correct! Dairy goes on the middle shelf where the temperature is most consistent.")
+            gameObject.disableInteractive();
+        }
+        
+        console.log("Correct!");
+        currentFood = null;
+        currentSprite = null;
+
+    } 
+    else {
+
+
+        setFridgeState("fail"); // React textbox trigger
+        gameObject.x = gameObject.startX;
+        gameObject.y = gameObject.startY;
+        if (correct === "drawer") {
+            setfridgefailState("Not quite! Veggies go in the crisper draw to mantain freshness.")
+        }
+        if (correct === "bottom") {
+            setfridgefailState("Not quite! Meat goes on the bottom shelf to prevent cross-contamination.")
+        }
+        if (correct === "top") {
+            setfridgefailState("Not quite! Ready made food goes on the top shelf because it is usually precooked.")
+        }
+        if (correct === "middle") {
+            setfridgefailState("Not quite! Dairy goes on the middle shelf where the temperature is most consistent.")
+        }
+    }
+
+});
+
+            
+        }
+    }
+        
+        const config = {
+            type: Phaser.AUTO,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            transparent: true,
+            scene: [ThermometerScene, FridgeScene],
+            parent: "phaser-transition-container"
+        };
+        
+        phaserGameRef.current = new Phaser.Game(config);
+    };
+useEffect(() => {
+    if (gameStage === "ThermometerScene") {
+        startPhaser(); 
+    }
+    if (gameStage === "FridgeScene") {
+        if (phaserGameRef.current) {
+            phaserGameRef.current.scene.start("FridgeScene");
+        }
+    }
+}, [gameStage]);
+
+    const handleNextClick = () => {
+        if (gameStage === "intro") {
+           
+            setgameStage("ThermometerScene"); 
+        }
+        if (gameStage === "ThermometerScene") {
+            setgameStage("FridgeScene");
+            
+        }
+    };
+
+    const introText = useTypewriter(
+        "Let's move on to understanding food saftey. Follow the instructions to complete each minigame.",
+        true
+    );
+    const thermometerInstructions = useTypewriter(
+    "Drag the bottom of the thermometer hand to the correct position to determine if the food is safe or not.",
+    thermometerState === "instructions"
+);
+const thermometerSuccessText = useTypewriter(
+    "Great job! You correctly identified the food's safety which is between 0 and 40 degrees. Click next to continue.", 
+    thermometerState === "success"
+);
+const thermometerFailText = useTypewriter(
+    "Not quite! The food is unsafe because the temperature is above 40 degrees. Click to try again.",
+    thermometerState === "fail"
+);
+const fridgeFailText = useTypewriter(
+    fridgefailState,
+    fridgeState === "fail"
+);
+const fridgeInstructions = useTypewriter(
+    "Click on the box for the food item to appear. Drag it to the correct shelf.",
+    fridgeInstructionsState === "instructions"
+); 
+
+const fridgeSuccessText = useTypewriter(
+    fridgeSuccessState,
+    fridgeState === "success"
+);
+    
+useEffect(() => {
+    if (gameStage === "ThermometerScene") {
+        setThermometerState("instructions");
+    }
+    if (gameStage === "FridgeScene") {
+        setFridgeState("playing");
+        setfridgefailState('');
+        setfridgeSuccessState('');
+    }
+}, [gameStage]);
+    let placeholder = true;
+
+    const isNextDisabled =
+    (gameStage === "ThermometerScene" && !(thermometerState === "success"));
+   const overlayStyle = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    zIndex: 15000,
+    backgroundColor: "rgba(0,0,0,0)",
+    cursor: "pointer"
+};
+    return (
+        <div 
+            className="form" 
+            style={{
+                ...backgroundStyle,
+                position: "relative", 
+            }}
+        >
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%"
+                }}
+            >
+                <button
+                    className="next-button"
+                    onClick={handleNextClick}
+                    style={{
+                        position: "absolute",
+                        bottom: "5%",
+                        right: "5%",
+                        opacity: isNextDisabled ? 0.5 : 1,
+                        pointerEvents: isNextDisabled ? "none" : "auto",
+                        background: "none",
+                        border: "none",
+                        padding: 0,
+                        zIndex: 20000
+                    }}
+                >
+                    <img 
+                        src={nextButton} 
+                        alt="Next" 
+                        style={{ 
+                            width: "20vw",
+                            minWidth: "120px"
+                        }} 
+                    />
+                </button>
+
+                {gameStage === "intro" && (
+    <Textbox
+        width="90vw"
+        height="90vh"
+        placeholder={introText}
+        placeHolderColor="#000000"
+        placeHolderfontSize="2vw"
+    />
+)}
+            </div>
+
+ <div
+            id="phaser-transition-container"
+            style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                zIndex: 10000
+            }}
+        />
+{gameStage === "ThermometerScene" && thermometerState === "instructions" && (
+    <div
+        onClick={() => setThermometerState("playing")}
+        style={overlayStyle}
+    >
+        <div
+            style={{
+                position: "fixed",
+                right: "10vw",
+                bottom: "25vh"
+            }}
+        >
+            <Textbox
+                width="30vw"
+                height="30vh"
+                placeholder={thermometerInstructions}
+                placeHolderColor="#000000"
+                placeHolderfontSize="1.1vw"
+            />
+        </div>
+    </div>
+)}
+{gameStage === "ThermometerScene" && thermometerState === "fail" && (
+    <div
+        onClick={() => setThermometerState("playing")}
+        style={overlayStyle}
+    >
+        <div
+            style={{
+                position: "fixed",
+                right: "10vw",
+                bottom: "25vh"
+            }}
+        >
+            <Textbox
+                width="30vw"
+                height="30vh"
+                placeholder={thermometerFailText}
+                placeHolderColor="#000000"
+                placeHolderfontSize="1.1vw"
+            />
+        </div>
+    </div>
+)}
+{gameStage === "ThermometerScene" && thermometerState === "success" && (
+    <div
+        style={{
+            position: "fixed",
+            right: "10vw",
+            bottom: "25vh",
+            zIndex: 15000
+        }}
+    >
+        <Textbox
+            width="30vw"
+            height="30vh"
+            placeholder={thermometerSuccessText}
+            placeHolderColor="#000000"
+            placeHolderfontSize="1.1vw"
+        />
+    </div>
+)}
+{gameStage === "FridgeScene" && fridgeInstructionsState === "instructions"&& (
+    <div
+        onClick={() => setFridgeInstructionsState("playing")}
+        style={overlayStyle}
+    >
+        <div
+            style={{
+                position: "fixed",
+                right: "10vw",
+                bottom: "25vh"
+            }}
+        >
+            <Textbox
+                width="30vw"
+                height="30vh"
+                placeholder={fridgeInstructions}
+                placeHolderColor="#000000"
+                placeHolderfontSize="1.1vw"
+            />
+        </div>
+    </div>
+)}
+{gameStage === "FridgeScene" && fridgeState === "fail" && (
+    <div
+        onClick={() => setFridgeState("playing")}
+        style={overlayStyle}
+    >
+        <div
+            style={{
+                position: "fixed",
+                right: "10vw",
+                bottom: "25vh"
+            }}
+        >
+            <Textbox
+                width="30vw"
+                height="30vh"
+                placeholder={fridgeFailText}
+                placeHolderColor="#000000"
+                placeHolderfontSize="1.1vw"
+            />
+        </div>
+    </div>
+)}
+{gameStage === "FridgeScene" && fridgeState === "success" && (
+    <div
+        onClick={() => setFridgeState("playing")}
+        style={overlayStyle}
+    >
+        <div
+            style={{
+                position: "fixed",
+                right: "10vw",
+                bottom: "25vh"
+            }}
+        >
+            <Textbox
+                width="30vw"
+                height="30vh"
+                placeholder={fridgeSuccessText}
+                placeHolderColor="#000000"
+                placeHolderfontSize="1.1vw"
+            />
+        </div>
+    </div>
+)}
+
+        </div>
+    );
+}
+
+export default Module2Part1;
