@@ -31,7 +31,7 @@ export default function Symptoms() {
       
 
       constructor() {
-        super("Symptom");
+        super("SymptomScene");
       }
 
       preload() {
@@ -138,11 +138,12 @@ export default function Symptoms() {
         this.scale.on('resize', this.checkOriention, this); */   
 }
 
-typewriteText(text, speed = 30) {
+typewriteText(text, speed = 5) {
   this.textboxText.setText("");
   this.isTyping = true;
   this.next.disableInteractive();
-
+  this.xMark.disableInteractive();
+  this.check.disableInteractive();
   let i = 0;
   this.time.addEvent({
     delay: speed,
@@ -153,6 +154,8 @@ typewriteText(text, speed = 30) {
       if (i === text.length) {
         this.isTyping = false;
         this.next.setInteractive();
+        this.xMark.setInteractive();
+        this.check.setInteractive();
       }
     }
   });
