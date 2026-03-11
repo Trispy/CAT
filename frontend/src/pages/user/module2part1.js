@@ -17,6 +17,17 @@ import chickenpackage from "../../assets/packagedchicken.png"
 import chicken from "../../assets/chicken.png"
 import fridgeSceneBackground from "../../assets/fridgescene.png"
 import milk from "../../assets/milk.png"
+import sinkbg from "../../assets/sinkbackground.png"
+import cleanHand from "../../assets/M1G3/handClean.png";
+import dirtyHand from "../../assets/M1G3/handDirty.png";
+import soapSprite from "../../assets/M1G3/soap.png";
+import sinkbg from "../../assets/M1G3/SinkBackground.png";
+import gloveLeft from "../../assets/M1G3/gloveLeft.png";
+import gloveRight from "../../assets/M1G3/gloveRight.png";
+import gloveBox from "../../assets/M1G3/gloveBox.png";
+import handLeft from "../../assets/M1G3/handLeft.png";
+import handRight from "../../assets/M1G3/handRight.png";
+import sudImg from "../../assets/M1G3/sud.png";
 
 
 function Module2Part1() {
@@ -29,6 +40,10 @@ function Module2Part1() {
     const [fridgeSuccessState, setfridgeSuccessState] = useState('');
     const [fridgeInstructionsState, setFridgeInstructionsState] = useState("instructions");
     const [fridgeSuccess, setfridgeSuccess] = useState(false);
+    const [handsClean, setHandsClean] = useState(false);
+    const [showSoapText, setShowSoapText] = useState(false);
+    const [glovedHands, setGlovedHands] = useState(false);
+    const [gloveInstruction, setGloveInstruction] = useState(false);
     
     
 
@@ -416,17 +431,288 @@ this.input.on("dragend", (pointer, gameObject) => {
     }
 
 });
-
-            
-        }
+}
     }
+    class HandScene extends Phaser.Scene {
+            constructor() {
+                super("HandScene");
+            }
+
+            preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
+                this.load.image("sinkbg", sinkbg);
+                this.load.image("apronOn", apronOn);
+                this.load.image("cleanHand", cleanHand);
+                this.load.image("dirtyHand", dirtyHand);
+                this.load.image("soapSprite", soapSprite);
+                this.load.image("sudImg", sudImg);
+            }
+
+            create() {
+                const { width, height } = this.scale;
+
+                this.add.image(width / 2, height / 2, "sinkbg")
+                    .setDisplaySize(width, height);
+                // Bottom layer (trimmed hand)
+                const cleanHand = this.add.image(
+                    width / 2,
+                    height / 2 + height * 0.05,
+                    "cleanHand"
+                )
+                const handMaxWidth = width * 0.6;
+                const scale = handMaxWidth / cleanHand.width;
+                cleanHand.setScale(scale);
+
+
+                const dirtyHand = this.add.image(
+                    width / 2,
+                    height / 2 + height * 0.05,
+                    "dirtyHand"
+                );
+
+                const scale1 = (width * 0.6) / dirtyHand.width;
+                dirtyHand.setScale(scale1);
+
+
+                dirtyHand.setVisible(false);
+
+                const handZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
+                    width / 2 - width * 0.20, 
+                    height / 2 - height * 0.35, 
+                    700,
+                    700
+                );
+
+                const gridSize = 20; // size of each cell
+                const cells = [];
+
+                for (let x = handZone.x; x < handZone.right; x += gridSize) {
+                    for (let y = handZone.y; y < handZone.bottom; y += gridSize) {
+                        cells.push({
+                            x,
+                            y,
+                            cleared: false
+                        });
+                    }
+                }
+
+                // Create render texture same size as long hand
+                const dirtyHandRT = this.add.renderTexture(
+                    dirtyHand.x,
+                    dirtyHand.y,
+                    dirtyHand.displayWidth,
+                    dirtyHand.displayHeight
+                );
+
+                // Draw the hidden long hand into render texture so user can erase it
+                dirtyHandRT.draw(
+                    dirtyHand,
+                    dirtyHand.displayWidth / 2,
+                    dirtyHand.displayHeight / 2
+                );
+
+                // Store original position
+                const soapStartX = cleanHand.x + cleanHand.displayWidth / 2 + width * 0.05;
+                const soapStartY = cleanHand.y;
+
+                // Create soap sprite
+                const soap = this.add.image(
+                    soapStartX,
+                    soapStartY,
+                    "soapSprite"
+                ).setInteractive({ useHandCursor: true });
+                const soapMaxWidth = width * 0.15;
+                const baseScale = soapMaxWidth / soap.width;
+                soap.setScale(baseScale);
+
+
+                this.input.setDraggable(soap);
+
+                soap.on("dragstart", () => {
+                    soap.setScale(baseScale);
+                });
+
+                soap.on("dragend", () => {
+                    soap.setScale(baseScale);
+                });
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    if (gameObject !== soap) return;
+
+                    soap.x = dragX;
+                    soap.y = dragY;
+
+
+                    const localX = (dragX - dirtyHandRT.x) / dirtyHandRT.scaleX + dirtyHandRT.width / 2;
+                    const localY = (dragY - dirtyHandRT.y) / dirtyHandRT.scaleY + dirtyHandRT.height / 2;
+
+                    const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
+                    eraseBrush.fillStyle(0xffffff);
+                    eraseBrush.fillCircle(0, 0, 60);
+                    
+                    const sud = this.add.image(
+                        dragX,
+                        dragY,
+                        "sudImg"
+                    ).setInteractive({ useHandCursor: true });
+                    const sudMaxWidth = width * 0.15 * Math.random();
+                    const baseScale = sudMaxWidth / sud.width;
+                    sud.setScale(baseScale);
+                    if (sud.alpha <= 0) {
+                        sud.destroy();
+                    }
+
+                    this.tweens.add({
+                        targets: sud,
+                        alpha: 0,
+                        duration: 1000,
+                        ease: 'Linear'
+                    });
+
+                    dirtyHandRT.erase(eraseBrush, localX, localY);
+                    cells.forEach(cell => {
+                        if (!cell.cleared) {
+                            if (
+                                dragX > cell.x &&
+                                dragX < cell.x + gridSize &&
+                                dragY > cell.y &&
+                                dragY < cell.y + gridSize
+                            ) {
+                                cell.cleared = true;
+                            }
+                        }
+                    });
+                    const clearedCount = cells.filter(c => c.cleared).length;
+                    const percentCleared = clearedCount / cells.length;
+                    if (!handsClean && percentCleared > 0.20) {
+                        setHandsClean(true);
+                        console.log("Hands fully clean.");
+                        dirtyHandRT.setVisible(false);
+                    }
+
+                });
+
+                // Show textbox when scene loads
+                setShowSoapText(true);
+
+                // when clipper is clicked hide the textbox
+                soap.on("pointerdown", () => {
+                    setShowSoapText(false);
+                });
+                this.events.on("shutdown", () => {
+                    this.input.removeAllListeners();
+                });
+            }
+        }
+    class GloveScene extends Phaser.Scene{
+            constructor() {
+                super("GloveScene");
+            }
+
+            preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
+                this.load.image("sinkbg", sinkbg);
+                this.load.image("apronOn", apronOn);
+                this.load.image("gloveLeft", gloveLeft);
+                this.load.image("gloveRight", gloveRight);
+                this.load.image("gloveBox", gloveBox);
+                this.load.image("handLeft", handLeft);
+                this.load.image("handRight", handRight);
+            }
+
+            create() {
+                let oneGlove = false;
+                const { width, height } = this.scale;
+
+                this.add.image(width / 2, height / 2, "sinkbg")
+                    .setDisplaySize(width, height);
+
+                const cleanHand = this.add.image(
+                    width / 2,
+                    height / 2 + height * 0.05,
+                    "handLeft"
+                )
+                const handMaxWidth = width * 0.6;
+                const scale = handMaxWidth / cleanHand.width;
+                cleanHand.setScale(scale);
+                const cleanHand2 = this.add.image(
+                    width / 2,
+                    height / 2 + height * 0.05,
+                    "handRight"
+                )
+                cleanHand2.setScale(scale);
+
+                const gloveBox = this.add.image(
+                    width * 0.75 - width * 0.043,
+                    height * 0.35 - height * 0.045,
+                    "gloveBox"
+                );
+
+                const gloveScale = (width * 0.13) / gloveBox.width;
+                gloveBox.setScale(gloveScale);
+
+                // Make draggable immediately
+                gloveBox.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(gloveBox);
+
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    if (gameObject === gloveBox) {
+                        gameObject.x = dragX;
+                        gameObject.y = dragY;
+                    }
+                });
+
+                gloveBox.on("dragend", () => {
+
+                    const gloveBoxBounds = gloveBox.getBounds();
+                    const leftZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
+                        width / 2 - width * 0.23, 
+                        height / 2 - height * 0.35, 
+                        350,
+                        700
+                    );
+
+                        const rightZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
+                        width / 2, 
+                        height / 2 - height * 0.35, 
+                        350,
+                        700
+                    );
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(gloveBoxBounds, leftZone)) {
+                        cleanHand.setTexture("gloveLeft");
+                        if(oneGlove) setGlovedHands(true);
+                        else oneGlove = true;
+
+                    } 
+                    else if (Phaser.Geom.Intersects.RectangleToRectangle(gloveBoxBounds, rightZone)) {
+                        cleanHand2.setTexture("gloveRight");
+                        if(oneGlove) setGlovedHands(true);
+                        else oneGlove = true;
+
+                    } 
+                    else {
+                        gloveBox.setPosition(
+                            width * 0.75 - width * 0.043,
+                            height * 0.35 - height * 0.045
+                        );
+                    }
+                });
+
+                setGloveInstruction(true);
+
+                // when clipper is clicked hide the textbox
+                gloveBox.on("pointerdown", () => {
+                    setGloveInstruction(false);
+                });
+                this.events.on("shutdown", () => {
+                    this.input.removeAllListeners();
+                });
+            }
+        }
         
         const config = {
             type: Phaser.AUTO,
             width: window.innerWidth,
             height: window.innerHeight,
             transparent: true,
-            scene: [ThermometerScene, FridgeScene],
+            scene: [ThermometerScene, FridgeScene, HandScene, GloveScene],
             parent: "phaser-transition-container"
         };
         
@@ -441,6 +727,16 @@ useEffect(() => {
             phaserGameRef.current.scene.start("FridgeScene");
         }
     }
+    if (gameStage === "soapyHands") {
+        if (phaserGameRef.current) {
+            phaserGameRef.current.scene.start("soapyHands");
+        }
+    }
+    if (gameStage === "gloveStage") {
+        if (phaserGameRef.current) {
+            phaserGameRef.current.scene.start("GloveScene");
+        }
+    }
 }, [gameStage]);
 
     const handleNextClick = () => {
@@ -451,6 +747,12 @@ useEffect(() => {
         if (gameStage === "ThermometerScene") {
             setgameStage("FridgeScene");
             
+        }
+        if (gameStage === "FridgeScene") {
+            setgameStage("soapyHands");
+        }
+        if (gameStage === "soapyHands") {
+            setgameStage("gloveStage");
         }
     };
 
@@ -483,7 +785,14 @@ const fridgeSuccessText = useTypewriter(
     fridgeSuccessState,
     fridgeState === "success"
 );
-    
+   const soapText = useTypewriter("You have soaped the hand.",
+        gameStage === "soapyHands" && showSoapText)
+    const soapSuccessText = useTypewriter("All clean! Now lets put on some gloves.",
+        gameStage === "soapyHands" && handsClean)
+    const gloveText = useTypewriter("Make sure to put gloves on before touching any food",
+        gameStage === "gloveStage" && gloveInstruction)
+    const gloveSuccessText = useTypewriter("Gloved up!", 
+        gameStage === "gloveStage" && glovedHands)
 useEffect(() => {
     if (gameStage === "ThermometerScene") {
         setThermometerState("instructions");
@@ -497,7 +806,7 @@ useEffect(() => {
     let placeholder = true;
 
     const isNextDisabled =
-    (gameStage === "ThermometerScene" && !(thermometerState === "success"));
+    (gameStage === "ThermometerScene" && !(thermometerState === "success") && !(handsClean) && !(glovedHands));
    const overlayStyle = {
     position: "fixed",
     top: 0,
@@ -677,6 +986,67 @@ useEffect(() => {
         </div>
     </div>
 )}
+ {gameStage === "soapyHands" && handsClean && (
+                <div
+                    style={{
+                        position: "fixed",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        zIndex: 15000,
+                    }}
+                >
+                <TextboxErin
+                    width="80vw"
+                    height="85vh"
+                    placeholder={soapSuccessText}
+                    placeHolderColor="#000000"
+                    placeHolderfontSize="1.8vw"
+                />
+                </div>
+            )}
+
+            {gameStage === "gloveStage" && gloveInstruction && (
+                <div
+                    onClick={() => setGloveInstruction(false)}
+                    style={{
+                        position: "fixed",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        zIndex: 15000,
+                    }}
+                >
+                <TextboxErin
+                    width="80vw"
+                    height="85vh"
+                    placeholder={gloveText}
+                    placeHolderColor="#000000"
+                    placeHolderfontSize="1.8vw"
+                />
+                </div>
+            )}
+
+            {gameStage === "gloveStage" && glovedHands && (
+                <div
+                    style={{
+                        position: "fixed",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        zIndex: 15000,
+                    }}
+                >
+                <TextboxErin
+                    width="80vw"
+                    height="85vh"
+                    placeholder={gloveSuccessText}
+                    placeHolderColor="#000000"
+                    placeHolderfontSize="1.8vw"
+                />
+                </div>
+            )}
+
 {gameStage === "FridgeScene" && fridgeState === "success" && (
     <div
         onClick={() => setFridgeState("playing")}
