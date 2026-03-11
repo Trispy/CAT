@@ -92,7 +92,7 @@ export default function Symptoms() {
         wordWrap: {
             width: this.textboxImage.width * 0.9
         }
-    }).setOrigin(0);
+        }).setOrigin(0);
         this.typewriteText("Welcome to the personal hygiene module!");
         this.textbox.setSize(this.textboxImage.width, this.textboxImage.height);
         this.textbox.add([this.textboxImage, this.textboxText]);

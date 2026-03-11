@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
-import "./login.css";
+import "../user/login.css";
 import hand from "../../assets/hand-long.png";
 import handTrimmed from "../../assets/hand-trimmed.png";
 import Textbox from "../../components/textbox";
@@ -87,7 +87,6 @@ function PersonalHygiene() {
         "In the following game, we will be going through personal hygiene steps that are essential to do before volunteering. Progress in the game by dragging items to the correct area using your finger.",
         true
     );
-
     const clipperText = useTypewriter(
         "Drag the nail clipper to the nails to cut the nails.",
         showClipperText && !nailsTrimmed
@@ -126,8 +125,8 @@ function PersonalHygiene() {
     );
     const startPhaser = () => {
 
-        if (phaserGameRef.current) return; 
-        
+        if (phaserGameRef.current) return;
+
 
         const setTrimmed = setNailsTrimmed;
 
@@ -156,10 +155,6 @@ function PersonalHygiene() {
                 this.load.image("tieduphair", tieduphair);
                 this.load.image("hairtie", hairtie);
                 this.load.image("erininstructions", erintextbox); 
-
-                
-                
-          
             }
 
             create() {
@@ -323,21 +318,21 @@ function PersonalHygiene() {
     }
 
     class RingScene extends Phaser.Scene {
-            constructor() {
-                super("RingScene");
-            }
+        constructor() {
+            super("RingScene");
+        }
 
-            create() {
-                const { width, height } = this.scale;
-                let ring1InBowl = false;
-                let ring2InBowl = false;
-                this.add.image(width/2, height/2, "bathroombg")
-                    .setDisplaySize(width, height);
+        create() {
+            const { width, height } = this.scale;
+            let ring1InBowl = false;
+            let ring2InBowl = false;
+            this.add.image(width/2, height/2, "bathroombg")
+                .setDisplaySize(width, height);
 
-                const trimmedHand = this.add.image(
-                    width/2,
-                    height/2 + height * 0.05,
-                    "handTrimmed"
+            const trimmedHand = this.add.image(
+                width/2,
+                height/2 + height * 0.05,
+                "handTrimmed"
             );
 
             const scale = (width * 0.6) / trimmedHand.width;
@@ -452,7 +447,7 @@ function PersonalHygiene() {
 
         }
     }
-    
+
     class ClothesScene extends Phaser.Scene {
     constructor() {
         super("ClothesScene");
@@ -643,6 +638,7 @@ function PersonalHygiene() {
         });
     }
 }
+
 class TiedHairScene extends Phaser.Scene {
     constructor() {
         super("TiedHairScene");
@@ -756,6 +752,7 @@ class TiedHairScene extends Phaser.Scene {
 
     }
 }
+
 class FinalScene extends Phaser.Scene {
     constructor() {
         super("FinalScene");
@@ -765,7 +762,8 @@ class FinalScene extends Phaser.Scene {
         this.add.image(width / 2, height / 2, "bg").setDisplaySize(width, height);
     }; 
 }
-        const config = { //actually add the scenes here and this starts the phaser game. The scenes will be switched based on the gameStage state in the main component.
+        const config = { //actually add the scenes here and this starts the phaser game. The scenes will be switched 
+        // based on the gameStage state in the main component.
                     type: Phaser.AUTO,
                     width: window.innerWidth,
                     height: window.innerHeight,
@@ -781,7 +779,10 @@ class FinalScene extends Phaser.Scene {
         };
         
 
-    const handleNextClick = () => { //handles the logic for transitioning between scenes based on the current game stage and user actions. It checks the current game stage and relevant state variables to determine if the user has completed the necessary actions to move to the next stage, then updates the game stage and starts the appropriate Phaser scene.
+    const handleNextClick = () => { //handles the logic for transitioning between scenes based on the current game 
+    // stage and user actions. It checks the current game stage and relevant state variables to determine if the user 
+    // has completed the necessary actions to move to the next stage, then updates the game stage and starts the appropriate 
+    // Phaser scene.
     
     if (gameStage === "intro") {
         startPhaser("clipper");
@@ -831,9 +832,8 @@ class FinalScene extends Phaser.Scene {
         return;
     }
     if (gameStage === "final") {
-        navigate('/module1/symptoms', { replace: true });
+        navigate('/module1/onLocation', { replace: true });
     }
-    
 };
     const isNextDisabled =
             (gameStage === "clipper" && !nailsTrimmed) ||
@@ -906,7 +906,7 @@ class FinalScene extends Phaser.Scene {
                 }}
             />
 
-            {showClipperText && !nailsTrimmed && (
+        {showClipperText && !nailsTrimmed && (
                 <div
                     style={{
                         position: "fixed",
@@ -1053,7 +1053,7 @@ class FinalScene extends Phaser.Scene {
             
        </div>
             )}
-           {showFinalText && gameStage === "final" && (
+        {showFinalText && gameStage === "final" && (
     <div
         style={{
             position: "fixed",
@@ -1071,9 +1071,7 @@ class FinalScene extends Phaser.Scene {
             placeHolderfontSize="1.8vw"
         />
     </div>
-)}
-            
-        
+            )}
         </div>
     );
 }
