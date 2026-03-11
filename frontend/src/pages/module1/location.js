@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
-import Loc from "../../assets/M1G3/FANOBackground.png";
+import Loc from "../../assets/Background1.png";
 import plainClothes from "../../assets/Tieduphair.png";
 import apron from "../../assets/M1G3/apron.png";
 import apronOn from "../../assets/M1G3/noGlove.png";
