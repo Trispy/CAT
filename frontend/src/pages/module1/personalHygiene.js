@@ -1,31 +1,31 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
-import "./login.css";
-import hand from "../../assets/hand-long.png";
-import handTrimmed from "../../assets/hand-trimmed.png";
+import "../user/login.css";
+import hand from "../../assets/M1G2/hand-long.png";
+import handTrimmed from "../../assets/M1G2/hand-trimmed.png";
 import Textbox from "../../components/textbox";
-import nextButton from "../../assets/nextbutton.png"; 
+import useTypewriter from "../../components/typewriter";
+import nextButton from "../../assets/nextbutton.png";
 import Phaser from "phaser";
-import nailclipper from "../../assets/NailClippers.png";
-import bowl from "../../assets/actualbowl.png";
-import ringonfinger from "../../assets/diamondringonfinger.png";
-import ring from "../../assets/diamondring.png";
+import nailclipper from "../../assets/M1G2/NailClippers.png";
+import bowl from "../../assets/M1G2/actualbowl.png";
+import ringonfinger from "../../assets/M1G2/rnf.png";
+import ring from "../../assets/M1G2/Ring.png";
 import firstBackground from "../../assets/Firstbackground.png";
-import shirt from "../../assets/Shirt.png";
+import shirt from "../../assets/M1G2/Shirt.png";
 import dresserBackground from "../../assets/flamboyantbackground.png";
 import bathroomSink from "../../assets/Bathroom_Sink_.png";
-import cleanClothesOn from "../../assets/AllOn.png"; 
-import shirtOn from "../../assets/ShirtOn.png";
-import shirtPantsOn from "../../assets/ShirtPantsOn.png";
-import dirtyClothesOn from "../../assets/DirtyClothes.png";
-import pants from "../../assets/Pants.png";
-import shoes from "../../assets/Shoes.png";
+import cleanClothesOn from "../../assets/M1G2/AllOn.png";
+import shirtOn from "../../assets/M1G2/ShirtOn.png";
+import shirtPantsOn from "../../assets/M1G2/ShirtPantsOn.png";
+import dirtyClothesOn from "../../assets/M1G2/DirtyClothes.png";
+import pants from "../../assets/M1G2/Pants.png";
+import shoes from "../../assets/M1G2/Shoes.png";
 import tieduphair from "../../assets/Tieduphair.png";
-import hairtie from "../../assets/Hairtie.png";
+import hairtie from "../../assets/M1G2/Hairtie.png";
 import erintextbox from "../../assets/erintextbox.png";
 import TextboxErin from "../../components/textboxerin";
-
 //has multiple scenes for each step of the personal hygiene process. Each scene has its own interactive elements and logic. The main component manages the overall game state and transitions between scenes based on user actions and progress.
 
 function PersonalHygiene() {

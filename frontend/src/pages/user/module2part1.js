@@ -21,13 +21,13 @@ import sinkbg from "../../assets/sinkbackground.png"
 import cleanHand from "../../assets/M1G3/handClean.png";
 import dirtyHand from "../../assets/M1G3/handDirty.png";
 import soapSprite from "../../assets/M1G3/soap.png";
-import sinkbg from "../../assets/M1G3/SinkBackground.png";
 import gloveLeft from "../../assets/M1G3/gloveLeft.png";
 import gloveRight from "../../assets/M1G3/gloveRight.png";
 import gloveBox from "../../assets/M1G3/gloveBox.png";
 import handLeft from "../../assets/M1G3/handLeft.png";
 import handRight from "../../assets/M1G3/handRight.png";
 import sudImg from "../../assets/M1G3/sud.png";
+import TextboxErin from "../../components/textboxerin";
 
 
 function Module2Part1() {
@@ -39,11 +39,12 @@ function Module2Part1() {
     const [fridgefailState, setfridgefailState] = useState('');
     const [fridgeSuccessState, setfridgeSuccessState] = useState('');
     const [fridgeInstructionsState, setFridgeInstructionsState] = useState("instructions");
-    const [fridgeSuccess, setfridgeSuccess] = useState(false);
+    const [showfridgeSuccess, setshowfridgeSuccess] = useState(false);
     const [handsClean, setHandsClean] = useState(false);
     const [showSoapText, setShowSoapText] = useState(false);
     const [glovedHands, setGlovedHands] = useState(false);
     const [gloveInstruction, setGloveInstruction] = useState(false);
+    
     
     
 
@@ -63,7 +64,6 @@ function Module2Part1() {
     useEffect(() => {
         if (!text || !isActive) return;
 
-        // reset when text changes
         hasStarted.current = false;
         setTypedText("");
 
@@ -127,18 +127,16 @@ function Module2Part1() {
             hand.setOrigin(0.5, 0.5);
 
             hand.setScale(thermScale);
-
-            // IMPORTANT:
         
             hand.setAngle(-90);
 
             pivot.add(hand);
 
-            // Start fully left
+          
             pivot.angle = 180;
 
 
-            // Make the hand fully draggable
+          
         hand.setInteractive({ useHandCursor: true });
         this.input.setDraggable(hand);
 
@@ -166,9 +164,6 @@ function Module2Part1() {
             finalAngle = angleDeg;
             finalAngleRef.current = finalAngle;
             
-            /*if (angleDeg <= 70) {
-                setThermometerSuccess(true);
-            }*/
         });
 
         hand.on("dragend", (pointer) => {
@@ -207,8 +202,7 @@ function Module2Part1() {
             const { width, height } = this.scale;
           
             // Background
-            this.add.image(width / 2, height / 2, "fridgeScene")
-                .setDisplaySize(width, height);
+            this.add.image(width / 2, height / 2, "fridgeScene").setDisplaySize(width, height);
             const box = this.add.image(width/2 - width * 0.25, height/2 + height * 0.30, "foodbox")
             const boxScale = (height * 0.65) / box.height;
             box.setScale(boxScale);
@@ -279,10 +273,6 @@ function Module2Part1() {
                 milk: "middle"
             };
 
-
-            
-
-
             const zoneTop = new Phaser.Geom.Rectangle(
                 width * 0.59,
                 height * 0.04,
@@ -328,110 +318,118 @@ function Module2Part1() {
             let currentSprite = null;
             box.on("pointerdown", () => {
 
-        if (currentFood !== null) return;
-        if (fridgeState !== "playing") return;
-        if (foodItems.length === 0) return;
+            if (currentFood !== null) return;
+            if (fridgeState !== "playing") return;
+            if (foodItems.length === 0) return;
 
-        const randomFood = Phaser.Utils.Array.GetRandom(foodItems);
+            const randomFood = Phaser.Utils.Array.GetRandom(foodItems);
 
-        const sprite = randomFood.sprite;
+            const sprite = randomFood.sprite;
 
-        sprite.setVisible(true);
+            sprite.setVisible(true);
 
-        sprite.startX = width/2 - width*0.25;
-        sprite.startY = height/2 + height*0.30;
+            sprite.startX = width/2 - width*0.25;
+            sprite.startY = height/2 + height*0.30;
 
-        sprite.x = sprite.startX;
-        sprite.y = sprite.startY;
+            sprite.x = sprite.startX;
+            sprite.y = sprite.startY;
 
-        sprite.setInteractive();
-        this.input.setDraggable(sprite);
+            sprite.setInteractive();
+            this.input.setDraggable(sprite);
 
-        sprite.foodKey = randomFood.key;
+            sprite.foodKey = randomFood.key;
 
-        currentFood = randomFood;
-        currentSprite = sprite;
+            currentFood = randomFood;
+            currentSprite = sprite;
 
     });
-this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+    this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
 
-    gameObject.x = dragX;
-    gameObject.y = dragY;
+        gameObject.x = dragX;
+        gameObject.y = dragY;
 
-});
-this.input.on("dragend", (pointer, gameObject) => {
+    });
+    this.input.on("dragend", (pointer, gameObject) => {
 
-    const x = gameObject.x;
-    const y = gameObject.y;
+        const x = gameObject.x;
+        const y = gameObject.y;
 
-    let droppedShelf = null;
+        let droppedShelf = null;
 
-    if (Phaser.Geom.Rectangle.Contains(zoneTop, x, y)) {
-        droppedShelf = "top";
-    }
+        if (Phaser.Geom.Rectangle.Contains(zoneTop, x, y)) {
+            droppedShelf = "top";
+        }
 
-    else if (Phaser.Geom.Rectangle.Contains(zoneShelf1, x, y)) {
-        droppedShelf = "middle";
-    }
+        else if (Phaser.Geom.Rectangle.Contains(zoneShelf1, x, y)) {
+            droppedShelf = "middle";
+        }
 
-    else if (Phaser.Geom.Rectangle.Contains(zoneShelf2, x, y)) {
-        droppedShelf = "bottom";
-    }
+        else if (Phaser.Geom.Rectangle.Contains(zoneShelf2, x, y)) {
+            droppedShelf = "bottom";
+        }
 
-    else if (Phaser.Geom.Rectangle.Contains(zoneShelf3, x, y)) {
-        droppedShelf = "drawer";
-    }
+        else if (Phaser.Geom.Rectangle.Contains(zoneShelf3, x, y)) {
+            droppedShelf = "drawer";
+        }
 
-    const correct = correctShelf[gameObject.foodKey];
+        const correct = correctShelf[gameObject.foodKey];
 
-    if (droppedShelf === correct) {
-        setFridgeState("success");
-        foodItems = foodItems.filter(item => item !== currentFood);
-        currentFood = null;
-        if (droppedShelf === "drawer") {
-            setfridgeSuccessState("Thats correct! Veggies go in the crisper draw to mantain freshness.")
-            gameObject.destroy();
+        if (droppedShelf === correct) {
+            
+            foodItems = foodItems.filter(item => item !== currentFood);
+            if (foodItems.length === 0) {
+                setFridgeState("complete");
+                
+            } else {
+                setFridgeState("success");
+            }
+            currentFood = null;
+            
+            if (droppedShelf === "drawer"
+            ) {
+                setfridgeSuccessState("Thats correct! Veggies go in the crisper drawer to mantain freshness.")
+                gameObject.destroy();
+            } 
+            if (droppedShelf === "bottom") {
+                setfridgeSuccessState("Thats correct! Meat goes on the bottom shelf to prevent cross-contamination.")
+                gameObject.disableInteractive();
+            }
+            if (droppedShelf === "top") {
+                setfridgeSuccessState("Thats correct! Ready made food goes on the top shelf because it is usually precooked.")
+                gameObject.disableInteractive();
+            }
+            if (droppedShelf === "middle") {
+                setfridgeSuccessState("Thats correct! Dairy goes on the middle shelf where the temperature is most consistent.")
+                gameObject.disableInteractive();
+            }
+            
+            console.log("Correct!");
+            currentFood = null;
+            currentSprite = null;
+
         } 
-        if (droppedShelf === "bottom") {
-            setfridgeSuccessState("Thats correct! Meat goes on the bottom shelf to prevent cross-contamination.")
-            gameObject.disableInteractive();
-        }
-        if (droppedShelf === "top") {
-            setfridgeSuccessState("Thats correct! Ready made food goes on the top shelf because it is usually precooked.")
-            gameObject.disableInteractive();
-        }
-        if (droppedShelf === "middle") {
-            setfridgeSuccessState("Thats correct! Dairy goes on the middle shelf where the temperature is most consistent.")
-            gameObject.disableInteractive();
-        }
-        
-        console.log("Correct!");
-        currentFood = null;
-        currentSprite = null;
-
-    } 
-    else {
+        else {
 
 
-        setFridgeState("fail"); // React textbox trigger
-        gameObject.x = gameObject.startX;
-        gameObject.y = gameObject.startY;
-        if (correct === "drawer") {
-            setfridgefailState("Not quite! Veggies go in the crisper draw to mantain freshness.")
+            setFridgeState("fail"); // React textbox trigger
+            gameObject.x = gameObject.startX;
+            gameObject.y = gameObject.startY;
+            if (correct === "drawer") {
+                setfridgefailState("Not quite! Veggies go in the crisper draw to mantain freshness.")
+            }
+            if (correct === "bottom") {
+                setfridgefailState("Not quite! Meat goes on the bottom shelf to prevent cross-contamination.")
+            }
+            if (correct === "top") {
+                setfridgefailState("Not quite! Ready made food goes on the top shelf because it is usually precooked.")
+            }
+            if (correct === "middle") {
+                setfridgefailState("Not quite! Dairy goes on the middle shelf where the temperature is most consistent.")
+            }
         }
-        if (correct === "bottom") {
-            setfridgefailState("Not quite! Meat goes on the bottom shelf to prevent cross-contamination.")
-        }
-        if (correct === "top") {
-            setfridgefailState("Not quite! Ready made food goes on the top shelf because it is usually precooked.")
-        }
-        if (correct === "middle") {
-            setfridgefailState("Not quite! Dairy goes on the middle shelf where the temperature is most consistent.")
-        }
+
+    });
     }
-
-});
-}
     }
     class HandScene extends Phaser.Scene {
             constructor() {
@@ -440,7 +438,6 @@ this.input.on("dragend", (pointer, gameObject) => {
 
             preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
                 this.load.image("sinkbg", sinkbg);
-                this.load.image("apronOn", apronOn);
                 this.load.image("cleanHand", cleanHand);
                 this.load.image("dirtyHand", dirtyHand);
                 this.load.image("soapSprite", soapSprite);
@@ -609,7 +606,6 @@ this.input.on("dragend", (pointer, gameObject) => {
 
             preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
                 this.load.image("sinkbg", sinkbg);
-                this.load.image("apronOn", apronOn);
                 this.load.image("gloveLeft", gloveLeft);
                 this.load.image("gloveRight", gloveRight);
                 this.load.image("gloveBox", gloveBox);
@@ -718,26 +714,27 @@ this.input.on("dragend", (pointer, gameObject) => {
         
         phaserGameRef.current = new Phaser.Game(config);
     };
-useEffect(() => {
-    if (gameStage === "ThermometerScene") {
-        startPhaser(); 
-    }
-    if (gameStage === "FridgeScene") {
-        if (phaserGameRef.current) {
-            phaserGameRef.current.scene.start("FridgeScene");
+
+    useEffect(() => {
+        if (gameStage === "ThermometerScene") {
+            startPhaser(); 
         }
-    }
-    if (gameStage === "soapyHands") {
-        if (phaserGameRef.current) {
-            phaserGameRef.current.scene.start("soapyHands");
+        if (gameStage === "FridgeScene") {
+            if (phaserGameRef.current) {
+                phaserGameRef.current.scene.start("FridgeScene");
+            }
         }
-    }
-    if (gameStage === "gloveStage") {
-        if (phaserGameRef.current) {
-            phaserGameRef.current.scene.start("GloveScene");
+        if (gameStage === "HandScene") {
+            if (phaserGameRef.current) {
+                phaserGameRef.current.scene.start("HandScene");
+            }
         }
-    }
-}, [gameStage]);
+        if (gameStage === "gloveStage") {
+            if (phaserGameRef.current) {
+                phaserGameRef.current.scene.start("GloveScene");
+            }
+        }
+    }, [gameStage]);
 
     const handleNextClick = () => {
         if (gameStage === "intro") {
@@ -749,9 +746,9 @@ useEffect(() => {
             
         }
         if (gameStage === "FridgeScene") {
-            setgameStage("soapyHands");
+            setgameStage("HandScene");
         }
-        if (gameStage === "soapyHands") {
+        if (gameStage === "HandScene") {
             setgameStage("gloveStage");
         }
     };
@@ -763,36 +760,40 @@ useEffect(() => {
     const thermometerInstructions = useTypewriter(
     "Drag the bottom of the thermometer hand to the correct position to determine if the food is safe or not.",
     thermometerState === "instructions"
-);
-const thermometerSuccessText = useTypewriter(
-    "Great job! You correctly identified the food's safety which is between 0 and 40 degrees. Click next to continue.", 
-    thermometerState === "success"
-);
-const thermometerFailText = useTypewriter(
-    "Not quite! The food is unsafe because the temperature is above 40 degrees. Click to try again.",
-    thermometerState === "fail"
-);
-const fridgeFailText = useTypewriter(
-    fridgefailState,
-    fridgeState === "fail"
-);
-const fridgeInstructions = useTypewriter(
-    "Click on the box for the food item to appear. Drag it to the correct shelf.",
-    fridgeInstructionsState === "instructions"
-); 
+    );
+    const thermometerSuccessText = useTypewriter(
+        "Great job! You correctly identified the food's safety which is between 0 and 40 degrees. Click next to continue.", 
+        thermometerState === "success"
+    );
+    const thermometerFailText = useTypewriter(
+        "Not quite! The food is unsafe because the temperature is above 40 degrees. Click to try again.",
+        thermometerState === "fail"
+    );
+    const fridgeFailText = useTypewriter(
+        fridgefailState,
+        fridgeState === "fail"
+    );
+    const fridgeInstructions = useTypewriter(
+        "Click on the box for the food item to appear. Drag it to the correct shelf.",
+        fridgeInstructionsState === "instructions"
+    ); 
 
-const fridgeSuccessText = useTypewriter(
-    fridgeSuccessState,
-    fridgeState === "success"
-);
-   const soapText = useTypewriter("You have soaped the hand.",
-        gameStage === "soapyHands" && showSoapText)
+    const fridgeSuccessText = useTypewriter(
+        fridgeSuccessState,
+        fridgeState === "success"
+    );
+    const soapText = useTypewriter("Drag the soap to the hand to clean them.",
+        gameStage === "HandScene" && showSoapText)
     const soapSuccessText = useTypewriter("All clean! Now lets put on some gloves.",
-        gameStage === "soapyHands" && handsClean)
+        gameStage === "HandScene" && handsClean)
     const gloveText = useTypewriter("Make sure to put gloves on before touching any food",
         gameStage === "gloveStage" && gloveInstruction)
     const gloveSuccessText = useTypewriter("Gloved up!", 
         gameStage === "gloveStage" && glovedHands)
+    const fridgeComplete = useTypewriter("Great job! You correctly sorted the food. Click next to continue.",
+        fridgeState === "complete")
+    
+
 useEffect(() => {
     if (gameStage === "ThermometerScene") {
         setThermometerState("instructions");
@@ -802,11 +803,20 @@ useEffect(() => {
         setfridgefailState('');
         setfridgeSuccessState('');
     }
+    if (gameStage === "HandScene") {
+        setShowSoapText(true);
+    }
+    if (gameStage === "gloveStage") {
+        setGloveInstruction(true);
+    }
 }, [gameStage]);
     let placeholder = true;
 
     const isNextDisabled =
-    (gameStage === "ThermometerScene" && !(thermometerState === "success") && !(handsClean) && !(glovedHands));
+    (gameStage === "ThermometerScene" && thermometerState !== "success") ||
+    (gameStage === "FridgeScene" && fridgeState !== "complete") ||
+    (gameStage === "HandScene" && !handsClean) ||
+    (gameStage === "gloveStage" && !glovedHands);
    const overlayStyle = {
     position: "fixed",
     top: 0,
@@ -880,131 +890,178 @@ useEffect(() => {
                 zIndex: 10000
             }}
         />
-{gameStage === "ThermometerScene" && thermometerState === "instructions" && (
-    <div
-        onClick={() => setThermometerState("playing")}
-        style={overlayStyle}
-    >
+    {gameStage === "ThermometerScene" && thermometerState === "instructions" && (
         <div
-            style={{
-                position: "fixed",
-                right: "10vw",
-                bottom: "25vh"
-            }}
+            onClick={() => setThermometerState("playing")}
+            style={overlayStyle}
         >
-            <Textbox
-                width="30vw"
-                height="30vh"
-                placeholder={thermometerInstructions}
-                placeHolderColor="#000000"
-                placeHolderfontSize="1.1vw"
-            />
-        </div>
-    </div>
-)}
-{gameStage === "ThermometerScene" && thermometerState === "fail" && (
-    <div
-        onClick={() => setThermometerState("playing")}
-        style={overlayStyle}
-    >
-        <div
-            style={{
-                position: "fixed",
-                right: "10vw",
-                bottom: "25vh"
-            }}
-        >
-            <Textbox
-                width="30vw"
-                height="30vh"
-                placeholder={thermometerFailText}
-                placeHolderColor="#000000"
-                placeHolderfontSize="1.1vw"
-            />
-        </div>
-    </div>
-)}
-{gameStage === "ThermometerScene" && thermometerState === "success" && (
-    <div
-        style={{
-            position: "fixed",
-            right: "10vw",
-            bottom: "25vh",
-            zIndex: 15000
-        }}
-    >
-        <Textbox
-            width="30vw"
-            height="30vh"
-            placeholder={thermometerSuccessText}
-            placeHolderColor="#000000"
-            placeHolderfontSize="1.1vw"
-        />
-    </div>
-)}
-{gameStage === "FridgeScene" && fridgeInstructionsState === "instructions"&& (
-    <div
-        onClick={() => setFridgeInstructionsState("playing")}
-        style={overlayStyle}
-    >
-        <div
-            style={{
-                position: "fixed",
-                right: "10vw",
-                bottom: "25vh"
-            }}
-        >
-            <Textbox
-                width="30vw"
-                height="30vh"
-                placeholder={fridgeInstructions}
-                placeHolderColor="#000000"
-                placeHolderfontSize="1.1vw"
-            />
-        </div>
-    </div>
-)}
-{gameStage === "FridgeScene" && fridgeState === "fail" && (
-    <div
-        onClick={() => setFridgeState("playing")}
-        style={overlayStyle}
-    >
-        <div
-            style={{
-                position: "fixed",
-                right: "10vw",
-                bottom: "25vh"
-            }}
-        >
-            <Textbox
-                width="30vw"
-                height="30vh"
-                placeholder={fridgeFailText}
-                placeHolderColor="#000000"
-                placeHolderfontSize="1.1vw"
-            />
-        </div>
-    </div>
-)}
- {gameStage === "soapyHands" && handsClean && (
-                <div
-                    style={{
-                        position: "fixed",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        zIndex: 15000,
-                    }}
-                >
-                <TextboxErin
-                    width="80vw"
-                    height="85vh"
-                    placeholder={soapSuccessText}
+            <div
+                style={{
+                    position: "fixed",
+                    right: "10vw",
+                    bottom: "25vh"
+                }}
+            >
+                <Textbox
+                    width="30vw"
+                    height="30vh"
+                    placeholder={thermometerInstructions}
                     placeHolderColor="#000000"
-                    placeHolderfontSize="1.8vw"
+                    placeHolderfontSize="1.1vw"
                 />
-                </div>
-            )}
+            </div>
+        </div>
+    )}
+    {gameStage === "ThermometerScene" && thermometerState === "fail" && (
+        <div
+            onClick={() => setThermometerState("playing")}
+            style={overlayStyle}
+        >
+            <div
+                style={{
+                    position: "fixed",
+                    right: "10vw",
+                    bottom: "25vh"
+                }}
+            >
+                <Textbox
+                    width="30vw"
+                    height="30vh"
+                    placeholder={thermometerFailText}
+                    placeHolderColor="#000000"
+                    placeHolderfontSize="1.1vw"
+                />
+            </div>
+        </div>
+    )}
+    {gameStage === "ThermometerScene" && thermometerState === "success" && (
+        <div
+            style={{
+                position: "fixed",
+                right: "10vw",
+                bottom: "25vh",
+                zIndex: 15000
+            }}
+        >
+            <Textbox
+                width="30vw"
+                height="30vh"
+                placeholder={thermometerSuccessText}
+                placeHolderColor="#000000"
+                placeHolderfontSize="1.1vw"
+            />
+        </div>
+    )}
+    {gameStage === "FridgeScene" && fridgeInstructionsState === "instructions"&& (
+        <div
+            onClick={() => setFridgeInstructionsState("playing")}
+            style={overlayStyle}
+        >
+            <div
+                style={{
+                    position: "fixed",
+                    right: "10vw",
+                    bottom: "25vh"
+                }}
+            >
+                <Textbox
+                    width="30vw"
+                    height="30vh"
+                    placeholder={fridgeInstructions}
+                    placeHolderColor="#000000"
+                    placeHolderfontSize="1.1vw"
+                />
+            </div>
+        </div>
+    )}
+    
+
+    {gameStage === "FridgeScene" && fridgeState === "fail" && (
+        <div
+            onClick={() => setFridgeState("playing")}
+            style={overlayStyle}
+        >
+            <div
+                style={{
+                    position: "fixed",
+                    right: "10vw",
+                    bottom: "25vh"
+                }}
+            >
+                <Textbox
+                    width="30vw"
+                    height="30vh"
+                    placeholder={fridgeFailText}
+                    placeHolderColor="#000000"
+                    placeHolderfontSize="1.1vw"
+                />
+            </div>
+        </div>
+    )}
+    {gameStage === "FridgeScene" && fridgeState === "complete" && (
+        <div
+            onClick={() => setFridgeInstructionsState("playing")}
+            style={overlayStyle}
+        >
+            <div
+                style={{
+                    position: "fixed",
+                    right: "10vw",
+                    bottom: "25vh"
+                }}
+            >
+                <Textbox
+                    width="30vw"
+                    height="30vh"
+                    placeholder={fridgeComplete}
+                    placeHolderColor="#000000"
+                    placeHolderfontSize="1.1vw"
+                />
+            </div>
+        </div>
+    )}
+    {gameStage ==="HandScene" && showSoapText && (
+        <div
+            onClick={() => setShowSoapText(false)}
+            style={overlayStyle}
+        >
+            <div
+                style={{
+                    position: "fixed",
+                    right: "10vw",
+                    bottom: "25vh"
+                }}
+            >
+                <Textbox
+                    width="30vw"
+                    height="30vh"
+                    placeholder={soapText}
+                    placeHolderColor="#000000"
+                    placeHolderfontSize="1.1vw"
+                />
+            </div>
+        </div>
+    )}
+
+            {gameStage === "HandScene" && handsClean && (
+                    <div
+                        style={{
+                            position: "fixed",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            zIndex: 15000,
+                        }}
+                    >
+                    <TextboxErin
+                        width="80vw"
+                        height="85vh"
+                        placeholder={soapSuccessText}
+                        placeHolderColor="#000000"
+                        placeHolderfontSize="1.8vw"
+                    />
+                    </div>
+                )}
 
             {gameStage === "gloveStage" && gloveInstruction && (
                 <div
