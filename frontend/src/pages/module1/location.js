@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
@@ -7,6 +7,7 @@ import plainClothes from "../../assets/Tieduphair.png";
 import apron from "../../assets/M1G3/apron.png";
 import apronOn from "../../assets/M1G3/noGlove.png";
 import Textbox from "../../components/textbox";
+import useTypewriter from "../../components/typewriter";
 import nextButton from "../../assets/nextbutton.png"; 
 import TextboxErin from "../../components/textboxerin";
 import cleanHand from "../../assets/M1G3/handClean.png";
@@ -40,35 +41,6 @@ export default function Location() {
     const [gloveInstruction, setGloveInstruction] = useState(false);
     const [glovedHands, setGlovedHands] = useState(false);
 
-    function useTypewriter(text, isActive, speed = 30) { //this is the type writer that actually types the text out one character at a time. It takes in the text to display, whether it should be active, and the speed of typing.
-        const [typedText, setTypedText] = useState("");
-        const hasStarted = useRef(false);
-
-        useEffect(() => {
-            if (!text || !isActive || hasStarted.current) return;
-
-            hasStarted.current = true;  // this prevent restarting
-            setTypedText("");
-
-            let i = 0;
-
-            const interval = setInterval(() => {
-                setTypedText(prev => {
-                    if (i >= text.length) {
-                        clearInterval(interval);
-                        return prev;
-                    }
-                    return prev + text[i++];
-                });
-            }, speed);
-
-            return () => clearInterval(interval);
-
-        }, [text, isActive, speed]);
-
-        return typedText;
-    }
-
     const introText = useTypewriter("We've arrived at the volunteer location, let's finish getting ready.",
         gameStage === "intro");
     const instructionText = useTypewriter("In the following game, we will be going through essential personal hygiene steps to follow once you arrive at the volunteer location. Progress in the game by dragging items to the correct area using your finger.",
@@ -86,9 +58,7 @@ export default function Location() {
     const gloveSuccessText = useTypewriter("Gloved up!", 
         gameStage === "gloveStage" && glovedHands)
 
-
     const startPhaser = () => {
-
         if (phaserGameRef.current) return;
 
         class ApronScene extends Phaser.Scene {
@@ -480,30 +450,38 @@ export default function Location() {
         if (gameStage === "instruction") {
             startPhaser("ApronScene");
             setGameStage("apron");
+
             if (phaserGameRef.current) {
                 phaserGameRef.current.scene.start("ApronScene");
             }
+            return;
         }
 
         if (gameStage === "apron") {
             setGameStage("soapyHands");
+
             if (phaserGameRef.current) {
                 phaserGameRef.current.scene.start("HandScene");
             }
+            return;
         }
 
         if (gameStage === "soapyHands") {
             setGameStage("gloveStage");
+
             if (phaserGameRef.current) {
                 phaserGameRef.current.scene.start("GloveScene");
             }
+            return;
         }
 
         if (gameStage === "gloveStage") {
             setGameStage("finalStage");
+
             if (phaserGameRef.current) {
                 phaserGameRef.current.scene.start("FinalScene");
             }
+            return;
         }
 
         if (gameStage === "finalStage") {
