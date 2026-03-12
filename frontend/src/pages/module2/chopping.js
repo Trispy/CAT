@@ -404,24 +404,25 @@ export default function Cleaning() {
 
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     if (gameObject === icon) {
+
                         gameObject.x = dragX;
                         gameObject.y = dragY;
+
                         cleanIcon.x = dragX;
                         cleanIcon.y = dragY;
-                    }
-                });
 
-                icon.on("dragend", () => {
-                    const bounds = icon.getBounds();
-                    if (Phaser.Geom.Intersects.RectangleToRectangle(bounds, waterZone)) {
-                        icon.alpha -= 0.1;
-                    }
-                    if (icon.alpha <= 0) {
-                        icon.destroy();
-                        cleanIcon.destroy();
-                        graphics.destroy();
-                        this.volScreen.destroy(true);
-                        return;
+                        const bounds = gameObject.getBounds();
+
+                        if (Phaser.Geom.Intersects.RectangleToRectangle(bounds, waterZone)) {
+                            gameObject.alpha = Math.max(0, gameObject.alpha - 0.005);
+                            if (icon.alpha <= 0) {
+                                icon.destroy();
+                                cleanIcon.destroy();
+                                graphics.destroy();
+                                this.volScreen.destroy(true);
+                                return;
+                            }
+                        }
                     }
                 });
             }
