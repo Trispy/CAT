@@ -20,8 +20,22 @@ import gloveBox from "../../assets/M1G3/gloveBox.png";
 import handLeft from "../../assets/M1G3/handLeft.png";
 import handRight from "../../assets/M1G3/handRight.png";
 import sudImg from "../../assets/M1G3/sud.png";
+import noGlove from "../../assets/M2G2/noGlove.png";
+import gloved from "../../assets/M2G2/gloved.png";
 
-export default function Location() {
+import beef from "../../assets/M2G2/beef.png";
+import bellPeppers from "../../assets/M2G2/bellpeppers.png";
+import onion from "../../assets/M2G2/onion.png";
+import cuttingBoard from "../../assets/M2G2/cuttingBoard.png";
+import dirtyCuttingBoard from "../../assets/M2G2/cuttingboarddirty.png";
+import dirtyBellpepper from "../../assets/M2G2/dirtyBellpeppers.png";
+import dirtyOnion from "../../assets/M2G2/dirtyOnion.png";
+import beefBowl from "../../assets/M2G2/BeefBowl.png";
+import onionBowl from "../../assets/M2G2/OnionBowl.png";
+import pepperBowl from "../../assets/M2G2/PepperBowl.png";
+import sprayBottle from "../../assets/M2G2/Spraybottle.png";
+
+export default function Cleaning() {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
 
@@ -139,6 +153,386 @@ export default function Location() {
             }
         }
 
+        class CleanScene extends Phaser.Scene {
+            constructor() {
+                super("CleanScene");
+            }
+
+            preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
+                this.load.image("volLocation", Loc);
+                this.load.image("sinkbg", sinkbg);
+                this.load.image("noGlove", noGlove);
+                this.load.image("gloved", gloved);
+                this.load.image("apronOn", apronOn);
+                this.load.image("beef", beef);
+                this.load.image("onion", onion);
+                this.load.image("bellpepper", bellPeppers);
+                this.load.image("dirtyOnion", dirtyOnion);
+                this.load.image("dirtyBellpepper", dirtyBellpepper);
+                this.load.image("beefBowl", beefBowl);
+                this.load.image("onionBowl", onionBowl);
+                this.load.image("pepperBowl", pepperBowl);
+                this.load.image("sprayBottle", sprayBottle);
+                this.load.image("cuttingBoard", cuttingBoard);
+                this.load.image("dirtyCuttingBoard", dirtyCuttingBoard);
+            }
+
+            create() {
+                const { width, height } = this.scale;
+
+                this.add.image(width / 2, height / 2, "volLocation")
+                    .setDisplaySize(width, height);
+
+                // Character
+                const character = this.add.image(
+                    width - width * 0.20,
+                    height * 0.65,
+                    "gloved"
+                );
+
+                const charScale = (height * 0.7) / character.height;
+                character.setScale(charScale);
+
+                const sinkZone = new Phaser.Geom.Rectangle( //interactive sink area
+                    width * 0.002, 
+                    height / 2 - height * 0.05, 
+                    width * 0.19,
+                    height * 0.25
+                );
+
+                const boardZone = new Phaser.Geom.Rectangle( //interactive cutting board area
+                    width / 2 - width * 0.22, 
+                    height / 2 - height * 0.05, 
+                    width * 0.15,
+                    height * 0.13
+                );
+
+                const onionIcon = this.add.image(
+                    width * 0.5,
+                    height * 0.15,
+                    "dirtyOnion"
+                );
+                const onionScale = (width * 0.05) / onionIcon.width;
+                onionIcon.setScale(onionScale);
+                onionIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(onionIcon);
+
+                const pepperIcon = this.add.image(
+                    width * 0.40,
+                    height * 0.10,
+                    "dirtyBellpepper"
+                );
+                const pepperScale = (width * 0.10) / pepperIcon.width;
+                pepperIcon.setScale(pepperScale);
+                pepperIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(pepperIcon);
+
+                const beefIcon = this.add.image(
+                    width * 0.80,
+                    height * 0.10,
+                    "beef"
+                );
+                const beefScale = (width * 0.06) / beefIcon.width;
+                beefIcon.setScale(beefScale);
+                beefIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(beefIcon);
+
+                const bottleIcon = this.add.image(
+                    width * 0.20,
+                    height * 0.5,
+                    "sprayBottle"
+                );
+                const bottleScale = (width * 0.05) / bottleIcon.width;
+                bottleIcon.setScale(bottleScale);
+                bottleIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(bottleIcon);
+
+                // show rectangle
+                /*
+                const objBounds = bottleIcon.getBounds();
+                const graphics = this.add.graphics({
+                    fillStyle: { color: 0xff0000 },
+                    lineStyle: { width: 4, color: 0x00ff00 }
+                });
+                graphics.alpha = 0.5;
+                graphics.fillRectShape(objBounds)
+                */
+
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    if (gameObject === onionIcon) {
+                        gameObject.x = dragX;
+                        gameObject.y = dragY;
+                    }
+                    else if (gameObject === pepperIcon) {
+                        gameObject.x = dragX;
+                        gameObject.y = dragY;
+                    }
+                    else if (gameObject === beefIcon) {
+                        gameObject.x = dragX;
+                        gameObject.y = dragY;
+                    }
+                    else if (gameObject === bottleIcon) {
+                        gameObject.x = dragX;
+                        gameObject.y = dragY;
+                    }
+                });
+
+                onionIcon.on("dragend", () => {
+
+                    const onionBounds = onionIcon.getBounds();
+
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(onionBounds, sinkZone)) {
+                        this.wash("dirtyOnion", "onion");
+                        onionIcon.setTexture("onion");
+                    } 
+                    else if (Phaser.Geom.Intersects.RectangleToRectangle(onionBounds, boardZone)) {
+                        //this.chop("onion", "onionBowl");
+                        if (onionIcon.texture === "onion") {
+                            onionIcon.setTexture("onionBowl");
+                        }
+                        else if (onionIcon.texture === "dirtyOnion") {
+                            // TODO: INSERT TEXT HERE
+                        }
+                    } 
+                    else {
+                        onionIcon.setPosition(
+                            width * 0.5,
+                            height * 0.15,
+                        );
+                    }
+                });
+
+                pepperIcon.on("dragend", () => {
+
+                    const pepperBounds = pepperIcon.getBounds();
+
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(pepperBounds, sinkZone)) {
+                        this.wash("dirtyBellpepper", "bellpepper");
+                        pepperIcon.setTexture("bellpepper");
+                    } 
+                    else if (Phaser.Geom.Intersects.RectangleToRectangle(pepperBounds, boardZone)) {
+                        //this.chop("onion", "onionBowl");
+                        if (pepperIcon.texture === "onion") {
+                            pepperIcon.setTexture("onionBowl");
+                        }
+                        else if (pepperIcon.texture === "dirtyOnion") {
+                            // TODO: INSERT TEXT HERE
+                        }
+                    } 
+                    else {
+                        pepperIcon.setPosition(
+                            width * 0.40,
+                            height * 0.10
+                        );
+                    }
+                });
+
+                bottleIcon.on("dragend", () => {
+                    const bottleBounds = bottleIcon.getBounds();
+
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(bottleBounds, boardZone)) {
+                        this.disinfect();
+                    } 
+                    else {
+                        bottleIcon.setPosition(
+                            width * 0.20,
+                            height * 0.5,
+                        );
+                    }
+                });
+
+                this.events.on("startClean", () => {
+                    onionIcon.setInteractive({ useHandCursor: true });
+                    pepperIcon.setInteractive({ useHandCursor: true })
+                    beefIcon.setInteractive({ useHandCursor: true })
+                });
+                this.events.on("shutdown", () => {
+                    this.input.removeAllListeners();
+                });
+            }
+
+            wash(dirty, clean) {
+                const { width, height } = this.scale;
+                this.volScreen = this.add.container(0, 0);
+                const bg = this.add.image(width / 2, height / 2, "sinkbg")
+                    .setDisplaySize(width, height);
+                this.volScreen.add(bg);
+
+                const cleanIcon = this.add.image(
+                    width / 4,
+                    height / 4,
+                    clean
+                );
+
+                const icon = this.add.image(
+                    width / 4,
+                    height / 4,
+                    dirty
+                );
+
+                const scale = (width * 0.10) / icon.width;
+                icon.setScale(scale);
+                cleanIcon.setScale(scale);
+
+                // Make draggable immediately
+                icon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(icon);
+
+                cleanIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(cleanIcon);
+
+                const waterZone = new Phaser.Geom.Polygon( //interactive sink area
+                    [
+                        {x: width * 0.25, y: height / 2 - height * 0.045}, 
+                        {x: width * 0.25 + width * 0.5, y: height / 2 - height * 0.045},
+                        {x: width * 0.25 + width * 0.5, y: height / 2 - height * 0.045 + height * 0.20},
+                        {x: width * 0.25 + width * 0.45, y: height / 2 - height * 0.045 + height * 0.27},
+                        {x: width * 0.25 + width * 0.05, y: height / 2 - height * 0.045 + height * 0.27},
+                        {x: width * 0.25, y: height / 2 - height * 0.045 + height * 0.20},
+                    ]
+                );
+
+                const graphics = this.add.graphics({
+                    fillStyle: { color: 0x4f59a8 },
+                    lineStyle: { width: 4, color: 0x4f59a8 }
+                });
+                graphics.alpha = 0.5;
+                graphics.fillPoints(waterZone.points);
+
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    if (gameObject === icon) {
+                        gameObject.x = dragX;
+                        gameObject.y = dragY;
+                        cleanIcon.x = dragX;
+                        cleanIcon.y = dragY;
+                    }
+                });
+
+                icon.on("dragend", () => {
+                    const bounds = icon.getBounds();
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(bounds, waterZone)) {
+                        icon.alpha -= 0.1;
+                    } 
+                    if (icon.alpha <= 0) {
+                        icon.destroy();
+                        cleanIcon.destroy();
+                        graphics.destroy();
+                        this.volScreen.destroy(true);
+                        return;
+                    }
+                });
+            }
+
+            disinfect() {
+                const { width, height } = this.scale;
+                this.volScreen = this.add.container(0, 0);
+                const bg = this.add.image(width / 2, height / 2, "cuttingBoard")
+                    .setDisplaySize(width, height);
+                this.volScreen.add(bg);
+
+                const dirtyBoard = this.add.image(width / 2, height / 2, "dirtyCuttingBoard")
+                    .setDisplaySize(width, height);
+
+                dirtyBoard.setVisible(false);
+
+                const bottleIcon = this.add.image(
+                    width / 6,
+                    height / 6,
+                    "sprayBottle"
+                );
+                const bottleScale = (width * 0.15) / bottleIcon.width;
+                bottleIcon.setScale(bottleScale);
+                bottleIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(bottleIcon);
+
+                const boardZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
+                    width * 0.12, 
+                    height / 2 - height * 0.30, 
+                    width * 0.75,
+                    height * 0.60
+                );
+
+                const gridSize = 20; // size of each cell
+                const cells = [];
+
+                for (let x = boardZone.x; x < boardZone.right; x += gridSize) {
+                    for (let y = boardZone.y; y < boardZone.bottom; y += gridSize) {
+                        cells.push({
+                            x,
+                            y,
+                            cleared: false
+                        });
+                    }
+                }
+
+                // Create render texture same size as long hand
+                const dirtyBoardRT = this.add.renderTexture(
+                    dirtyBoard.x,
+                    dirtyBoard.y,
+                    dirtyBoard.displayWidth,
+                    dirtyBoard.displayHeight
+                );
+
+                // Draw the hidden long hand into render texture so user can erase it
+                dirtyBoardRT.draw(
+                    dirtyBoard,
+                    dirtyBoard.displayWidth / 2,
+                    dirtyBoard.displayHeight / 2
+                );
+
+                dirtyBoard.destroy();
+
+                const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
+                eraseBrush.fillStyle(0xffffff);
+                eraseBrush.fillCircle(0, 0, 25);
+
+                this.input.setDraggable(bottleIcon);
+
+                bottleIcon.on("dragstart", () => {
+                    bottleIcon.setScale(bottleScale);
+                });
+
+                bottleIcon.on("dragend", () => {
+                    bottleIcon.setScale(bottleScale);
+                });
+
+                let sprayed = false;
+               
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    if (gameObject !== bottleIcon) return;
+
+                    
+                    bottleIcon.x = dragX;
+                    bottleIcon.y = dragY;
+                
+                dirtyBoardRT.erase(eraseBrush, dragX, dragY);
+                cells.forEach(cell => {
+                if (!cell.cleared) {
+                    if (
+                        dragX > cell.x &&
+                        dragX < cell.x + gridSize &&
+                        dragY > cell.y &&
+                        dragY < cell.y + gridSize
+                    ) {
+                        cell.cleared = true;
+                    }
+                }
+                });
+                const clearedCount = cells.filter(c => c.cleared).length;
+                const percentCleared = clearedCount / cells.length;
+                if (!sprayed && percentCleared > 0.40) {
+                    sprayed = true;
+                }
+
+            });
+
+            }
+
+            chop(whole, chopped) {
+                
+            }
+        }
+
         class HandScene extends Phaser.Scene {
             constructor() {
                 super("HandScene");
@@ -182,10 +576,10 @@ export default function Location() {
                 dirtyHand.setVisible(false);
 
                 const handZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
-                    width / 2 - width * 0.23, 
-                    height / 2 - height * 0.37, 
-                    width * 0.45,
-                    height * 0.8
+                    width / 2 - width * 0.20, 
+                    height / 2 - height * 0.35, 
+                    700,
+                    700
                 );
 
                 const gridSize = 20; // size of each cell
@@ -252,7 +646,7 @@ export default function Location() {
 
                     const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
                     eraseBrush.fillStyle(0xffffff);
-                    eraseBrush.fillCircle(0, 0, width * 0.02);
+                    eraseBrush.fillCircle(0, 0, 60);
                     
                     const sud = this.add.image(
                         dragX,
@@ -288,7 +682,7 @@ export default function Location() {
                     });
                     const clearedCount = cells.filter(c => c.cleared).length;
                     const percentCleared = clearedCount / cells.length;
-                    if (!handsClean && percentCleared > 0.60) {
+                    if (!handsClean && percentCleared > 0.20) {
                         setHandsClean(true);
                         console.log("Hands fully clean.");
                         dirtyHandRT.setVisible(false);
@@ -371,18 +765,17 @@ export default function Location() {
                     const gloveBoxBounds = gloveBox.getBounds();
                     const leftZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                         width / 2 - width * 0.23, 
-                        height / 2 - height * 0.38, 
-                        width * 0.2,
-                        height * 0.7
+                        height / 2 - height * 0.35, 
+                        350,
+                        700
                     );
 
                         const rightZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                         width / 2, 
                         height / 2 - height * 0.35, 
-                        width * 0.22,
-                        height * 0.7
+                        350,
+                        700
                     );
-
                     if (Phaser.Geom.Intersects.RectangleToRectangle(gloveBoxBounds, leftZone)) {
                         cleanHand.setTexture("gloveLeft");
                         if(oneGlove) setGlovedHands(true);
@@ -433,7 +826,7 @@ export default function Location() {
             width: window.innerWidth,
             height: window.innerHeight,
             transparent: true,
-            scene: [ApronScene, HandScene, GloveScene, FinalScene],
+            scene: [ApronScene, HandScene, GloveScene, FinalScene, CleanScene],
             parent: "phaser-transition-container"
         };
 
@@ -444,16 +837,23 @@ export default function Location() {
         e.stopPropagation();
 
         if (gameStage === "intro") {
-            setGameStage("instruction");
-            return;
-        }
-
-        if (gameStage === "instruction") {
-            startPhaser("ApronScene");
+            startPhaser("CleanScene");
             setGameStage("apron");
 
             if (phaserGameRef.current) {
-                phaserGameRef.current.scene.start("ApronScene");
+                phaserGameRef.current.scene.start("CleanScene");
+            }
+            return;
+            setGameStage("cleanStage");
+            return;
+        }
+
+        if (gameStage === "cleanStage") {
+            startPhaser("CleanScene");
+            setGameStage("apron");
+
+            if (phaserGameRef.current) {
+                phaserGameRef.current.scene.start("CleanScene");
             }
             return;
         }
