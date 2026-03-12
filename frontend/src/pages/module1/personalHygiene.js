@@ -193,10 +193,11 @@ function PersonalHygiene() {
                 
                 const nailZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                     width / 2 - width * 0.15, 
-                    height / 2 - height * 0.40,  
-                    500,              
-                    220        
+                    height / 2 - height * 0.50,  
+                    width * 0.35,
+                    height * 0.40      
                 );
+                
             const gridSize = 20; // size of each cell
             const cells = [];
 

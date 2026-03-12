@@ -8,7 +8,7 @@ import thermometerBackground from "../../assets/thermometerbackground.png"
 import nextButton from "../../assets/nextbutton.png"
 import readymadefood1 from "../../assets/readymadefood1.png"
 import readymadefood2 from "../../assets/readymadefood2.png"
-import yogurt from "../../assets/yogurt.png"
+import egg from "../../assets/egg.png"
 import onion from "../../assets/onion.png"
 import bellpepper from "../../assets/bellpeppers.png"
 import beefpackage from "../../assets/beefpackage.png"
@@ -30,6 +30,7 @@ import sudImg from "../../assets/M1G3/sud.png";
 import TextboxErin from "../../components/textboxerin";
 
 
+
 function Module2Part1() {
     const [gameStage, setgameStage] = useState('intro'); 
     const phaserGameRef = useRef(null);
@@ -44,6 +45,7 @@ function Module2Part1() {
     const [showSoapText, setShowSoapText] = useState(false);
     const [glovedHands, setGlovedHands] = useState(false);
     const [gloveInstruction, setGloveInstruction] = useState(false);
+    const [timerDone, setTimerDone] = useState(false);
     
     
     
@@ -105,11 +107,11 @@ function Module2Part1() {
 
             const { width, height } = this.scale;
 
-            // Background
+      
             this.add.image(width / 2, height / 2, "thermometerBackground")
                 .setDisplaySize(width, height);
 
-            // Thermometer body
+
             const therm = this.add.image(width / 2, height / 2, "thermometer");
 
             const thermScale = (height * 0.7) / therm.height;
@@ -157,7 +159,6 @@ function Module2Part1() {
 
             angleDeg = (angleDeg + 360) % 360;
 
-            // Clamp to right ↔ left only
             if (angleDeg > 180) return;
 
             pivot.angle = angleDeg;
@@ -186,7 +187,7 @@ function Module2Part1() {
         preload() {
             this.load.image("readymadefood1", readymadefood1);
             this.load.image("readymadefood2", readymadefood2);
-            this.load.image("yogurt", yogurt);
+            this.load.image("egg", egg);
             this.load.image("onion", onion);
             this.load.image("beefpackage", beefpackage);
             this.load.image("chicken", chicken);
@@ -208,7 +209,7 @@ function Module2Part1() {
             box.setScale(boxScale);
         
 
-            const chickenpkg = this.add.image(width/2 - width * 0.25, height/2 + height * 0.30, "chickenpackage")
+            const chickenpkg = this.add.image(width/2 - width * 0.25, height/2 + height * 0.30, "beefpackage")
             const chickenpkgScale = (height * 0.18) / chickenpkg.height;
             chickenpkg.setScale(chickenpkgScale);
             chickenpkg.setVisible(false);
@@ -233,10 +234,10 @@ function Module2Part1() {
             ready2.setScale(ready2Scale);
             ready2.setVisible(false);
 
-            const yogurt = this.add.image(width/2, height/2 - height * 0.20, "yogurt")
-            const yogurtScale = (height * 0.20) / yogurt.height;
-            yogurt.setScale(yogurtScale);
-            yogurt.setVisible(false);
+            const egg = this.add.image(width/2, height/2 - height * 0.20, "egg")
+            const eggScale = (height * 0.20) / egg.height;
+            egg.setScale(eggScale);
+            egg.setVisible(false);
 
             const milk = this.add.image(width/2 + width * 0.25, height/2 - height * 0.20, "milk")
             const milkScale = (height * 0.20) / milk.height;
@@ -253,23 +254,20 @@ function Module2Part1() {
                 {key:"onion", sprite: onion},
                 {key:"readymadefood1", sprite: ready1},
                 {key:"readymadefood2", sprite: ready2},
-                {key:"yogurt", sprite: yogurt},
+                {key:"egg", sprite: egg},
                 {key:"milk", sprite: milk},
                 {key:"bellpepper", sprite: bellpepper}
             ];
 
-            let fooditems = [chickenpkg, beefpkg, onion, ready1, ready2, yogurt, milk, bellpepper];
+            let fooditems = [chickenpkg, beefpkg, onion, ready1, ready2, egg, milk, bellpepper];
             const correctShelf = {
                 chickenpackage: "bottom",
                 beefpackage: "bottom",
-
                 bellpepper: "drawer",
                 onion: "drawer",
-
                 readymadefood1: "top",
                 readymadefood2: "top",
-
-                yogurt: "middle",
+                egg: "middle",
                 milk: "middle"
             };
 
@@ -446,7 +444,36 @@ function Module2Part1() {
 
             create() {
                 const { width, height } = this.scale;
+                let timeLeft = 20;
 
+                const timerText = this.add.text(
+                    width * 0.85,
+                    height * 0.05,
+                    ":20",
+                    {
+                        fontSize: "48px",
+                        color: "#ff0000",
+                        fontStyle: "bold"
+                    }
+                    ).setOrigin(0.5);
+                timerText.setDepth(1000);
+                this.time.addEvent({
+                    delay: 1000, //one second
+                    loop: true,
+                    callback: () => {
+                        if (timeLeft <= 0) return;
+                        timeLeft--;
+                        timerText.setText(":" + timeLeft.toString());
+
+                        if (timeLeft <= 0) {
+
+                            timerText.setText("Done!");
+                            setTimerDone(true);
+
+                        }
+
+                    }
+                });
                 this.add.image(width / 2, height / 2, "sinkbg")
                     .setDisplaySize(width, height);
                 // Bottom layer (trimmed hand)
@@ -472,7 +499,7 @@ function Module2Part1() {
 
                 dirtyHand.setVisible(false);
 
-                const handZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
+                const handZone = new Phaser.Geom.Rectangle( 
                     width / 2 - width * 0.20, 
                     height / 2 - height * 0.35, 
                     700,
@@ -725,6 +752,7 @@ function Module2Part1() {
             }
         }
         if (gameStage === "HandScene") {
+            
             if (phaserGameRef.current) {
                 phaserGameRef.current.scene.start("HandScene");
             }
@@ -785,7 +813,7 @@ function Module2Part1() {
     const soapText = useTypewriter("Drag the soap to the hand to clean them.",
         gameStage === "HandScene" && showSoapText)
     const soapSuccessText = useTypewriter("All clean! Now lets put on some gloves.",
-        gameStage === "HandScene" && handsClean)
+        gameStage === "HandScene" && handsClean && timerDone)
     const gloveText = useTypewriter("Make sure to put gloves on before touching any food",
         gameStage === "gloveStage" && gloveInstruction)
     const gloveSuccessText = useTypewriter("Gloved up!", 
@@ -804,6 +832,7 @@ useEffect(() => {
         setfridgeSuccessState('');
     }
     if (gameStage === "HandScene") {
+        setTimerDone(false);
         setShowSoapText(true);
     }
     if (gameStage === "gloveStage") {
@@ -815,7 +844,7 @@ useEffect(() => {
     const isNextDisabled =
     (gameStage === "ThermometerScene" && thermometerState !== "success") ||
     (gameStage === "FridgeScene" && fridgeState !== "complete") ||
-    (gameStage === "HandScene" && !handsClean) ||
+    (gameStage === "HandScene" && (!handsClean || !timerDone)) ||
     (gameStage === "gloveStage" && !glovedHands);
    const overlayStyle = {
     position: "fixed",
@@ -1043,7 +1072,7 @@ useEffect(() => {
         </div>
     )}
 
-            {gameStage === "HandScene" && handsClean && (
+            {gameStage === "HandScene" && handsClean && timerDone &&(
                     <div
                         style={{
                             position: "fixed",
