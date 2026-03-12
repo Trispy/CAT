@@ -36,7 +36,7 @@ import pepperBowl from "../../assets/M2G2/PepperBowl.png";
 import sprayBottle from "../../assets/M2G2/Spraybottle.png";
 import rag from "../../assets/M2G2/rag.png";
 import wetCuttingBoard from "../../assets/M2G2/watercuttingboard.png";
-
+import knife from "../../assets/M2G2/knife.png";
 
 export default function Cleaning() {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
@@ -316,7 +316,9 @@ export default function Cleaning() {
                 this.load.image("cuttingBoard", cuttingBoard);
                 this.load.image("dirtyCuttingBoard", dirtyCuttingBoard);
                 this.load.image("wetCuttingBoard", wetCuttingBoard);
-                this.load.image("rag", rag);
+                this.load.image("rag", rag); 
+                this.load.image("knife", knife); 
+                
             }
 
             create() {
@@ -428,7 +430,7 @@ export default function Cleaning() {
                         onionIcon.setTexture("onion");
                     } 
                     else if (Phaser.Geom.Intersects.RectangleToRectangle(onionBounds, boardZone)) {
-                        //this.chop("onion", "onionBowl");
+                        chopping("dirtyOnion", "onionBowl", "knife");
                         if (onionIcon.texture === "onion") {
                             onionIcon.setTexture("onionBowl");
                         }
@@ -453,7 +455,7 @@ export default function Cleaning() {
                         pepperIcon.setTexture("bellpepper");
                     } 
                     else if (Phaser.Geom.Intersects.RectangleToRectangle(pepperBounds, boardZone)) {
-                        //this.chop("onion", "onionBowl");
+                        chopping("dirtyBellpepper", "pepperBowl", "knife");
                         if (pepperIcon.texture === "onion") {
                             pepperIcon.setTexture("onionBowl");
                         }
@@ -1058,30 +1060,7 @@ export default function Cleaning() {
                 });
             }
         }
-        class ChopScene extends Phaser.Scene {
-            constructor() {
-                super("ChopScene");
-            }
-
-            preload() {
-                this.load.image("cuttingBoard", cuttingBoard);
-                this.load.image("onion", onion);
-                this.load.image("knife", knife);
-                this.load.image("bellpepper", bellPeppers);
-                this.load.image("beef", beef);
-                this.load.image("choppedbeef", choppedBeef);
-                this.load.image("choppedOnion", choppedOnion);
-                this.load.image("choppedPepper", choppedPepper);
-            }
-            create() {
-                chopped("onion", "choppedOnion", "knife");
-
-                chopped("bellpepper", "choppedPepper", "knife");
-
-                chopped("beef", "choppedBeef", "knife");
-
-            }
-        }
+        
         class FinalScene extends Phaser.Scene {
             constructor() {
                 super("FinalScene");
