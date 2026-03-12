@@ -34,6 +34,8 @@ import beefBowl from "../../assets/M2G2/BeefBowl.png";
 import onionBowl from "../../assets/M2G2/OnionBowl.png";
 import pepperBowl from "../../assets/M2G2/PepperBowl.png";
 import sprayBottle from "../../assets/M2G2/Spraybottle.png";
+import rag from "../../assets/M2G2/rag.png";
+import wetCuttingBoard from "../../assets/M2G2/watercuttingboard.png";
 
 export default function Cleaning() {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
@@ -175,6 +177,8 @@ export default function Cleaning() {
                 this.load.image("sprayBottle", sprayBottle);
                 this.load.image("cuttingBoard", cuttingBoard);
                 this.load.image("dirtyCuttingBoard", dirtyCuttingBoard);
+                this.load.image("wetCuttingBoard", wetCuttingBoard);
+                this.load.image("rag", rag);
             }
 
             create() {
@@ -430,20 +434,13 @@ export default function Cleaning() {
                     .setDisplaySize(width, height);
                 this.volScreen.add(bg);
 
+                const wetBoard = this.add.image(width / 2, height / 2, "wetCuttingBoard")
+                    .setDisplaySize(width, height);
+
                 const dirtyBoard = this.add.image(width / 2, height / 2, "dirtyCuttingBoard")
                     .setDisplaySize(width, height);
 
                 dirtyBoard.setVisible(false);
-
-                const bottleIcon = this.add.image(
-                    width / 6,
-                    height / 6,
-                    "sprayBottle"
-                );
-                const bottleScale = (width * 0.15) / bottleIcon.width;
-                bottleIcon.setScale(bottleScale);
-                bottleIcon.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(bottleIcon);
 
                 const boardZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                     width * 0.12, 
@@ -482,9 +479,19 @@ export default function Cleaning() {
 
                 dirtyBoard.destroy();
 
+                const bottleIcon = this.add.image(
+                    width / 6,
+                    height / 6,
+                    "sprayBottle"
+                );
+                const bottleScale = (width * 0.15) / bottleIcon.width;
+                bottleIcon.setScale(bottleScale);
+                bottleIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(bottleIcon);
+
                 const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
                 eraseBrush.fillStyle(0xffffff);
-                eraseBrush.fillCircle(0, 0, 25);
+                eraseBrush.fillCircle(0, 0, width * 0.08);
 
                 this.input.setDraggable(bottleIcon);
 
@@ -520,16 +527,122 @@ export default function Cleaning() {
                 });
                 const clearedCount = cells.filter(c => c.cleared).length;
                 const percentCleared = clearedCount / cells.length;
-                if (!sprayed && percentCleared > 0.40) {
+                if (!sprayed && percentCleared > 0.20) {
+                    bottleIcon.destroy();
+                    dirtyBoardRT.destroy();
                     sprayed = true;
+                    wetBoard.destroy();
+                    this.dryBoard();
+                    this.volScreen.destroy(true);
+                    return;
                 }
-
             });
-
             }
 
-            chop(whole, chopped) {
+            dryBoard() {
+                const { width, height } = this.scale;
+                const bg = this.add.image(width / 2, height / 2, "cuttingBoard")
+                    .setDisplaySize(width, height);
+
+                const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
+                eraseBrush.fillStyle(0xffffff);
+                eraseBrush.fillCircle(0, 0, width * 0.08);
+
+                const gridSize = 20;
+
+                const boardZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
+                    width * 0.12, 
+                    height / 2 - height * 0.30, 
+                    width * 0.75,
+                    height * 0.60
+                );
+
+                const cells2 = [];
+                    for (let x = boardZone.x; x < boardZone.right; x += gridSize) {
+                    for (let y = boardZone.y; y < boardZone.bottom; y += gridSize) {
+                        cells2.push({
+                            x,
+                            y,
+                            cleared: false
+                        });
+                    }
+                }
+
+                const wetBoard = this.add.image(width / 2, height / 2, "wetCuttingBoard")
+                    .setDisplaySize(width, height);
+
+                wetBoard.setVisible(false);
+
+                // Create render texture same size as long hand
+                const wetBoardRT = this.add.renderTexture(
+                    wetBoard.x,
+                    wetBoard.y,
+                    wetBoard.displayWidth,
+                    wetBoard.displayHeight
+                );
+
+                // Draw the hidden long hand into render texture so user can erase it
+                wetBoardRT.draw(
+                    wetBoard,
+                    wetBoard.displayWidth / 2,
+                    wetBoard.displayHeight / 2
+                );
+
+                wetBoard.destroy();
+
+                const ragIcon = this.add.image(
+                    width / 6,
+                    height / 6,
+                    "rag"
+                );
+                const ragScale = (width * 0.15) / ragIcon.width;
+                ragIcon.setScale(ragScale);
+                ragIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(ragIcon);
+
+                this.input.setDraggable(ragIcon);
+
+                ragIcon.on("dragstart", () => {
+                    ragIcon.setScale(ragScale);
+                });
+
+                ragIcon.on("dragend", () => {
+                    ragIcon.setScale(ragScale);
+                });
+               
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    if (gameObject !== ragIcon) return;
+
+                    
+                    ragIcon.x = dragX;
+                    ragIcon.y = dragY;
                 
+                wetBoardRT.erase(eraseBrush, dragX, dragY);
+                cells2.forEach(cell => {
+                if (!cell.cleared) {
+                    if (
+                        dragX > cell.x &&
+                        dragX < cell.x + gridSize &&
+                        dragY > cell.y &&
+                        dragY < cell.y + gridSize
+                    ) {
+                        cell.cleared = true;
+                    }
+                }
+                });
+                const clearedCount = cells2.filter(c => c.cleared).length;
+                const percentCleared = clearedCount / cells2.length;
+                if (percentCleared > 0.20) {
+                    ragIcon.destroy();
+                    wetBoardRT.destroy();
+                    bg.destroy();
+                    return;
+                }
+            });
+        }
+
+            chop(whole, chopped) {
+
             }
         }
 
