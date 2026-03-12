@@ -15,7 +15,7 @@ import beefpackage from "../../assets/beefpackage.png"
 import foodbox from "../../assets/foodbox.png"
 import chickenpackage from "../../assets/packagedchicken.png"
 import chicken from "../../assets/chicken.png"
-import fridgeSceneBackground from "../../assets/fridgescene.png"
+import fridgeSceneBackground from "../../assets/fridgescreen.png"
 import milk from "../../assets/milk.png"
 import sinkbg from "../../assets/sinkbackground.png"
 import cleanHand from "../../assets/M1G3/handClean.png";
@@ -89,12 +89,37 @@ function Module2Part1() {
 }
     const startPhaser = () => {
         if (phaserGameRef.current) return; 
+         const createClickIndicator = (scene, x, y) => {
 
+            const indicatorContainer = scene.add.container(x, y);
+
+            const circle = scene.add.circle(0, 0, 20, 0xffff00, 0.5);
+
+            const text = scene.add.text(0, -60, "DRAG HERE", {
+                fontSize: "28px",
+                color: "#000000",
+                fontStyle: "bold"
+            }).setOrigin(0.5);
+
+            indicatorContainer.add([circle, text]);
+
+            scene.tweens.add({
+                targets: circle,
+                alpha: { from: 0.2, to: 0.8 },
+                scale: { from: 0.9, to: 1.2 },
+                duration: 600,
+                yoyo: true,
+                repeat: -1
+            });
+
+            return indicatorContainer;
+        };
         class ThermometerScene extends Phaser.Scene {
             
             constructor() {
                 super("ThermometerScene");
             }
+            
 
             preload() {
                 this.load.image("thermometerhand", thermometerhand);
@@ -125,6 +150,18 @@ function Module2Part1() {
 
             const hand = this.add.image(0, 0, "thermometerhand");
 
+            hand.setOrigin(0.5, 0.5);
+            hand.setScale(thermScale);
+            hand.setAngle(-90);
+
+            pivot.add(hand);
+
+            // position indicator relative to the hand tip
+            const tipOffsetY = hand.displayHeight * 0.02;
+            const tipOffsetX = hand.displayWidth * 0.02;
+            const indicator = createClickIndicator(this, tipOffsetX, tipOffsetY);
+            pivot.add(indicator);
+
             // Use true center to avoid PNG padding issues.
             hand.setOrigin(0.5, 0.5);
 
@@ -135,7 +172,7 @@ function Module2Part1() {
             pivot.add(hand);
 
           
-            pivot.angle = 180;
+            pivot.angle = 0;
 
 
           
@@ -145,6 +182,7 @@ function Module2Part1() {
         let finalAngle = null;
         // When dragging, rotate based on pointer
         hand.on("drag", (pointer) => {
+            if (indicator) indicator.destroy();
             if (thermometerState === "fail") {
             setThermometerState("playing");
         }
@@ -277,7 +315,6 @@ function Module2Part1() {
                 width * 0.28,
                 height * 0.24
             );
-
 
             const zoneShelf1 = new Phaser.Geom.Rectangle(
                 width * 0.59,
@@ -552,6 +589,7 @@ function Module2Part1() {
                 this.input.setDraggable(soap);
 
                 soap.on("dragstart", () => {
+                    
                     soap.setScale(baseScale);
                 });
 

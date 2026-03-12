@@ -36,7 +36,7 @@ import pepperBowl from "../../assets/M2G2/PepperBowl.png";
 import sprayBottle from "../../assets/M2G2/Spraybottle.png";
 import rag from "../../assets/M2G2/rag.png";
 import wetCuttingBoard from "../../assets/M2G2/watercuttingboard.png";
-import knife from "../../assets/M2G2/knife.png";
+import knife from "../../assets/M2G2/Knife.png";
 
 export default function Cleaning() {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
@@ -1079,7 +1079,7 @@ export default function Cleaning() {
             width: window.innerWidth,
             height: window.innerHeight,
             transparent: true,
-            scene: [ApronScene, HandScene, GloveScene, FinalScene, CleanScene, ChopScene],
+            scene: [ApronScene, HandScene, GloveScene, FinalScene, CleanScene],
             parent: "phaser-transition-container"
         };
 
