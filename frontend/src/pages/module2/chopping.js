@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
@@ -22,7 +23,6 @@ import handRight from "../../assets/M1G3/handRight.png";
 import sudImg from "../../assets/M1G3/sud.png";
 import noGlove from "../../assets/M2G2/noGlove.png";
 import gloved from "../../assets/M2G2/gloved.png";
-
 import beef from "../../assets/M2G2/beef.png";
 import bellPeppers from "../../assets/M2G2/bellpeppers.png";
 import onion from "../../assets/M2G2/onion.png";
@@ -34,6 +34,7 @@ import beefBowl from "../../assets/M2G2/BeefBowl.png";
 import onionBowl from "../../assets/M2G2/OnionBowl.png";
 import pepperBowl from "../../assets/M2G2/PepperBowl.png";
 import sprayBottle from "../../assets/M2G2/Spraybottle.png";
+
 
 export default function Cleaning() {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
@@ -54,7 +55,11 @@ export default function Cleaning() {
     const [handsClean, setHandsClean] = useState(false);
     const [gloveInstruction, setGloveInstruction] = useState(false);
     const [glovedHands, setGlovedHands] = useState(false);
+    const [cutMaterials, setCutMaterials] = useState(''); 
+    const [showCutText, setShowCutText] = useState(false);
+    const [showCutSuccessText, setShowCutSuccessText] = useState(false);
 
+    let numberOfCutMaterials = 0;
     const introText = useTypewriter("We've arrived at the volunteer location, let's finish getting ready.",
         gameStage === "intro");
     const instructionText = useTypewriter("In the following game, we will be going through essential personal hygiene steps to follow once you arrive at the volunteer location. Progress in the game by dragging items to the correct area using your finger.",
@@ -71,7 +76,140 @@ export default function Cleaning() {
         gameStage === "gloveStage" && gloveInstruction)
     const gloveSuccessText = useTypewriter("Gloved up!", 
         gameStage === "gloveStage" && glovedHands)
+    const cutInstructionText = useTypewriter("Drag the knife over the food to chop it up.",
+        gameStage === "cutting" && showCutText)
+    const cutSuccessText = useTypewriter("You have successfully chopped the food!",
+        gameStage === "cutting" && showCutSuccessText)
+    
+    function chopping(uncutfoodstring, cutfoodstring, knifestring) {
+        numberOfCutMaterials += 1; 
+        const {width, height} = this.scale; 
 
+        const uncutfood = this.add.image(
+            width / 2,
+            height / 2,
+        uncutfoodstring); 
+        const uncutScale = (width * 0.10) / uncutfood.width;
+        uncutfood.setScale(uncutScale);
+        
+        const cutfood = this.add.image(
+            width / 2,
+            height / 2,
+        cutfoodstring);
+        const cutScale = (width * 0.10) / cutfood.width;
+        cutfood.setScale(cutScale);
+
+        cutfood.setDepth(0);
+        uncutRT.setDepth(1);
+
+        
+        const boardZone = new Phaser.Geom.Rectangle( //interactive cutting board area
+            width / 2 - width * 0.22, 
+            height / 2 - height * 0.05, 
+            width * 0.15,
+            height * 0.13
+        );
+
+        const gridSize = 20; // size of each cell
+        const cells = [];
+
+        for (let x = boardZone.x; x < boardZone.right; x += gridSize) {
+            for (let y = boardZone.y; y < boardZone.bottom; y += gridSize) {
+                cells.push({
+                    x,
+                    y,
+                    cleared: false
+                });
+            }
+        }
+        let chopped = false;
+
+        const uncutRT = this.add.renderTexture(
+            uncutfood.x,
+            uncutfood.y,
+            uncutfood.displayWidth,
+            uncutfood.displayHeight
+        );
+
+        uncutRT.draw(
+            uncutfood,
+            uncutfood.displayWidth / 2,
+            uncutfood.displayHeight / 2
+        ); 
+
+        uncutfood.destroy();
+        const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
+        eraseBrush.fillStyle(0xffffff);
+        eraseBrush.fillCircle(0, 0, 25);
+
+        const knifeStartX = cutfood.x + cutfood.displayWidth / 2 + width * 0.05;
+        const knifeStartY = cutfood.y;
+
+        const knife = this.add.image(
+            knifeStartX,
+            knifeStartY,
+        knifestring);
+        const knifeScale = (width * 0.10) / knife.width;
+        knife.setScale(knifeScale);
+        knife.setInteractive({ useHandCursor: true });
+        const baseScale = (width * 0.10) / knife.width;
+        this.input.setDraggable(knife);
+
+        knife.on("dragstart", () => {
+            knife.setScale(knifeScale);
+        }); 
+
+        knife.on("dragend", () => {
+            knife.setScale(baseScale)
+        });
+        
+        this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                if (gameObject !== knife) return;
+
+                    
+                knife.x = dragX;
+                knife.y = dragY;
+
+                    
+                const tipOffsetX = -knife.displayWidth * 0.28;
+                const tipOffsetY = knife.displayHeight * 0.18;
+
+                const tipX = dragX + tipOffsetX;
+                const tipY = dragY + tipOffsetY;
+                 
+
+                const localX = (tipX - uncutRT.x) / uncutRT.scaleX + uncutRT.width / 2;
+                const localY = (tipY - uncutRT.y) / uncutRT.scaleY + uncutRT.height / 2;
+
+                
+                uncutRT.erase(eraseBrush, localX, localY);
+                cells.forEach(cell => {
+                if (!cell.cleared) {
+                    if (
+                        tipX > cell.x &&
+                        tipX < cell.x + gridSize &&
+                        tipY > cell.y &&
+                        tipY < cell.y + gridSize
+                    ) {
+                        cell.cleared = true;
+                    }
+                }
+                });
+                const clearedCount = cells.filter(c => c.cleared).length;
+                const percentCleared = clearedCount / cells.length;
+                if (!chopped && percentCleared > 0.40) {
+                chopped = true;
+                setCutMaterials(cutfoodstring);
+                 console.log("Food fully chopped!");
+                }
+
+            });
+
+
+
+
+        
+    }
     const startPhaser = () => {
         if (phaserGameRef.current) return;
 
@@ -807,7 +945,30 @@ export default function Cleaning() {
                 });
             }
         }
+        class ChopScene extends Phaser.Scene {
+            constructor() {
+                super("ChopScene");
+            }
 
+            preload() {
+                this.load.image("cuttingBoard", cuttingBoard);
+                this.load.image("onion", onion);
+                this.load.image("knife", knife);
+                this.load.image("bellpepper", bellPeppers);
+                this.load.image("beef", beef);
+                this.load.image("choppedbeef", choppedBeef);
+                this.load.image("choppedOnion", choppedOnion);
+                this.load.image("choppedPepper", choppedPepper);
+            }
+            create() {
+                chopped("onion", "choppedOnion", "knife");
+
+                chopped("bellpepper", "choppedPepper", "knife");
+
+                chopped("beef", "choppedBeef", "knife");
+
+            }
+        }
         class FinalScene extends Phaser.Scene {
             constructor() {
                 super("FinalScene");
@@ -826,7 +987,7 @@ export default function Cleaning() {
             width: window.innerWidth,
             height: window.innerHeight,
             transparent: true,
-            scene: [ApronScene, HandScene, GloveScene, FinalScene, CleanScene],
+            scene: [ApronScene, HandScene, GloveScene, FinalScene, CleanScene, ChopScene],
             parent: "phaser-transition-container"
         };
 

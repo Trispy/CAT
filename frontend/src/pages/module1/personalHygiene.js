@@ -310,7 +310,7 @@ function PersonalHygiene() {
 
             // when clipper is clicked hide the textbox
             clipper.on("pointerdown", () => {
-                setShowClipperText(false);
+               setShowClipperText(false);
             });
         this.events.on("shutdown", () => {
             this.input.removeAllListeners();

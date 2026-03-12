@@ -804,7 +804,7 @@ function Module2Part1() {
     const fridgeInstructions = useTypewriter(
         "Click on the box for the food item to appear. Drag it to the correct shelf.",
         fridgeInstructionsState === "instructions"
-    );
+    ); 
 
     const fridgeSuccessText = useTypewriter(
         fridgeSuccessState,
@@ -816,7 +816,7 @@ function Module2Part1() {
         gameStage === "HandScene" && handsClean && timerDone)
     const gloveText = useTypewriter("Make sure to put gloves on before touching any food",
         gameStage === "gloveStage" && gloveInstruction)
-    const gloveSuccessText = useTypewriter("Gloved up!",
+    const gloveSuccessText = useTypewriter("Gloved up!", 
         gameStage === "gloveStage" && glovedHands)
     const fridgeComplete = useTypewriter("Great job! You correctly sorted the food. Click next to continue.",
         fridgeState === "complete")
