@@ -147,6 +147,8 @@ export default function Symptoms() {
         this.textboxText.setText("");
         this.isTyping = true;
         this.next.disableInteractive();
+        this.xMark.disableInteractive();
+        this.check.disableInteractive();
 
         let i = 0;
         this.time.addEvent({
@@ -158,6 +160,8 @@ export default function Symptoms() {
             if (i === text.length) {
               this.isTyping = false;
               this.next.setInteractive();
+              this.xMark.setInteractive();
+              this.check.setInteractive();
             }
           }
         });

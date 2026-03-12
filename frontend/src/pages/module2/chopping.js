@@ -778,7 +778,7 @@ export default function Cleaning() {
             checkWin() {
                 if (numberOfCutMaterials === 3) {
                     this.showMes("Win condition met");
-                    navigate('/module2/cleaning', { replace: true });
+                    navigate('/module2/cooking', { replace: true });
                 }
             }
 

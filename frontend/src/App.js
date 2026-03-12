@@ -7,6 +7,7 @@ import PersonalHygiene from './pages/module1/personalHygiene.js';
 import Module2Part1 from './pages/module2/module2part1.js'
 import Location from './pages/module1/location.js'
 import Cleaning from './pages/module2/chopping.js';
+import Cooking from './pages/module2/cooking.js';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/module1/onLocation" element={<Location />} />
         <Route path="/module2/therm" element={<Module2Part1/>} />
         <Route path="/module2/cleaning" element={<Cleaning />} />
+        <Route path="/module2/cooking" element={<Cooking />} />
       </Routes>
     </BrowserRouter>
   );
