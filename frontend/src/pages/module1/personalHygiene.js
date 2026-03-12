@@ -1,30 +1,31 @@
+
 import React, { useEffect, useState, useRef } from "react";
-import "./login.css";
-import hand from "../../assets/hand-long.png";
-import handTrimmed from "../../assets/hand-trimmed.png";
-import background from '../../assets/Background1.png';
+import { useNavigate } from 'react-router-dom';
+import "../user/login.css";
+import hand from "../../assets/M1G2/hand-long.png";
+import handTrimmed from "../../assets/M1G2/hand-trimmed.png";
 import Textbox from "../../components/textbox";
-import nextButton from "../../assets/nextbutton.png"; 
+import useTypewriter from "../../components/typewriter";
+import nextButton from "../../assets/nextbutton.png";
 import Phaser from "phaser";
-import nailclipper from "../../assets/NailClippers.png";
-import bowl from "../../assets/actualbowl.png";
-import ringonfinger from "../../assets/rnf.png";
-import ring from "../../assets/Ring.png";
+import nailclipper from "../../assets/M1G2/NailClippers.png";
+import bowl from "../../assets/M1G2/actualbowl.png";
+import ringonfinger from "../../assets/M1G2/rnf.png";
+import ring from "../../assets/M1G2/Ring.png";
 import firstBackground from "../../assets/Firstbackground.png";
-import shirt from "../../assets/Shirt.png";
+import shirt from "../../assets/M1G2/Shirt.png";
 import dresserBackground from "../../assets/flamboyantbackground.png";
 import bathroomSink from "../../assets/Bathroom_Sink_.png";
-import cleanClothesOn from "../../assets/AllOn.png"; 
-import shirtOn from "../../assets/ShirtOn.png";
-import shirtPantsOn from "../../assets/ShirtPantsOn.png";
-import dirtyClothesOn from "../../assets/DirtyClothes.png";
-import pants from "../../assets/Pants.png";
-import shoes from "../../assets/Shoes.png";
+import cleanClothesOn from "../../assets/M1G2/AllOn.png";
+import shirtOn from "../../assets/M1G2/ShirtOn.png";
+import shirtPantsOn from "../../assets/M1G2/ShirtPantsOn.png";
+import dirtyClothesOn from "../../assets/M1G2/DirtyClothes.png";
+import pants from "../../assets/M1G2/Pants.png";
+import shoes from "../../assets/M1G2/Shoes.png";
 import tieduphair from "../../assets/Tieduphair.png";
-import hairtie from "../../assets/Hairtie.png";
+import hairtie from "../../assets/M1G2/Hairtie.png";
 import erintextbox from "../../assets/erintextbox.png";
 import TextboxErin from "../../components/textboxerin";
-
 //has multiple scenes for each step of the personal hygiene process. Each scene has its own interactive elements and logic. The main component manages the overall game state and transitions between scenes based on user actions and progress.
 
 function PersonalHygiene() {
@@ -52,6 +53,7 @@ function PersonalHygiene() {
     const [hairInstructionDismissed, setHairInstructionDismissed] = useState(false);
     const [showFinalText, setShowFinalText] = useState(false);
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
+    const navigate = useNavigate(); // link to next game when finished
 
     function useTypewriter(text, isActive, speed = 30) { //this is the type writer that actually types the text out one character at a time. It takes in the text to display, whether it should be active, and the speed of typing.
         const [typedText, setTypedText] = useState("");
@@ -191,10 +193,11 @@ function PersonalHygiene() {
                 
                 const nailZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                     width / 2 - width * 0.15, 
-                    height / 2 - height * 0.40,  
-                    500,              
-                    220        
+                    height / 2 - height * 0.50,  
+                    width * 0.35,
+                    height * 0.40      
                 );
+                
             const gridSize = 20; // size of each cell
             const cells = [];
 
@@ -223,22 +226,7 @@ function PersonalHygiene() {
                     longHandImage.displayWidth / 2,
                     longHandImage.displayHeight / 2
                 );
-                const ringOnFinger = this.add.image(
-                    width / 2 + width * 0.005,
-                    height / 2 - height * 0.15, 
-                    "ringonfinger"
-                ).setVisible(true);
-                
-                // Scale ringOnFinger to fit properly
-                const ringOnFingerScale = (width * 0.27) / ringOnFinger.width;
-                ringOnFinger.setScale(ringOnFingerScale);
-                
-                const ringOnFinger2 = this.add.image(
-                width / 2 - width * 0.029,   // more LEFT
-                height / 2 - height * 0.14,
-                "ringonfinger"
-                )
-                ringOnFinger2.setScale((width * 0.28) / ringOnFinger2.width);
+             
                 // Remove temporary image
                 longHandImage.destroy();
                 const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
@@ -272,15 +260,24 @@ function PersonalHygiene() {
                 clipper.on("dragend", () => {
                     clipper.setScale(baseScale);
                 });
+               
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     if (gameObject !== clipper) return;
 
+                    
                     clipper.x = dragX;
                     clipper.y = dragY;
 
                     
-                    const localX = (dragX - longHandRT.x) / longHandRT.scaleX + longHandRT.width / 2;
-                    const localY = (dragY - longHandRT.y) / longHandRT.scaleY + longHandRT.height / 2;
+                    const tipOffsetX = -clipper.displayWidth * 0.28;
+                    const tipOffsetY = clipper.displayHeight * 0.18;
+
+                    const tipX = dragX + tipOffsetX;
+                    const tipY = dragY + tipOffsetY;
+                 
+
+                    const localX = (tipX - longHandRT.x) / longHandRT.scaleX + longHandRT.width / 2;
+                    const localY = (tipY - longHandRT.y) / longHandRT.scaleY + longHandRT.height / 2;
 
                 
                 longHandRT.erase(eraseBrush, localX, localY);
@@ -313,7 +310,7 @@ function PersonalHygiene() {
 
             // when clipper is clicked hide the textbox
             clipper.on("pointerdown", () => {
-                setShowClipperText(false);
+               setShowClipperText(false);
             });
         this.events.on("shutdown", () => {
             this.input.removeAllListeners();
@@ -327,129 +324,119 @@ function PersonalHygiene() {
             }
 
             create() {
-                const { width, height } = this.scale;
-                let ring1InBowl = false;
-                let ring2InBowl = false;
-                this.add.image(width/2, height/2, "bathroombg")
-                    .setDisplaySize(width, height);
+        const { width, height } = this.scale;
 
-                const trimmedHand = this.add.image(
-                    width/2,
-                    height/2 + height * 0.05,
-                    "handTrimmed"
-            );
+        this.add.image(width/2, height/2, "bathroombg")
+            .setDisplaySize(width, height);
 
-            const scale = (width * 0.6) / trimmedHand.width;
-            trimmedHand.setScale(scale);
-            //ring 1
-           
-            const ringOnFinger1 = this.add.image(
-                width / 2 + width * 0.005,
-                height / 2 - height * 0.15,
-                "ringonfinger"
-            ).setInteractive({ useHandCursor: true });
+        const trimmedHand = this.add.image(
+            width/2,
+            height/2 + height * 0.05,
+            "handTrimmed"
+        );
 
-            ringOnFinger1.setScale((width * 0.27) / ringOnFinger1.width);
-            ringOnFinger1.setDepth(20);
+        const scale = (width * 0.6) / trimmedHand.width;
+        trimmedHand.setScale(scale);
+
+        // Ring on finger
+        const ringOnFinger1 = this.add.image(
+            width / 2 + width * 0.005,
+            height / 2 - height * 0.15,
+            "ringonfinger"
+        ).setInteractive({ useHandCursor: true });
+
+        ringOnFinger1.setScale((width * 0.27) / ringOnFinger1.width);
+
+        // Actual draggable ring
+        const ring1 = this.add.image(
+            ringOnFinger1.x,
+            ringOnFinger1.y,
+            "ring"
+        );
+
+        ring1.setScale((width * 0.30) / ring1.width);
+        ring1.setVisible(false);
+        ring1.setDepth(200); 
+        const ringStart = { x: ring1.x, y: ring1.y };
+
+        // Bowl
+        const bowlImage = this.add.image(
+            width/2,
+            height * 0.65,
+            "bowl"
+        );
+
+        const bowlScale = (width * 1) / bowlImage.width;
+        bowlImage.setScale(bowlScale);
+
+        let wasDragged = false;
+        const bowlZone = new Phaser.Geom.Rectangle(
+            bowlImage.x - bowlImage.displayWidth * 0.49,
+            bowlImage.y - bowlImage.displayHeight * 0.20,
+            bowlImage.displayWidth * 0.20,
+            bowlImage.displayHeight * 0.30
+        );
+
+        // Click ring on finger
+        ringOnFinger1.on("pointerdown", () => {
+
+            ringOnFinger1.setVisible(false);
+            ring1.setVisible(true);
+
+            ring1.setInteractive({ useHandCursor: true });
+            this.input.setDraggable(ring1);
+
+        });
+
+        // Drag ring
+        this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+
+            if (gameObject !== ring1) return;
+
+            wasDragged = true;
+
+            gameObject.x = dragX;
+            gameObject.y = dragY;
+
+        });
+
+        // Release ring
+        this.input.on("dragend", (pointer, gameObject) => {
+            const x = gameObject.x;
+            const y = gameObject.y;
+            if (gameObject !== ring1) return;
+            if (!wasDragged) return;
 
             
-            const ring1 = this.add.image(
-                ringOnFinger1.x,
-                ringOnFinger1.y,
-                "ring"
-            );
 
-            ring1.setScale((width * 0.30) / ring1.width);
-            ring1.setVisible(false);
-            ring1.setDepth(20);
+            if (
+                Phaser.Geom.Rectangle.Contains(bowlZone, x, y)
+            ) {
 
-       
-            ringOnFinger1.on("pointerdown", () => {
-                ringOnFinger1.setVisible(false);  // hide finger ring
-                ring1.setVisible(true);           // show loose ring when user clicks on the ringonfinger
+                // SUCCESS
+                ring1.disableInteractive();
 
-                ring1.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(ring1);
-            });
+                setShowRingText(true);
+                setRingRemoved(true);
 
-            // Drag behavior
-            ring1.on("drag", (pointer, dragX, dragY) => {
-                ring1.x = dragX;
-                ring1.y = dragY;
-            });
-           
+            } else {
 
-            //ring 2
-            const ringOnFinger2 = this.add.image(
-                width / 2 - width * 0.029,
-                height / 2 - height * 0.14,
-                "ringonfinger"
-            ).setInteractive({ useHandCursor: true });
+                // SNAP BACK
+                ring1.setPosition(
+                    ringStart.x,
+                    ringStart.y
+                );
 
-            ringOnFinger2.setScale((width * 0.28) / ringOnFinger2.width);
-            ringOnFinger2.setDepth(20);
+            }
 
-         
-            const ring2 = this.add.image(
-                ringOnFinger2.x,
-                ringOnFinger2.y,
-                "ring"
-            );
+            wasDragged = false;
 
-            ring2.setScale((width * 0.30) / ring2.width);
-            ring2.setVisible(false);
-            ring2.setDepth(20);
+    });
 
-            ringOnFinger2.on("pointerdown", () => {
-                ringOnFinger2.setVisible(false);   // hide finger ring
-                ring2.setVisible(true);            // show loose ring
-
-                ring2.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(ring2);
-            });
-
-            ring2.on("drag", (pointer, dragX, dragY) => {
-                ring2.x = dragX;
-                ring2.y = dragY;
-            });
-            const bowlImage = this.add.image(
-                width/2,
-                height * 0.65,
-                "bowl"
-            ); 
-            const bowlScale = (width * 1) / bowlImage.width;
-            bowlImage.setScale(bowlScale);
-           
-    
-            this.input.on("dragend", (pointer, gameObject) => {
-
-                const bowlBounds = bowlImage.getBounds();
-
-                if (Phaser.Geom.Rectangle.Contains(bowlBounds, gameObject.x, gameObject.y)) {
-
-                    gameObject.disableInteractive();
-
-                    if (gameObject === ring1) {
-                        ring1InBowl = true;
-                    }
-
-                    if (gameObject === ring2) {
-                        ring2InBowl = true;
-                    }
-
-                   
-                    if (ring1InBowl && ring2InBowl) {
-                        setShowRingText(true);
-                        setRingRemoved(true);
-                    }
-                }
-            });
-            this.events.on("shutdown", () => {
-            this.input.removeAllListeners();
-});
-        
-
-        }
+    this.events.on("shutdown", () => {
+        this.input.removeAllListeners();
+    });
+}
     }
     
     class ClothesScene extends Phaser.Scene {
@@ -762,8 +749,6 @@ class FinalScene extends Phaser.Scene {
     create () {
         const { width, height } = this.scale;
         this.add.image(width / 2, height / 2, "bg").setDisplaySize(width, height);
-        
-
     }; 
 }
         const config = { //actually add the scenes here and this starts the phaser game. The scenes will be switched based on the gameStage state in the main component.
@@ -830,6 +815,9 @@ class FinalScene extends Phaser.Scene {
         }
         
         return;
+    }
+    if (gameStage === "final") {
+        navigate('/module1/symptoms', { replace: true });
     }
     
 };

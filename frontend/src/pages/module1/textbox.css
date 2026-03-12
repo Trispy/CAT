@@ -1,8 +1,0 @@
-.img-overlay {
-  position: absolute; /* Positions relative to the parent container */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* Centers the image */
-  z-index: 1; /* Ensures this image is on top of the background image */
-  width: 100px; /* Adjust size as needed */
-}
