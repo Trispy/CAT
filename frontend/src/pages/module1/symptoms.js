@@ -10,6 +10,12 @@ import check from "../../assets/M1G1/Check.png";
 import xMark from "../../assets/M1G1/X.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import next from "../../assets/M1G1/nextbutton.png";
+import {defaultFont} from "../../formatting";
+import {defaultFontSize} from "../../formatting";
+import {defaultFontColor} from "../../formatting";
+import {defaultTypingSpeed} from "../../formatting";
+
+
 
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +28,6 @@ export default function Symptoms() {
         erinY = 175;
         erinScale = 1.1;
         textboxScale = 0.75;
-        textFontSize = 70;
         markY = 650;
         welcomeTexts = ["In this module, you will learn how to tell if you are fit to volunteer and about what hygiene practices you should follow before volunteering.",
          "It's important to stay home when you are not feeling well. Let's see if the volunteer is fit for the job today!"];
@@ -87,8 +92,9 @@ export default function Symptoms() {
         this.textbox = this.add.container(145, 112);
         this.textboxImage = this.add.image(0,0, 'textbox').setOrigin(0);
         this.textboxText = this.add.text(100, 100, "", {
-        font: '70px Arial',
-        color: '#000',
+        fontFamily: defaultFont,
+        fontSize: defaultFontSize,
+        color: defaultFontColor,
         wordWrap: {
             width: this.textboxImage.width * 0.9
         }
@@ -112,7 +118,7 @@ export default function Symptoms() {
         }
         else if (this.volunteerScenario.length > 0){
           this.textbox.setScale(this.textboxScale);
-          this.textboxText.setFontSize(this.textFontSize);
+          this.textboxText.setFontSize(defaultFontSize);
           this.typewriteText(this.volunteerScenario[0].question);
           this.volunteerScenario[this.volunteerScenario.length - 1].erinType.setVisible(false);
           this.volunteerScenario[0].erinType.setVisible(true);
@@ -121,7 +127,7 @@ export default function Symptoms() {
           this.next.setVisible(false);
         }
         else{
-          window.navigateToPage("/personalhygiene");
+          window.navigateToPage("/module1/personalhygiene");
         }
       
 });
@@ -138,7 +144,7 @@ export default function Symptoms() {
         this.scale.on('resize', this.checkOriention, this); */   
 }
 
-typewriteText(text, speed = 5) {
+typewriteText(text, speed = defaultTypingSpeed) {
   this.textboxText.setText("");
   this.isTyping = true;
   this.next.disableInteractive();
@@ -163,25 +169,25 @@ typewriteText(text, speed = 5) {
 
 handleAnswer(scenarios, button) {
   this.scenario = scenarios[0];
-  if (this.scenario.correctAnswer === "no" && button === this.xMark || this.scenario.correctAnswer === "yes" && button === this.check) {
+  if ((this.scenario.correctAnswer === "no" && button === this.xMark) || (this.scenario.correctAnswer === "yes" && button === this.check)) {
     scenarios.shift(); 
     if (scenarios.length > 0) {
       this.textboxText.setColor('#000');
       this.textbox.setScale(this.textboxScale);
-      this.textboxText.setFontSize(this.textFontSize);
+      this.textboxText.setFontSize(defaultFontSize);
       this.typewriteText(scenarios[0].question);
       scenarios[0].erinType.setVisible(true);
       this.check.preFX.clear();
       this.xMark.preFX.clear();
     }
   } else {
-    if(button == this.xMark){
+    if(button === this.xMark){
       this.check.preFX.addShine(1, 0.5, 5);
     }
     else{
       this.xMark.preFX.addShine(1, 0.5, 5);
     }
-    this.textboxText.setFontSize(this.textFontSize * 0.8);
+    this.textboxText.setFontSize(defaultFontSize * 0.8);
     this.textboxText.setColor('rgb(252, 0, 0)');
     this.typewriteText(this.scenario.popup);
   }
