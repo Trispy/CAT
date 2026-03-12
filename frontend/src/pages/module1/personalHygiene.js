@@ -817,7 +817,7 @@ class FinalScene extends Phaser.Scene {
         return;
     }
     if (gameStage === "final") {
-        navigate('/module1/symptoms', { replace: true });
+        navigate('/module1/onLocation', { replace: true });
     }
     
 };

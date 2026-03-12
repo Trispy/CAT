@@ -5,7 +5,7 @@ import Phaser from "phaser";
 import Loc from "../../assets/Background1.png";
 import plainClothes from "../../assets/Tieduphair.png";
 import apron from "../../assets/M1G3/apron.png";
-import apronOn from "../../assets/M1G3/noGlove.png";
+import apronOn from "../../assets/M2G2/noGlove.png";
 import Textbox from "../../components/textbox";
 import useTypewriter from "../../components/typewriter";
 import nextButton from "../../assets/nextbutton.png"; 
@@ -486,7 +486,7 @@ export default function Location() {
         }
 
         if (gameStage === "finalStage") {
-            navigate('/login', { replace: true });
+            navigate('/module2/therm', { replace: true });
         }
     };
 
