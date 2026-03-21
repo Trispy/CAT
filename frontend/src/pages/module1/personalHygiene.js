@@ -158,9 +158,6 @@ function PersonalHygiene() {
                 this.load.image("hairtie", hairtie);
                 this.load.image("erininstructions", erintextbox); 
 
-                
-                
-          
             }
 
             create() {
@@ -295,7 +292,7 @@ function PersonalHygiene() {
                 });
                 const clearedCount = cells.filter(c => c.cleared).length;
                 const percentCleared = clearedCount / cells.length;
-                if (!trimmed && percentCleared > 0.40) {
+                if (!trimmed && percentCleared > 0.35) {
                 trimmed = true;
                 setTrimmed(true);
                  console.log("Nails fully trimmed!");
@@ -685,7 +682,7 @@ class TiedHairScene extends Phaser.Scene {
         
         const hairTie = this.add.image(
             width * 0.85 - width * 0.10,
-            height * 0.75 - height * 0.10,
+            height * 0.75 - height * 0.30,
             "hairtie"
         );
         
@@ -750,15 +747,23 @@ class FinalScene extends Phaser.Scene {
         const { width, height } = this.scale;
         this.add.image(width / 2, height / 2, "bg").setDisplaySize(width, height);
     }; 
-}
-        const config = { //actually add the scenes here and this starts the phaser game. The scenes will be switched based on the gameStage state in the main component.
-                    type: Phaser.AUTO,
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    transparent: true,
-                    scene: [ClipperScene, RingScene, ClothesScene, TiedHairScene, FinalScene],
-                    parent: "phaser-transition-container"
-        };
+}const config = {
+        type: Phaser.AUTO,
+        scale: {
+            mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH,
+            width: 1920,
+            height: 1080
+        },
+        render: {
+            pixelArt: false,
+            antialias: true
+        },
+        audio: {noAudio: true},
+        transparent: true,
+        scene: [ClipperScene, RingScene, ClothesScene, TiedHairScene, FinalScene],
+        parent: "phaser-game"
+    };
 
                 phaserGameRef.current = new Phaser.Game(config);
 
@@ -817,7 +822,7 @@ class FinalScene extends Phaser.Scene {
         return;
     }
     if (gameStage === "final") {
-        navigate('/module1/symptoms', { replace: true });
+        navigate('/module1/onLocation', { replace: true });
     }
     
 };
@@ -828,47 +833,51 @@ class FinalScene extends Phaser.Scene {
             (gameStage === "tyehair" && !hairTied);
 
     return (
-        <div 
-            className="form" 
+    <div 
+        className="form" 
+        style={{
+            ...backgroundStyle,
+            position: "relative",
+            height: "100dvh",      // 👈 important (mobile fix)
+            overflow: "hidden"     // 👈 prevents scroll
+        }}
+    >
+
+        {/* 🔹 INTRO TEXT */}
+        <div
             style={{
-                ...backgroundStyle,
-                position: "relative", 
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%"
             }}
         >
+            <Textbox
+                width="90vw"
+                height="90vh"
+                placeholder={introText}
+                placeHolderColor="#000000"
+                placeHolderfontSize="2vw"
+            />
+        </div>
 
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100%"
-                }}
-            >
-                <Textbox
-                    width="90vw"
-                    height="90vh"
-                    placeholder={introText}
-                    placeHolderColor="#000000"
-                    placeHolderfontSize="2vw"
-                />
-            </div>
-
-            <button
-                className="next-button"
-                disabled={isNextDisabled}
-                onClick={handleNextClick}
-                style={{
-                    position: "absolute",
-                    bottom: "5%",
-                    right: "5%",
-                    opacity: isNextDisabled ? 0.5 : 1,
-                    pointerEvents: isNextDisabled ? "none" : "auto",
-                    background: "none",
-                    border: "none",
-                    padding: 0,
-                    zIndex: 20000
-                }}
-                >
+        {/* 🔹 NEXT BUTTON */}
+        <button
+            className="next-button"
+            disabled={isNextDisabled}
+            onClick={handleNextClick}
+            style={{
+                position: "absolute",
+                bottom: "5%",
+                right: "5%",
+                opacity: isNextDisabled ? 0.5 : 1,
+                pointerEvents: isNextDisabled ? "none" : "auto",
+                background: "none",
+                border: "none",
+                padding: 0,
+                zIndex: 20000
+            }}
+        >
             <img 
                 src={nextButton} 
                 alt="Next" 
@@ -877,191 +886,205 @@ class FinalScene extends Phaser.Scene {
                     minWidth: "120px"
                 }} 
             />
-            </button>
+        </button>
 
+        {/* 🔥 PHASER CONTAINER (MATCHES OTHER FILES) */}
+<div
+  id="phaser-game"
+  style={{
+    width: "100%",
+    height: "100%",
+    maxWidth: `${window.innerHeight * (16 / 9)}px`, // 👈 ADD THIS
+    maxHeight: "100%",
+    margin: "0 auto" // 👈 centers it
+  }}
+/>
+
+        {/* 🔹 CLIPPER TEXT */}
+        {showClipperText && !nailsTrimmed && (
             <div
-                id="phaser-transition-container"
                 style={{
                     position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100vw",
-                    height: "100vh",
-                    zIndex: 9999,
-                    pointerEvents: "auto"
+                    right: "1vw",
+                    bottom: "50vh",
+                    zIndex: 10000
                 }}
-            />
+            >
+                <Textbox
+                    width="30vw"
+                    height="30vh"
+                    placeholder={clipperText}
+                    placeHolderColor="#000000"
+                    placeHolderfontSize="1.1vw"
+                />
+            </div>
+        )}
 
-            {showClipperText && !nailsTrimmed && (
-                <div
-                    style={{
-                        position: "fixed",
-                        right: "1vw",
-                        bottom: "50vh",
-                        zIndex: 10000
-                    }}
-                >
+        {/* 🔹 SUCCESS / INSTRUCTION TEXTS */}
+        {nailsTrimmed && (
+            <div
+                style={{
+                    position: "fixed",
+                    right: "10vw",
+                    bottom: "25vh",
+                    zIndex: 10000
+                }}
+            >
+                {!removeClipSuccess && (
                     <Textbox
                         width="30vw"
                         height="30vh"
-                        placeholder={clipperText}
+                        placeholder={clipperSuccessText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.1vw"
                     />
-                    
-                </div>
-            )}
-        {nailsTrimmed && (
-        <div
-        style={{
-            position: "fixed",
-            right: "10vw",
-            bottom: "25vh",
-            zIndex: 10000
-        }}
-    >
-        {!removeClipSuccess && (<Textbox
-            width="30vw"
-            height="30vh"
-            placeholder={clipperSuccessText}
-            placeHolderColor="#000000"
-            placeHolderfontSize="1.1vw"
-        />)}
-        {nailsTrimmed && removeClipSuccess && !showRingText && (gameStage === "rings") && (<Textbox
-            width="30vw"
-            height="30vh"
-            placeholder={ringText}
-            placeHolderColor="#000000"
-            placeHolderfontSize="1.1vw"
-        />)}
-        {showRingText && (<Textbox
-            width="30vw"
-            height="30vh"
-            placeholder={ringSuccessText}
-            placeHolderColor="#000000"
-            placeHolderfontSize="1.1vw"
-        />)}
-         {clothesRemoved && (<Textbox
-            width="30vw"
-            height="30vh"
-            placeholder={clothesSuccessText}
-            placeHolderColor="#000000"
-            placeHolderfontSize="1.1vw"
-        />)}
-      
-        {gameStage === "tyehair" && hairTied && !showTyedHairText && (<Textbox
-            width="30vw"
-            height="30vh"
-            placeholder={tiedHairSuccessText}
-            placeHolderColor="#000000"
-            placeHolderfontSize="1.1vw"
-        />)}
-        {showClothesText && gameStage === "clothes" && !clothesInstructionsDone && (
-        <div
-            onClick={() => {
-                setClothesInstructionsDone(true);
-                setShowClothesText(false);
-                if (phaserGameRef.current) {
-                    const scene = phaserGameRef.current.scene.getScene("ClothesScene");
-                    if (scene) {
-                        scene.events.emit("startClothes");
-                    }
-                }
-            }}
-            style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100vw",
-                height: "100vh",
-                zIndex: 15000,
-                backgroundColor: "rgba(0,0,0,0)", 
-                cursor: "pointer"
-            }}
-        >
+                )}
+
+                {nailsTrimmed && removeClipSuccess && !showRingText && (gameStage === "rings") && (
+                    <Textbox
+                        width="30vw"
+                        height="30vh"
+                        placeholder={ringText}
+                        placeHolderColor="#000000"
+                        placeHolderfontSize="1.1vw"
+                    />
+                )}
+
+                {showRingText && (
+                    <Textbox
+                        width="30vw"
+                        height="30vh"
+                        placeholder={ringSuccessText}
+                        placeHolderColor="#000000"
+                        placeHolderfontSize="1.1vw"
+                    />
+                )}
+
+                {clothesRemoved && (
+                    <Textbox
+                        width="30vw"
+                        height="30vh"
+                        placeholder={clothesSuccessText}
+                        placeHolderColor="#000000"
+                        placeHolderfontSize="1.1vw"
+                    />
+                )}
+
+                {gameStage === "tyehair" && hairTied && !showTyedHairText && (
+                    <Textbox
+                        width="30vw"
+                        height="30vh"
+                        placeholder={tiedHairSuccessText}
+                        placeHolderColor="#000000"
+                        placeHolderfontSize="1.1vw"
+                    />
+                )}
+
+                {/* 🔹 CLOTHES INSTRUCTION OVERLAY */}
+                {showClothesText && gameStage === "clothes" && !clothesInstructionsDone && (
+                    <div
+                        onClick={() => {
+                            setClothesInstructionsDone(true);
+                            setShowClothesText(false);
+                            if (phaserGameRef.current) {
+                                const scene = phaserGameRef.current.scene.getScene("ClothesScene");
+                                if (scene) {
+                                    scene.events.emit("startClothes");
+                                }
+                            }
+                        }}
+                        style={{
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            width: "100dvw",
+                            height: "100dvh",
+                            zIndex: 15000,
+                            cursor: "pointer"
+                        }}
+                    >
+                        <div
+                            style={{
+                                position: "fixed",
+                                right: "10vw",
+                                bottom: "25vh"
+                            }}
+                        >
+                            <Textbox
+                                width="30vw"
+                                height="30vh"
+                                placeholder={clothesText}
+                                placeHolderColor="#000000"
+                                placeHolderfontSize="1.1vw"
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {/* 🔹 HAIR INSTRUCTION */}
+                {gameStage === "tyehair" && !hairInstructionDismissed && !hairTied && (
+                    <div
+                        onClick={() => {
+                            setHairInstructionDismissed(true);
+                            if (phaserGameRef.current) {
+                                const scene = phaserGameRef.current.scene.getScene("TiedHairScene");
+                                if (scene) {
+                                    scene.events.emit("startHairTie");
+                                }
+                            }
+                        }}
+                        style={{
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            width: "100dvw",
+                            height: "100dvh",
+                            zIndex: 15000,
+                            cursor: "pointer"
+                        }}
+                    >
+                        <div
+                            style={{
+                                position: "fixed",
+                                right: "10vw",
+                                bottom: "25vh"
+                            }}
+                        >
+                            <Textbox
+                                width="30vw"
+                                height="30vh"
+                                placeholder={tiedHairText}
+                                placeHolderColor="#000000"
+                                placeHolderfontSize="1.1vw"
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>
+        )}
+
+        {/* 🔹 FINAL TEXT */}
+        {showFinalText && gameStage === "final" && (
             <div
                 style={{
                     position: "fixed",
-                    right: "10vw",
-                    bottom: "25vh"
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    zIndex: 15000,
                 }}
             >
-                <Textbox
-                    width="30vw"
-                    height="30vh"
-                    placeholder={clothesText}
+                <TextboxErin
+                    width="80vw"
+                    height="85vh"
+                    placeholder={finalText}
                     placeHolderColor="#000000"
-                    placeHolderfontSize="1.1vw"
+                    placeHolderfontSize="1.8vw"
                 />
             </div>
-        </div>
-    )}
-    {gameStage === "tyehair" && !hairInstructionDismissed && !hairTied && (
-        <div
-            onClick={() => {
-                setHairInstructionDismissed(true);
-                if (phaserGameRef.current) {
-                    const scene = phaserGameRef.current.scene.getScene("TiedHairScene");
-                    if (scene) {
-                        scene.events.emit("startHairTie");
-                    }
-                }
-            }}
-            style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100vw",
-                height: "100vh",
-                zIndex: 15000,
-                backgroundColor: "rgba(0,0,0,0)",
-                cursor: "pointer"
-            }}
-        >
-            <div
-                style={{
-                    position: "fixed",
-                    right: "10vw",
-                    bottom: "25vh"
-                }}
-            >
-                <Textbox
-                    width="30vw"
-                    height="30vh"
-                    placeholder={tiedHairText}
-                    placeHolderColor="#000000"
-                    placeHolderfontSize="1.1vw"
-                />
-            </div>
-        </div>
-    )}
-        
-            
-       </div>
-            )}
-           {showFinalText && gameStage === "final" && (
-    <div
-        style={{
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            zIndex: 15000,
-        }}
-    >
-        <TextboxErin
-            width="80vw"
-            height="85vh"
-            placeholder={finalText}
-            placeHolderColor="#000000"
-            placeHolderfontSize="1.8vw"
-        />
+        )}
     </div>
-)}
-            
-        
-        </div>
-    );
+);
 }
 
 export default PersonalHygiene;

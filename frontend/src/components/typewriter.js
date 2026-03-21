@@ -25,11 +25,11 @@ import { useEffect, useState, useRef } from "react";
 
 function useTypewriter(text, isActive = true, speed = 30) { //this is the type writer that actually types the text out one character at a time. It takes in the text to display, whether it should be active, and the speed of typing.
     const [typedText, setTypedText] = useState("");
-    const hasStarted = useRef(false);
+    
     useEffect(() => {
-        if (!text || !isActive || hasStarted.current) return;
+        if (!text || !isActive) return;
 
-        hasStarted.current = true;  // this prevent restarting
+        
         setTypedText("");
 
         let i = 0;

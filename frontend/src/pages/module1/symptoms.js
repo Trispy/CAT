@@ -10,6 +10,12 @@ import check from "../../assets/M1G1/Check.png";
 import xMark from "../../assets/M1G1/X.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import next from "../../assets/M1G1/nextbutton.png";
+import {defaultFont} from "../../formatting";
+import {defaultFontSize} from "../../formatting";
+import {defaultFontColor} from "../../formatting";
+import {defaultTypingSpeed} from "../../formatting";
+
+
 
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +37,7 @@ export default function Symptoms() {
 
 
       constructor() {
-        super("Symptom");
+        super("SymptomScene");
       }
 
       preload() {
@@ -141,6 +147,8 @@ export default function Symptoms() {
         this.textboxText.setText("");
         this.isTyping = true;
         this.next.disableInteractive();
+        this.xMark.disableInteractive();
+        this.check.disableInteractive();
 
         let i = 0;
         this.time.addEvent({
@@ -152,6 +160,8 @@ export default function Symptoms() {
             if (i === text.length) {
               this.isTyping = false;
               this.next.setInteractive();
+              this.xMark.setInteractive();
+              this.check.setInteractive();
             }
           }
         });
@@ -204,17 +214,23 @@ export default function Symptoms() {
       }
     }
 
-    const config = {
-      type: Phaser.AUTO,
-      width: 1920,
-      height: 1080,
-      parent: "phaser-game",
-      scene: [Symptom],
-      scale: {
-        mode: Phaser.Scale.ENVELOP,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-      },
-      backgroundColor: 0x000000,
+
+        const config = {
+        type: Phaser.AUTO,
+        scale: {
+            mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH,
+            width: 1920,
+            height: 1080
+        },
+        render: {
+            pixelArt: false,
+            antialias: true
+        },
+        audio: {noAudio: true},
+        transparent: true,
+        scene: [Symptom],
+        parent: "phaser-game"
     };
     const game = new Phaser.Game(config);
 
@@ -230,8 +246,8 @@ export default function Symptoms() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "100vw",
-        height: "100vh",
+        width: "100dvw",
+        height: "100dvh",
         backgroundColor: "black",
       }}
     >
