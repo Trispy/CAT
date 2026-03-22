@@ -29,11 +29,11 @@ import TextboxErin from "../../components/textboxerin";
 //has multiple scenes for each step of the personal hygiene process. Each scene has its own interactive elements and logic. The main component manages the overall game state and transitions between scenes based on user actions and progress.
 
 function PersonalHygiene() {
-
+    const [gameStage, setGameStage] = useState("intro");
     const backgroundStyle = {
-        backgroundImage: `url(${firstBackground})`,
+        backgroundImage: gameStage === "intro" ? `url(${firstBackground})` : "none",
         minHeight: '100vh',
-        backgroundSize: 'contain',
+        backgroundSize: 'cover',
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
         backgroundColor: 'black'
@@ -41,7 +41,7 @@ function PersonalHygiene() {
 
     const [showClipperText, setShowClipperText] = useState(false);
     const [nailsTrimmed, setNailsTrimmed] = useState(false);
-    const [gameStage, setGameStage] = useState("intro");
+    
     const [removeClipSuccess, setRemoveClipSuccess] = useState(false);
     const [showRingText, setShowRingText] = useState(false);
     const [ringRemoved, setRingRemoved] = useState(false);
@@ -83,7 +83,9 @@ function PersonalHygiene() {
 
     return typedText;
 }
-
+useEffect(() => {
+  startPhaser();
+}, []);
     const introText = useTypewriter(
         "In the following game, we will be going through personal hygiene steps that are essential to do before volunteering. Progress in the game by dragging items to the correct area using your finger.",
         true
@@ -131,6 +133,22 @@ function PersonalHygiene() {
         
 
         const setTrimmed = setNailsTrimmed;
+        class IntroScene extends Phaser.Scene {
+        constructor() {
+            super("IntroScene");
+        }
+
+        preload() {
+            this.load.image("introBg", firstBackground);
+        }
+
+        create() {
+            const { width, height } = this.scale;
+
+            this.add.image(width / 2, height / 2, "introBg")
+            .setDisplaySize(width, height);
+        }
+        }
 
         class ClipperScene extends Phaser.Scene {
             constructor() {
@@ -303,7 +321,7 @@ function PersonalHygiene() {
 
 
             // Show textbox when scene loads
-            setShowClipperText(true);
+         
 
             // when clipper is clicked hide the textbox
             clipper.on("pointerdown", () => {
@@ -760,13 +778,20 @@ class FinalScene extends Phaser.Scene {
             antialias: true
         },
         audio: {noAudio: true},
-        transparent: true,
-        scene: [ClipperScene, RingScene, ClothesScene, TiedHairScene, FinalScene],
+        transparent: false,
+        backgroundColor: "#000000",
+        scene: [IntroScene, ClipperScene, RingScene, ClothesScene, TiedHairScene, FinalScene],
         parent: "phaser-game"
     };
 
                 phaserGameRef.current = new Phaser.Game(config);
 
+                setTimeout(() => {
+                    if (phaserGameRef.current) {
+                        setGameStage("intro");
+                        phaserGameRef.current.scene.start("IntroScene");
+                    }
+                }, 100);
                 // Show textbox AFTER Phaser starts
                 setShowClipperText(true);
         };
@@ -775,11 +800,14 @@ class FinalScene extends Phaser.Scene {
     const handleNextClick = () => { //handles the logic for transitioning between scenes based on the current game stage and user actions. It checks the current game stage and relevant state variables to determine if the user has completed the necessary actions to move to the next stage, then updates the game stage and starts the appropriate Phaser scene.
     
     if (gameStage === "intro") {
-        startPhaser("clipper");
         setGameStage("clipper");
+
+        if (phaserGameRef.current) {
+            phaserGameRef.current.scene.start("ClipperScene");
+        }
+
         return;
     }
-
     if (gameStage === "clipper" && nailsTrimmed) {
         setGameStage("rings");
         setRemoveClipSuccess(true);
@@ -833,35 +861,46 @@ class FinalScene extends Phaser.Scene {
             (gameStage === "tyehair" && !hairTied);
 
     return (
-    <div 
-        className="form" 
-        style={{
-            ...backgroundStyle,
-            position: "relative",
-            height: "100dvh",      // 👈 important (mobile fix)
-            overflow: "hidden"     // 👈 prevents scroll
-        }}
-    >
-
-        {/* 🔹 INTRO TEXT */}
-        <div
-            style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%"
-            }}
-        >
-            <Textbox
+    
+  <div
+    className="form"
+    style={{
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      backgroundColor: "black",
+      height: "100vh",
+      overflow: "hidden",
+      position: "relative"
+    }}
+  >
+     
+        {gameStage === "intro" && (
+<div
+  style={{
+    position: "fixed", 
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10000
+  }}
+>
+             <Textbox
                 width="90vw"
                 height="90vh"
                 placeholder={introText}
                 placeHolderColor="#000000"
                 placeHolderfontSize="2vw"
             />
-        </div>
+  </div>
+)}
+    
+       
 
-        {/* 🔹 NEXT BUTTON */}
         <button
             className="next-button"
             disabled={isNextDisabled}
@@ -888,20 +927,21 @@ class FinalScene extends Phaser.Scene {
             />
         </button>
 
-        {/* 🔥 PHASER CONTAINER (MATCHES OTHER FILES) */}
+        
 <div
   id="phaser-game"
   style={{
-    width: "100%",
-    height: "100%",
-    maxWidth: `${window.innerHeight * (16 / 9)}px`, // 👈 ADD THIS
-    maxHeight: "100%",
-    margin: "0 auto" // 👈 centers it
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    zIndex: 1
   }}
 />
 
-        {/* 🔹 CLIPPER TEXT */}
-        {showClipperText && !nailsTrimmed && (
+   
+        {gameStage === "clipper" && showClipperText && !nailsTrimmed && (
             <div
                 style={{
                     position: "fixed",
@@ -920,7 +960,7 @@ class FinalScene extends Phaser.Scene {
             </div>
         )}
 
-        {/* 🔹 SUCCESS / INSTRUCTION TEXTS */}
+    
         {nailsTrimmed && (
             <div
                 style={{
@@ -980,7 +1020,6 @@ class FinalScene extends Phaser.Scene {
                     />
                 )}
 
-                {/* 🔹 CLOTHES INSTRUCTION OVERLAY */}
                 {showClothesText && gameStage === "clothes" && !clothesInstructionsDone && (
                     <div
                         onClick={() => {
@@ -1021,7 +1060,6 @@ class FinalScene extends Phaser.Scene {
                     </div>
                 )}
 
-                {/* 🔹 HAIR INSTRUCTION */}
                 {gameStage === "tyehair" && !hairInstructionDismissed && !hairTied && (
                     <div
                         onClick={() => {
@@ -1063,7 +1101,6 @@ class FinalScene extends Phaser.Scene {
             </div>
         )}
 
-        {/* 🔹 FINAL TEXT */}
         {showFinalText && gameStage === "final" && (
             <div
                 style={{
@@ -1083,8 +1120,8 @@ class FinalScene extends Phaser.Scene {
                 />
             </div>
         )}
-    </div>
-);
+  </div>
+    );
 }
 
 export default PersonalHygiene;
