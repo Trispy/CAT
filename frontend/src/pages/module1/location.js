@@ -366,7 +366,8 @@ export default function Location() {
             }
 
             create() {
-                let oneGlove = false;
+                let rightGlove = false;
+                let leftGlove = false;
                 const { width, height } = this.scale;
 
                 this.add.image(width / 2, height / 2, "sinkbg")
@@ -416,7 +417,6 @@ export default function Location() {
                         width * 0.2,
                         height * 0.7
                     );
-
                         const rightZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                         width / 2, 
                         height / 2 - height * 0.35, 
@@ -426,14 +426,14 @@ export default function Location() {
 
                     if (Phaser.Geom.Intersects.RectangleToRectangle(gloveBoxBounds, leftZone)) {
                         cleanHand.setTexture("gloveLeft");
-                        if(oneGlove) setGlovedHands(true);
-                        else oneGlove = true;
+                        if(rightGlove) setGlovedHands(true);
+                        else leftGlove = true;
 
                     } 
                     else if (Phaser.Geom.Intersects.RectangleToRectangle(gloveBoxBounds, rightZone)) {
                         cleanHand2.setTexture("gloveRight");
-                        if(oneGlove) setGlovedHands(true);
-                        else oneGlove = true;
+                        if(leftGlove) setGlovedHands(true);
+                        else rightGlove = true;
 
                     } 
                     else {
