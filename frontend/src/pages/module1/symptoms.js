@@ -10,19 +10,15 @@ import check from "../../assets/M1G1/Check.png";
 import xMark from "../../assets/M1G1/X.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import next from "../../assets/M1G1/nextbutton.png";
-import {defaultFont} from "../../formatting";
-import {defaultFontSize} from "../../formatting";
-import {defaultFontColor} from "../../formatting";
-import {defaultTypingSpeed} from "../../formatting";
-
-
 
 import { useNavigate } from "react-router-dom";
 
 export default function Symptoms() {
   const navigate = useNavigate();
+
   useEffect(() => {
     window.navigateToPage = navigate;
+
     class Symptom extends Phaser.Scene {
       erinX = 1300;
       erinY = 175;
@@ -30,11 +26,19 @@ export default function Symptoms() {
       textboxScale = 0.75;
       textFontSize = 70;
       markY = 650;
-      welcomeTexts = ["In this module, you will learn how to tell if you are fit to volunteer and about what hygiene practices you should follow before volunteering.",
-        "It's important to stay home when you are not feeling well. Let's see if the volunteer is fit for the job today!"];
-      instructions = ["In the following game, the volunteer will share different symptoms with you, and you will determine if they should volunteer or stay home. \n\n If they should stay home, tap the red X, if they can volunteer, tap the green check."];
-      transitions = ["Great job identifying when you should stay home! In the next section, we'll get this volunteer ready for their shift."]
 
+      welcomeTexts = [
+        "In this module, you will learn how to tell if you are fit to volunteer and about what hygiene practices you should follow before volunteering.",
+        "It's important to stay home when you are not feeling well. Let's see if the volunteer is fit for the job today!"
+      ];
+
+      instructions = [
+        "In the following game, the volunteer will share different symptoms with you, and you will determine if they should volunteer or stay home. \n\n If they should stay home, tap the red X, if they can volunteer, tap the green check."
+      ];
+
+      transitions = [
+        "Great job identifying when you should stay home! In the next section, we'll get this volunteer ready for their shift."
+      ];
 
       constructor() {
         super("SymptomScene");
@@ -53,14 +57,64 @@ export default function Symptoms() {
       }
 
       create() {
-        this.bg1 = this.add.image(0, 0, 'bg1').setOrigin(0).setScale(1);
-        this.nausea = this.add.image(this.erinX, this.erinY, 'nausea').setOrigin(0).setScale(this.erinScale).setVisible(false);
-        this.runnyNose = this.add.image(this.erinX, this.erinY, 'runnyNose').setOrigin(0).setScale(this.erinScale).setVisible(false);
-        this.fever = this.add.image(this.erinX, this.erinY, 'fever').setOrigin(0).setScale(this.erinScale).setVisible(false);
-        this.healthy = this.add.image(this.erinX, this.erinY, 'healthy').setOrigin(0).setScale(this.erinScale).setVisible(true);
-        this.xMark = this.add.image(865, this.markY, 'x').setScale(0.3).setInteractive({ pixelPerfect: true }).setVisible(false);
-        this.check = this.add.image(565, this.markY, 'check').setScale(0.3).setInteractive().setVisible(false);
-        this.next = this.add.image(this.erinX * 1.25, this.erinY * 4.35, 'next').setOrigin(0).setScale(0.35).setInteractive().setVisible(true);
+        // Background
+        this.bg1 = this.add.image(
+          this.scale.width / 2,
+          this.scale.height / 2,
+          "bg1"
+        );
+
+        const scaleX = this.scale.width / this.bg1.width;
+        const scaleY = this.scale.height / this.bg1.height;
+
+        // ORIGINAL behavior (fit entire image)
+        const scale = Math.min(scaleX, scaleY);
+
+        this.bg1.setScale(scale);
+
+        // Characters
+        this.nausea = this.add.image(this.erinX, this.erinY, "nausea")
+          .setOrigin(0)
+          .setScale(this.erinScale)
+          .setVisible(false);
+
+        this.runnyNose = this.add.image(this.erinX, this.erinY, "runnyNose")
+          .setOrigin(0)
+          .setScale(this.erinScale)
+          .setVisible(false);
+
+        this.fever = this.add.image(this.erinX, this.erinY, "fever")
+          .setOrigin(0)
+          .setScale(this.erinScale)
+          .setVisible(false);
+
+        this.healthy = this.add.image(this.erinX, this.erinY, "healthy")
+          .setOrigin(0)
+          .setScale(this.erinScale)
+          .setVisible(true);
+
+        // Buttons
+        this.xMark = this.add.image(865, this.markY, "x")
+          .setScale(0.3)
+          .setInteractive({ pixelPerfect: true })
+          .setVisible(false);
+
+        this.check = this.add.image(565, this.markY, "check")
+          .setScale(0.3)
+          .setInteractive()
+          .setVisible(false);
+
+        this.next = this.add.image(
+          this.erinX * 1.25,
+          this.erinY * 4.35,
+          "next"
+        )
+          .setOrigin(0)
+          .setScale(0.35)
+          .setInteractive()
+          .setVisible(true);
+
+        // Scenario logic
         this.volunteerScenario = [
           {
             question: "Hey! I have an upset stomach today, and I'm feeling a bit nauseous, am I still good to come in?",
@@ -89,76 +143,77 @@ export default function Symptoms() {
         ];
 
         this.volunteerScenario[this.volunteerScenario.length - 1].erinType.setVisible(true);
+
+        // Textbox
         this.textbox = this.add.container(145, 112);
-        this.textboxImage = this.add.image(0, 0, 'textbox').setOrigin(0);
+
+        this.textboxImage = this.add.image(0, 0, "textbox").setOrigin(0);
+
         this.textboxText = this.add.text(100, 100, "", {
-          font: '70px Arial',
-          color: '#000',
+          font: "70px Arial",
+          color: "#000",
           wordWrap: {
             width: this.textboxImage.width * 0.9
           }
         }).setOrigin(0);
+
         this.typewriteText("Welcome to the personal hygiene module!");
+
         this.textbox.setSize(this.textboxImage.width, this.textboxImage.height);
         this.textbox.add([this.textboxImage, this.textboxText]);
         this.textbox.setScale(this.textboxScale);
 
-
-        this.next.on('pointerdown', () => {
+        // Interactions
+        this.next.on("pointerdown", () => {
           if (this.welcomeTexts.length > 0) {
             this.typewriteText(this.welcomeTexts[0]);
             this.welcomeTexts.shift();
-          }
-          else if (this.instructions.length > 0) {
+          } else if (this.instructions.length > 0) {
             this.textbox.setScale(1.05);
             this.textboxText.setFontSize(50);
             this.typewriteText(this.instructions[0]);
             this.instructions.shift();
-          }
-          else if (this.volunteerScenario.length > 0) {
+          } else if (this.volunteerScenario.length > 0) {
             this.textbox.setScale(this.textboxScale);
             this.textboxText.setFontSize(this.textFontSize);
             this.typewriteText(this.volunteerScenario[0].question);
+
             this.volunteerScenario[this.volunteerScenario.length - 1].erinType.setVisible(false);
             this.volunteerScenario[0].erinType.setVisible(true);
+
             this.xMark.setVisible(true);
             this.check.setVisible(true);
             this.next.setVisible(false);
-          }
-          else {
+          } else {
             window.navigateToPage("/module1/personalHygiene");
           }
-
         });
-        this.xMark.on('pointerdown', () => {
+
+        this.xMark.on("pointerdown", () => {
           this.handleAnswer(this.volunteerScenario, this.xMark);
         });
-        this.check.on('pointerdown', () => {
+
+        this.check.on("pointerdown", () => {
           this.handleAnswer(this.volunteerScenario, this.check);
         });
-
-        /*
-                this.text = this.add.text(300, 300, 'Please set your\nphone to landscape', { font: '48px Courier', fill: '#00ff00', align: 'center' }).setOrigin(0.5);
-                this.checkOriention();
-                this.scale.on('resize', this.checkOriention, this); */
       }
 
       typewriteText(text, speed = 30) {
         this.textboxText.setText("");
-        this.isTyping = true;
         this.next.disableInteractive();
         this.xMark.disableInteractive();
         this.check.disableInteractive();
 
         let i = 0;
+
         this.time.addEvent({
           delay: speed,
           repeat: text.length - 1,
           callback: () => {
             this.textboxText.text += text[i];
             i++;
+
             if (i === text.length) {
-              this.isTyping = false;
               this.next.setInteractive();
               this.xMark.setInteractive();
               this.check.setInteractive();
@@ -169,13 +224,19 @@ export default function Symptoms() {
 
       handleAnswer(scenarios, button) {
         this.scenario = scenarios[0];
-        if ((this.scenario.correctAnswer === "no" && button === this.xMark) || (this.scenario.correctAnswer === "yes" && button === this.check)) {
+
+        if (
+          (this.scenario.correctAnswer === "no" && button === this.xMark) ||
+          (this.scenario.correctAnswer === "yes" && button === this.check)
+        ) {
           scenarios.shift();
+
           if (scenarios.length > 0) {
-            this.textboxText.setColor('#000');
+            this.textboxText.setColor("#000");
             this.textbox.setScale(this.textboxScale);
             this.textboxText.setFontSize(this.textFontSize);
             this.typewriteText(scenarios[0].question);
+
             scenarios[0].erinType.setVisible(true);
             this.check.preFX.clear();
             this.xMark.preFX.clear();
@@ -183,55 +244,46 @@ export default function Symptoms() {
         } else {
           if (button === this.xMark) {
             this.check.preFX.addShine(1, 0.5, 5);
-          }
-          else {
+          } else {
             this.xMark.preFX.addShine(1, 0.5, 5);
           }
+
           this.textboxText.setFontSize(this.textFontSize * 0.8);
-          this.textboxText.setColor('rgb(252, 0, 0)');
+          this.textboxText.setColor("rgb(252, 0, 0)");
           this.typewriteText(this.scenario.popup);
         }
+
         if (scenarios.length === 0) {
           this.textbox.setScale(1.05);
-          this.textboxText.setColor('#000');
+          this.textboxText.setColor("#000");
           this.textboxText.setFontSize(50);
           this.typewriteText(this.transitions[0]);
+
           this.xMark.setVisible(false);
           this.check.setVisible(false);
           this.next.setVisible(true);
         }
       }
-
-      checkOriention() {
-        if (window.innerHeight > window.innerWidth) {
-          this.textbox.alpha = 0.2;
-          this.text.setVisible(true);
-        }
-        else {
-          this.textbox.alpha = 1;
-          this.text.setVisible(false);
-        }
-      }
     }
 
-
-        const config = {
-        type: Phaser.AUTO,
-        scale: {
-            mode: Phaser.Scale.FIT,
-            autoCenter: Phaser.Scale.CENTER_BOTH,
-            width: 1920,
-            height: 1080
-        },
-        render: {
-            pixelArt: false,
-            antialias: true
-        },
-        audio: {noAudio: true},
-        transparent: true,
-        scene: [Symptom],
-        parent: "phaser-game"
+    const config = {
+      type: Phaser.AUTO,
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 1920,
+        height: 1080
+      },
+      render: {
+        pixelArt: false,
+        antialias: true
+      },
+      audio: { noAudio: true },
+      backgroundColor: "#000000",
+      scene: [Symptom],
+      parent: "phaser-game"
     };
+
     const game = new Phaser.Game(config);
 
     return () => {
@@ -241,23 +293,22 @@ export default function Symptoms() {
 
   return (
     <div
-      id="phaser-wrapper"
       style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100dvw",
-        height: "100dvh",
-        backgroundColor: "black",
+        height: "100vh",
+        overflow: "hidden",
+        position: "relative",
+        backgroundColor: "black"
       }}
     >
       <div
         id="phaser-game"
         style={{
-          width: "100%",
-          height: "100%",
-          maxWidth: `${window.innerHeight * (16 / 9)}px`,
-          maxHeight: "100%",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100dvw",
+          height: "100dvh",
+          zIndex: 1
         }}
       />
     </div>

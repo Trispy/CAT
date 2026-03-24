@@ -869,7 +869,7 @@ class FinalScene extends Phaser.Scene {
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
       backgroundColor: "black",
-      height: "100vh",
+      height: "100dvh",
       overflow: "hidden",
       position: "relative"
     }}
@@ -881,8 +881,8 @@ class FinalScene extends Phaser.Scene {
     position: "fixed", 
     top: 0,
     left: 0,
-    width: "100vw",
-    height: "100vh",
+    width: "100dvw",
+    height: "100dvh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -890,8 +890,8 @@ class FinalScene extends Phaser.Scene {
   }}
 >
              <Textbox
-                width="90vw"
-                height="90vh"
+                width="90dvw"
+                height="90dvh"
                 placeholder={introText}
                 placeHolderColor="#000000"
                 placeHolderfontSize="2vw"
@@ -928,17 +928,17 @@ class FinalScene extends Phaser.Scene {
         </button>
 
         
-<div
-  id="phaser-game"
-  style={{
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100vw",
-    height: "100vh",
-    zIndex: 1
-  }}
-/>
+        <div
+        id="phaser-game"
+        style={{
+            position: "fixed",
+            top: 0,
+            left: -200,
+            width: "150dvw",
+            height: "150dvh",
+            zIndex: 1
+        }}
+        />
 
    
         {gameStage === "clipper" && showClipperText && !nailsTrimmed && (
@@ -951,8 +951,8 @@ class FinalScene extends Phaser.Scene {
                 }}
             >
                 <Textbox
-                    width="30vw"
-                    height="30vh"
+                    width="30dvw"
+                    height="30dvh"
                     placeholder={clipperText}
                     placeHolderColor="#000000"
                     placeHolderfontSize="1.1vw"
@@ -972,8 +972,8 @@ class FinalScene extends Phaser.Scene {
             >
                 {!removeClipSuccess && (
                     <Textbox
-                        width="30vw"
-                        height="30vh"
+                        width="30dvw"
+                        height="30dvh"
                         placeholder={clipperSuccessText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.1vw"
@@ -982,8 +982,8 @@ class FinalScene extends Phaser.Scene {
 
                 {nailsTrimmed && removeClipSuccess && !showRingText && (gameStage === "rings") && (
                     <Textbox
-                        width="30vw"
-                        height="30vh"
+                        width="30dvw"
+                        height="30dvh"
                         placeholder={ringText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.1vw"
@@ -992,8 +992,8 @@ class FinalScene extends Phaser.Scene {
 
                 {showRingText && (
                     <Textbox
-                        width="30vw"
-                        height="30vh"
+                        width="30dvw"
+                        height="30dvh"
                         placeholder={ringSuccessText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.1vw"
@@ -1002,8 +1002,8 @@ class FinalScene extends Phaser.Scene {
 
                 {clothesRemoved && (
                     <Textbox
-                        width="30vw"
-                        height="30vh"
+                        width="30dvw"
+                        height="30dvh"
                         placeholder={clothesSuccessText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.1vw"
@@ -1012,8 +1012,8 @@ class FinalScene extends Phaser.Scene {
 
                 {gameStage === "tyehair" && hairTied && !showTyedHairText && (
                     <Textbox
-                        width="30vw"
-                        height="30vh"
+                        width="30dvw"
+                        height="30dvh"
                         placeholder={tiedHairSuccessText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.1vw"
@@ -1036,8 +1036,8 @@ class FinalScene extends Phaser.Scene {
                             position: "fixed",
                             top: 0,
                             left: 0,
-                            width: "100dvw",
-                            height: "100dvh",
+                            width: "100vw",
+                            height: "100vh",
                             zIndex: 15000,
                             cursor: "pointer"
                         }}
@@ -1050,8 +1050,8 @@ class FinalScene extends Phaser.Scene {
                             }}
                         >
                             <Textbox
-                                width="30vw"
-                                height="30vh"
+                                width="30dvw"
+                                height="30dvh"
                                 placeholder={clothesText}
                                 placeHolderColor="#000000"
                                 placeHolderfontSize="1.1vw"
@@ -1089,8 +1089,8 @@ class FinalScene extends Phaser.Scene {
                             }}
                         >
                             <Textbox
-                                width="30vw"
-                                height="30vh"
+                                width="30dvw"
+                                height="30dvh"
                                 placeholder={tiedHairText}
                                 placeHolderColor="#000000"
                                 placeHolderfontSize="1.1vw"
@@ -1112,8 +1112,8 @@ class FinalScene extends Phaser.Scene {
                 }}
             >
                 <TextboxErin
-                    width="80vw"
-                    height="85vh"
+                    width="80dvw"
+                    height="85dvh"
                     placeholder={finalText}
                     placeHolderColor="#000000"
                     placeHolderfontSize="1.8vw"
