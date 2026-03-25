@@ -58,11 +58,20 @@ function Module2Part1() {
         }
     };
 }, []);
+useEffect(() => {
+    startPhaser();
+
+    setTimeout(() => {
+        if (phaserGameRef.current) {
+            phaserGameRef.current.scene.start("IntroScene");
+        }
+    }, 100);
+}, []);
 
     const backgroundStyle = {
         backgroundImage: `url(${module2Background})`,
-        minHeight: '100vh',
-        backgroundSize: 'contain',
+        minHeight: '100dvh',
+        backgroundSize: 'cover',
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
         backgroundColor: 'black'
@@ -102,10 +111,10 @@ function Module2Part1() {
 
             const indicatorContainer = scene.add.container(x, y);
 
-            const circle = scene.add.circle(0, 0, 20, 0xffff00, 0.5);
+            const circle = scene.add.circle(0, 0, 30, 0xffff00, 0.5);
 
             const text = scene.add.text(0, -60, "DRAG HERE", {
-                fontSize: "28px",
+                fontSize: "35px",
                 color: "#000000",
                 fontStyle: "bold"
             }).setOrigin(0.5);
@@ -123,6 +132,22 @@ function Module2Part1() {
 
             return indicatorContainer;
         };
+        class IntroScene extends Phaser.Scene {
+                constructor() {
+                    super("IntroScene");
+                }
+        
+                preload() {
+                    this.load.image("introBg", module2Background);
+                }
+        
+                create() {
+                    const { width, height } = this.scale;
+        
+                    this.add.image(width / 2, height / 2, "introBg")
+                    .setDisplaySize(width, height);
+                }
+        }
         class ThermometerScene extends Phaser.Scene {
 
             constructor() {
@@ -148,7 +173,7 @@ function Module2Part1() {
 
                 const therm = this.add.image(width / 2, height / 2, "thermometer");
 
-                const thermScale = (height * 0.7) / therm.height;
+                const thermScale = (height * 0.9) / therm.height;
                 therm.setScale(thermScale);
 
                 const centerX = therm.x;
@@ -482,7 +507,7 @@ function Module2Part1() {
         
                     preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
                         this.load.image("sinkbg", sinkbg);
-                       
+                     
                         this.load.image("cleanHand", cleanHand);
                         this.load.image("dirtyHand", dirtyHand);
                         this.load.image("soapSprite", soapSprite);
@@ -491,41 +516,39 @@ function Module2Part1() {
         
                     create() {
                         const { width, height } = this.scale;
+                         let timeLeft = 20;
+        
+                                const timerText = this.add.text(
+                                    width * 0.85,
+                                    height * 0.05,
+                                    ":20",
+                                    {
+                                        fontSize: "48px",
+                                        color: "#ff0000",
+                                        fontStyle: "bold"
+                                    }
+                                ).setOrigin(0.5);
+                                timerText.setDepth(1000);
+                                this.time.addEvent({
+                                    delay: 1000, //one second
+                                    loop: true,
+                                    callback: () => {
+                                        if (timeLeft <= 0) return;
+                                        timeLeft--;
+                                        timerText.setText(":" + timeLeft.toString());
+        
+                                        if (timeLeft <= 0) {
+        
+                                            timerText.setText("Done!");
+                                            setTimerDone(true);
+        
+                                        }
+        
+                                    }
+                                });
                         this.input.addPointer(3);
                         this.input.dragDistanceThreshold = 0;
                         this.input.dragTimeThreshold = 0;
-                        this.input.topOnly = false;
-
-                        let timeLeft = 20;
-
-                        const timerText = this.add.text(
-                            width * 0.85,
-                            height * 0.05,
-                            ":20",
-                            {
-                                fontSize: "48px",
-                                color: "#ff0000",
-                                fontStyle: "bold"
-                            }
-                        ).setOrigin(0.5);
-                        timerText.setDepth(1000);
-                        this.time.addEvent({
-                            delay: 1000, //one second
-                            loop: true,
-                            callback: () => {
-                                if (timeLeft <= 0) return;
-                                timeLeft--;
-                                timerText.setText(":" + timeLeft.toString());
-
-                                if (timeLeft <= 0) {
-
-                                    timerText.setText("Done!");
-                                    setTimerDone(true);
-
-                                }
-
-                            }
-                        });
                         this.add.image(width / 2, height / 2, "sinkbg")
                             .setDisplaySize(width, height);
                         // Bottom layer (trimmed hand)
@@ -534,7 +557,7 @@ function Module2Part1() {
                             height / 2 + height * 0.05,
                             "cleanHand"
                         )
-                        const handMaxWidth = width * 0.6;
+                        const handMaxWidth = width * 0.8;
                         const scale = handMaxWidth / cleanHand.width;
                         cleanHand.setScale(scale);
         
@@ -545,20 +568,22 @@ function Module2Part1() {
                             "dirtyHand"
                         );
         
-                        const scale1 = (width * 0.6) / dirtyHand.width;
+                        const scale1 = (width * 0.8) / dirtyHand.width;
                         dirtyHand.setScale(scale1);
         
         
-                        dirtyHand.setVisible(false);
+                        
         
                         const handZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
-                            width / 2 - width * 0.23, 
+                            width / 2 - width * 0.30, 
                             height / 2 - height * 0.37, 
-                            width * 0.45,
-                            height * 0.8
+                            width * 0.60,
+                            height * 0.85
                         );
+                      
         
-                        const gridSize = 20; // size of each cell
+        
+                        const gridSize = 40; // size of each cell
                         const cells = [];
         
                         for (let x = handZone.x; x < handZone.right; x += gridSize) {
@@ -587,7 +612,7 @@ function Module2Part1() {
                             dirtyHand.displayWidth / 2,
                             dirtyHand.displayHeight / 2
                         );
-        
+                        dirtyHand.setVisible(false);
                         // Store original position
                         const soapStartX = cleanHand.x + cleanHand.displayWidth / 2 + width * 0.05;
                         const soapStartY = cleanHand.y;
@@ -598,7 +623,7 @@ function Module2Part1() {
                             soapStartY,
                             "soapSprite"
                         ).setInteractive({ draggable: true });
-                        const soapMaxWidth = width * 0.15;
+                        const soapMaxWidth = width * 0.18;
                         const baseScale = soapMaxWidth / soap.width;
                         soap.setScale(baseScale);
         
@@ -612,21 +637,21 @@ function Module2Part1() {
                         soap.on("dragend", () => {
                             soap.setScale(baseScale);
                         });
-                            soap.on("drag", (pointer, dragX, dragY) => {
+                        soap.on("drag", (pointer, dragX, dragY) => {
                             soap.x = dragX;
                             soap.y = dragY;
-
-
+        
+        
                             const localX = (dragX - dirtyHandRT.x) / dirtyHandRT.scaleX + dirtyHandRT.width / 2;
                             const localY = (dragY - dirtyHandRT.y) / dirtyHandRT.scaleY + dirtyHandRT.height / 2;
-
-                        
+        
+                           
                             if (Math.random() < 0.2) {
                                 const sud = this.add.image(dragX, dragY, "sudImg");
-
+        
                                 const sudMaxWidth = width * 0.1 * Math.random();
                                 sud.setScale(sudMaxWidth / sud.width);
-
+        
                                 this.tweens.add({
                                     targets: sud,
                                     alpha: 0,
@@ -635,7 +660,7 @@ function Module2Part1() {
                                 });
                             }
                             
-
+        
                             dirtyHandRT.erase(eraseBrush, localX, localY);
                             cells.forEach(cell => {
                                 if (!cell.cleared) {
@@ -656,19 +681,22 @@ function Module2Part1() {
                                 console.log("Hands fully clean.");
                                 dirtyHandRT.setVisible(false);
                             }
-
-                });
+        
+                        });
         
                         // Show textbox when scene loads
                         setShowSoapText(true);
         
                         // when clipper is clicked hide the textbox
-                        soap.on("pointerdown", () => {
-                            setShowSoapText(false);
-                        });
+                     
                         this.events.on("shutdown", () => {
-                            this.input.removeAllListeners();
+                        this.input.removeAllListeners();
+        
+                            if (dirtyHandRT) {
+                                dirtyHandRT.destroy();
+                            }
                         });
+                       
                     }
                 }
         
@@ -698,7 +726,7 @@ function Module2Part1() {
                     height / 2 + height * 0.05,
                     "handLeft"
                 )
-                const handMaxWidth = width * 0.6;
+                const handMaxWidth = width * 0.8;
                 const scale = handMaxWidth / cleanHand.width;
                 cleanHand.setScale(scale);
                 const cleanHand2 = this.add.image(
@@ -777,23 +805,27 @@ function Module2Part1() {
         }
 
         const config = {
-            type: Phaser.AUTO,
-            scale: {
-                mode: Phaser.Scale.RESIZE,
-                autoCenter: Phaser.Scale.CENTER_BOTH
-            },
-            audio: {
-                noAudio: true
-            },
-            transparent: true,
-            scene: [ThermometerScene, FridgeScene, HandScene, GloveScene],
-            parent: "phaser-transition-container"
-        };
+                type: Phaser.AUTO,
+                scale: {
+                    mode: Phaser.Scale.FIT,
+                    autoCenter: Phaser.Scale.CENTER_BOTH,
+                    width: 1920,
+                    height: 1080
+                },
+                render: {
+                    pixelArt: false,
+                    antialias: true
+                },
+                audio: {noAudio: true},
+                transparent: false,
+                backgroundColor: "#000000",
+                 scene: [IntroScene, ThermometerScene, FridgeScene, HandScene, GloveScene],
+                parent: "phaser-game"
+            };
+        
+       
 
-        const container = document.getElementById("phaser-transition-container");
-        if (container) {
-            container.innerHTML = "";
-        }
+        
 
         phaserGameRef.current = new Phaser.Game(config);
     };
@@ -907,16 +939,16 @@ function Module2Part1() {
         (gameStage === "FridgeScene" && fridgeState !== "complete") ||
         (gameStage === "HandScene" && (!handsClean || !timerDone)) ||
         (gameStage === "gloveStage" && !glovedHands);
-const overlayStyle = {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        zIndex: 15000,
-        backgroundColor: "rgba(0,0,0,0)",
-        cursor: "pointer"
-    };
+    const overlayStyle = {
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            zIndex: 15000,
+            backgroundColor: "rgba(0,0,0,0)",
+            cursor: "pointer"
+        };
     const handOverlayStyle = {
     position: "fixed",
     top: "50%",
@@ -926,66 +958,79 @@ const overlayStyle = {
 };
     return (
         <div
-            className="form"
-            style={{
-                ...backgroundStyle,
-                position: "relative",
-            }}
-        >
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100%"
-                }}
-            >
-                <button
-                    className="next-button"
-                    onClick={handleNextClick}
-                    style={{
-                        position: "absolute",
-                        bottom: "5%",
-                        right: "5%",
-                        opacity: isNextDisabled ? 0.5 : 1,
-                        pointerEvents: isNextDisabled ? "none" : "auto",
-                        background: "none",
-                        border: "none",
-                        padding: 0,
-                        zIndex: 20000
-                    }}
-                >
-                    <img
-                        src={nextButton}
-                        alt="Next"
-                        style={{
-                            width: "20vw",
-                            minWidth: "120px"
-                        }}
-                    />
-                </button>
+    className="form"
+    style={{
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      backgroundColor: "black",
+      height: "100dvh",
+      overflow: "hidden",
+      position: "relative"
+    }}
+  >
+       
+            <button
+                   className="next-button"
+                   disabled={isNextDisabled}
+                   onClick={handleNextClick}
+                   style={{
+                       position: "absolute",
+                       bottom: "5%",
+                       right: "15%",
+                       opacity: isNextDisabled ? 0.5 : 1,
+                       pointerEvents: isNextDisabled ? "none" : "auto",
+                       background: "none",
+                       border: "none",
+                       padding: 0,
+                       zIndex: 20000
+                   }}
+               >
+                   <img 
+                       src={nextButton} 
+                       alt="Next" 
+                       style={{ 
+                           width: "20vw",
+                           minWidth: "120px"
+                       }} 
+                   />
+               </button>
+                
 
                 {gameStage === "intro" && (
+                    <div
+                    style={{
+                        position: "fixed", 
+                        top: 0,
+                        left: 0,
+                        width: "100dvw",
+                        height: "100dvh",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 15000
+                    }}
+                >
                     <Textbox
-                        width="90vw"
-                        height="90vh"
+                        width="70vw"
+                        height="70vh"
                         placeholder={introText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="2vw"
                     />
+                    </div>
                 )}
-            </div>
-
+            
             <div
-                id="phaser-transition-container"
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    zIndex: 10000
-                }}
+            id="phaser-game"
+            style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100dvw",
+                height: "100dvh",
+                zIndex: 10000
+            }}
             />
             {gameStage === "ThermometerScene" && thermometerState === "instructions" && (
                 <div
@@ -995,8 +1040,8 @@ const overlayStyle = {
                     <div
                         style={{
                             position: "fixed",
-                            right: "10vw",
-                            bottom: "25vh"
+                            right: "18vw",
+                            bottom: "10vh"
                         }}
                     >
                         <Textbox
@@ -1017,8 +1062,8 @@ const overlayStyle = {
                     <div
                         style={{
                             position: "fixed",
-                            right: "10vw",
-                            bottom: "25vh"
+                            right: "18vw",
+                            bottom: "10vh"
                         }}
                     >
                         <Textbox
@@ -1035,8 +1080,8 @@ const overlayStyle = {
                 <div
                     style={{
                         position: "fixed",
-                        right: "10vw",
-                        bottom: "25vh",
+                        right: "18vw",
+                        bottom: "10vh",
                         zIndex: 15000
                     }}
                 >
@@ -1057,8 +1102,8 @@ const overlayStyle = {
                     <div
                         style={{
                             position: "fixed",
-                            right: "10vw",
-                            bottom: "25vh"
+                            right: "18vw",
+                            bottom: "10vh"
                         }}
                     >
                         <Textbox
@@ -1081,8 +1126,8 @@ const overlayStyle = {
                     <div
                         style={{
                             position: "fixed",
-                            right: "10vw",
-                            bottom: "25vh"
+                            right: "18vw",
+                            bottom: "10vh"
                         }}
                     >
                         <Textbox
@@ -1103,8 +1148,8 @@ const overlayStyle = {
                     <div
                         style={{
                             position: "fixed",
-                            right: "10vw",
-                            bottom: "25vh"
+                            right: "18vw",
+                            bottom: "10vh"
                         }}
                     >
                         <Textbox
@@ -1118,87 +1163,119 @@ const overlayStyle = {
                 </div>
             )}
             {gameStage === "HandScene" && showSoapText && (
-                <div
-                    onClick={() => setShowSoapText(false)}
-                    style={handOverlayStyle}
-                >
-                    <div
-                        style={{
-                            position: "fixed",
-                            right: "10vw",
-                            bottom: "25vh"
-                        }}
-                    >
-                        <Textbox
-                            width="30vw"
-                            height="30vh"
-                            placeholder={soapText}
-                            placeHolderColor="#000000"
-                            placeHolderfontSize="1.1vw"
-                        />
-                    </div>
+                 <div
+                onClick={() => setShowSoapText(false)}
+            style={{
+                        position: "fixed", 
+                        top: 0,
+                        left: 0,
+                        width: "100dvw",
+                        height: "100dvh",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 10000
+                    }}
+            >
+                
+                <Textbox
+                    width="70dvw"
+                    height="70dvh"
+                    placeholder={soapText}
+                    placeHolderColor="#000000"
+                    placeHolderfontSize="1.8vw"
+                />
                 </div>
             )}
 
             {gameStage === "HandScene" && handsClean && timerDone && (
-                <div
-                    style={{
-                        position: "fixed",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        zIndex: 15000,
+             <div
+                style={{
+                        position: "fixed", 
+                        top: 0,
+                        left: 0,
+                        width: "100dvw",
+                        height: "100dvh",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 10000
                     }}
-                >
-                    <TextboxErin
-                        width="80vw"
-                        height="85vh"
-                        placeholder={soapSuccessText}
-                        placeHolderColor="#000000"
-                        placeHolderfontSize="1.8vw"
-                    />
-                </div>
+            >
+   
+      <Textbox
+        width="70dvw"
+        height="70dvh"
+        placeholder={soapSuccessText}
+        placeHolderColor="#000000"
+        placeHolderfontSize="1.8vw"
+      />
+    </div>
+
             )}
 
             {gameStage === "gloveStage" && gloveInstruction && (
-                <div
-                    onClick={() => setGloveInstruction(false)}
-                    style={{
-                        position: "fixed",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        zIndex: 15000,
-                    }}
-                >
-                    <TextboxErin
-                        width="80vw"
-                        height="85vh"
-                        placeholder={gloveText}
-                        placeHolderColor="#000000"
-                        placeHolderfontSize="1.8vw"
-                    />
-                </div>
+              <div
+    style={{
+            position: "fixed", 
+            top: 0,
+            left: 0,
+            width: "100dvw",
+            height: "100dvh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10000
+        }}
+  >
+    <div
+      onClick={() => setGloveInstruction(false)}
+     style={{
+            position: "fixed", 
+            top: 0,
+            left: 0,
+            width: "100dvw",
+            height: "100dvh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10000
+        }}
+    >
+      <Textbox
+        width="70%"
+        height="70%"
+        placeholder={gloveText}
+        placeHolderColor="#000000"
+        placeHolderfontSize="1.8vw"
+      />
+    </div>
+  </div>
             )}
 
             {gameStage === "gloveStage" && glovedHands && (
-                <div
-                    style={{
-                        position: "fixed",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        zIndex: 15000,
-                    }}
-                >
-                    <TextboxErin
-                        width="80vw"
-                        height="85vh"
-                        placeholder={gloveSuccessText}
-                        placeHolderColor="#000000"
-                        placeHolderfontSize="1.8vw"
-                    />
-                </div>
+               <div
+    style={{
+            position: "fixed", 
+            top: 0,
+            left: 0,
+            width: "100dvw",
+            height: "100dvh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10000
+        }}
+  >
+   
+      <Textbox
+       width="70dvw"
+        height="70dvh"
+        placeholder={gloveSuccessText}
+        placeHolderColor="#000000"
+        placeHolderfontSize="1.8vw"
+      />
+    </div>
             )}
 
             {gameStage === "FridgeScene" && fridgeState === "success" && (
@@ -1209,8 +1286,8 @@ const overlayStyle = {
                     <div
                         style={{
                             position: "fixed",
-                            right: "10vw",
-                            bottom: "25vh"
+                            right: "18vw",
+                            bottom: "10vh"
                         }}
                     >
                         <Textbox

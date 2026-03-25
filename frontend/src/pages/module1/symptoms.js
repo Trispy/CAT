@@ -150,7 +150,7 @@ export default function Symptoms() {
         this.textboxImage = this.add.image(0, 0, "textbox").setOrigin(0);
 
         this.textboxText = this.add.text(100, 100, "", {
-          font: "70px Arial",
+          font: "bold 70px sans-serif",
           color: "#000",
           wordWrap: {
             width: this.textboxImage.width * 0.9

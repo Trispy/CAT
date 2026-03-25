@@ -189,7 +189,7 @@ useEffect(() => {
                     height / 2 + height * 0.05, 
                     "handTrimmed"
                 )
-                const handMaxWidth = width * 0.6;   
+                const handMaxWidth = width * 0.8;   
                 const scale = handMaxWidth / trimmedHand.width;
                 trimmedHand.setScale(scale);
                 
@@ -200,7 +200,7 @@ useEffect(() => {
                     "hand"
                 );
 
-                const scale1 = (width * 0.6) / longHandImage.width;
+                const scale1 = (width * 0.8) / longHandImage.width;
                 longHandImage.setScale(scale1);
             
 
@@ -208,11 +208,12 @@ useEffect(() => {
                 
                 const nailZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                     width / 2 - width * 0.15, 
-                    height / 2 - height * 0.50,  
-                    width * 0.35,
-                    height * 0.40      
+                    height / 2 - height * 0.47,  
+                    width * 0.40,
+                    height * 0.35      
                 );
-                
+              
+
             const gridSize = 20; // size of each cell
             const cells = [];
 
@@ -253,16 +254,15 @@ useEffect(() => {
                 const clipperStartY = trimmedHand.y;
 
                 // Create nail clipper
-                const clipper = this.add.image(
+            const clipper = this.add.image(
                     clipperStartX,
                     clipperStartY,
                     "nailclipper"
                 ).setInteractive({ useHandCursor: true });
-                const clipperMaxWidth = width * 0.10;
+                const clipperMaxWidth = width * 0.14;
                 const clipperScale = clipperMaxWidth / clipper.width;
                 const baseScale = clipperMaxWidth / clipper.width;
                 clipper.setScale(baseScale);
-                    
 
 
 
@@ -325,7 +325,7 @@ useEffect(() => {
 
             // when clipper is clicked hide the textbox
             clipper.on("pointerdown", () => {
-               setShowClipperText(false);
+                setShowClipperText(false);
             });
         this.events.on("shutdown", () => {
             this.input.removeAllListeners();
@@ -350,7 +350,7 @@ useEffect(() => {
             "handTrimmed"
         );
 
-        const scale = (width * 0.6) / trimmedHand.width;
+        const scale = (width * 0.8) / trimmedHand.width;
         trimmedHand.setScale(scale);
 
         // Ring on finger
@@ -360,7 +360,7 @@ useEffect(() => {
             "ringonfinger"
         ).setInteractive({ useHandCursor: true });
 
-        ringOnFinger1.setScale((width * 0.27) / ringOnFinger1.width);
+        ringOnFinger1.setScale((width * 0.37) / ringOnFinger1.width);
 
         // Actual draggable ring
         const ring1 = this.add.image(
@@ -369,7 +369,7 @@ useEffect(() => {
             "ring"
         );
 
-        ring1.setScale((width * 0.30) / ring1.width);
+        ring1.setScale((width * 0.43) / ring1.width);
         ring1.setVisible(false);
         ring1.setDepth(200); 
         const ringStart = { x: ring1.x, y: ring1.y };
@@ -391,6 +391,8 @@ useEffect(() => {
             bowlImage.displayWidth * 0.20,
             bowlImage.displayHeight * 0.30
         );
+      
+
 
         // Click ring on finger
         ringOnFinger1.on("pointerdown", () => {
@@ -422,10 +424,10 @@ useEffect(() => {
             if (gameObject !== ring1) return;
             if (!wasDragged) return;
 
-            
+            const ringBounds = ring1.getBounds();
 
             if (
-                Phaser.Geom.Rectangle.Contains(bowlZone, x, y)
+                (Phaser.Geom.Intersects.RectangleToRectangle(ringBounds, bowlZone))
             ) {
 
                 // SUCCESS
@@ -467,15 +469,14 @@ useEffect(() => {
             const indicatorContainer = this.add.container(target.x, target.y);
 
             const radius = Math.max(target.displayWidth, target.displayHeight) / 2 + 10;
-            const circle = this.add.circle(0, 0, radius, 0xffffff, 0.3);
-            const text = this.add.text(0, -80, "CLICK HERE", {
-                fontSize: "28px",
-                color: "#ffffff",
-                fontStyle: "bold"
-            }).setOrigin(0.5);
+                    const circle = this.add.circle(0, 0, radius, 0xFFFF00, 0.45);
+                    const text = this.add.text(0, -80, "CLICK HERE", {
+                        fontSize: "28px",
+                        color: "#ffffff",
+                        fontStyle: "bold"
+                    }).setOrigin(0.5);
 
-            indicatorContainer.add([circle, text]);
-
+                    indicatorContainer.add([circle, text]);
             
             this.tweens.add({
                 targets: circle,
@@ -876,28 +877,28 @@ class FinalScene extends Phaser.Scene {
   >
      
         {gameStage === "intro" && (
-<div
-  style={{
-    position: "fixed", 
-    top: 0,
-    left: 0,
-    width: "100dvw",
-    height: "100dvh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 10000
-  }}
->
-             <Textbox
-                width="90dvw"
-                height="90dvh"
-                placeholder={introText}
-                placeHolderColor="#000000"
-                placeHolderfontSize="2vw"
-            />
-  </div>
-)}
+        <div
+        style={{
+            position: "fixed", 
+            top: 0,
+            left: 0,
+            width: "100dvw",
+            height: "100dvh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10000
+        }}
+        >
+                    <Textbox
+                        width="70dvw"
+                        height="70dvh"
+                        placeholder={introText}
+                        placeHolderColor="#000000"
+                        placeHolderfontSize="1.5vw"
+                    />
+        </div>
+        )}
     
        
 
@@ -908,7 +909,7 @@ class FinalScene extends Phaser.Scene {
             style={{
                 position: "absolute",
                 bottom: "5%",
-                right: "5%",
+                right: "15%",
                 opacity: isNextDisabled ? 0.5 : 1,
                 pointerEvents: isNextDisabled ? "none" : "auto",
                 background: "none",
@@ -933,19 +934,18 @@ class FinalScene extends Phaser.Scene {
         style={{
             position: "fixed",
             top: 0,
-            left: -200,
-            width: "150dvw",
-            height: "150dvh",
+            left: 0,
+            width: "100dvw",
+            height: "100dvh",
             zIndex: 1
         }}
         />
 
-   
-        {gameStage === "clipper" && showClipperText && !nailsTrimmed && (
+ {gameStage === "clipper" && showClipperText && !nailsTrimmed && (
             <div
                 style={{
                     position: "fixed",
-                    right: "1vw",
+                    right: "18vw",
                     bottom: "50vh",
                     zIndex: 10000
                 }}
@@ -959,13 +959,12 @@ class FinalScene extends Phaser.Scene {
                 />
             </div>
         )}
-
     
         {nailsTrimmed && (
             <div
                 style={{
                     position: "fixed",
-                    right: "10vw",
+                    right: "18vw",
                     bottom: "25vh",
                     zIndex: 10000
                 }}
@@ -1045,13 +1044,13 @@ class FinalScene extends Phaser.Scene {
                         <div
                             style={{
                                 position: "fixed",
-                                right: "10vw",
+                                right: "18vw",
                                 bottom: "25vh"
                             }}
                         >
                             <Textbox
                                 width="30dvw"
-                                height="30dvh"
+                                height="40dvh"
                                 placeholder={clothesText}
                                 placeHolderColor="#000000"
                                 placeHolderfontSize="1.1vw"
@@ -1084,13 +1083,13 @@ class FinalScene extends Phaser.Scene {
                         <div
                             style={{
                                 position: "fixed",
-                                right: "10vw",
+                                right: "18vw",
                                 bottom: "25vh"
                             }}
                         >
                             <Textbox
                                 width="30dvw"
-                                height="30dvh"
+                                height="40dvh"
                                 placeholder={tiedHairText}
                                 placeHolderColor="#000000"
                                 placeHolderfontSize="1.1vw"
@@ -1102,23 +1101,23 @@ class FinalScene extends Phaser.Scene {
         )}
 
         {showFinalText && gameStage === "final" && (
-            <div
+           <div
                 style={{
                     position: "fixed",
                     top: "50%",
-                    left: "50%",
+                    left: "51%",
                     transform: "translate(-50%, -50%)",
-                    zIndex: 15000,
+                    zIndex: 10000
                 }}
             >
-                <TextboxErin
-                    width="80dvw"
-                    height="85dvh"
-                    placeholder={finalText}
-                    placeHolderColor="#000000"
-                    placeHolderfontSize="1.8vw"
-                />
-            </div>
+                    <TextboxErin
+                        width="65dvw"
+                        height="75dvh"
+                        placeholder={finalText}
+                        placeHolderColor="#000000"
+                        placeHolderfontSize="1.5vw"
+                    />
+        </div>
         )}
   </div>
     );
