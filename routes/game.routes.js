@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/game.model');
+const User = require('../models/user.model');
 const module1SummarySchema = require('../models/game.model');
 const requireAuth = require('../middleware/auth.middleware');
 router.post('/addModule1Summary', requireAuth, async (req, res) => {
@@ -39,6 +39,23 @@ router.get('/getModule1Summary', requireAuth, async (req, res) => {
         console.error('Error retrieving module 1 summary:', error);
         res.status(500).json({ message: 'Server error' });
     }
+});
+
+router.post('/updateComplete', async (req, res) => {
+  try {
+    const { username, module } = req.body;
+
+    const user = await User.findOne({ username });
+
+    if(module === "m1") user.finished_m1 = true;
+    else if(module === "m2") user.finished_m2 = true;
+    await user.save();
+    res.status(200).json({ message: 'Module 1 summary created successfully with user: ', user });
+  } 
+  catch (error) {
+    console.error('Error creating account:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 module.exports = router;

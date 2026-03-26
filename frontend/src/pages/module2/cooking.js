@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Phaser from "phaser";
+import callUpdate from "../../components/callupdate";
 
 import beefBowl from "../../assets/M2Cooking/Bowl_Beef.png";
 import onionBowl from "../../assets/M2Cooking/Bowl_Onion.png";
@@ -159,30 +160,31 @@ export default function Cooking() {
           this.mealMessages.shift();
         }
         else{
+          callUpdate("m2");
           window.navigateToPage("/");
         }  
 });
 
         this.input.on('drag', (pointer, gameObject, x, y) =>{
-          if(gameObject == this.beefBowl){
+          if(gameObject === this.beefBowl){
             this.beefBowl.x = x;
             this.beefBowl.y = y;
           }
-          if (gameObject == this.pepperBowl){
+          if (gameObject === this.pepperBowl){
             this.pepperBowl.x = x;
             this.pepperBowl.y = y;
           }
-          if (gameObject == this.onionBowl){
+          if (gameObject === this.onionBowl){
             this.onionBowl.x = x;
             this.onionBowl.y = y;
           }
-          if(gameObject == this.veggieThermometer){
+          if(gameObject === this.veggieThermometer){
             this.veggieThermometer.x = x;
             this.veggieThermometer.y = y;
             this.veggieThermometerHand.x = this.veggieThermometer.getCenter().x;
             this.veggieThermometerHand.y = this.veggieThermometer.getCenter().y;
           }
-          if(gameObject == this.meatThermometer){
+          if(gameObject === this.meatThermometer){
             this.meatThermometer.x = x;
             this.meatThermometer.y = y;
             this.meatThermometerHand.x = this.meatThermometer.getCenter().x;
