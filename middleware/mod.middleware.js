@@ -7,6 +7,12 @@ const Module4 = require("../models/module4.model");
 const Module5 = require("../models/module5.model");
 const Module6 = require("../models/module6.model");
 
+const mod1_dic = {"symptoms": 0, "personalHygiene": 1, "location": 2}; 
+const mod2_dic = {"module2part1": 0, "chopping": 1, "cooking": 2}; 
+const mod3_dic = {"module3part1": 0, "module3part2": 1, "module3part3": 2};
+const mod4_dic = {"module4part1": 0, "module4part2": 1, "module4part3": 2};
+const mod5_dic = {"module5part1": 0, "module5part2": 1, "module5part3": 2};
+const mod6_dic = {"module6part1": 0, "module6part2": 1, "module6part3": 2};
 const checkAccess = (moduleName, gameName) => {
   return async (req, res, next) => {
     try {
@@ -43,8 +49,14 @@ const checkAccess = (moduleName, gameName) => {
         if (gameName !== startingModule1 && mod1[startingModule1] === false) {
             return res.status(403).json({ message: "You must start the first step first" });
         }
-
-        if (gameName !== startingModule1 && mod1[gameName] === false) {
+        let prev_number = 0; 
+      
+        if (mod1_dic[gameName] - 1 >= 0) {
+          prev_number = mod1_dic[gameName] - 1; 
+        }
+        const key = Object.keys(mod1_dic).find(k => mod1_dic[k] === prev_number);
+        
+        if (gameName !== startingModule1 && mod1[key] === false) {
             return res.status(403).json({ message: `${gameName} not unlocked` });
         }
       }
@@ -63,13 +75,18 @@ const checkAccess = (moduleName, gameName) => {
         if (gameName !== startingModule2 && mod2[startingModule2] === false) {
             return res.status(403).json({ message: "You must start the first step first" });
         }
+        let prev_number = 0; 
+        if (mod2_dic[gameName] - 1 >= 0) {
+          prev_number = mod2_dic[gameName] - 1; 
+        }
+        const key = Object.keys(mod2_dic).find(k => mod2_dic[k] === prev_number);
 
-        if (gameName !== startingModule2 && mod2[gameName] === false) {
+        if (gameName !== startingModule2 && mod2[key] === false) {
             return res.status(403).json({ message: `${gameName} not unlocked` });
         }
       }
 
-      // MODULE 3
+      /*// MODULE 3
       if (moduleName === "module3") {
         if (user.finished_m3 === "locked") {
           return res.status(403).json({ message: "Module 3 is locked" });
@@ -80,8 +97,13 @@ const checkAccess = (moduleName, gameName) => {
         if (!mod3) {
           return res.status(404).json({ message: "Module 3 data not found" });
         }
+        let prev_number = 0; 
+        if (mod3_dic[gameName] - 1 >= 0) {
+          prev_number = mod3_dic[gameName] - 1; 
+        }
+        const key = Object.keys(obj).find(k => obj[k] === prev_number);
 
-        if (gameName && mod3[gameName] === false) {
+        if (gameName && mod3[key] === false) {
           return res.status(403).json({ message: `${gameName} not unlocked` });
         }
       }
@@ -97,8 +119,12 @@ const checkAccess = (moduleName, gameName) => {
         if (!mod4) {
           return res.status(404).json({ message: "Module 4 data not found" });
         }
-
-        if (gameName && mod4[gameName] === false) {
+        let prev_number = 0; 
+        if (mod4_dic[gameName] - 1 >= 0) {
+          prev_number = mod4_dic[gameName] - 1; 
+        }
+        const key = Object.keys(obj).find(k => obj[k] === prev_number);
+        if (gameName && mod4[key] === false) {
           return res.status(403).json({ message: `${gameName} not unlocked` });
         }
       }
@@ -114,8 +140,13 @@ const checkAccess = (moduleName, gameName) => {
         if (!mod5) {
           return res.status(404).json({ message: "Module 5 data not found" });
         }
+        let prev_number = 0; 
+        if (mod5_dic[gameName] - 1 >= 0) {
+          prev_number = mod5_dic[gameName] - 1; 
+        }
+        const key = Object.keys(obj).find(k => obj[k] === prev_number);
 
-        if (gameName && mod5[gameName] === false) {
+        if (gameName && mod5[key] === false) {
           return res.status(403).json({ message: `${gameName} not unlocked` });
         }
       }
@@ -131,11 +162,15 @@ const checkAccess = (moduleName, gameName) => {
         if (!mod6) {
           return res.status(404).json({ message: "Module 6 data not found" });
         }
-
-        if (gameName && mod6[gameName] === false) {
+        let prev_number = 0; 
+        if (mod6_dic[gameName] - 1 >= 0) {
+          prev_number = mod6_dic[gameName] - 1; 
+        }
+        const key = Object.keys(obj).find(k => obj[k] === prev_number);
+        if (gameName && mod6[key] === false) {
           return res.status(403).json({ message: `${gameName} not unlocked` });
         }
-      }
+      }*/
 
       next();
 

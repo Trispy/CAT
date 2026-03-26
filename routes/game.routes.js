@@ -1,44 +1,195 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const User = require('../models/game.model');
-const module1SummarySchema = require('../models/game.model');
-const requireAuth = require('../middleware/auth.middleware');
-router.post('/addModule1Summary', requireAuth, async (req, res) => {
+
+const Module1 = require("../models/module1.model");
+const Module2 = require("../models/module2.model");
+
+const checkAccess = require("../middleware/checkAccess");
+
+//mod 1 routes
+
+// mark as complete
+router.post(
+  "/module1/symptoms/completed",
+  checkAccess("module1", "symptoms"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const updated = await Module1.findOneAndUpdate(
+        { username },
+        { symptoms: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+router.post(
+  "/module1/personalHygiene/completed",
+  checkAccess("module1", "personalHygiene"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const updated = await Module1.findOneAndUpdate(
+        { username },
+        { personalHygiene: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+router.post(
+  "/module1/location/completed",
+  checkAccess("module1", "location"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const updated = await Module1.findOneAndUpdate(
+        { username },
+        { location: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+// --- GET STATUS ---
+router.get("/module1/status", async (req, res) => {
   try {
-    const { chillScore, cleanScore, separateScore, cookScore, strikes } = req.body;
-    if (!chillScore || !cleanScore || !separateScore || !cookScore) {
-      return res.status(400).json({ message: 'All scores are required' });
-    }
-    let averageScore = (chillScore + cleanScore + separateScore + cookScore) / 5;
-    let completed = false; 
-    if (strikes > 3 || averageScore < 90) {
-      completed = false;
-    }
-    else {
-      completed = true;
-    }
-    const module1summary = new module1SummarySchema({ userId: req.user.userId, username: req.user.username, chillScore, cleanScore, separateScore, cookScore, strikes, completed, averageScore });
-    await module1summary.save();
-    res.status(201).json({ message: 'Module 1 summary created successfully with user: ', module1summary });
-  } 
-  catch (error) {
-    console.error('Error creating account:', error);
-    res.status(500).json({ message: 'Server error' });
+    const username = req.user.username;
+
+    const data = await Module1.findOne({ username });
+
+    res.json({
+      symptoms: data?.symptoms || false,
+      personalHygiene: data?.personalHygiene || false,
+      location: data?.location || false,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
-router.get('/getModule1Summary', requireAuth, async (req, res) => {
+
+// --- SUMMARY ---
+router.get("/module1/summary", async (req, res) => {
+  try {
+    const username = req.user.username;
+
+    const data = await Module1.findOne({ username });
+
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+//mod 2 routes
+
+// mark as complete
+router.post(
+  "/module2/module2part1/completed",
+  checkAccess("module2", "module2part1"),
+  async (req, res) => {
     try {
-        const module1summary = await module1SummarySchema.find({ userId: req.user.userId });
-        if (module1summary.length === 0) {
-            return res.status(404).json({ message: 'Module 1 summary not found' });
-        }
-        else {
-            return res.status(200).json({ message: 'Module 1 summary retrieved successfully with user: ', module1summary });
-        }
-    } catch (error) {
-        console.error('Error retrieving module 1 summary:', error);
-        res.status(500).json({ message: 'Server error' });
+      const username = req.user.username;
+
+      const updated = await Module2.findOneAndUpdate(
+        { username },
+        { module2part1: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
     }
+  }
+);
+
+router.post(
+  "/module2/chopping/completed",
+  checkAccess("module2", "chopping"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const updated = await Module2.findOneAndUpdate(
+        { username },
+        { chopping: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+router.post(
+  "/module2/cooking/completed",
+  checkAccess("module2", "cooking"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const updated = await Module2.findOneAndUpdate(
+        { username },
+        { cooking: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+// mod 2 status
+router.get("/module2/status", async (req, res) => {
+  try {
+    const username = req.user.username;
+
+    const data = await Module2.findOne({ username });
+
+    res.json({
+      module2part1: data?.module2part1 || false,
+      chopping: data?.chopping || false,
+      cooking: data?.cooking || false,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// mod2 summary
+router.get("/module2/summary", async (req, res) => {
+  try {
+    const username = req.user.username;
+
+    const data = await Module2.findOne({ username });
+
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 module.exports = router;
