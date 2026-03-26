@@ -183,7 +183,7 @@ useEffect(() => {
 
                 const pivot = this.add.container(centerX, centerY);
 
-                const pivot = this.add.container(centerX, centerY);
+           
 
 
             hand.setOrigin(0.5, 0.5);
