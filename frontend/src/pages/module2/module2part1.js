@@ -184,7 +184,7 @@ useEffect(() => {
                 const pivot = this.add.container(centerX, centerY);
 
            
-
+const hand = this.add.image(0, 0, "thermometerhand");
 
             hand.setOrigin(0.5, 0.5);
             hand.setScale(thermScale);
@@ -197,7 +197,7 @@ useEffect(() => {
             const tipOffsetX = hand.displayWidth * 0.02;
             const indicator = createClickIndicator(this, tipOffsetX, tipOffsetY);
             pivot.add(indicator);
-
+                
                 // Use true center to avoid PNG padding issues.
                 hand.setOrigin(0.5, 0.5);
 
