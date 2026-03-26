@@ -77,7 +77,7 @@ const [gameStage, setGameStage] = useState("intro");
         gameStage === "apron")
     const finalText = useTypewriter("You have now completed the basic hygiene module. Let's move on to the basic food safety module!",
         gameStage === "finalStage")
-    const soapText = useTypewriter("You have soaped the hand.",
+    const soapText = useTypewriter("Soap the hand.",
         gameStage === "soapyHands" && showSoapText)
     const soapSuccessText = useTypewriter("All clean! Now lets put on some gloves.",
         gameStage === "soapyHands" && handsClean)
@@ -545,8 +545,10 @@ const instructionTypewriter = useTypewriter(
 
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     if (gameObject === icon) {
+
                         gameObject.x = dragX;
                         gameObject.y = dragY;
+
                         cleanIcon.x = dragX;
                         cleanIcon.y = dragY;
 

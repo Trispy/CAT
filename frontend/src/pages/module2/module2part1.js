@@ -170,6 +170,8 @@ useEffect(() => {
                 this.add.image(width / 2, height / 2, "thermometerBackground")
                     .setDisplaySize(width, height);
 
+                this.add.image(width / 2, height / 2, "thermometerBackground")
+                    .setDisplaySize(width, height);
 
                 const therm = this.add.image(width / 2, height / 2, "thermometer");
 
@@ -181,14 +183,14 @@ useEffect(() => {
 
                 const pivot = this.add.container(centerX, centerY);
 
+                const pivot = this.add.container(centerX, centerY);
 
-            const hand = this.add.image(0, 0, "thermometerhand");
 
             hand.setOrigin(0.5, 0.5);
             hand.setScale(thermScale);
             hand.setAngle(-90);
 
-            pivot.add(hand);
+                hand.setScale(thermScale);
 
             // position indicator relative to the hand tip
             const tipOffsetY = hand.displayHeight * 0.02;
@@ -715,7 +717,8 @@ useEffect(() => {
             }
 
             create() {
-                let oneGlove = false;
+                let leftGlove = false;
+                let rightGlove = false;
                 const { width, height } = this.scale;
 
                 this.add.image(width / 2, height / 2, "sinkbg")
@@ -762,26 +765,27 @@ useEffect(() => {
                     const leftZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                         width / 2 - width * 0.23,
                         height / 2 - height * 0.35,
-                        350,
-                        700
+                        width * 0.2,
+                        height * 0.7
                     );
 
                     const rightZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                         width / 2,
                         height / 2 - height * 0.35,
-                        350,
-                        700
+                        width * 0.2,
+                        height * 0.7
                     );
+
                     if (Phaser.Geom.Intersects.RectangleToRectangle(gloveBoxBounds, leftZone)) {
                         cleanHand.setTexture("gloveLeft");
-                        if (oneGlove) setGlovedHands(true);
-                        else oneGlove = true;
+                        if (rightGlove) setGlovedHands(true);
+                        else leftGlove = true;
 
                     }
                     else if (Phaser.Geom.Intersects.RectangleToRectangle(gloveBoxBounds, rightZone)) {
                         cleanHand2.setTexture("gloveRight");
-                        if (oneGlove) setGlovedHands(true);
-                        else oneGlove = true;
+                        if (leftGlove) setGlovedHands(true);
+                        else rightGlove = true;
 
                     }
                     else {
