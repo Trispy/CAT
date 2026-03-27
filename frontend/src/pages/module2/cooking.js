@@ -107,9 +107,10 @@ export default function Cooking() {
         this.textbox = this.add.container(this.textboxX, this.textboxY);
         this.textboxImage = this.add.image(0,0, 'erinTextbox').setOrigin(0);
         this.textboxText = this.add.text(585, 100, "", {
-        fontFamily: defaultFont,
+        fontFamily: "sans-serif",
         fontSize: defaultFontSize,
         color: defaultFontColor,
+        fontStyle: "bold", 
         align: 'left',
         wordWrap: {
             width: this.textboxImage.width * 0.60
@@ -346,18 +347,23 @@ typewriteText(text, speed = defaultTypingSpeed, fontSize = null) {
 }
 }
 
-const config = {
-  type: Phaser.AUTO,
-  width: 1920,
-  height: 1080,
-  parent: "phaser-game",
-  scene: [Cooking],
-  scale: {
-    mode: Phaser.Scale.ENVELOP,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
-  },
-  backgroundColor: 0x000000,
-};
+ const config = {
+      type: Phaser.AUTO,
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 1920,
+        height: 1080
+      },
+      render: {
+        pixelArt: false,
+        antialias: true
+      },
+      audio: { noAudio: true },
+      backgroundColor: "#000000",
+      scene: [Cooking],
+      parent: "phaser-game"
+    };
     const game = new Phaser.Game(config);
 
     return () => {
@@ -366,26 +372,25 @@ const config = {
   }, []);
 
   return (
-<div
-  id="phaser-wrapper"
-  style={{
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100vw",
-    height: "100vh",
-    backgroundColor: "black",
-  }}
->
-  <div
-    id="phaser-game"
-    style={{
-      width: "100%",
-      height: "100%",
-      maxWidth: `${window.innerHeight * (16/9)}px`,
-      maxHeight: "100%",
-    }}
-  />
-</div>
+ <div
+      style={{
+        height: "100vh",
+        overflow: "hidden",
+        position: "relative",
+        backgroundColor: "black"
+      }}
+    >
+      <div
+        id="phaser-game"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100dvw",
+          height: "100dvh",
+          zIndex: 1
+        }}
+      />
+    </div>
 );
 }

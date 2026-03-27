@@ -25,7 +25,7 @@ import sudImg from "../../assets/M1G3/sud.png";
 export default function Location() {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
-
+     
     useEffect(() => {
         return () => {
             if (phaserGameRef.current) {
@@ -53,6 +53,7 @@ export default function Location() {
     const [handsClean, setHandsClean] = useState(false);
     const [gloveInstruction, setGloveInstruction] = useState(false);
     const [glovedHands, setGlovedHands] = useState(false);
+    const [timerDone, setTimerDone] = useState(false);
 
     const introText = useTypewriter("We've arrived at the volunteer location, let's finish getting ready.",
         gameStage === "intro");
@@ -104,12 +105,13 @@ export default function Location() {
                 this.add.image(width / 2, height / 2, "instructionBg")
                     .setDisplaySize(width, height);
             }
-        }
+            }
         class ApronScene extends Phaser.Scene {
+                    
             constructor() {
                 super("ApronScene");
             }
-
+            
             preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
                 this.load.image("volLocation", Loc);
                 this.load.image("plainClothes", plainClothes);
@@ -118,6 +120,31 @@ export default function Location() {
             }
 
             create() {
+                 const createClickIndicator = (target) => {
+
+                    const indicatorContainer = this.add.container(target.x, target.y);
+
+                    const radius = Math.max(target.displayWidth, target.displayHeight) / 2 + 10;
+                    const circle = this.add.circle(0, 0, radius, 0xFFFF00, 0.45);
+                    const text = this.add.text(0, -80, "CLICK HERE", {
+                        fontSize: "40px",
+                        color: "#ffffff",
+                        fontStyle: "bold"
+                    }).setOrigin(0.5);
+
+                    indicatorContainer.add([circle, text]);
+
+                    
+                    this.tweens.add({
+                        targets: circle,
+                        alpha: { from: 0.2, to: 0.8 },
+                        duration: 600,
+                        yoyo: true,
+                        repeat: -1
+                    });
+
+                    return indicatorContainer;
+                };
                 const { width, height } = this.scale;
 
                 this.add.image(width / 2, height / 2, "volLocation")
@@ -145,7 +172,10 @@ export default function Location() {
                 // Make draggable immediately
                 apronIcon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(apronIcon);
-
+                let currentIndicator = null;
+                 if (currentIndicator) currentIndicator.destroy(); 
+                    currentIndicator = createClickIndicator(apronIcon); 
+                
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     if (gameObject === apronIcon) {
                         gameObject.x = dragX;
@@ -157,7 +187,9 @@ export default function Location() {
 
                     const apronBounds = apronIcon.getBounds();
                     const charBounds = character.getBounds();
-
+                   if (currentIndicator) {
+                        currentIndicator.destroy();
+                    }
                     if (Phaser.Geom.Intersects.RectangleToRectangle(apronBounds, charBounds)) {
                         character.setTexture("apronOn");
                         apronIcon.destroy();
@@ -199,6 +231,36 @@ export default function Location() {
 
             create() {
                 const { width, height } = this.scale;
+                 let timeLeft = 20;
+
+                        const timerText = this.add.text(
+                            width * 0.85,
+                            height * 0.05,
+                            ":20",
+                            {
+                                fontSize: "48px",
+                                color: "#ff0000",
+                                fontStyle: "bold"
+                            }
+                        ).setOrigin(0.5);
+                        timerText.setDepth(1000);
+                        this.time.addEvent({
+                            delay: 1000, //one second
+                            loop: true,
+                            callback: () => {
+                                if (timeLeft <= 0) return;
+                                timeLeft--;
+                                timerText.setText(":" + timeLeft.toString());
+
+                                if (timeLeft <= 0) {
+
+                                    timerText.setText("Done!");
+                                    setTimerDone(true);
+
+                                }
+
+                            }
+                        });
                 this.input.addPointer(3);
                 this.input.dragDistanceThreshold = 0;
                 this.input.dragTimeThreshold = 0;
@@ -210,7 +272,7 @@ export default function Location() {
                     height / 2 + height * 0.05,
                     "cleanHand"
                 )
-                const handMaxWidth = width * 0.6;
+                const handMaxWidth = width * 0.8;
                 const scale = handMaxWidth / cleanHand.width;
                 cleanHand.setScale(scale);
 
@@ -221,20 +283,22 @@ export default function Location() {
                     "dirtyHand"
                 );
 
-                const scale1 = (width * 0.6) / dirtyHand.width;
+                const scale1 = (width * 0.8) / dirtyHand.width;
                 dirtyHand.setScale(scale1);
 
 
 
 
                 const handZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
-                    width / 2 - width * 0.23,
-                    height / 2 - height * 0.37,
-                    width * 0.45,
-                    height * 0.8
+                    width / 2 - width * 0.30, 
+                    height / 2 - height * 0.37, 
+                    width * 0.60,
+                    height * 0.85
                 );
+              
 
-                const gridSize = 20; // size of each cell
+
+                const gridSize = 40; // size of each cell
                 const cells = [];
 
                 for (let x = handZone.x; x < handZone.right; x += gridSize) {
@@ -274,7 +338,7 @@ export default function Location() {
                     soapStartY,
                     "soapSprite"
                 ).setInteractive({ draggable: true });
-                const soapMaxWidth = width * 0.15;
+                const soapMaxWidth = width * 0.18;
                 const baseScale = soapMaxWidth / soap.width;
                 soap.setScale(baseScale);
 
@@ -379,7 +443,7 @@ export default function Location() {
                     height / 2 + height * 0.05,
                     "handLeft"
                 )
-                const handMaxWidth = width * 0.6;
+                const handMaxWidth = width * 0.8;
                 const scale = handMaxWidth / cleanHand.width;
                 cleanHand.setScale(scale);
                 const cleanHand2 = this.add.image(
@@ -531,6 +595,7 @@ export default function Location() {
         }
 
         if (gameStage === "soapyHands") {
+            setTimerDone(false);
             setGameStage("gloveStage");
 
             if (phaserGameRef.current) {
@@ -555,124 +620,100 @@ export default function Location() {
     };
 
     const isNextDisabled =
-        (gameStage === "apron" && !fullyDressed) ||
-        (gameStage === "soapyHands" && !handsClean) ||
+        (gameStage === "apron" && !fullyDressed) || 
+        (gameStage === "soapyHands" && (!handsClean || !timerDone)) || 
         (gameStage === "gloveStage" && !glovedHands);
 
     return (
         <div
-            className="form"
-            style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "black",
-                backgroundRepeat: "no-repeat",
-                height: "100dvh",
-                overflowY: "auto",
-                overflowX: "hidden",
-
-                position: "relative"
-            }}
+           className="form"
+           style={{
+             display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "black",
+             backgroundRepeat: "no-repeat",
+             backgroundColor: "black",
+             height: "100dvh",
+             overflowY: "auto",
+            overflowX: "hidden",
+            
+             position: "relative"
+           }}
+         >  
+         {gameStage === "intro" && (
+ <div
+        style={{
+            position: "fixed", 
+            top: 0,
+            left: 0,
+            width: "100dvw",
+            height: "100dvh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10000
+        }}
         >
-            {gameStage === "intro" && (
-                <div
-                    style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100vw",
-                        height: "100vh",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        pointerEvents: "none",
-                        zIndex: 15000
-                    }}
-                >
-                    <div
-                        style={{
-                            width: `${window.innerHeight * (16 / 9)}px`,
-                            height: "100%",
-                            maxWidth: "100vw",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            pointerEvents: "auto"
-                        }}
-                    >
-                        <TextboxErin
-                            width="80%"
-                            height="80%"
-                            placeholder={introText}
-                            placeHolderColor="#000000"
-                            placeHolderfontSize="1.8vw"
-                        />
-                    </div>
-                </div>
-            )}
+                    <Textbox
+                        width="70dvw"
+                        height="70dvh"
+                        placeholder={introText}
+                        placeHolderColor="#000000"
+                        placeHolderfontSize="1.5vw"
+                    />
+        </div>
+)}
             {gameStage === "instruction" && (
-                <div
-                    style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100vw",
-                        height: "100vh",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        pointerEvents: "none",
-                        zIndex: 15000
-                    }}
-                >
-                    <div
-                        style={{
-                            width: `${window.innerHeight * (16 / 9)}px`,
-                            height: "100%",
-                            maxWidth: "100vw",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            pointerEvents: "auto"
-                        }}
-                    >
-                        <Textbox
-                            width="80%"
-                            height="80%"
-                            placeholder={instructionText}
-                            placeHolderColor="#000000"
-                            placeHolderfontSize="2vw"
-                        />
-                    </div>
-                </div>
-            )}
+  <div
+        style={{
+            position: "fixed", 
+            top: 0,
+            left: 0,
+            width: "100dvw",
+            height: "100dvh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10000
+        }}
+        >
+                    <Textbox
+                        width="70dvw"
+                        height="70dvh"
+                        placeholder={instructionText}
+                        placeHolderColor="#000000"
+                        placeHolderfontSize="1.5vw"
+                    />
+        </div>
+)}
 
             <button
-                className="next-button"
-                disabled={isNextDisabled}
-                onClick={handleNextClick}
-                style={{
-                    position: "absolute",
-                    bottom: "5%",
-                    right: "5%",
-                    opacity: isNextDisabled ? 0.5 : 1,
-                    pointerEvents: isNextDisabled ? "none" : "auto",
-                    background: "none",
-                    border: "none",
-                    padding: 0,
-                    zIndex: 20000
-                }}
-            >
-                <img
-                    src={nextButton}
-                    alt="Next"
-                    style={{
-                        width: "20vw",
-                        minWidth: "120px"
-                    }}
-                />
-            </button>
+                      className="next-button"
+                      disabled={isNextDisabled}
+                      onClick={handleNextClick}
+                      style={{
+                          position: "absolute",
+                          bottom: "5%",
+                          right: "15%",
+                          opacity: isNextDisabled ? 0.5 : 1,
+                          pointerEvents: isNextDisabled ? "none" : "auto",
+                          background: "none",
+                          border: "none",
+                          padding: 0,
+                          zIndex: 20000
+                      }}
+                  >
+                      <img 
+                          src={nextButton} 
+                          alt="Next" 
+                          style={{ 
+                              width: "20vw",
+                              minWidth: "120px"
+                          }} 
+                      />
+                  </button>
+          
 
             <div
                 id="phaser-game"
@@ -688,224 +729,166 @@ export default function Location() {
             />
 
             {gameStage === "apron" && fullyDressed && (
-                <div
-                    style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100vw",
-                        height: "100vh",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        pointerEvents: "none",
-                        zIndex: 15000
-                    }}
-                >
-                    <div
-                        style={{
-                            width: `${window.innerHeight * (16 / 9)}px`,
-                            height: "100%",
-                            maxWidth: "100vw",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            pointerEvents: "auto"
-                        }}
-                    >
-                        <Textbox
-                            width="40%"
-                            height="40%"
-                            placeholder={apronSuccessText}
-                            placeHolderColor="#000000"
-                            placeHolderfontSize="1.1vw"
-                        />
-                    </div>
-                </div>
-            )}
+            <div
+                style={{
+                    position: "fixed",
+                    right: "18vw",
+                    bottom: "10vh",
+                    zIndex: 10000
+                }}
+            >
+   
+    
+      <Textbox
+        width="30dvw"
+        height="45dvh"
+        placeholder={apronSuccessText}
+        placeHolderColor="#000000"
+        placeHolderfontSize="1.1vw"
+      />
+    </div>
+ 
+)}
             {gameStage === "soapyHands" && showSoapText && (
-                <div
-                    style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100vw",
-                        height: "100vh",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        pointerEvents: "none",
-                        zIndex: 15000
-                    }}
-                >
-                    <div
-                        onClick={() => setShowSoapText(false)}
-                        style={{
-                            width: `${window.innerHeight * (16 / 9)}px`,
-                            height: "100%",
-                            maxWidth: "100vw",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            pointerEvents: "auto"
-                        }}
-                    >
-                        <TextboxErin
-                            width="70%"
-                            height="70%"
-                            placeholder={soapText}
-                            placeHolderColor="#000000"
-                            placeHolderfontSize="1.8vw"
-                        />
-                    </div>
-                </div>
-            )}
-            {gameStage === "soapyHands" && handsClean && (
-                <div
-                    style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100vw",
-                        height: "100vh",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        pointerEvents: "none",
-                        zIndex: 15000
-                    }}
-                >
-                    <div
-                        style={{
-                            width: `${window.innerHeight * (16 / 9)}px`,
-                            height: "100%",
-                            maxWidth: "100vw",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            pointerEvents: "auto"
-                        }}
-                    >
-                        <TextboxErin
-                            width="70%"
-                            height="70%"
-                            placeholder={soapSuccessText}
-                            placeHolderColor="#000000"
-                            placeHolderfontSize="1.8vw"
-                        />
-                    </div>
-                </div>
-            )}
+  <div
+    onClick={() => setShowSoapText(false)}
+   style={{
+            position: "fixed", 
+            top: 0,
+            left: 0,
+            width: "100dvw",
+            height: "100dvh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10000
+        }}
+  >
+    
+      <Textbox
+        width="70dvw"
+        height="70dvh"
+        placeholder={soapText}
+        placeHolderColor="#000000"
+        placeHolderfontSize="1.8vw"
+      />
+    </div>
 
-            {gameStage === "gloveStage" && gloveInstruction && (
-                <div
-                    style={{
-                        position: "fixed",
+)}
+           {gameStage === "soapyHands" && handsClean && timerDone && (
+            <div
+                style={{
+                        position: "fixed", 
                         top: 0,
                         left: 0,
-                        width: "100vw",
-                        height: "100vh",
+                        width: "100dvw",
+                        height: "100dvh",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        pointerEvents: "none",
-                        zIndex: 15000
+                        zIndex: 10000
                     }}
-                >
-                    <div
-                        onClick={() => setGloveInstruction(false)}
-                        style={{
-                            width: `${window.innerHeight * (16 / 9)}px`,
-                            height: "100%",
-                            maxWidth: "100vw",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            pointerEvents: "auto"
-                        }}
-                    >
-                        <TextboxErin
-                            width="70%"
-                            height="70%"
-                            placeholder={gloveText}
-                            placeHolderColor="#000000"
-                            placeHolderfontSize="1.8vw"
-                        />
-                    </div>
-                </div>
-            )}
-            {gameStage === "gloveStage" && glovedHands && (
-                <div
-                    style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100vw",
-                        height: "100vh",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        pointerEvents: "none",
-                        zIndex: 15000
-                    }}
-                >
-                    <div
-                        style={{
-                            width: `${window.innerHeight * (16 / 9)}px`,
-                            height: "100%",
-                            maxWidth: "100vw",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            pointerEvents: "auto"
-                        }}
-                    >
-                        <TextboxErin
-                            width="70%"
-                            height="70%"
-                            placeholder={gloveSuccessText}
-                            placeHolderColor="#000000"
-                            placeHolderfontSize="1.8vw"
-                        />
-                    </div>
-                </div>
-            )}
-            {gameStage === "finalStage" && (
-                <div
-                    style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100vw",
-                        height: "100vh",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        pointerEvents: "none",
-                        zIndex: 15002
-                    }}
-                >
-                    <div
-                        style={{
-                            width: `${window.innerHeight * (16 / 9)}px`,
-                            height: "100%",
-                            maxWidth: "100vw",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            pointerEvents: "auto"
-                        }}
-                    >
-                        <TextboxErin
-                            width="70%"
-                            height="70%"
-                            placeholder={finalText}
-                            placeHolderColor="#000000"
-                            placeHolderfontSize="1.8vw"
-                        />
-                    </div>
-                </div>
-            )}
+            >
+   
+      <Textbox
+        width="70dvw"
+        height="70dvh"
+        placeholder={soapSuccessText}
+        placeHolderColor="#000000"
+        placeHolderfontSize="1.8vw"
+      />
+    </div>
+
+)}
+
+          {gameStage === "gloveStage" && gloveInstruction && (
+  <div
+    style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100dvw",
+            height: "100dvh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10000
+        }}
+  >
+    <div
+      onClick={() => setGloveInstruction(false)}
+     style={{
+            position: "fixed", 
+            top: 0,
+            left: 0,
+            width: "100dvw",
+            height: "100dvh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10000
+        }}
+    >
+      <Textbox
+        width="70%"
+        height="70%"
+        placeholder={gloveText}
+        placeHolderColor="#000000"
+        placeHolderfontSize="1.8vw"
+      />
+    </div>
+  </div>
+)}
+         {gameStage === "gloveStage" && glovedHands && (
+  <div
+    style={{
+            position: "fixed", 
+            top: 0,
+            left: 0,
+            width: "100dvw",
+            height: "100dvh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10000
+        }}
+  >
+   
+      <Textbox
+       width="70dvw"
+        height="70dvh"
+        placeholder={gloveSuccessText}
+        placeHolderColor="#000000"
+        placeHolderfontSize="1.8vw"
+      />
+    </div>
+
+)}
+{gameStage === "finalStage" && (
+  <div
+    style={{
+            position: "fixed", 
+            top: 0,
+            left: 0,
+            width: "100dvw",
+            height: "100dvh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10000
+        }}
+  >
+    
+      <Textbox
+        width="70dvw"
+        height="70dvh"
+        placeholder={finalText}
+        placeHolderColor="#000000"
+        placeHolderfontSize="1.8vw"
+      />
+    </div>
+
+)}
         </div>
     );
 }
