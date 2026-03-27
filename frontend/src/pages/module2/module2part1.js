@@ -183,12 +183,11 @@ useEffect(() => {
 
                 const pivot = this.add.container(centerX, centerY);
 
-           
-const hand = this.add.image(0, 0, "thermometerhand");
+                const hand = this.add.image(0, 0, "thermometerhand");
 
-            hand.setOrigin(0.5, 0.5);
-            hand.setScale(thermScale);
-            hand.setAngle(-90);
+                hand.setOrigin(0.5, 0.5);
+                hand.setScale(thermScale);
+                hand.setAngle(-90);
 
                 hand.setScale(thermScale);
 
