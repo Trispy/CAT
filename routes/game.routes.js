@@ -4,7 +4,7 @@ const router = express.Router();
 const Module1 = require("../models/module1.model");
 const Module2 = require("../models/module2.model");
 
-const checkAccess = require("../middleware/checkAccess");
+const checkAccess = require("../middleware/mod.middleware");
 
 //mod 1 routes
 
@@ -69,7 +69,7 @@ router.post(
   }
 );
 
-// --- GET STATUS ---
+// status
 router.get("/module1/status", async (req, res) => {
   try {
     const username = req.user.username;
@@ -86,7 +86,7 @@ router.get("/module1/status", async (req, res) => {
   }
 });
 
-// --- SUMMARY ---
+// summary
 router.get("/module1/summary", async (req, res) => {
   try {
     const username = req.user.username;
