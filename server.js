@@ -22,6 +22,6 @@ mongoose.connect(MONGODB_URI)
     process.exit(1);
   });
   app.use('/api/users', userRoutes); // use the route http://localhost:3000/api/users/createaccount or http://localhost:3000/api/users/login
-  app.use('/api/game', gameRoutes); // use the route http://localhost:3000/api/game/addModule1Summary or http://localhost:3000/api/game/getModule1Summary
+  app.use('/api/game', gameRoutes); // use the routes from game.model.js with http://localhost:3000/api/game/routesingame.model.js
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 

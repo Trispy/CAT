@@ -39,6 +39,10 @@ export default function Cleaning() {
         }
     };
 }, []);
+useEffect(() => {
+    startPhaser();
+}, []);
+
 const [gameStage, setGameStage] = useState("intro");
     const backgroundStyle = {
         backgroundImage: gameStage === "cleanStage" ? "none" : `url(${Loc})`,
@@ -60,7 +64,10 @@ const [gameStage, setGameStage] = useState("intro");
     const [showCutSuccessText, setShowCutSuccessText] = useState(false);
     const [instructionStep, setInstructionStep] = useState(0);
     const numberOfCutMaterials = useRef(0);
-    const introText = useTypewriter("Time to start prepping some food! In this simulation we'll chop and cook bell peppers, an onion, and some beef. Make sure to wash the vegetables before chopping them, and clean the chopping board and change your gloves before every item.",
+    useEffect(() => {
+    window.handleNext = handleNextClick;
+}, [gameStage]);
+    const introText = useTypewriter("Time to start prepping some food! Follow the instructions in the next slide!",
         gameStage === "intro");
     const instructionText = useTypewriter("In the following game, we will be going through essential personal hygiene steps to follow once you arrive at the volunteer location. Progress in the game by dragging items to the correct area using your finger.",
         gameStage === "instruction");
@@ -99,20 +106,54 @@ const instructionTypewriter = useTypewriter(
 
     const startPhaser = () => {
         if (phaserGameRef.current) return;
-
+         class IntroScene extends Phaser.Scene {
+                constructor() {
+                        super("IntroScene");
+                    }
+                
+                preload() {
+                        this.load.image("introBg", Loc);
+                }
+                
+                create() {
+                        const { width, height } = this.scale;
+                
+                        this.add.image(width / 2, height / 2, "introBg")
+                        .setDisplaySize(width, height);
+                    }
+        }
+         class InstructionScene extends Phaser.Scene {
+                    constructor() {
+                        super("InstructionScene");
+                    }
+        
+                    preload() {
+                        this.load.image("instructionBg", Loc); // reuse same background
+                    }
+        
+                    create() {
+                        const { width, height } = this.scale;
+        
+                        this.add.image(width / 2, height / 2, "instructionBg")
+                        .setDisplaySize(width, height);
+                       
+                    }
+            }
+   
         class CleanScene extends Phaser.Scene {
             constructor() {
                 super("CleanScene");
                 
             }
-           init(data = {}) {
-    this.instructions = data.instructions || [];
-}
-            preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
+                    init(data = {}) {
+                this.instructions = data.instructions || [];
+            }
+                preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
                 this.load.image("volLocation", Loc);
                 this.load.image("sinkbg", sinkbg);
                 this.load.image("noGlove", noGlove);
                 this.load.image("gloved", gloved);
+                this.load.image("nextButton", nextButton);
                 this.load.image("beef", beef);
                 this.load.image("onion", onion);
                 this.load.image("bellpepper", bellPeppers);
@@ -160,7 +201,7 @@ const instructionTypewriter = useTypewriter(
                         "X",
                         {
                             font: "40px Arial",
-                            backgroundColor: "#ff4444",
+                            backgroundColor: "#e2e2e2",
                             padding: { x: 10, y: 5 }
                         }
                     )
@@ -178,29 +219,44 @@ const instructionTypewriter = useTypewriter(
                 //this.next = this.add.image(this.erinX * 1.25, this.erinY * 4.35, 'next').setOrigin(0).setScale(0.35).setInteractive().setVisible(true);
                 this.scale.refresh();
                 this.add.image(width / 2, height / 2, "volLocation").setDisplaySize(width, height);
-
+                /*const nextBtn = this.add.image(
+                    width * 0.85,
+                    height * 0.95,
+                    "nextButton"
+                )
+                              
+                .setOrigin(0.5) // center it like React button visually
+                .setScale(0.3)  // adjust to match your current size
+                .setInteractive({ useHandCursor: true })
+                .setDepth(1000);
+                  nextBtn.on("pointerdown", () => {
+                    if (window.handleNext) {
+                        window.handleNext({ stopPropagation: () => {} });
+                    }
+                });*/
                 let boardClean = false;
-                const helpButton = this.add.text(
-                    width * 0.92,
-                    height * 0.92,
+                    const helpButton = this.add.text(
+                    width * 0.78,
+                    height * 0.90,
                     "?",
                     {
-                        font: "48px Arial",
+                        font: "60px Arial",
                         backgroundColor: "#ffffff",
-                        color: "#000",
-                        padding: { x: 20, y: 10 }
+                        color: "#5100ff",
+                        padding: { x: 50, y: 30 }
                     }
                 )
                 .setOrigin(0.5)
                 .setInteractive({ useHandCursor: true })
-                .setDepth(1000);
+                .setDepth(1000)
+                .setStroke("#000000", 4); 
 
                 helpButton.on("pointerdown", () => {
                     this.showInstructions();
                 });
                 // Character
                 const character = this.add.image(
-                    width - width * 0.20,
+                    width - width * 0.40,
                     height * 0.65,
                     "gloved"
                 );
@@ -936,28 +992,39 @@ const instructionTypewriter = useTypewriter(
             antialias: true
         },
         audio: {noAudio: true},
-        transparent: true,
-        scene: [CleanScene],
+       transparent: false,
+        backgroundColor: "#000000",
+        scene: [IntroScene, InstructionScene, CleanScene],
         parent: "phaser-game"
     };
         phaserGameRef.current = new Phaser.Game(config);
+        setTimeout(() => {
+            if (phaserGameRef.current) {
+                phaserGameRef.current.scene.start("IntroScene");
+              
+            }
+        }, 100);
     }
 
     const handleNextClick = (e) => { //handles the logic for transitioning between scenes based on the current game stage and user actions. It checks the current game stage and relevant state variables to determine if the user has completed the necessary actions to move to the next stage, then updates the game stage and starts the appropriate Phaser scene.
-        e.stopPropagation();
-        if (gameStage === "intro") {
-            /*startPhaser("CleanScene");
-            setGameStage("cleanStage");
-            startPhaser("CleanScene");*/
-            setGameStage("instructions");
-            setInstructionStep(0);
-            if (phaserGameRef.current) {
-                phaserGameRef.current.scene.start("CleanScene", {
-    instructions: instructionTexts
-});
-            }
-            return;
+       if (gameStage === "intro") {
+        setGameStage("instructions");
+
+        if (phaserGameRef.current) {
+            phaserGameRef.current.scene.start("InstructionScene");
         }
+
+        return;
+    }
+    else {
+         setGameStage("cleanStage");
+        setInstructionStep(0); 
+        if (phaserGameRef.current) {
+                phaserGameRef.current.scene.start("CleanScene", {
+                    instructions: instructionTexts
+                });
+        }
+    }
     };
     const handleInstructionClick = () => {
 
@@ -968,7 +1035,7 @@ const instructionTypewriter = useTypewriter(
 
             setGameStage("cleanStage");
 
-            startPhaser();
+        
 
             if (phaserGameRef.current) {
                 phaserGameRef.current.scene.start("CleanScene", {
@@ -980,18 +1047,66 @@ const instructionTypewriter = useTypewriter(
 
     return (
         <div
-            className="form"
-            style={{
-                ...backgroundStyle,
-                position: "relative",
-            }}
-        >
-            {gameStage === "instructions" && (
+           className="form"
+           style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "black",
+             backgroundRepeat: "no-repeat",
+             backgroundColor: "black",
+             height: "100dvh",
+             overflowY: "auto",
+            overflowX: "hidden",
+             position: "relative"
+           }}
+         >  
+         
+               
+         <div
+    style={{
+        position: "absolute",
+        bottom: "5%",
+        right: "15%",
+        zIndex: 20000,
+        width: "20vw",   
+        minWidth: "120px",
+        height: "auto",
+        pointerEvents: "none" 
+    }}
+>
+    
+    <img
+        src={nextButton}
+        alt="Next"
+        style={{
+            width: "100%",
+            display: "block"
+        }}
+    />
+
+    
     <div
+        onClick={handleNextClick}
+        style={{
+            position: "absolute",
+            bottom: 0,
+            right: 0,
+            width: "140px",   
+            height: "80px",
+            cursor: "pointer",
+            pointerEvents: "auto",
+        }}
+    />
+</div>
+                   
+       
+          {gameStage === "intro" && (
+               <div
         onClick={handleInstructionClick}
         style={{
             position: "fixed",
-            top: 0,
+            top: -50,
             left: 0,
             width: "100vw",
             height: "100vh",
@@ -999,72 +1114,59 @@ const instructionTypewriter = useTypewriter(
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            cursor: "pointer"
+            cursor: "pointer",
+            pointerEvents: gameStage === "intro" ? "auto" : "none"
         }}
     >
-        <TextboxErin
-            width="80vw"
-            height="85vh"
+        <Textbox
+            width="70dvw"
+            height="70dvh"
+            placeholder={introText}
+            placeHolderColor="#000000"
+            placeHolderfontSize="1.8vw"
+        />
+        </div>
+            )}
+            {gameStage === "instructions" && (
+    <div
+        onClick={handleInstructionClick}
+        style={{
+            position: "fixed",
+            top: -50,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            zIndex: 15000,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            cursor: "pointer",
+            pointerEvents: gameStage === "instructions" ? "auto" : "none"
+        }}
+    >
+        <Textbox
+            width="70dvw"
+            height="70dvh"
             placeholder={instructionTypewriter}
             placeHolderColor="#000000"
             placeHolderfontSize="1.8vw"
         />
     </div>
 )}
-            {gameStage === "intro" && (
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "100%"
-                    }}
-                >
-                    <button
-                        className="next-button"
-                        disabled={false}
-                        onClick={handleNextClick}
-                        style={{
-                            position: "absolute",
-                            bottom: "5%",
-                            right: "5%",
-                            opacity: false ? 0.5 : 1,
-                            pointerEvents: false ? "none" : "auto",
-                            background: "none",
-                            border: "none",
-                            padding: 0,
-                            zIndex: 20000
-                        }}
-                    >
-                        <img
-                            src={nextButton}
-                            alt="Next"
-                            style={{
-                                width: "20vw",
-                                minWidth: "120px"
-                            }}
-                        />
-                    </button>
-                    <Textbox
-                        width="90vw"
-                        height="90vh"
-                        placeholder={introText}
-                        placeHolderColor="#000000"
-                        placeHolderfontSize="2vw"
-                    />
-                </div>
-            )}
+           
 
-    <div
-    id="phaser-game"
-    style={{
-                        position: "fixed",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        zIndex: 15000,
-                    }}
-/>
+                <div
+            id="phaser-game"
+            style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100dvh",
+                zIndex: 1,
+                 
+            }}
+            />
         </div>
     );
 }
