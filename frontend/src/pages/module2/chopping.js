@@ -8,7 +8,6 @@ import Textbox from "../../components/textbox";
 import textbox from "../../assets/M1G1/Textbox.png";
 import useTypewriter from "../../components/typewriter";
 import nextButton from "../../assets/nextbutton.png";
-import TextboxErin from "../../components/textboxerin";
 import sinkbg from "../../assets/M1G3/SinkBackground.png";
 import gloveBox from "../../assets/M1G3/gloveBox.png";
 import noGlove from "../../assets/M2G2/noGlove.png";
@@ -27,6 +26,7 @@ import sprayBottle from "../../assets/M2G2/Spraybottle.png";
 import rag from "../../assets/M2G2/rag.png";
 import wetCuttingBoard from "../../assets/M2G2/watercuttingboard.png";
 import knife from "../../assets/M2G2/Knife.png";
+import TextboxErin from "../../components/textboxerin";
 
 export default function Cleaning() {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
@@ -53,8 +53,6 @@ const [gameStage, setGameStage] = useState("intro");
         backgroundColor: 'black'
     };
 
-    const textboxScale = 0.75;
-    const textFontSize = 70;
 
     
     const [showSoapText, setShowSoapText] = useState(false);

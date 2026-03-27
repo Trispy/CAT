@@ -8,7 +8,7 @@ import apron from "../../assets/M1G3/apron.png";
 import apronOn from "../../assets/M2G2/noGlove.png";
 import Textbox from "../../components/textbox";
 import useTypewriter from "../../components/typewriter";
-import nextButton from "../../assets/nextbutton.png"; 
+import nextButton from "../../assets/nextbutton.png";
 import TextboxErin from "../../components/textboxerin";
 import cleanHand from "../../assets/M1G3/handClean.png";
 import dirtyHand from "../../assets/M1G3/handDirty.png";
@@ -68,7 +68,7 @@ export default function Location() {
         gameStage === "soapyHands" && handsClean)
     const gloveText = useTypewriter("Make sure to put gloves on before touching any food",
         gameStage === "gloveStage" && gloveInstruction)
-    const gloveSuccessText = useTypewriter("Gloved up!", 
+    const gloveSuccessText = useTypewriter("Gloved up!",
         gameStage === "gloveStage" && glovedHands)
 
     const startPhaser = () => {
@@ -415,7 +415,7 @@ export default function Location() {
             }
         }
 
-        class GloveScene extends Phaser.Scene{
+        class GloveScene extends Phaser.Scene {
             constructor() {
                 super("GloveScene");
             }
@@ -477,30 +477,30 @@ export default function Location() {
 
                     const gloveBoxBounds = gloveBox.getBounds();
                     const leftZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
-                        width / 2 - width * 0.23, 
-                        height / 2 - height * 0.38, 
+                        width / 2 - width * 0.23,
+                        height / 2 - height * 0.38,
                         width * 0.2,
                         height * 0.7
                     );
-                        const rightZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
-                        width / 2, 
-                        height / 2 - height * 0.35, 
+                    const rightZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
+                        width / 2,
+                        height / 2 - height * 0.35,
                         width * 0.22,
                         height * 0.7
                     );
 
                     if (Phaser.Geom.Intersects.RectangleToRectangle(gloveBoxBounds, leftZone)) {
                         cleanHand.setTexture("gloveLeft");
-                        if(rightGlove) setGlovedHands(true);
+                        if (rightGlove) setGlovedHands(true);
                         else leftGlove = true;
 
-                    } 
+                    }
                     else if (Phaser.Geom.Intersects.RectangleToRectangle(gloveBoxBounds, rightZone)) {
                         cleanHand2.setTexture("gloveRight");
-                        if(leftGlove) setGlovedHands(true);
+                        if (leftGlove) setGlovedHands(true);
                         else rightGlove = true;
 
-                    } 
+                    }
                     else {
                         gloveBox.setPosition(
                             width * 0.75 - width * 0.043,
@@ -528,10 +528,10 @@ export default function Location() {
             preload() {
                 this.load.image("Loc", Loc);
             }
-            create () {
+            create() {
                 const { width, height } = this.scale;
                 this.add.image(width / 2, height / 2, "Loc").setDisplaySize(width, height);
-            }; 
+            };
         }
 
         const config = {

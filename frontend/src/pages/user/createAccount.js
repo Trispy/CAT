@@ -1,10 +1,11 @@
 import './login.css';
 import Button from '../../components/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
 
 function CreateAccount() {
     const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', username: '' })
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,6 +21,7 @@ function CreateAccount() {
       
       const user = await response.json()
       console.log('Created:', user)
+      navigate('/login', { replace: true });
     } catch (error) {
       console.error(error)
       console.error(error.message)
