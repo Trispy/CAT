@@ -5,7 +5,7 @@ const Module1 = require("../models/module1.model");
 const Module2 = require("../models/module2.model");
 
 const checkAccess = require("../middleware/mod.middleware");
-
+const requireAuth = require("../middleware/auth.middleware");
 //mod 1 routes
 
 // mark as complete
@@ -15,6 +15,8 @@ router.post(
   async (req, res) => {
     try {
       const username = req.user.username;
+      console.log(req.user); 
+      console.log("HELLO"); 
 
       const updated = await Module1.findOneAndUpdate(
         { username },
@@ -70,9 +72,11 @@ router.post(
 );
 
 // status
-router.get("/module1/status", async (req, res) => {
+router.get("/module1/status", requireAuth, async (req, res) => {
   try {
     const username = req.user.username;
+    console.log("TESTING"); 
+    console.log(req.user);
 
     const data = await Module1.findOne({ username });
 
@@ -82,12 +86,12 @@ router.get("/module1/status", async (req, res) => {
       location: data?.location || false,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: req.user.username });
   }
 });
 
 // summary
-router.get("/module1/summary", async (req, res) => {
+router.get("/module1/summary", requireAuth, async (req, res) => {
   try {
     const username = req.user.username;
 
@@ -163,7 +167,7 @@ router.post(
 );
 
 // mod 2 status
-router.get("/module2/status", async (req, res) => {
+router.get("/module2/status", requireAuth, async (req, res) => {
   try {
     const username = req.user.username;
 
@@ -180,7 +184,7 @@ router.get("/module2/status", async (req, res) => {
 });
 
 // mod2 summary
-router.get("/module2/summary", async (req, res) => {
+router.get("/module2/summary", requireAuth,async (req, res) => {
   try {
     const username = req.user.username;
 
