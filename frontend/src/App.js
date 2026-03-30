@@ -12,6 +12,7 @@ import Cleaning from './pages/module2/chopping.js';
 import Cooking from './pages/module2/cooking.js';
 import Map from "./pages/user/map.js";
 import OrientationGuard from "./components/orientationguard";
+import Expiration from './pages/module3/expiration.js'; 
 function App() {
   return (
     <BrowserRouter>
@@ -27,6 +28,7 @@ function App() {
           <Route path="/module2/therm" element={<Module2Part1/>} />
           <Route path="/module2/cleaning" element={<Cleaning />} />
           <Route path="/module2/cooking" element={<Cooking />} />
+          <Route path="/module3/expiration" element={<Expiration />} />
         </Routes>
       </OrientationGuard>
     </BrowserRouter>
