@@ -37,23 +37,23 @@ export default function Allergens() {
 
         class Allergen extends Phaser.Scene {
             erinScale = 1.1;
-            itemScale = 1;
+            itemScale = 0.9;
             guestScale = 0.8;
             textboxScale = 0.75;
             textFontSize = 70;
             markY = 750;
 
             welcomeTexts = [
-"The nine common allergens are eggs, milk, fish, shellfish, wheat, peanuts, tree nuts, soybeans, and sesame.",
+                "The nine common allergens are eggs, milk, fish, shellfish, wheat, peanuts, tree nuts, soybeans, and sesame.",
 
-"It is important that you know how to read and understand allergen and ingredient information on food items, as some patrons may have allergies.",
+                "It is important that you know how to read and understand allergen and ingredient information on food items, as some patrons may have allergies.",
 
-"We are about to practice reading allergen labels that feature these allergens."
+                "We are about to practice reading allergen labels that feature these allergens."
 
             ];
 
             instructions = [
-                "In the following game, a patron will tell you an allergy they have. Based on their allergy, you will determine whether or not they can have the shown item.\n\nIf they can consume the item, place it in the check box. If they cannot, place it in the “X” box."
+                "In the following game, a patron will tell you an allergy they have. Based on their allergy, you will determine whether or not they can have the shown item.\n\nIf they can consume the item, drag it into the ✅ box. If they cannot, drag it into the ❌ box."
             ];
 
             transitions = [
@@ -88,10 +88,15 @@ export default function Allergens() {
                 this.load.image("yogurt", yogurt);
             }
             
-            showPopup(inputText) {
+            showPopup(inputText) {           
                     const { width, height } = this.scale;
 
                     const overlay = this.add.container(0, 0);
+
+                    //user can't interact with items while popup is open
+                    const blocker = this.add.rectangle(0, 0, width, height, 0x000000, 0.3)
+                    .setOrigin(0)
+                    .setInteractive();
 
                     const bg = this.add.rectangle(
                         width / 2,
@@ -129,7 +134,7 @@ export default function Allergens() {
                         overlay.destroy(true);
                     });
 
-                    overlay.add([bg, text, close]);
+                    overlay.add([blocker, bg, text, close]);
                     overlay.setDepth(30);
                 }
 
@@ -153,7 +158,7 @@ export default function Allergens() {
                 this.erinY = this.bg1.height / 2;
 
                 this.itemX = this.bg1.width / 2 - 100;
-                this.itemY = this.bg1.height / 2 - 300;
+                this.itemY = this.bg1.height / 2 - 150;
 
                 this.guestX = 420;
                 this.guestY = 98;
@@ -162,7 +167,7 @@ export default function Allergens() {
                 this.fish = this.add.image(this.itemX, this.itemY, "sauce")
                     .setDepth(20)
                     .setOrigin(0)
-                    .setScale(this.itemScale)
+                    .setScale(1.1)
                     .setVisible(false);
 
                 this.shellfish = this.add.image(this.itemX, this.itemY, "stock")
@@ -192,7 +197,7 @@ export default function Allergens() {
                 this.nosesame = this.add.image(this.itemX, this.itemY, "sauce")
                     .setDepth(20)
                     .setOrigin(0)
-                    .setScale(this.itemScale)
+                    .setScale(1.1)
                     .setVisible(false);
 
                 this.wheateggs = this.add.image(this.itemX, this.itemY, "cookies")
@@ -207,7 +212,7 @@ export default function Allergens() {
                     .setScale(this.itemScale)
                     .setVisible(false);
 
-                this.milk = this.add.image(this.itemX, this.guestY, "yogurt")
+                this.milk = this.add.image(this.itemX, this.itemY, "yogurt")
                     .setDepth(20)
                     .setOrigin(0)
                     .setScale(this.itemScale)
@@ -328,66 +333,75 @@ export default function Allergens() {
                     {
                         question: "I’m allergic to fish. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        popup: "Fish is one of the listed ingredients, so the patron should not be given this item.",
-                        damageType: this.fish,
+                        incorrectPopup: "Try again. Fish is one of the listed ingredients, so the patron should not be given this item.",
+                        correctPopup: "Correct! Fish is one of the listed ingredients, so the patron should not be given this item.",
+                        itemType: this.fish,
                         person: this.guest1
                     },
                     {
                         question: "I’m allergic to shellfish. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        popup: "The “may contain” statement lists shellfish. It is possible for the patron to have an allergic reaction to the item, so they should not be given it.",
-                        damageType: this.shellfish,                        
+                        incorrectPopup: "Try again. The “may contain” statement lists shellfish. It is possible for the patron to have an allergic reaction to the item, so they should not be given it.",
+                        correctPopup: "Correct! The “may contain” statement lists shellfish. It is possible for the patron to have an allergic reaction to the item, so they should not be given it.",
+                        itemType: this.shellfish,                        
                         person: this.guest2
 
                     },
                     {
                         question: "I’m allergic to wheat. Is it ok for me to eat this?",
                         correctAnswer: "yes",
-                        popup: "Wheat is not one of the listed ingredients. It is also not listed in the “may contain” statement. The patron can safely have this item. ",
-                        damageType: this.nowheat,                        
+                        incorrectPopup: "Try again. Wheat is not one of the listed ingredients. It is also not listed in the “may contain” statement. The patron can safely have this item. ",
+                        correctPopup: "Correct! Wheat is not one of the listed ingredients. It is also not listed in the “may contain” statement. The patron can safely have this item. ",
+                        itemType: this.nowheat,                        
                         person: this.guest3
 
                     },
                     {
                         question: "I’m allergic to sesame. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        popup: "Sesame oil is one of the listed ingredients, so the patron should not be given this item.",
-                        damageType: this.sesame,
+                        incorrectPopup: "Try again. Sesame oil is one of the listed ingredients, so the patron should not be given this item.",
+                        correctPopup: "Correct! Sesame oil is one of the listed ingredients, so the patron should not be given this item.",
+                        itemType: this.sesame,
                         person: this.guest4
                     },
                     {
                         question: "I’m allergic to soy. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        popup: "Soybeans is one of the listed ingredients, so the patron should not be given this item.",
-                        damageType: this.soy,
+                        incorrectPopup: "Try again. Soybeans is one of the listed ingredients, so the patron should not be given this item.",
+                        correctPopup: "Correct! Soybeans is one of the listed ingredients, so the patron should not be given this item.",
+                        itemType: this.soy,
                         person: this.guest5
                     },
                     {
                         question: "I’m allergic to sesame. Is it ok for me to eat this?",
                         correctAnswer: "yes",
-                        popup: "Sesame is not one of the listed ingredients. It is also not in the “may contain” statement. The patron can safely have this item.",
-                        damageType: this.nosesame,
+                        incorrectPopup: "Try again. Sesame is not one of the listed ingredients. It is also not in the “may contain” statement. The patron can safely have this item.",
+                        correctPopup: "Correct! Sesame is not one of the listed ingredients. It is also not in the “may contain” statement. The patron can safely have this item.",
+                        itemType: this.nosesame,
                         person: this.guest6
                     },
                     {
                         question: "I’m allergic to wheat and eggs. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        popup: "Wheat and eggs are both listed ingredients, so the patron should not be given this item.",
-                        damageType: this.wheateggs,
+                        incorrectPopup: "Try again. Wheat and eggs are both listed ingredients, so the patron should not be given this item.",
+                        correctPopup: "Correct! Wheat and eggs are both listed ingredients, so the patron should not be given this item.",
+                        itemType: this.wheateggs,
                         person: this.guest7
                     },
                     {
                         question: "I’m allergic to tree nuts and peanuts. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        popup: "Cashews is one of the listed ingredients and the “may contain” statement lists peanuts, so the patron should not be given the item.",
-                        damageType: this.nuts,
+                        incorrectPopup: "Try again. Cashews is one of the listed ingredients and the “may contain” statement lists peanuts, so the patron should not be given the item.",
+                        correctPopup: "Correct! Cashews is one of the listed ingredients and the “may contain” statement lists peanuts, so the patron should not be given the item.",
+                        itemType: this.nuts,
                         person: this.guest8
                     },
                     {
                         question: "I’m allergic to milk. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        popup: "Milk is one of the listed ingredients, so the patron should not be given this item.",
-                        damageType: this.milk,
+                        incorrectPopup: "Try again. Milk is one of the listed ingredients, so the patron should not be given this item.",
+                        correctPopup: "Correct! Milk is one of the listed ingredients, so the patron should not be given this item.",
+                        itemType: this.milk,
                         person: this.guest9
                     },
                 ];
@@ -426,19 +440,18 @@ export default function Allergens() {
 
             }
 
-            typewriteText(text, type, speed = 1) {
-                if (type == "popup"){
-                    this.showPopup(text);
-                    return;
+            typewriteText(text, type, speed = 30) {
+                //removes old timer before new one starts
+                if (this.typingEvent) {
+                    this.typingEvent.remove(false);
                 }
+
                 this.textboxText.setText("");
                 this.next.disableInteractive();
-                this.xMark.disableInteractive();
-                this.check.disableInteractive();
 
                 let i = 0;
 
-                this.time.addEvent({
+                this.typingEvent = this.time.addEvent({
                     delay: speed,
                     repeat: text.length - 1,
                     callback: () => {
@@ -447,8 +460,6 @@ export default function Allergens() {
 
                         if (i === text.length) {
                             this.next.setInteractive();
-                            this.xMark.setInteractive();
-                            this.check.setInteractive();
                         }
                     }
                 });
@@ -458,10 +469,9 @@ export default function Allergens() {
                     console.log(this.volunteerScenario);
                         this.typewriteText(this.volunteerScenario[0].question);
                         this.volunteerScenario[0].person.setVisible(true);
-                        //this.volunteerScenario[this.volunteerScenario.length - 1].damageType.setVisible(false);
-                        this.volunteerScenario[0].damageType.setVisible(true);
-                        this.volunteerScenario[0].damageType.setInteractive({ useHandCursor: true });
-                        this.input.setDraggable(this.volunteerScenario[0].damageType);
+                        this.volunteerScenario[0].itemType.setVisible(true);
+                        this.volunteerScenario[0].itemType.setInteractive({ useHandCursor: true });
+                        this.input.setDraggable(this.volunteerScenario[0].itemType);
 
                         this.xMark.setVisible(true);
                         this.check.setVisible(true);
@@ -472,9 +482,9 @@ export default function Allergens() {
                             gameObject.y = dragY;
                         });
 
-                        this.volunteerScenario[0].damageType.on("dragend", () => {
+                        this.volunteerScenario[0].itemType.on("dragend", () => {
 
-                            const itemBounds = this.volunteerScenario[0].damageType.getBounds();
+                            const itemBounds = this.volunteerScenario[0].itemType.getBounds();
                             const checkBounds = this.check.getBounds();
                             const xBounds = this.xMark.getBounds();
 
@@ -495,19 +505,17 @@ export default function Allergens() {
                     (this.scenario.correctAnswer === "no" && button === this.xMark) ||
                     (this.scenario.correctAnswer === "yes" && button === this.check)
                 ) {
-                    this.volunteerScenario[0].damageType.destroy();
+                    this.volunteerScenario[0].itemType.destroy();
                     this.volunteerScenario[0].person.destroy();
                     this.textboxText.setColor("rgb(0, 133, 0)");
-                    this.typewriteText(this.scenario.popup, "popup");
+                    this.showPopup(this.scenario.correctPopup);
                     scenarios.shift();
                     
                     if (scenarios.length > 0) {
                         this.textboxText.setColor("#000");
                         this.textbox.setScale(this.textboxScale);
                         this.textboxText.setFontSize(this.textFontSize);
-                        //this.typewriteText(scenarios[0].question);
-
-                        scenarios[0].damageType.setVisible(true);
+                        scenarios[0].itemType.setVisible(true);
                         this.check.preFX.clear();
                         this.xMark.preFX.clear();
                         this.cycleScenarios();
@@ -521,7 +529,8 @@ export default function Allergens() {
 
                     this.textboxText.setFontSize(this.textFontSize * 0.8);
                     this.textboxText.setColor("rgb(252, 0, 0)");
-                    this.typewriteText(this.scenario.popup, "popup");
+                    this.showPopup(this.scenario.incorrectPopup);
+
                 }
                 
                 if (scenarios.length === 0) {
