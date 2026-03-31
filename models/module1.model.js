@@ -5,4 +5,4 @@ const module1SummarySchema = new mongoose.Schema({
   personalHygiene: {type: Boolean, required: true, default: false}, 
   location: {type: Boolean, required: true, default: false}
 });
-module.exports = mongoose.model("module1SummarySchema", module1SummarySchema);
+module.exports = mongoose.model("module1SummarySchem", module1SummarySchem);

@@ -39,7 +39,7 @@ export default function Symptoms() {
       ];
 
       instructions = [
-        "In the following game, the volunteer will share different symptoms with you, and you will determine if they should volunteer or stay home. \n\n If they should stay home, tap the red X, if they can volunteer, tap the green check."
+        "In the following game, the volunteer will share different symptoms with you, and you will determine if they should volunteer or stay home. \n\nIf they should stay home, tap the red X, if they can volunteer, tap the green check."
       ];
 
       transitions = [

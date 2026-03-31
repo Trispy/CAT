@@ -1,5 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const User = require('../models/user.model');
+const module1SummarySchema = require('../models/game.model');
+const requireAuth = require('../middleware/auth.middleware');
+
 
 const Module1 = require("../models/module1.model");
 const Module2 = require("../models/module2.model");
@@ -193,6 +197,23 @@ router.get("/module2/summary", requireAuth,async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+router.post('/updateComplete', async (req, res) => {
+  try {
+    const { username, module } = req.body;
+
+    const user = await User.findOne({ username });
+
+    if(module === "m1") user.finished_m1 = true;
+    else if(module === "m2") user.finished_m2 = true;
+    await user.save();
+    res.status(200).json({ message: 'Module 1 summary created successfully with user: ', user });
+  } 
+  catch (error) {
+    console.error('Error creating account:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
