@@ -14,6 +14,8 @@ import Can from './pages/module3/cansort.js'
 import Map from "./pages/user/map.js";
 import M1Nav from './pages/module1/module1Navigate.js';
 import OrientationGuard from "./components/orientationguard";
+import Allergen from './pages/module3/allergens.js';
+
 function App() {
   return (
     <BrowserRouter>
@@ -31,6 +33,7 @@ function App() {
           <Route path="/module2/cleaning" element={<Cleaning />} />
           <Route path="/module2/cooking" element={<Cooking />} />
           <Route path="/module3/canSorting" element={<Can />} />
+          <Route path="/module3/allergenIdentification" element={<Allergen />} />
         </Routes>
       </OrientationGuard>
     </BrowserRouter>
