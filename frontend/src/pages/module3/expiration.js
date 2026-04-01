@@ -30,6 +30,13 @@ import spoiledgreens from "../../assets/M3G2/spoiledgreen.png";
 
 export default function Expiration() {
     const navigate = useNavigate();
+    let allInstructions = [
+                "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the expiration date or best by date.\n\nIf the item should be discarded, drag the item to the box with the X. If it is good to be used, drag it to the box with the check.",
+                "Items with expiraton dates should be disposed of if the date is even one more day after the expiration date. Expiration date is a hard deadline.",
+                "For best by date, we will use a specific rule, but many food banks use a different rule. Thus, remember to consult your supervisor on the rules.",
+                "For this module, items with best buy dates should be disposed of if the date is 6 months after the expiration date."
+                
+            ];
 
     useEffect(() => {
         window.navigateToPage = navigate;
@@ -83,6 +90,49 @@ export default function Expiration() {
                 this.load.image("soup", soup); 
                 this.load.image("spoiledgreens", spoiledgreens); 
             }
+            showInstructions() {
+                    const { width, height } = this.scale;
+
+                    const overlay = this.add.container(0, 0);
+
+                    const bg = this.add.rectangle(
+                        width / 2,
+                        height / 2,
+                        width * 0.8,
+                        height * 0.8,
+                        0xffffff
+                    ).setStrokeStyle(4, 0x000000);
+
+                    const text = this.add.text(
+                        width / 2,
+                        height / 2,
+                        allInstructions.join("\n\n"),
+                        {
+                            font: "bold 32px sans-serif",
+                            color: "#000",
+                            wordWrap: { width: width * 0.7 }
+                        }
+                    ).setOrigin(0.5);
+
+                    const close = this.add.text(
+                        width * 0.85,
+                        height * 0.15,
+                        "X",
+                        {
+                            font: "bold 40px sans-serif",
+                            backgroundColor: "#ff0000",
+                            padding: { x: 10, y: 5 }
+                        }
+                    )
+                    .setInteractive()
+                    .setOrigin(0.5);
+
+                    close.on("pointerdown", () => {
+                        overlay.destroy(true);
+                    });
+
+                    overlay.add([bg, text, close]);
+                }
             
             showPopup(inputText) {
                     const { width, height } = this.scale;
@@ -163,7 +213,26 @@ export default function Expiration() {
 
                 this.canX = this.bg1.width / 2 - this.bg1.width * 0.15;
                 this.canY = this.bg1.height / 2;
+                // Help Button
+                const helpButton = this.add.text(
+                    this.scale.width * 0.95,   // right side
+                    this.scale.height * 0.1,          
+                    "?",
+                    {
+                        font: "60px Arial",
+                        backgroundColor: "#ffffff",
+                        color: "#5100ff",
+                        padding: { x: 40, y: 40 }
+                    }
+                )
+                .setOrigin(0.5)
+                .setInteractive({ useHandCursor: true })
+                .setDepth(1000)
+                .setStroke("#000000", 4); 
 
+                helpButton.on("pointerdown", () => {
+                    this.showInstructions();
+                });
                 // Characters
                 this.babyfood = this.add.image(this.canX, this.canY, "babyfood")
                     .setOrigin(0)
@@ -202,7 +271,7 @@ export default function Expiration() {
 
                 this.salad = this.add.image(this.canX, this.canY, "salad")
                     .setOrigin(0)
-                    .setScale(this.erinScale)
+                    .setScale(0.8)
                     .setVisible(false);
 
                 this.saltinecrackers = this.add.image(this.canX, this.canY, "saltinecrackers")
