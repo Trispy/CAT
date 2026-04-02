@@ -11,6 +11,7 @@ router.post('/createaccount', async (req, res) => {
     if (!firstName || !lastName || !username || !email) {
       return res.status(400).json({ message: 'All fields are needed' });
     }
+     
     const user = new User({ firstName, lastName, username, email });
         await Module1.create({
       username: user.username,
@@ -25,7 +26,6 @@ router.post('/createaccount', async (req, res) => {
       cooking: false
     })
     await user.save();
-    
     res.status(201).json({ message: 'Account created successfully with user: ', user });
   } 
   catch (error) {
@@ -55,6 +55,7 @@ router.post('/login', async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
+   
     
     res.status(200).json({
       message: 'Login successful',
