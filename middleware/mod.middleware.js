@@ -1,11 +1,8 @@
 const jwt = require("jsonwebtoken");
-const User = require("./models/user.model");
+const User = require('../models/user.model');
 const Module1 = require("../models/module1.model");
 const Module2 = require("../models/module2.model");
-const Module3 = require("../models/module3.model");
-const Module4 = require("../models/module4.model");
-const Module5 = require("../models/module5.model");
-const Module6 = require("../models/module6.model");
+
 
 const mod1_dic = {"symptoms": 0, "personalHygiene": 1, "location": 2}; 
 const mod2_dic = {"module2part1": 0, "chopping": 1, "cooking": 2}; 

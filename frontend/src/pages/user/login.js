@@ -31,15 +31,18 @@ function Login() {
       },
       body: JSON.stringify(userData),
     });
+    console.log(add)
     const data = await add.json();
-    sessionStorage.setItem("username", data.user.username);
-    sessionStorage.setItem("m1", data.user.finished_m1);
-    sessionStorage.setItem("m2", data.user.finished_m2);
-    sessionStorage.setItem("m3", data.user.finished_m3);
-    sessionStorage.setItem("m4", data.user.finished_m4);
-    sessionStorage.setItem("m5", data.user.finished_m5);
-    sessionStorage.setItem("m6", data.user.finished_m6);
+
+  
+    const token = data.token;
+
+ 
+    console.log("JWT Token:", token);
+
+    localStorage.setItem("token", token);
     if(add.status === 200){
+        
         navigate('/map', { replace: true });
         // link to module 1 start
         // Check for jwt token ? Special status for if they have a token?
