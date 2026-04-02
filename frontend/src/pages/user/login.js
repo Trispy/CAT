@@ -31,6 +31,9 @@ function Login() {
       },
       body: JSON.stringify(userData),
     });
+    const token = data.token;
+    console.log("JWT Token:", token);
+    localStorage.setItem("token", token);
     const data = await add.json();
     sessionStorage.setItem("username", data.user.username);
     sessionStorage.setItem("m1", data.user.finished_m1);

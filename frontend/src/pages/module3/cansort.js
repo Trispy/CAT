@@ -2,19 +2,20 @@ import { useEffect } from "react";
 import Phaser from "phaser";
 
 import bg1 from "../../assets/Plainbackground.png";
-import healthy from "../../assets/M1G1/Healthy.png";
-import fever from "../../assets/M1G1/Fever.png";
-import runnyNose from "../../assets/M1G1/RunnyNose.png";
-import nausea from "../../assets/M1G1/Nausea.png";
+import bulgingCan from "../../assets/M3G1/bulgingCan.png";
+import cereal from "../../assets/M3G1/cereal.png";
+import cornCan from "../../assets/M3G1/cornCan.png";
+import jar from "../../assets/M3G1/jar.png";
+import moldyOrange from "../../assets/M3G1/moldyOrange.png";
+import rice from "../../assets/M3G1/rice.png";
+import slightDent from "../../assets/M3G1/slightDent.png";
+import tomatoLeaking from "../../assets/M3G1/tomatoLeaking.png";
+import waterDamage from "../../assets/M3G1/waterDamage.png";
 import check from "../../assets/M3G1/foodboxCheck.png";
 import xMark from "../../assets/M3G1/foodboxX.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import erinText from "../../assets/M3G1/erintextbox.png"
 import next from "../../assets/M1G1/nextbutton.png";
-import { defaultFont } from "../../formatting";
-import { defaultFontSize } from "../../formatting";
-import { defaultFontColor } from "../../formatting";
-import { defaultTypingSpeed } from "../../formatting";
 
 
 
@@ -29,7 +30,7 @@ export default function Cans() {
         class Can extends Phaser.Scene {
             erinX = 1300;
             erinY = 175;
-            erinScale = 1.1;
+            objectScale = 0.2;
             textboxScale = 0.75;
             textFontSize = 70;
             markY = 750;
@@ -40,7 +41,7 @@ export default function Cans() {
             ];
 
             instructions = [
-                "In the following game, the volunteer will sort items based on whether the packaging is damaged and should be discarded.\n\nIf the item should be discarded, drag the item to the box with the X. If it is good to be used, drag it to the box with the check."
+                "In the following game, the volunteer will sort items based on whether the packaging is damaged and should be discarded.\n\nIf the item is questionable, drag the item to the box with the X to ask a supervisor. If it is good to be used, drag it to the box with the check."
             ];
 
             transitions = [
@@ -53,10 +54,15 @@ export default function Cans() {
 
             preload() {
                 this.load.image("bg1", bg1);
-                this.load.image("nausea", nausea);
-                this.load.image("fever", fever);
-                this.load.image("runnyNose", runnyNose);
-                this.load.image("healthy", healthy);
+                this.load.image("bulgingCan", bulgingCan);
+                this.load.image("cereal", cereal);
+                this.load.image("cornCan", cornCan);
+                this.load.image("jar", jar);
+                this.load.image("moldyOrange", moldyOrange);
+                this.load.image("rice", rice);
+                this.load.image("slightDent", slightDent);
+                this.load.image("tomatoLeaking", tomatoLeaking);
+                this.load.image("waterDamage", waterDamage);
                 this.load.image("check", check);
                 this.load.image("x", xMark);
                 this.load.image("textbox", textbox);
@@ -128,49 +134,49 @@ export default function Cans() {
                 this.canY = this.bg1.height / 2;
 
                 // Characters
-                this.dented = this.add.image(this.canX, this.canY, "nausea")
+                this.dented = this.add.image(this.canX, this.canY, "tomatoLeaking")
                     .setOrigin(0)
-                    .setScale(this.erinScale)
+                    .setScale(this.objectScale)
                     .setVisible(false);
 
-                this.cornCan = this.add.image(this.canX, this.canY, "healthy")
+                this.cornCan = this.add.image(this.canX, this.canY, "cornCan")
                     .setOrigin(0)
-                    .setScale(this.erinScale)
+                    .setScale(this.objectScale)
                     .setVisible(false);
 
-                this.jarPop = this.add.image(this.canX, this.canY, "fever")
+                this.jarPop = this.add.image(this.canX, this.canY, "jar")
                     .setOrigin(0)
-                    .setScale(this.erinScale)
+                    .setScale(0.15)
                     .setVisible(false);
 
-                this.smallDent = this.add.image(this.canX, this.canY, "healthy")
+                this.smallDent = this.add.image(this.canX, this.canY, "slightDent")
                     .setOrigin(0)
-                    .setScale(this.erinScale)
+                    .setScale(this.objectScale)
                     .setVisible(false);
 
-                this.cereal = this.add.image(this.canX, this.canY, "healthy")
+                this.cereal = this.add.image(this.canX, this.canY, "cereal")
                     .setOrigin(0)
-                    .setScale(this.erinScale)
+                    .setScale(0.15)
                     .setVisible(false);
 
-                this.canMisshapen = this.add.image(this.canX, this.canY, "fever")
+                this.canMisshapen = this.add.image(this.canX, this.canY, "bulgingCan")
                     .setOrigin(0)
-                    .setScale(this.erinScale)
+                    .setScale(this.objectScale)
                     .setVisible(false);
 
-                this.waterDamage = this.add.image(this.canX, this.canY, "nausea")
+                this.waterDamage = this.add.image(this.canX, this.canY, "waterDamage")
                     .setOrigin(0)
-                    .setScale(this.erinScale)
+                    .setScale(0.15)
                     .setVisible(false);
 
-                this.mold = this.add.image(this.canX, this.canY, "fever")
+                this.mold = this.add.image(this.canX, this.canY, "moldyOrange")
                     .setOrigin(0)
-                    .setScale(this.erinScale)
+                    .setScale(this.objectScale)
                     .setVisible(false);
 
-                this.torn = this.add.image(this.canX, this.canY, "nausea")
+                this.torn = this.add.image(this.canX, this.canY, "rice")
                     .setOrigin(0)
-                    .setScale(this.erinScale)
+                    .setScale(0.15)
                     .setVisible(false);
 
                 // Buttons
@@ -195,7 +201,7 @@ export default function Cans() {
                     .setVisible(true);
 
                 // Scenario logic
-                this.volunteerScenario = [
+                this.canScenario = [
                     {
                         question: "This can is dented and has some of the contents leaking from the top.",
                         correctAnswer: "no",
@@ -203,7 +209,7 @@ export default function Cans() {
                         damageType: this.dented
                     },
                     {
-                        question: "This can is slightly dentend in the middle.",
+                        question: "This can is slightly dented in the middle.",
                         correctAnswer: "yes",
                         popup: "A small dent that doesn't compromise the seal is fine.",
                         damageType: this.smallDent
@@ -223,13 +229,13 @@ export default function Cans() {
                     {
                         question: "This can is misshapen and bulging.",
                         correctAnswer: "no",
-                        popup: "A bulging can indicates [something].",
+                        popup: "A bulging can indicates pathogen growth.",
                         damageType: this.canMisshapen
                     },
                     {
                         question: "This box has clearly has some water damage.",
                         correctAnswer: "no",
-                        popup: "Any water damage could have effected the food inside- better to toss it.",
+                        popup: "Any water damage could have affected the food inside- better to toss it.",
                         damageType: this.waterDamage
                     },
                     {
@@ -261,7 +267,7 @@ export default function Cans() {
                 this.textboxErin.setScale(this.textboxScale);
                 this.textboxErinImage.setVisible(false);
 
-                this.volunteerScenario[this.volunteerScenario.length - 1].damageType.setVisible(true);
+                this.canScenario[this.canScenario.length - 1].damageType.setVisible(true);
 
                 // Textbox
                 this.textbox = this.add.container(145, 112);
@@ -292,8 +298,8 @@ export default function Cans() {
                         this.textboxText.setFontSize(50);
                         this.typewriteText(this.instructions[0]);
                         this.instructions.shift();
-                    } else if (this.volunteerScenario.length > 0) {
-                        console.log(this.volunteerScenario);
+                    } else if (this.canScenario.length > 0) {
+                        console.log(this.canScenario);
                         this.textbox.setVisible(false);
                         this.textboxText = this.add.text(this.textboxErinImage.width * 0.47, this.textboxErinImage.height * 0.22, "", {
                             font: "54px Arial",
@@ -343,13 +349,13 @@ export default function Cans() {
             }
 
             cycleScenarios() {
-                    console.log(this.volunteerScenario);
-                        this.typewriteText(this.volunteerScenario[0].question);
+                    console.log(this.canScenario);
+                        this.typewriteText(this.canScenario[0].question);
 
-                        this.volunteerScenario[this.volunteerScenario.length - 1].damageType.setVisible(false);
-                        this.volunteerScenario[0].damageType.setVisible(true);
-                        this.volunteerScenario[0].damageType.setInteractive({ useHandCursor: true });
-                        this.input.setDraggable(this.volunteerScenario[0].damageType);
+                        this.canScenario[this.canScenario.length - 1].damageType.setVisible(false);
+                        this.canScenario[0].damageType.setVisible(true);
+                        this.canScenario[0].damageType.setInteractive({ useHandCursor: true });
+                        this.input.setDraggable(this.canScenario[0].damageType);
 
                         this.xMark.setVisible(true);
                         this.check.setVisible(true);
@@ -360,17 +366,17 @@ export default function Cans() {
                             gameObject.y = dragY;
                         });
 
-                        this.volunteerScenario[0].damageType.on("dragend", () => {
+                        this.canScenario[0].damageType.on("dragend", () => {
 
-                            const itemBounds = this.volunteerScenario[0].damageType.getBounds();
+                            const itemBounds = this.canScenario[0].damageType.getBounds();
                             const checkBounds = this.check.getBounds();
                             const xBounds = this.xMark.getBounds();
 
                             if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, checkBounds)) {
-                                this.handleAnswer(this.volunteerScenario, this.check);
+                                this.handleAnswer(this.canScenario, this.check);
                             }
                             else if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, xBounds)) {
-                                this.handleAnswer(this.volunteerScenario, this.xMark);
+                                this.handleAnswer(this.canScenario, this.xMark);
                             }
                         });
                 };
@@ -383,7 +389,7 @@ export default function Cans() {
                     (this.scenario.correctAnswer === "no" && button === this.xMark) ||
                     (this.scenario.correctAnswer === "yes" && button === this.check)
                 ) {
-                    this.volunteerScenario[0].damageType.destroy();
+                    this.canScenario[0].damageType.destroy();
                     this.textboxText.setColor("rgb(0, 133, 0)");
                     this.typewriteText(this.scenario.popup, "popup");
                     scenarios.shift();

@@ -5,7 +5,15 @@ export default function M1Nav() {
     const navigate = useNavigate();
     const nav = async (e) => {
         try {
-            const response = await fetch('http://localhost:3001/api/game/module1/status');
+            const jwt = localStorage.getItem("token");
+            const response = await fetch("http://localhost:3001/api/game/module1/status", {
+                method:"GET",
+                headers:{
+                ContentType:"Application/json",
+                Authorization: jwt
+                }
+            }
+            )
             const data = await response.json();
             console.log(data);
             // parse data
