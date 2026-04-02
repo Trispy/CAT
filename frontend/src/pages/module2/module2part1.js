@@ -485,7 +485,7 @@ useEffect(() => {
                         gameObject.x = gameObject.startX;
                         gameObject.y = gameObject.startY;
                         if (correct === "drawer") {
-                            setfridgefailState("Not quite! Veggies go in the crisper draw to mantain freshness.")
+                            setfridgefailState("Not quite! Veggies go in the crisper draw to maintain freshness.")
                         }
                         if (correct === "bottom") {
                             setfridgefailState("Not quite! Meat goes on the bottom shelf to prevent cross-contamination.")
