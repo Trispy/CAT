@@ -1,10 +1,12 @@
-import { useNavigate} from "react-router-dom";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import map from "../../assets/map.png";
 import "./map.css";
 import Phaser from "phaser";
 
 function Map() {
+    const [m1, setm1] = useState(sessionStorage.getItem("m1"));
+    const [m2, setm2] = useState(sessionStorage.getItem("m2"));
 
     const navigate = useNavigate();
 
@@ -21,19 +23,19 @@ function Map() {
             <div className="indicator">
                 <div className="text">{modulename}</div>
                 <div className="circle"></div>
-                
+
             </div>
         );
     };
     useEffect(() => {
         window.navigateToPage = navigate;
-    
+
         class MapScene extends Phaser.Scene {
             constructor() {
-                super("MapScene"); 
+                super("MapScene");
             }
             preload() {
-                this.load.image("mapbg", map); 
+                this.load.image("mapbg", map);
             }
             create() {
                 this.map = this.add.image(
@@ -86,51 +88,65 @@ function Map() {
 
         }
         const config = {
-              type: Phaser.AUTO,
-              scale: {
+            type: Phaser.AUTO,
+            scale: {
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH,
                 width: 1920,
                 height: 1080
-              },
-              render: {
+            },
+            render: {
                 pixelArt: false,
                 antialias: true
-              },
-              audio: { noAudio: true },
-              backgroundColor: "#000000",
-              scene: [MapScene],
-              parent: "phaser-game"
-            };
-            const game = new Phaser.Game(config);
-            return () => {
-      game.destroy(true);
-    };
+            },
+            audio: { noAudio: true },
+            backgroundColor: "#000000",
+            scene: [MapScene],
+            parent: "phaser-game"
+        };
+        const game = new Phaser.Game(config);
+        return () => {
+            game.destroy(true);
+        };
 
-    }, []); 
+    }, []);
 
     return (
         <div
-      style={{
-        height: "100vh",
-        overflow: "hidden",
-        position: "relative",
-        backgroundColor: "black"
-      }}
-    >
+            style={{
+                height: "100vh",
+                overflow: "hidden",
+                position: "relative",
+                backgroundColor: "black"
+            }}
+        >
 
-          
+
             <div
-        id="phaser-game"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100dvw",
-          height: "100dvh",
-          zIndex: 1
-        }}
-      />
+                id="phaser-game"
+                style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100dvw",
+                    height: "100dvh",
+                    zIndex: 1
+                }}
+            />
+            <div className="map-container">
+                <img src={map} alt="map" className="map-image" />
+                {/* Module 1 clickable area */}
+                {(!m1) && (
+                    <div className="module1" onClick={goToModule1}>
+                        {createClickIndicator("")}
+                    </div>
+                )}
+                {m1 && (!m2) && (
+                    <div className="module2" onClick={goToModule2}>
+                        {createClickIndicator("")}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

@@ -10,8 +10,11 @@ import Module2Part1 from './pages/module2/module2part1.js'
 import Location from './pages/module1/location.js'
 import Cleaning from './pages/module2/chopping.js';
 import Cooking from './pages/module2/cooking.js';
+import Can from './pages/module3/cansort.js'
 import Map from "./pages/user/map.js";
+import M1Nav from './pages/module1/module1Navigate.js';
 import OrientationGuard from "./components/orientationguard";
+import Expiration from './pages/module3/expiration.js'; 
 function App() {
   return (
     <BrowserRouter>
@@ -21,12 +24,15 @@ function App() {
           <Route path="/createaccount" element={<CreateAccount />} />
           <Route path="/login" element={<Login />} />
           <Route path="/map" element={<Map />} />
+          <Route path="/module1" element={<M1Nav />} />
           <Route path="/module1/symptoms" element={<Symptoms />} />
           <Route path="/module1/personalHygiene" element={<PersonalHygiene />} />
           <Route path="/module1/onLocation" element={<Location />} />
           <Route path="/module2/therm" element={<Module2Part1/>} />
           <Route path="/module2/cleaning" element={<Cleaning />} />
           <Route path="/module2/cooking" element={<Cooking />} />
+          <Route path="/module3/expiration" element={<Expiration />} />
+          <Route path="/module3/canSorting" element={<Can />} />
         </Routes>
       </OrientationGuard>
     </BrowserRouter>

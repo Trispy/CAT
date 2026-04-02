@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
+import callUpdate from "../../components/callupdate";
 
 import Loc from "../../assets/Background1.png";
 import plainClothes from "../../assets/Tieduphair.png";
@@ -26,16 +27,16 @@ export default function Location() {
     const navigate = useNavigate();
      
     useEffect(() => {
-    return () => {
-        if (phaserGameRef.current) {
-            phaserGameRef.current.destroy(true);
-            phaserGameRef.current = null;
-        }
-    };
+        return () => {
+            if (phaserGameRef.current) {
+                phaserGameRef.current.destroy(true);
+                phaserGameRef.current = null;
+            }
+        };
     }, []);
     useEffect(() => {
-    startPhaser();
-}, []);
+        startPhaser();
+    }, []);
     //backgroundImage: `url(${Loc})`,
     const backgroundStyle = {
         backgroundImage: `url(${Loc})`,
@@ -73,21 +74,21 @@ export default function Location() {
 
     const startPhaser = () => {
         if (phaserGameRef.current) return;
-       class IntroScene extends Phaser.Scene {
-        constructor() {
-            super("IntroScene");
-        }
+        class IntroScene extends Phaser.Scene {
+            constructor() {
+                super("IntroScene");
+            }
 
-        preload() {
-            this.load.image("introBg", Loc);
-        }
+            preload() {
+                this.load.image("introBg", Loc);
+            }
 
-        create() {
-            const { width, height } = this.scale;
+            create() {
+                const { width, height } = this.scale;
 
-            this.add.image(width / 2, height / 2, "introBg")
-            .setDisplaySize(width, height);
-        }
+                this.add.image(width / 2, height / 2, "introBg")
+                    .setDisplaySize(width, height);
+            }
         }
         class InstructionScene extends Phaser.Scene {
             constructor() {
@@ -102,8 +103,7 @@ export default function Location() {
                 const { width, height } = this.scale;
 
                 this.add.image(width / 2, height / 2, "instructionBg")
-                .setDisplaySize(width, height);
-               
+                    .setDisplaySize(width, height);
             }
             }
         class ApronScene extends Phaser.Scene {
@@ -287,7 +287,7 @@ export default function Location() {
                 dirtyHand.setScale(scale1);
 
 
-                
+
 
                 const handZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                     width / 2 - width * 0.30, 
@@ -360,7 +360,7 @@ export default function Location() {
                     const localX = (dragX - dirtyHandRT.x) / dirtyHandRT.scaleX + dirtyHandRT.width / 2;
                     const localY = (dragY - dirtyHandRT.y) / dirtyHandRT.scaleY + dirtyHandRT.height / 2;
 
-                   
+
                     if (Math.random() < 0.2) {
                         const sud = this.add.image(dragX, dragY, "sudImg");
 
@@ -374,7 +374,7 @@ export default function Location() {
                             onComplete: () => sud.destroy()
                         });
                     }
-                    
+
 
                     dirtyHandRT.erase(eraseBrush, localX, localY);
                     cells.forEach(cell => {
@@ -403,15 +403,15 @@ export default function Location() {
                 setShowSoapText(true);
 
                 // when clipper is clicked hide the textbox
-             
+
                 this.events.on("shutdown", () => {
-                this.input.removeAllListeners();
+                    this.input.removeAllListeners();
 
                     if (dirtyHandRT) {
                         dirtyHandRT.destroy();
                     }
                 });
-               
+
             }
         }
 
@@ -535,30 +535,30 @@ export default function Location() {
         }
 
         const config = {
-                type: Phaser.AUTO,
-                scale: {
-                    mode: Phaser.Scale.FIT,
-                    autoCenter: Phaser.Scale.CENTER_BOTH,
-                    width: 1920,
-                    height: 1080
-                },
-                render: {
-                    pixelArt: false,
-                    antialias: true
-                },
-                audio: {noAudio: true},
-                transparent: false,
-                backgroundColor: "#000000",
-                scene: [IntroScene, InstructionScene, ApronScene, HandScene, GloveScene, FinalScene],
-                parent: "phaser-game"
-            };
+            type: Phaser.AUTO,
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: 1920,
+                height: 1080
+            },
+            render: {
+                pixelArt: false,
+                antialias: true
+            },
+            audio: { noAudio: true },
+            transparent: false,
+            backgroundColor: "#000000",
+            scene: [IntroScene, InstructionScene, ApronScene, HandScene, GloveScene, FinalScene],
+            parent: "phaser-game"
+        };
 
         phaserGameRef.current = new Phaser.Game(config);
 
-       setTimeout(() => {
-        if (phaserGameRef.current) {
-            phaserGameRef.current.scene.start("IntroScene");
-        }
+        setTimeout(() => {
+            if (phaserGameRef.current) {
+                phaserGameRef.current.scene.start("IntroScene");
+            }
         }, 100);
     }
 
@@ -614,6 +614,7 @@ export default function Location() {
         }
 
         if (gameStage === "finalStage") {
+            callUpdate("m1");
             navigate('/map', { replace: true });
         }
     };
@@ -715,16 +716,16 @@ export default function Location() {
           
 
             <div
-            id="phaser-game"
-            style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100vw",
-                height: "100dvh",
-                zIndex: 1,
-                 
-            }}
+                id="phaser-game"
+                style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100vw",
+                    height: "100dvh",
+                    zIndex: 1,
+
+                }}
             />
 
             {gameStage === "apron" && fullyDressed && (
@@ -803,7 +804,7 @@ export default function Location() {
           {gameStage === "gloveStage" && gloveInstruction && (
   <div
     style={{
-            position: "fixed", 
+            position: "fixed",
             top: 0,
             left: 0,
             width: "100dvw",

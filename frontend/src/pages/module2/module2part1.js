@@ -935,7 +935,6 @@ useEffect(() => {
             setGloveInstruction(true);
         }
     }, [gameStage]);
-    let placeholder = true;
 
     const isNextDisabled =
         (gameStage === "ThermometerScene" && thermometerState !== "success") ||

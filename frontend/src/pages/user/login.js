@@ -32,7 +32,17 @@ function Login() {
       body: JSON.stringify(userData),
     });
     console.log(add)
+    const data = await add.json();
+
+  
+    const token = data.token;
+
+ 
+    console.log("JWT Token:", token);
+
+    localStorage.setItem("token", token);
     if(add.status === 200){
+        
         navigate('/map', { replace: true });
         // link to module 1 start
         // Check for jwt token ? Special status for if they have a token?

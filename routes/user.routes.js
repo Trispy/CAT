@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
+const Module1 = require('../models/module1.model'); 
+const Module2 = require('../models/module2.model'); 
 
 router.post('/createaccount', async (req, res) => {
   try {
@@ -40,7 +42,19 @@ router.post('/login', async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
-
+    await Module1.create({
+      username: user.username,
+      symptoms: false,
+      personalHygiene: false,
+      location: false
+    });
+    await Module2.create({
+      username: user.username, 
+      module2part1: false, 
+      chopping: false, 
+      cooking: false
+    })
+    
     res.status(200).json({
       message: 'Login successful',
       token,
