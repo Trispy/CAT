@@ -67,7 +67,7 @@ function Map() {
 
                 mod1.setInteractive();
                 mod1.on("pointerdown", () => {
-                    window.navigateToPage("/module1/symptoms");
+                    window.navigateToPage("/module1");
                 });
 
                 // MODULE 2 indicator

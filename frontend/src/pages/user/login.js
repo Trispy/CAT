@@ -31,8 +31,16 @@ function Login() {
       },
       body: JSON.stringify(userData),
     });
+<<<<<<< Updated upstream
     console.log(add)
     const data = await add.json();
+=======
+    const data = await add.json();
+    const token = data.token;
+    console.log("JWT Token:", token);
+    localStorage.setItem("token", token);
+    
+>>>>>>> Stashed changes
     sessionStorage.setItem("username", data.user.username);
     sessionStorage.setItem("m1", data.user.finished_m1);
     sessionStorage.setItem("m2", data.user.finished_m2);
