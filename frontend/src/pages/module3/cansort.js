@@ -63,6 +63,50 @@ export default function Cans() {
                 this.load.image("erinText", erinText);
                 this.load.image("next", next);
             }
+            
+            showPopup(inputText) {
+                    const { width, height } = this.scale;
+
+                    const overlay = this.add.container(0, 0);
+
+                    const bg = this.add.rectangle(
+                        width / 2,
+                        height / 2,
+                        width * 0.8,
+                        height * 0.8,
+                        0xffffff
+                    ).setStrokeStyle(4, 0x000000);
+
+                    const text = this.add.text(
+                        width / 2,
+                        height / 2,
+                        inputText,
+                        {
+                            font: "70px Arial",
+                            color: "#000",
+                            wordWrap: { width: width * 0.7 }
+                        }
+                    ).setOrigin(0.5);
+
+                    const close = this.add.text(
+                        width * 0.85,
+                        height * 0.15,
+                        "X",
+                        {
+                            font: "40px Arial",
+                            backgroundColor: "#e2e2e2",
+                            padding: { x: 10, y: 5 }
+                        }
+                    )
+                    .setInteractive()
+                    .setOrigin(0.5);
+
+                    close.on("pointerdown", () => {
+                        overlay.destroy(true);
+                    });
+
+                    overlay.add([bg, text, close]);
+                }
 
             create() {
                 // Background
@@ -251,7 +295,7 @@ export default function Cans() {
                     } else if (this.volunteerScenario.length > 0) {
                         console.log(this.volunteerScenario);
                         this.textbox.setVisible(false);
-                        this.textboxText = this.add.text(this.textboxErinImage.width * 0.5, this.textboxErinImage.height * 0.22, "", {
+                        this.textboxText = this.add.text(this.textboxErinImage.width * 0.47, this.textboxErinImage.height * 0.22, "", {
                             font: "54px Arial",
                             color: "#000000",
                             wordWrap: {
@@ -270,7 +314,11 @@ export default function Cans() {
 
             }
 
-            typewriteText(text, speed = 30) {
+            typewriteText(text, type, speed = 5) {
+                if (type == "popup"){
+                    this.showPopup(text);
+                    return;
+                }
                 this.textboxText.setText("");
                 this.next.disableInteractive();
                 this.xMark.disableInteractive();
@@ -328,6 +376,7 @@ export default function Cans() {
                 };
 
             handleAnswer(scenarios, button) {
+                
                 this.scenario = scenarios[0];
 
                 if (
@@ -336,14 +385,14 @@ export default function Cans() {
                 ) {
                     this.volunteerScenario[0].damageType.destroy();
                     this.textboxText.setColor("rgb(0, 133, 0)");
-                    this.typewriteText(this.scenario.popup);
+                    this.typewriteText(this.scenario.popup, "popup");
                     scenarios.shift();
-
+                    
                     if (scenarios.length > 0) {
                         this.textboxText.setColor("#000");
                         this.textbox.setScale(this.textboxScale);
                         this.textboxText.setFontSize(this.textFontSize);
-                        this.typewriteText(scenarios[0].question);
+                        //this.typewriteText(scenarios[0].question);
 
                         scenarios[0].damageType.setVisible(true);
                         this.check.preFX.clear();
@@ -359,12 +408,15 @@ export default function Cans() {
 
                     this.textboxText.setFontSize(this.textFontSize * 0.8);
                     this.textboxText.setColor("rgb(252, 0, 0)");
-                    this.typewriteText(this.scenario.popup);
+                    this.typewriteText(this.scenario.popup, "popup");
                 }
-
+                
                 if (scenarios.length === 0) {
-                    this.textbox.setScale(1.05);
                     this.textboxText.setColor("#000");
+                    this.textboxErin.setScale(1.05);
+                    this.textboxErin.setX(60);
+                    this.textboxText.setWordWrapWidth(this.textboxErinImage.width * 0.47);
+                    this.textboxText.setY(150);
                     this.textboxText.setFontSize(50);
                     this.typewriteText(this.transitions[0]);
 
