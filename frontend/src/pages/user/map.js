@@ -7,6 +7,8 @@ import Phaser from "phaser";
 function Map() {
     const [m1, setm1] = useState(sessionStorage.getItem("m1"));
     const [m2, setm2] = useState(sessionStorage.getItem("m2"));
+    console.log(m1);
+    console.log(m2);
 
     const navigate = useNavigate();
 
@@ -65,7 +67,7 @@ function Map() {
 
                 mod1.setInteractive();
                 mod1.on("pointerdown", () => {
-                    window.navigateToPage("/module1/symptoms");
+                    window.navigateToPage("/module1");
                 });
 
                 // MODULE 2 indicator

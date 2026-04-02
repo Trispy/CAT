@@ -5,16 +5,23 @@ export default function M1Nav() {
     const navigate = useNavigate();
     const nav = async (e) => {
         try {
-            const response = await fetch('http://localhost:3001/api/game/module1/status');
+            const jwt = localStorage.getItem("token");
+            const response = await fetch("http://localhost:3001/api/game/module1/status", {
+                method:"GET",
+                headers:{
+                ContentType:"Application/json",
+                Authorization: `Bearer ${jwt}`
+                }
+            }
+            )
             const data = await response.json();
-            console.log(data);
             // parse data
-            /*if(!true)
+            if(!data.symptoms)
                 navigate('/module1/symptoms', { replace: true });
-            else if(!true)
+            else if(!data.personalHygiene)
                 navigate('/module1/personalHygiene', { replace: true });
             else
-                navigate('/module1/onLocation', { replace: true });*/
+                navigate('/module1/onLocation', { replace: true });
         } catch (error) {
             console.error('Error fetching data:', error);
         }

@@ -13,8 +13,7 @@ router.post('/createaccount', async (req, res) => {
     }
      
     const user = new User({ firstName, lastName, username, email });
-    await user.save();
-    await Module1.create({
+        await Module1.create({
       username: user.username,
       symptoms: false,
       personalHygiene: false,
@@ -26,6 +25,7 @@ router.post('/createaccount', async (req, res) => {
       chopping: false, 
       cooking: false
     })
+    await user.save();
     res.status(201).json({ message: 'Account created successfully with user: ', user });
   } 
   catch (error) {

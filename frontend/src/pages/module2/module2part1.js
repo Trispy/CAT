@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import module2Background from "../../assets/finalbackground.png"
+import moduleUpdate from "../../components/moduleupdate";
 import Textbox from "../../components/textbox";
+
+import module2Background from "../../assets/finalbackground.png"
 import Phaser from "phaser";
 import thermometerhand from "../../assets/thermometerhand.png"
 import thermometer from "../../assets/thermometer.png"
@@ -29,7 +31,6 @@ import gloveBox from "../../assets/M1G3/gloveBox.png";
 import handLeft from "../../assets/M1G3/handLeft.png";
 import handRight from "../../assets/M1G3/handRight.png";
 import sudImg from "../../assets/M1G3/sud.png";
-import TextboxErin from "../../components/textboxerin";
 
 
 
@@ -873,6 +874,7 @@ useEffect(() => {
             setgameStage("gloveStage");
         }
         if (gameStage === "gloveStage") {
+            moduleUpdate("http://localhost:3001/api/game/module2/module2part1/completed");
             navigate('/module2/cleaning', { replace: true });
         }
     };
