@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
-import moduleUpdate from "../../components/moduleupdate";
+import moduleUpdate from "../../components/moduleupdate.js";
 
 import Loc from "../../assets/Background1.png";
 import Textbox from "../../components/textbox";

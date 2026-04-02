@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/user.model');
 const Module1 = require("../models/module1.model");
 const Module2 = require("../models/module2.model");
+const requireAuth = require('../middleware/auth.middleware');
 
 const checkAccess = require("../middleware/mod.middleware");
 //mod 1 routes
