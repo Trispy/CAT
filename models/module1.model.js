@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const module1SummarySchem = new mongoose.Schema({
-  sessionId: { type: String, required: true, unique: true },
+const module1SummarySchema = new mongoose.Schema({
   username: { type: String, required: true},
   symptoms: {type: Boolean, required: true, default: false},
   personalHygiene: {type: Boolean, required: true, default: false}, 
