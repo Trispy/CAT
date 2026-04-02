@@ -1,10 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require('../models/user.model');
-const module1SummarySchema = require('../models/game.model');
-const requireAuth = require('../middleware/auth.middleware');
-
-
+const module1SummarySchema = require('../models/module1.model');
 const Module1 = require("../models/module1.model");
 const Module2 = require("../models/module2.model");
 
