@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
+import moduleUpdate from "../../components/moduleupdate";
+
 import Loc from "../../assets/Background1.png";
 import Textbox from "../../components/textbox";
 import textbox from "../../assets/M1G1/Textbox.png";
@@ -26,7 +28,6 @@ import sprayBottle from "../../assets/M2G2/Spraybottle.png";
 import rag from "../../assets/M2G2/rag.png";
 import wetCuttingBoard from "../../assets/M2G2/watercuttingboard.png";
 import knife from "../../assets/M2G2/Knife.png";
-import TextboxErin from "../../components/textboxerin";
 
 export default function Cleaning() {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
@@ -216,24 +217,8 @@ const instructionTypewriter = useTypewriter(
                 }
             create() {
                 const { width, height } = this.scale;
-                //this.next = this.add.image(this.erinX * 1.25, this.erinY * 4.35, 'next').setOrigin(0).setScale(0.35).setInteractive().setVisible(true);
                 this.scale.refresh();
                 this.add.image(width / 2, height / 2, "volLocation").setDisplaySize(width, height);
-                /*const nextBtn = this.add.image(
-                    width * 0.85,
-                    height * 0.95,
-                    "nextButton"
-                )
-                              
-                .setOrigin(0.5) // center it like React button visually
-                .setScale(0.3)  // adjust to match your current size
-                .setInteractive({ useHandCursor: true })
-                .setDepth(1000);
-                  nextBtn.on("pointerdown", () => {
-                    if (window.handleNext) {
-                        window.handleNext({ stopPropagation: () => {} });
-                    }
-                });*/
                 let boardClean = false;
                     const helpButton = this.add.text(
                     width * 0.78,
@@ -919,6 +904,7 @@ const instructionTypewriter = useTypewriter(
             checkWin() {
                 if (numberOfCutMaterials.current === 3) {
                     this.showMes("Win condition met");
+                    moduleUpdate("http://localhost:3001/api/game/module2/chopping/completed");
                     navigate('/module2/cooking', { replace: true });
                 }
             }

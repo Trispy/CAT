@@ -12,11 +12,6 @@ import check from "../../assets/M1G1/Check.png";
 import xMark from "../../assets/M1G1/X.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import next from "../../assets/M1G1/nextbutton.png";
-import { defaultFont } from "../../formatting";
-import { defaultFontSize } from "../../formatting";
-import { defaultFontColor } from "../../formatting";
-import { defaultTypingSpeed } from "../../formatting";
-
 
 
 import { useNavigate } from "react-router-dom";
@@ -194,7 +189,7 @@ export default function Symptoms() {
             this.next.setVisible(false);
           } else {
             moduleUpdate("http://localhost:3001/api/game/module1/symptoms/completed");
-            //window.navigateToPage("/module1/personalHygiene");
+            window.navigateToPage("/module1/personalHygiene");
           }
         });
 

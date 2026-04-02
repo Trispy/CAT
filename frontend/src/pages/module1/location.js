@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 import callUpdate from "../../components/callupdate";
+import moduleUpdate from "../../components/moduleupdate";
 
 import Loc from "../../assets/Background1.png";
 import plainClothes from "../../assets/Tieduphair.png";
@@ -10,7 +11,6 @@ import apronOn from "../../assets/M2G2/noGlove.png";
 import Textbox from "../../components/textbox";
 import useTypewriter from "../../components/typewriter";
 import nextButton from "../../assets/nextbutton.png";
-import TextboxErin from "../../components/textboxerin";
 import cleanHand from "../../assets/M1G3/handClean.png";
 import dirtyHand from "../../assets/M1G3/handDirty.png";
 import soapSprite from "../../assets/M1G3/soap.png";
@@ -615,6 +615,7 @@ export default function Location() {
 
         if (gameStage === "finalStage") {
             callUpdate("m1");
+            moduleUpdate("http://localhost:3001/api/game/module1/location/completed");
             navigate('/map', { replace: true });
         }
     };

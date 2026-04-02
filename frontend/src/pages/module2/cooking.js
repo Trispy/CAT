@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import Phaser from "phaser";
+
 import callUpdate from "../../components/callupdate";
+import moduleUpdate from "../../components/moduleupdate";
 
 import beefBowl from "../../assets/M2Cooking/Bowl_Beef.png";
 import onionBowl from "../../assets/M2Cooking/Bowl_Onion.png";
@@ -24,7 +26,6 @@ import panPepper from "../../assets/M2Cooking/Pan_Peppers.png";
 import thermometerHand from "../../assets/M2Cooking/ThermometerHand.png";
 import next from "../../assets/M1G1/nextbutton.png";
 
-import {defaultFont} from "../../formatting";
 import {defaultFontSize} from "../../formatting";
 import {defaultFontColor} from "../../formatting";
 import {defaultTypingSpeed} from "../../formatting";
@@ -162,6 +163,7 @@ export default function Cooking() {
         }
         else{
           callUpdate("m2");
+          moduleUpdate("http://localhost:3001/api/game/module2/cooking/completed");
           window.navigateToPage("/");
         }  
 });

@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const User = require('../models/user.model');
-const module1SummarySchema = require('../models/game.model');
 const requireAuth = require('../middleware/auth.middleware');
 
 
@@ -9,7 +8,6 @@ const Module1 = require("../models/module1.model");
 const Module2 = require("../models/module2.model");
 
 const checkAccess = require("../middleware/mod.middleware");
-const requireAuth = require("../middleware/auth.middleware");
 //mod 1 routes
 
 // mark as complete
@@ -94,19 +92,6 @@ router.get("/module1/status", requireAuth, async (req, res) => {
   }
 });
 
-// summary
-router.get("/module1/summary", requireAuth, async (req, res) => {
-  try {
-    const username = req.user.username;
-
-    const data = await Module1.findOne({ username });
-
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
 //mod 2 routes
 
 // mark as complete
@@ -182,19 +167,6 @@ router.get("/module2/status", requireAuth, async (req, res) => {
       chopping: data?.chopping || false,
       cooking: data?.cooking || false,
     });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// mod2 summary
-router.get("/module2/summary", requireAuth,async (req, res) => {
-  try {
-    const username = req.user.username;
-
-    const data = await Module2.findOne({ username });
-
-    res.json(data);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -26,6 +26,7 @@ import tieduphair from "../../assets/Tieduphair.png";
 import hairtie from "../../assets/M1G2/Hairtie.png";
 import erintextbox from "../../assets/erintextbox.png";
 import TextboxErin from "../../components/textboxerin";
+import moduleUpdate from "../../components/moduleupdate";
 //has multiple scenes for each step of the personal hygiene process. Each scene has its own interactive elements and logic. The main component manages the overall game state and transitions between scenes based on user actions and progress.
 
 function PersonalHygiene() {
@@ -851,6 +852,7 @@ class FinalScene extends Phaser.Scene {
         return;
     }
     if (gameStage === "final") {
+        moduleUpdate("http://localhost:3001/api/game/module1/personalHygiene/completed");
         navigate('/module1/onLocation', { replace: true });
     }
     
