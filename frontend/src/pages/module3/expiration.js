@@ -57,7 +57,7 @@ export default function Expiration() {
             instructions = [
                 "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the expiration date or best by date.\n\nIf the item should be discarded, drag the item to the box with the X. If it is good to be used, drag it to the box with the check.",
                 "In this module, we will following the following rules for expiration dates and best by dates: ",
-                "Items with expiraton dates should be disposed of if the date is even one more day after the expiration date. Expiration date is a hard deadline.",
+                "Items with expiration dates should be disposed of if the date is even one more day after the expiration date. Expiration date is a hard deadline.",
                 "For best by date, we will use a specific rule but many food banks use a different rule, so remember to consult your supervisor on the rules.",
                 "For this module, items with best buy dates should be disposed of if the date is 6 months after the expiration date."
                 
@@ -524,6 +524,8 @@ export default function Expiration() {
                         this.showPopup(`${this.currentItem.label}`);
 
                         this.seeDateButton.destroy();
+
+                        
                     });
                     this.seeDateButton.on("pointerdown", () => {
                         if (this.popupOpen) return;
@@ -534,6 +536,7 @@ export default function Expiration() {
 
                         // remove button after click
                         this.seeDateButton.destroy();
+                        
                     });
 
                     this.xMark.setVisible(true);
@@ -610,7 +613,11 @@ export default function Expiration() {
                     this.currentSprite.destroy();
 
                     this.currentIndex++;
-                    this.loadNextItem();
+                    if (this.currentIndex >= this.foodItems.length) {
+                            navigate();
+                        } else {
+                            this.loadNextItem();
+                        }
                 } else {
                     this.typewriteText(`Incorrect!\n${this.currentItem.reason}`, "popup");
 

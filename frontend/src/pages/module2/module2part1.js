@@ -908,7 +908,7 @@ useEffect(() => {
     );
     const soapText = useTypewriter("Drag the soap to the hand to clean them.",
         gameStage === "HandScene" && showSoapText)
-    const soapSuccessText = useTypewriter("All clean! Now lets put on some gloves.",
+    const soapSuccessText = useTypewriter("All clean! Now let's put on some gloves.",
         gameStage === "HandScene" && handsClean && timerDone)
     const gloveText = useTypewriter("Make sure to put gloves on before touching any food",
         gameStage === "gloveStage" && gloveInstruction)

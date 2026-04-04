@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import map from "../../assets/map.png";
+import map from "../../assets/Maprenovated.png";
 import "./map.css";
 import Phaser from "phaser";
 
@@ -133,20 +133,7 @@ function Map() {
                     zIndex: 1
                 }}
             />
-            <div className="map-container">
-                <img src={map} alt="map" className="map-image" />
-                {/* Module 1 clickable area */}
-                {(!m1) && (
-                    <div className="module1" onClick={goToModule1}>
-                        {createClickIndicator("")}
-                    </div>
-                )}
-                {m1 && (!m2) && (
-                    <div className="module2" onClick={goToModule2}>
-                        {createClickIndicator("")}
-                    </div>
-                )}
-            </div>
+        
         </div>
     );
 }
