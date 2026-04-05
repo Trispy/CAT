@@ -2,11 +2,12 @@ const jwt = require("jsonwebtoken");
 const User = require('../models/user.model');
 const Module1 = require("../models/module1.model");
 const Module2 = require("../models/module2.model");
+const Module3 = require("../models/module3.model");
 
 
 const mod1_dic = {"symptoms": 0, "personalHygiene": 1, "location": 2}; 
 const mod2_dic = {"module2part1": 0, "chopping": 1, "cooking": 2}; 
-const mod3_dic = {"module3part1": 0, "module3part2": 1, "module3part3": 2};
+const mod3_dic = {"cansort": 0, "expiration": 1, "allergenIdentification": 2};
 const mod4_dic = {"module4part1": 0, "module4part2": 1, "module4part3": 2};
 const mod5_dic = {"module5part1": 0, "module5part2": 1, "module5part3": 2};
 const mod6_dic = {"module6part1": 0, "module6part2": 1, "module6part3": 2};
@@ -14,7 +15,7 @@ const checkAccess = (moduleName, gameName) => {
   return async (req, res, next) => {
     try {
 
-    
+      console.log("In checkAccess");
       const authHeader = req.headers.authorization;
       if (!authHeader) {
         return res.status(401).json({ message: "No token provided" });
@@ -29,12 +30,14 @@ const checkAccess = (moduleName, gameName) => {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
+      console.log(user);
 
       let startingModule1 = "symptoms"; 
       let startingModule2 = "module2part1"; 
+      let startingModule3 = "cansort";
       // MODULE 1
       if (moduleName === "module1") {
-        if (user.finished_m1 === "locked") {
+        if (user.finished_m1 === "locked") { // change to boolean at some point
           return res.status(403).json({ message: "Module 1 is locked" });
         }
 
@@ -83,7 +86,7 @@ const checkAccess = (moduleName, gameName) => {
         }
       }
 
-      /*// MODULE 3
+      // MODULE 3
       if (moduleName === "module3") {
         if (user.finished_m3 === "locked") {
           return res.status(403).json({ message: "Module 3 is locked" });
@@ -94,18 +97,21 @@ const checkAccess = (moduleName, gameName) => {
         if (!mod3) {
           return res.status(404).json({ message: "Module 3 data not found" });
         }
+        if (gameName !== startingModule3 && mod3[startingModule3] === false) {
+            return res.status(403).json({ message: "You must start the first step first" });
+        }
         let prev_number = 0; 
         if (mod3_dic[gameName] - 1 >= 0) {
           prev_number = mod3_dic[gameName] - 1; 
         }
-        const key = Object.keys(obj).find(k => obj[k] === prev_number);
+        const key = Object.keys(mod3_dic).find(k => mod3_dic[k] === prev_number);
 
-        if (gameName && mod3[key] === false) {
-          return res.status(403).json({ message: `${gameName} not unlocked` });
+        if (gameName !== startingModule3 && mod3[key] === false) {
+            return res.status(403).json({ message: `${gameName} not unlocked` });
         }
       }
 
-      // MODULE 4
+      /*// MODULE 4
       if (moduleName === "module4") {
         if (user.finished_m4 === "locked") {
           return res.status(403).json({ message: "Module 4 is locked" });

@@ -12,9 +12,12 @@ import Cleaning from './pages/module2/chopping.js';
 import Cooking from './pages/module2/cooking.js';
 import Can from './pages/module3/cansort.js'
 import Map from "./pages/user/map.js";
-import M1Nav from './pages/module1/module1Navigate.js';
 import OrientationGuard from "./components/orientationguard";
 import Allergen from './pages/module3/allergens.js';
+
+import M1Nav from './pages/module1/module1Navigate.js';
+import M2Nav from './pages/module2/module2Navigate.js';
+import M3Nav from './pages/module3/module3Navigate.js';
 
 import Expiration from './pages/module3/expiration.js'; 
 function App() {
@@ -30,9 +33,11 @@ function App() {
           <Route path="/module1/symptoms" element={<Symptoms />} />
           <Route path="/module1/personalHygiene" element={<PersonalHygiene />} />
           <Route path="/module1/onLocation" element={<Location />} />
+          <Route path="/module2" element={<M2Nav />} />
           <Route path="/module2/therm" element={<Module2Part1/>} />
           <Route path="/module2/cleaning" element={<Cleaning />} />
           <Route path="/module2/cooking" element={<Cooking />} />
+          <Route path="/module3" element={<M3Nav />} />
           <Route path="/module3/expiration" element={<Expiration />} />
           <Route path="/module3/canSorting" element={<Can />} />
           <Route path="/module3/allergenIdentification" element={<Allergen />} />

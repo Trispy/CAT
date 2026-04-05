@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import Phaser from "phaser";
 
+import moduleUpdate from "../../components/moduleupdate";
+
 import bg1 from "../../assets/Plainbackground.png";
 import bulgingCan from "../../assets/M3G1/bulgingCan.png";
 import cereal from "../../assets/M3G1/cereal.png";
@@ -45,7 +47,7 @@ export default function Cans() {
             ];
 
             transitions = [
-                "As a volunteer, you will may be hands on with all sorts of food products. While understanding when a package is good to use is important, it is equally as important to ask a supervisor if you have any questions, or aren't sure whether a package or can is bad."
+                "As a volunteer, you may be hands-on with all sorts of food products. While understanding when a package is good to use is important, it is equally as important to ask a supervisor if you have any questions, or aren't sure whether a package or can is bad."
             ];
 
             constructor() {
@@ -314,7 +316,8 @@ export default function Cans() {
                         this.cycleScenarios();
 
                     } else {
-                        window.navigateToPage("/map");
+                        moduleUpdate("http://localhost:3001/api/game/module3/canSorting/completed");
+                        window.navigateToPage("/module3/expiration");
                     }
                 });
 

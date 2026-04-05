@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 const Module1 = require('../models/module1.model'); 
 const Module2 = require('../models/module2.model'); 
+const module3Model = require('../models/module3.model');
 
 router.post('/createaccount', async (req, res) => {
   try {
@@ -13,7 +14,7 @@ router.post('/createaccount', async (req, res) => {
     }
      
     const user = new User({ firstName, lastName, username, email });
-        await Module1.create({
+    await Module1.create({
       username: user.username,
       symptoms: false,
       personalHygiene: false,
@@ -24,6 +25,12 @@ router.post('/createaccount', async (req, res) => {
       module2part1: false, 
       chopping: false, 
       cooking: false
+    })
+    await module3Model.create({
+      username: user.username, 
+      cansort: false, 
+      expiration: false, 
+      allergenIdentification: false
     })
     await user.save();
     res.status(201).json({ message: 'Account created successfully with user: ', user });

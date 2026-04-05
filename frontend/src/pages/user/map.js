@@ -13,10 +13,13 @@ function Map() {
     const navigate = useNavigate();
 
     const goToModule1 = () => {
-        navigate("/module1/symptoms");
+        navigate("/module1");
     };
     const goToModule2 = () => {
-        navigate("/module2/therm");
+        navigate("/module2");
+    }
+    const goToModule3 = () => {
+        navigate("/module3");
     }
 
 
@@ -84,7 +87,24 @@ function Map() {
 
                 mod2.setInteractive();
                 mod2.on("pointerdown", () => {
-                    window.navigateToPage("/module2/therm");
+                    window.navigateToPage("/module2");
+                });
+
+                // MODULE 3 indicator
+                const x2 = this.map.x - this.map.displayWidth / 2 + this.map.displayWidth * 0.85;
+                const y2 = this.map.y - this.map.displayHeight / 2 + this.map.displayHeight * 0.4;
+                const mod3 = this.add.circle(x2, y2, 50, 0xfff600);
+                this.tweens.add({
+                    targets: mod3,
+                    alpha: 0.2,
+                    duration: 500,
+                    yoyo: true,
+                    repeat: -1
+                });
+
+                mod3.setInteractive();
+                mod3.on("pointerdown", () => {
+                    window.navigateToPage("/module3");
                 });
             }
 
@@ -145,6 +165,11 @@ function Map() {
                 )}
                 {m1 && (!m2) && (
                     <div className="module2" onClick={goToModule2}>
+                        {createClickIndicator("")}
+                    </div>
+                )}
+                {m1 && (!m2) && (
+                    <div className="module3" onClick={goToModule3}>
                         {createClickIndicator("")}
                     </div>
                 )}

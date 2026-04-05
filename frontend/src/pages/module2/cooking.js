@@ -164,7 +164,7 @@ export default function Cooking() {
         else{
           callUpdate("m2");
           moduleUpdate("http://localhost:3001/api/game/module2/cooking/completed");
-          window.navigateToPage("/");
+          window.navigateToPage("/map");
         }  
 });
 

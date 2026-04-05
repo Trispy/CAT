@@ -1,20 +1,14 @@
 import { useEffect } from "react";
 import Phaser from "phaser";
 
+import moduleUpdate from "../../components/moduleupdate";
+
 import bg1 from "../../assets/Plainbackground.png";
-import healthy from "../../assets/M1G1/Healthy.png";
-import fever from "../../assets/M1G1/Fever.png";
-import runnyNose from "../../assets/M1G1/RunnyNose.png";
-import nausea from "../../assets/M1G1/Nausea.png";
 import check from "../../assets/M3G1/foodboxCheck.png";
 import xMark from "../../assets/M3G1/foodboxX.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import erinText from "../../assets/M3G1/erintextbox.png"
 import next from "../../assets/M1G1/nextbutton.png";
-import { defaultFont } from "../../formatting";
-import { defaultFontSize } from "../../formatting";
-import { defaultFontColor } from "../../formatting";
-import { defaultTypingSpeed } from "../../formatting";
 import { useNavigate } from "react-router-dom";
 import babyfood from "../../assets/M3G2/babyfood.png"; 
 import beefexpired from "../../assets/M3G2/beefexpired.png"; 
@@ -474,6 +468,7 @@ export default function Expiration() {
                             obj.setVisible(false);
                         }
                     });
+                    
 
                     const sprite = this[item.key];
                                         if (!sprite) {
@@ -524,6 +519,7 @@ export default function Expiration() {
                         this.showPopup(`${this.currentItem.label}`);
 
                         this.seeDateButton.destroy();
+                        
                     });
                     this.seeDateButton.on("pointerdown", () => {
                         if (this.popupOpen) return;
@@ -610,7 +606,12 @@ export default function Expiration() {
                     this.currentSprite.destroy();
 
                     this.currentIndex++;
-                    this.loadNextItem();
+                    if (this.currentIndex >= this.foodItems.length) {
+                        moduleUpdate("http://localhost:3001/api/game/module3/expiration/completed");
+                        navigate("/module3/allergenIdentification");
+                    } else {
+                        this.loadNextItem();
+                    }
                 } else {
                     this.typewriteText(`Incorrect!\n${this.currentItem.reason}`, "popup");
 
