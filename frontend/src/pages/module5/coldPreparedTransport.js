@@ -13,6 +13,8 @@ import bg5 from "../../assets/M5G1/OpenFridgeFullCooler.png";
 import ice from "../../assets/M5G1/Ice.png";
 import thermometer from "../../assets/M5G1/IceTherm.png";
 import iceBox from "../../assets/M5G1/icecooler.png"
+import closedBox from "../../assets/M5G1/closedcooler.png";
+import emptyBox from "../../assets/M5G1/emptycooler.png";
 import prepFood1 from "../../assets/M5G1/PreparedFood1.png"
 import prepFood2 from "../../assets/M5G1/PreparedFood2.png"
 import hand from "../../assets/M2Cooking/ThermometerHand.png";
@@ -85,7 +87,9 @@ export default function ColdPrepTransport() {
                 this.load.image("bg4", bg4);
                 this.load.image("bg5", bg5);
                 this.load.image("ice", ice);        
-                this.load.image("iceBox", iceBox);  
+                this.load.image("openBox", iceBox);  
+                this.load.image("closedBox", closedBox);                
+                this.load.image("emptyBox", emptyBox);  
                 this.load.image("therm", thermometer);
                 this.load.image("hand", hand);              
 
@@ -196,15 +200,15 @@ export default function ColdPrepTransport() {
                 this.emptyBox = this.add.image(
                     this.iceboxX, 
                     this.iceboxY, 
-                    "iceBox")
+                    "emptyBox")
                 .setOrigin(0)
                 .setScale(this.iceboxScale)
                 .setVisible(true);
 
                 this.closedBox = this.add.image(
-                    this.iceboxX, 
-                    this.iceboxY, 
-                    "iceBox")
+                    this.iceboxX - 20, 
+                    this.iceboxY + 150, 
+                    "closedBox")
                 .setOrigin(0)
                 .setScale(this.iceboxScale)
                 .setVisible(false);
@@ -212,7 +216,7 @@ export default function ColdPrepTransport() {
                  this.openBox = this.add.image(
                     this.iceboxX, 
                     this.iceboxY, 
-                    "iceBox")
+                    "openBox")
                 .setOrigin(0)
                 .setScale(this.iceboxScale)
                 .setVisible(false);
@@ -268,15 +272,15 @@ export default function ColdPrepTransport() {
                 .setVisible(false);
 
                 this.coolertop1 = this.add.rectangle(650,10, 1000, 350).setOrigin(0);
-                this.coolertop1.setStrokeStyle(4, 0o0);
+                //this.coolertop1.setStrokeStyle(4, 0o0);
                 this.coolertop1.setVisible(false);
 
                 this.coolertop2 = this.add.rectangle(650,10, 1000, 350).setOrigin(0);
-                this.coolertop2.setStrokeStyle(4, 0o0);
+                //this.coolertop2.setStrokeStyle(4, 0o0);
                 this.coolertop2.setVisible(false);
 
                 this.coolertop3 = this.add.rectangle(650,10, 1000, 350).setOrigin(0);
-                this.coolertop3.setStrokeStyle(4, 0o0);
+                //this.coolertop3.setStrokeStyle(4, 0o0);
                 this.coolertop3.setVisible(false);
 
                 this.textboxErin = this.add.container(this.bg1.width / 2 - 640, 50);
@@ -360,6 +364,9 @@ export default function ColdPrepTransport() {
                         if(this.emptyBox){
                             console.log("hi");
                             this.ice.setVisible(false);
+                            this.openBox.setVisible(true);
+                            this.openBox.setScale(this.zoomedScale);
+                            this.openBox.setPosition(this.zoomedX, this.zoomedY);
                             this.coolertop1.setInteractive();
                             this.coolertop1.setVisible(true);
                             this.iterateGameMessage();
@@ -382,6 +389,7 @@ export default function ColdPrepTransport() {
                        this.bg1.setTexture("bg3");
                         this.emptyBox.destroy();
                         this.emptyBox = null;
+                        this.openBox.setVisible(false);
                         this.closedBox.setVisible(true);
                         //this.erin.setVisible(true);
                         if(!this.timerStart){
@@ -430,14 +438,16 @@ export default function ColdPrepTransport() {
                     this.input.setDraggable(this.prepFood1);
                     this.input.setDraggable(this.prepFood2);
                     this.openBox.setVisible(true);
+                    this.openBox.setScale(this.iceboxScale);
+                    this.openBox.setPosition(this.iceboxX, this.iceboxY);
                     
                 })
                   this.closedBox.on("pointerdown", () => {
                     this.iterateGameMessage();
                     this.timerText.destroy();
                     //this.erin.setVisible(false);
-                    this.closedBox.setScale(this.zoomedScale);
-                    this.closedBox.setPosition(this.zoomedX,this.zoomedY);
+                    this.closedBox.setVisible(false);
+                    this.openBox.setVisible();
                     this.bg1.setTexture("bg4");
                     this.therm.setInteractive();
                     this.therm.setVisible(true);
@@ -515,7 +525,7 @@ export default function ColdPrepTransport() {
             this.tweens.add({
                 targets: hand,
                 angle: -235,
-                duration: 2000,
+                duration: 5000,
                 ease:'Linear',
                 onComplete: () => {
                     this.coolertop2.setInteractive();
@@ -530,7 +540,7 @@ export default function ColdPrepTransport() {
                 const itemBounds = draggedItem.getBounds();
                 //this.rect1.setStrokeStyle(4, 0o0);
                 //this.rect2.setStrokeStyle(4, 0o0);
-                let targetBounds = this.rect1.getBounds();
+                let targetBounds = this.openBox.getBounds();
                 if(draggedItem === this.prepFood1|| draggedItem === this.prepFood2){
                      targetBounds =  this.rect2.getBounds();                
                 }    
@@ -541,7 +551,7 @@ export default function ColdPrepTransport() {
                 }
                 return false;
             }
-            typewriteText(text, type, speed = 25) {
+            typewriteText(text, type, speed = 30) {
                 //removes old timer before new one starts
                 if (this.typingEvent) {
                     this.typingEvent.remove(false);

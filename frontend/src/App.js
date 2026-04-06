@@ -16,6 +16,8 @@ import M1Nav from './pages/module1/module1Navigate.js';
 import OrientationGuard from "./components/orientationguard";
 import Allergen from './pages/module3/allergens.js';
 import ColdPrepTransport from './pages/module5/coldPreparedTransport.js';
+import HotPrepTransport from './pages/module5/hotPreparedTransport.js';
+
 
 import Expiration from './pages/module3/expiration.js'; 
 function App() {
@@ -38,6 +40,7 @@ function App() {
           <Route path="/module3/canSorting" element={<Can />} />
           <Route path="/module3/allergenIdentification" element={<Allergen />} />
           <Route path="/module5/coldPreparedTransport" element={<ColdPrepTransport />} />
+          <Route path="/module5/hotPreparedTransport" element={<HotPrepTransport />} />
         </Routes>
       </OrientationGuard>
     </BrowserRouter>
