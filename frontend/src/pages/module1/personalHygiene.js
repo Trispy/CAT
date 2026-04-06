@@ -27,6 +27,7 @@ import hairtie from "../../assets/M1G2/Hairtie.png";
 import erintextbox from "../../assets/erintextbox.png";
 import TextboxErin from "../../components/textboxerin";
 import moduleUpdate from "../../components/moduleupdate";
+import mapbutton from "../../assets/mapbutton.png";
 //has multiple scenes for each step of the personal hygiene process. Each scene has its own interactive elements and logic. The main component manages the overall game state and transitions between scenes based on user actions and progress.
 
 function PersonalHygiene() {
@@ -1101,6 +1102,19 @@ class FinalScene extends Phaser.Scene {
                 )}
             </div>
         )}
+          <img
+                          src={mapbutton}
+                          alt="map"
+                          onClick={() => navigate("/map")}
+                          style={{
+                                          position: "absolute",
+                                          top: "4px",
+                                          right: "625px",
+                                          width: "100px",
+                                          cursor: "pointer",
+                                          zIndex: 10
+                                      }}
+                      />
 
         {showFinalText && gameStage === "final" && (
            <div

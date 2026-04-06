@@ -15,13 +15,16 @@ export default function M1Nav() {
             }
             )
             const data = await response.json();
+            console.log(data);
             // parse data
             if(!data.symptoms)
                 navigate('/module1/symptoms', { replace: true });
             else if(!data.personalHygiene)
                 navigate('/module1/personalHygiene', { replace: true });
-            else
+            else if(!data.location)
                 navigate('/module1/onLocation', { replace: true });
+            else
+                navigate('/map', { replace: true });
         } catch (error) {
             console.error('Error fetching data:', error);
         }

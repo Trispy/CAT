@@ -93,7 +93,7 @@ function Login() {
 
                 <div className="home">
                     <Link to="/createaccount">
-                        <Button text="Create a New Account"></Button>
+                        <input type="submit" value="Create a New Account" />
                     </Link>
                 </div>
             </form>

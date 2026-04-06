@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import Phaser from "phaser";
 
+import callUpdate from "../../components/callupdate";
+import moduleUpdate from "../../components/moduleupdate";
+
 import bg1 from "../../assets/Plainbackground.png";
 import healthy from "../../assets/M1G1/Healthy.png";
 import fever from "../../assets/M1G1/Fever.png";
@@ -11,10 +14,6 @@ import xMark from "../../assets/M3G1/foodboxX.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import erinText from "../../assets/M3G1/erintextbox.png"
 import next from "../../assets/M1G1/nextbutton.png";
-import { defaultFont } from "../../formatting";
-import { defaultFontSize } from "../../formatting";
-import { defaultFontColor } from "../../formatting";
-import { defaultTypingSpeed } from "../../formatting";
 
 import bar from "../../assets/M3G3/Bar.png";
 import cookies from "../../assets/M3G3/Cookies.png";
@@ -26,7 +25,7 @@ import sauce from "../../assets/M3G3/Sauce.png";
 import seaweed from "../../assets/M3G3/Seaweed.png";
 import stock from "../../assets/M3G3/Stock.png";
 import yogurt from "../../assets/M3G3/Yogurt.png";
-
+import mapbutton from "../../assets/mapbutton.png";
 import { useNavigate } from "react-router-dom";
 
 export default function Allergens() {
@@ -434,6 +433,8 @@ export default function Allergens() {
                         this.cycleScenarios();
 
                     } else {
+                        moduleUpdate("http://localhost:3001/api/game/module3/allergenIdentification/completed");
+                        callUpdate("m3");
                         window.navigateToPage("/map");
                     }
                 });
@@ -583,6 +584,19 @@ export default function Allergens() {
                 backgroundColor: "black"
             }}
         >
+            <img
+                            src={mapbutton}
+                            alt="map"
+                            onClick={() => navigate("/map")}
+                            style={{
+                                            position: "absolute",
+                                            top: "4px",
+                                            right: "625px",
+                                            width: "100px",
+                                            cursor: "pointer",
+                                            zIndex: 10
+                                        }}
+                        />
             <div
                 id="phaser-game"
                 style={{

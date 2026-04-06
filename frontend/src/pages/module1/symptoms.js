@@ -12,6 +12,7 @@ import check from "../../assets/M1G1/Check.png";
 import xMark from "../../assets/M1G1/X.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import next from "../../assets/M1G1/nextbutton.png";
+import mapbutton from "../../assets/mapbutton.png";
 
 
 import { useNavigate } from "react-router-dom";
@@ -315,6 +316,19 @@ export default function Symptoms() {
           zIndex: 1
         }}
       />
+     <img
+                     src={mapbutton}
+                     alt="map"
+                     onClick={() => navigate("/map")}
+                     style={{
+                                     position: "absolute",
+                                     top: "4px",
+                                     right: "625px",
+                                     width: "100px",
+                                     cursor: "pointer",
+                                     zIndex: 10
+                                 }}
+                 />
     </div>
   );
 }

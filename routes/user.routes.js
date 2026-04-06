@@ -18,7 +18,7 @@ router.post('/createaccount', async (req, res) => {
     }
      
     const user = new User({ firstName, lastName, username, email });
-        await Module1.create({
+    await Module1.create({
       username: user.username,
       symptoms: false,
       personalHygiene: false,

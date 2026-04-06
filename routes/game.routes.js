@@ -19,8 +19,8 @@ router.post(
   async (req, res) => {
     try {
       const username = req.user.username;
-      console.log(req.user); 
-      console.log("HELLO"); 
+      console.log(req.user);
+      console.log("HELLO");
 
       const updated = await Module1.findOneAndUpdate(
         { username },
@@ -79,7 +79,7 @@ router.post(
 router.get("/module1/status", requireAuth, async (req, res) => {
   try {
     const username = req.user.username;
-    console.log("TESTING"); 
+    console.log("TESTING");
     console.log(req.user);
 
     const data = await Module1.findOne({ username });
@@ -180,11 +180,12 @@ router.post('/updateComplete', async (req, res) => {
 
     const user = await User.findOne({ username });
 
-    if(module === "m1") user.finished_m1 = true;
-    else if(module === "m2") user.finished_m2 = true;
+    if (module === "m1") user.finished_m1 = true;
+    else if (module === "m2") user.finished_m2 = true;
+    else if (module === "m3") user.finished_m3 = true;
     await user.save();
     res.status(200).json({ message: 'Module 1 summary created successfully with user: ', user });
-  } 
+  }
   catch (error) {
     console.error('Error creating account:', error);
     res.status(500).json({ message: 'Server error' });
@@ -252,6 +253,89 @@ router.get('/moduleSummary', requireAuth, async (req, res) => {
 
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+//mod 3 routes
+
+// mark as complete
+router.post(
+  "/module3/canSorting/completed",
+  checkAccess("module3", "cansort"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+      console.log(req.user);
+
+      const updated = await Module3.findOneAndUpdate(
+        { username },
+        { cansort: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+router.post(
+  "/module3/expiration/completed",
+  checkAccess("module3", "expiration"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const updated = await Module3.findOneAndUpdate(
+        { username },
+        { expiration: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+router.post(
+  "/module3/allergenIdentification/completed",
+  checkAccess("module3", "allergenIdentification"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const updated = await Module3.findOneAndUpdate(
+        { username },
+        { allergenIdentification: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+// status
+router.get("/module3/status", requireAuth, async (req, res) => {
+  try {
+    const username = req.user.username;
+    console.log("TESTING");
+    console.log(req.user);
+
+    const data = await Module3.findOne({ username });
+
+    res.json({
+      cansort: data?.cansort || false,
+      expiration: data?.expiration || false,
+      allergenIdentification: data?.allergenIdentification || false,
+    });
+  } catch (err) {
+    res.status(500).json({ message: req.user.username });
   }
 });
 

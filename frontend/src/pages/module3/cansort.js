@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import Phaser from "phaser";
 
+import moduleUpdate from "../../components/moduleupdate";
+
 import bg1 from "../../assets/Plainbackground.png";
 import bulgingCan from "../../assets/M3G1/bulgingCan.png";
 import cereal from "../../assets/M3G1/cereal.png";
@@ -16,7 +18,7 @@ import xMark from "../../assets/M3G1/foodboxX.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import erinText from "../../assets/M3G1/erintextbox.png"
 import next from "../../assets/M1G1/nextbutton.png";
-
+import mapbutton from "../../assets/mapbutton.png";
 
 
 import { useNavigate } from "react-router-dom";
@@ -45,7 +47,7 @@ export default function Cans() {
             ];
 
             transitions = [
-                "As a volunteer, you will may be hands on with all sorts of food products. While understanding when a package is good to use is important, it is equally as important to ask a supervisor if you have any questions, or aren't sure whether a package or can is bad."
+                "As a volunteer, you may be hands-on with all sorts of food products. While understanding when a package is good to use is important, it is equally as important to ask a supervisor if you have any questions, or aren't sure whether a package or can is bad."
             ];
 
             constructor() {
@@ -314,7 +316,8 @@ export default function Cans() {
                         this.cycleScenarios();
 
                     } else {
-                        window.navigateToPage("/map");
+                        moduleUpdate("http://localhost:3001/api/game/module3/canSorting/completed");
+                        window.navigateToPage("/module3/expiration");
                     }
                 });
 
@@ -467,6 +470,19 @@ export default function Cans() {
                 backgroundColor: "black"
             }}
         >
+            <img
+                            src={mapbutton}
+                            alt="map"
+                            onClick={() => navigate("/map")}
+                            style={{
+                                            position: "absolute",
+                                            top: "4px",
+                                            right: "625px",
+                                            width: "100px",
+                                            cursor: "pointer",
+                                            zIndex: 10
+                                        }}
+                        />
             <div
                 id="phaser-game"
                 style={{

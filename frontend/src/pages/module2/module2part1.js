@@ -31,6 +31,7 @@ import gloveBox from "../../assets/M1G3/gloveBox.png";
 import handLeft from "../../assets/M1G3/handLeft.png";
 import handRight from "../../assets/M1G3/handRight.png";
 import sudImg from "../../assets/M1G3/sud.png";
+import mapbutton from "../../assets/mapbutton.png";
 
 
 
@@ -1304,6 +1305,19 @@ useEffect(() => {
                     </div>
                 </div>
             )}
+             <img
+                             src={mapbutton}
+                             alt="map"
+                             onClick={() => navigate("/map")}
+                             style={{
+                                             position: "absolute",
+                                             top: "4px",
+                                             right: "625px",
+                                             width: "100px",
+                                             cursor: "pointer",
+                                             zIndex: 20001
+                                         }}
+                         />
 
         </div>
     );

@@ -45,11 +45,11 @@ function CreateAccount() {
         Last Name: <input name="lastName" onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}/>
         </label>
 
-        <Button type="submit" text="Create a New Account"/>
+       <input type="submit" value="Create a New Account" />
         <p className='home'>Already have an account?</p>
         <div className="home">
         <Link to="/login">
-            <Button text="Log In"></Button>
+            <input type="submit" value="Login" />
         </Link>
         </div>
     </form>

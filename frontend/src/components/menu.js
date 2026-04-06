@@ -1,60 +1,43 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Menu() {
   const navigate = useNavigate();
   const [openIndex, setOpenIndex] = useState(null);
-
+  const [summary, setSummary] = useState(null);
+  useEffect(() => {
+          const token = localStorage.getItem("token");
+  
+          fetch("http://localhost:3001/api/game/moduleSummary", {
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+          })
+              .then(res => {
+                  if (!res.ok) throw new Error("Auth failed");
+                  return res.json();
+              })
+              .then(data => setSummary(data))
+              .catch(err => console.error("FETCH ERROR:", err));
+      }, []);
   // mock data
-  const data = {
-    finished_m1: true,
-    module1: {
-      symptoms: true,
-      personalHygiene: true,
-      location: false,
-    },
-    module2: {
-      module2part1: false,
-      chopping: false,
-      cooking: false,
-    },
-    module3: {
-      module3part1: false,
-      module3part2: false,
-      module3part3: false,
-    },
-    module4: {
-      module4part1: false,
-      module4part2: false,
-      module4part3: false,
-    },
-    module5: {
-      module5part1: false,
-      module5part2: false,
-      module5part3: false,
-    },
-    module6: {
-      module6part1: false,
-      module6part2: false,
-      module6part3: false,
-    },
-  };
+ console.log("SUMMARY:", summary);
 
   const routeMap = {
     module1: {
       symptoms: "/module1/symptoms",
       personalHygiene: "/module1/personalHygiene",
-      location: "/module1/location",
+      location: "/module1/onLocation",
     },
     module2: {
-      module2part1: "/module2/module2part1",
-      chopping: "/module2/chopping",
+      module2part1: "/module2/therm",
+      chopping: "/module2/cleaning",
       cooking: "/module2/cooking",
     },
     module3: {
-      module3part1: "/module3/module3part1",
-      module3part2: "/module3/module3part2",
-      module3part3: "/module3/module3part3",
+      module3part1: "/module3/expiration",
+      module3part2: "/module3/canSorting",
+      module3part3: "/module3/allergenIdentification",
     },
     module4: {
       module4part1: "/module4/module4part1",
@@ -82,61 +65,105 @@ export default function Menu() {
     { name: "Module 6", key: "module6" },
   ];
 
-  // 🔥 SAME unlock logic
-  const getGames = (moduleObj) => {
-    const entries = Object.entries(moduleObj || {});
-    let lastTrue = -1;
+  
+ const getGames = (moduleObj) => {
+      if (!summary) return [];
 
-    entries.forEach(([_, val], i) => {
+      const allEntries = [];
+
+      const modules = [
+      summary.module1,
+      summary.module2,
+      summary.module3,
+      summary.module4,
+      summary.module5,
+      summary.module6
+      ];
+
+      for (let m of modules) {
+      if (!m || typeof m !== "object") continue;
+
+      for (let key in m) {
+        if (key === "_id" || key === "username" || key === "__v") continue;
+        allEntries.push([key, m[key]]);
+      }
+
+      }
+
+      let lastTrue = -1;
+
+      allEntries.forEach(([_, val], i) => {
       if (val === true) lastTrue = i;
-    });
+      });
 
-    return entries.map(([name, val], i) => ({
-      name,
-      completed: val,
-      clickable: val === true || i === lastTrue + 1,
-    }));
-  };
+      const nextIndex = lastTrue === -1 ? 0 : lastTrue + 1;
+
+      const moduleEntries = Object.entries(moduleObj || {})
+      .filter(([key]) => key !== "_id" && key !== "username" && key !== "__v");
+
+      return moduleEntries.map(([name, val]) => {
+      const globalIndex = allEntries.findIndex((entry) => entry[0] === name);
+
+      return {
+        name,
+        completed: val,
+        clickable: val === true || globalIndex === nextIndex
+      };
+
+});
+};
 
   return (
     <div
       style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: "420px",
-        backgroundColor: "#f5e6c8",
-        border: "5px solid black",
-        borderRadius: "20px",
-        padding: "20px",
-        zIndex: 20,
-        fontFamily: "sans-serif",
-      }}
-    >
-      <h2 style={{ textAlign: "center" }}>Select Module</h2>
+          position: "absolute",
+          top: "40%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
 
-      {modules.map((mod, index) => {
-        const games = getGames(data[mod.key]);
+          width: "85vw",        
+          maxWidth: "300px",
+
+          height: "auto",
+          maxHeight: openIndex !== null ? " 100vh" : "80vh",
+        overflowY: "auto",
+
+          backgroundColor: "#f5e6c8",
+          border: "2px solid black",
+          borderRadius: "12px",
+          padding: "6px",       
+          zIndex: 20,
+          fontFamily: "sans-serif",
+        }}
+    >
+      <h2 style={{ textAlign: "center", fontSize: "16px", margin: "4px" }}>Select Module</h2>
+
+            {modules.map((mod, index) => {
+              const games = summary?.[mod.key]
+  ? getGames(summary[mod.key])
+  : [];
 
         return (
           <div key={index} style={{ marginBottom: "10px" }}>
-            {/* MODULE HEADER */}
+            
             <div
               onClick={() =>
                 setOpenIndex(openIndex === index ? null : index)
               }
-              style={{
+            style={{
                 backgroundColor: "#e6c89c",
-                border: "3px solid black",
-                borderRadius: "12px",
-                padding: "10px",
-                cursor: "pointer",
-                textAlign: "center",
-                fontWeight: "bold",
+                border: "2px solid black",
+                borderRadius: "8px",
+                padding: "2px",
+                fontSize: "12px",   
               }}
             >
-              {mod.name}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span>{mod.name}</span>
+              <span style={{ fontSize: "12px" }}>
+                {openIndex === index ? "▼" : "▶"}
+              </span>
+            </div>
             </div>
 
         
@@ -150,10 +177,11 @@ export default function Menu() {
                       navigate(routeMap[mod.key][game.name]);
                     }}
                     style={{
-                      marginTop: "5px",
-                      padding: "8px",
+                      marginTop: "1px",
+                      padding: "1px",
                       border: "2px solid black",
                       borderRadius: "10px",
+                     
                       textAlign: "center",
                       backgroundColor: game.clickable
                         ? "#c8f7c5"

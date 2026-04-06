@@ -25,7 +25,7 @@ import panOnion from "../../assets/M2Cooking/Pan_Onions.png";
 import panPepper from "../../assets/M2Cooking/Pan_Peppers.png";
 import thermometerHand from "../../assets/M2Cooking/ThermometerHand.png";
 import next from "../../assets/M1G1/nextbutton.png";
-
+import mapbutton from "../../assets/mapbutton.png";
 import {defaultFontSize} from "../../formatting";
 import {defaultFontColor} from "../../formatting";
 import {defaultTypingSpeed} from "../../formatting";
@@ -164,7 +164,7 @@ export default function Cooking() {
         else{
           callUpdate("m2");
           moduleUpdate("http://localhost:3001/api/game/module2/cooking/completed");
-          window.navigateToPage("/");
+          window.navigateToPage("/map");
         }  
 });
 
@@ -393,6 +393,19 @@ typewriteText(text, speed = defaultTypingSpeed, fontSize = null) {
           zIndex: 1
         }}
       />
+       <img
+                       src={mapbutton}
+                       alt="map"
+                       onClick={() => navigate("/map")}
+                       style={{
+                                       position: "absolute",
+                                       top: "4px",
+                                       right: "625px",
+                                       width: "100px",
+                                       cursor: "pointer",
+                                       zIndex: 10
+                                   }}
+                   />
     </div>
 );
 }
