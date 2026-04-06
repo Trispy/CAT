@@ -10,11 +10,12 @@ const mod3_dic = {"module3part1": 0, "module3part2": 1, "module3part3": 2};
 const mod4_dic = {"module4part1": 0, "module4part2": 1, "module4part3": 2};
 const mod5_dic = {"module5part1": 0, "module5part2": 1, "module5part3": 2};
 const mod6_dic = {"module6part1": 0, "module6part2": 1, "module6part3": 2};
+
 const checkAccess = (moduleName, gameName) => {
   return async (req, res, next) => {
     try {
 
-    
+      
       const authHeader = req.headers.authorization;
       if (!authHeader) {
         return res.status(401).json({ message: "No token provided" });
@@ -32,11 +33,10 @@ const checkAccess = (moduleName, gameName) => {
 
       let startingModule1 = "symptoms"; 
       let startingModule2 = "module2part1"; 
+     
       // MODULE 1
       if (moduleName === "module1") {
-        if (user.finished_m1 === "locked") {
-          return res.status(403).json({ message: "Module 1 is locked" });
-        }
+        
 
         const mod1 = await Module1.findOne({ username: user.username });
 
@@ -60,8 +60,8 @@ const checkAccess = (moduleName, gameName) => {
 
       // MODULE 2
       if (moduleName === "module2") {
-        if (user.finished_m2 === "locked") {
-          return res.status(403).json({ message: "Module 2 is locked" });
+        if (user.finished_m1 === false) {
+          return res.status(403).json({ message: "Module 2 is locked- must complete module 1." });
         }
 
         const mod2 = await Module2.findOne({ username: user.username });
@@ -82,6 +82,8 @@ const checkAccess = (moduleName, gameName) => {
             return res.status(403).json({ message: `${gameName} not unlocked` });
         }
       }
+ 
+      
 
       /*// MODULE 3
       if (moduleName === "module3") {

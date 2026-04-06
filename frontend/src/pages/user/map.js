@@ -3,10 +3,13 @@ import { useNavigate } from "react-router-dom";
 import map from "../../assets/map.png";
 import "./map.css";
 import Phaser from "phaser";
+import menubutton from "../../assets/menubutton.png";
+import Menu from "../../components/menu.js";
 
 function Map() {
     const [m1, setm1] = useState(sessionStorage.getItem("m1"));
     const [m2, setm2] = useState(sessionStorage.getItem("m2"));
+    const [showMenu, setShowMenu] = useState(false);
     console.log(m1);
     console.log(m2);
 
@@ -91,6 +94,7 @@ function Map() {
         }
         const config = {
             type: Phaser.AUTO,
+            transparent: true,
             scale: {
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -135,21 +139,56 @@ function Map() {
                     zIndex: 1
                 }}
             />
-            <div className="map-container">
-                <img src={map} alt="map" className="map-image" />
-                {/* Module 1 clickable area */}
-                {(!m1) && (
-                    <div className="module1" onClick={goToModule1}>
-                        {createClickIndicator("")}
-                    </div>
-                )}
-                {m1 && (!m2) && (
-                    <div className="module2" onClick={goToModule2}>
-                        {createClickIndicator("")}
-                    </div>
-                )}
+             <img
+            src={menubutton}
+            alt="menu"
+            onClick={() => setShowMenu(true)}
+            style={{
+                position: "absolute",
+                top: "0px",
+                right: "90px",
+                width: "250px",
+                cursor: "pointer",
+                zIndex: 10
+            }}
+        />
+
+     
+        {showMenu && (
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                    height: "100%",
+                    zIndex: 20
+                }}
+            >
+                <Menu />
+
+           
+                <div
+                    onClick={() => setShowMenu(false)}
+                    style={{
+                        position: "absolute",
+                        top: "20px",
+                        right: "20px",
+                        fontSize: "40px",
+                        color: "white",
+                        cursor: "pointer",
+                        zIndex: 30
+                    }}
+                >
+                    ✖
+                </div>
             </div>
+        )}
+
+            
         </div>
+        
     );
 }
 
