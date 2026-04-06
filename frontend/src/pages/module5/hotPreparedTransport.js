@@ -440,6 +440,7 @@ export default function HotPrepTransport() {
                         this.transitions.shift();
                     }
                     else {
+                        this.cleanupScene();
                         window.navigateToPage("/map");
                     }
                 });
@@ -635,7 +636,59 @@ export default function HotPrepTransport() {
                     }
         
     
-    
+    cleanupScene() {
+    const objects = [
+        this.bg1,
+        this.next,
+        this.erin,
+
+        this.emptyBag,
+        this.closedBag,
+
+        this.tupper,
+        this.tupperChicken,
+
+        this.openThermos,
+        this.closedThermos,
+
+        this.chickenPan,
+        this.soupPan,
+        this.pan1,
+        this.pan2,
+
+        this.chicken,
+        this.soup,
+
+        this.therm1,
+        this.therm2,
+        this.hand1,
+        this.hand2,
+
+        this.zoney,
+
+        this.textbox,
+        this.textboxImage,
+        this.textboxText,
+        this.textboxErin,
+        this.textboxErinImage,
+
+        this.timerText
+    ];
+
+    objects.forEach(obj => {
+        if (obj && obj.destroy) {
+            obj.destroy(true);
+        }
+    });
+
+    if (this.typingEvent) this.typingEvent.remove(false);
+
+    this.time.removeAllEvents();   
+    this.tweens.killAll();           
+    this.input.removeAllListeners(); 
+
+    this.scene.stop();
+}
     centerHand() {
             this.hand1.x = this.therm1.getCenter().x - 20;
             this.hand1.y = this.therm1.getCenter().y + 10;

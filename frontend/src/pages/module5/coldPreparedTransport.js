@@ -332,7 +332,8 @@ export default function ColdPrepTransport() {
                         this.transitions.shift();
                     }
                     else {
-                        window.navigateToPage("/map");
+                        this.cleanupScene();
+                        window.navigateToPage("/module5/hotPreparedTransport");
                     }
                 });
 
@@ -512,6 +513,45 @@ export default function ColdPrepTransport() {
                     this.coolertop3.disableInteractive();
                     this.coolertop3.destroy();
                 })
+        }
+        cleanupScene() {
+            const objects = [
+                this.bg1,
+                this.next,
+                this.emptyBox,
+                this.closedBox,
+                this.openBox,
+                this.erin,
+                this.therm,
+                this.hand,
+                this.ice,
+                this.prepFood1,
+                this.prepFood2,
+                this.coolertop1,
+                this.coolertop2,
+                this.coolertop3,
+                this.textbox,
+                this.textboxImage,
+                this.textboxText,
+                this.textboxErin,
+                this.textboxErinImage,
+                this.timerText
+            ];
+
+            objects.forEach(obj => {
+                if (obj && obj.destroy) {
+                    obj.destroy(true);
+                }
+            });
+
+            if (this.typingEvent) this.typingEvent.remove(false);
+            this.time.removeAllEvents();
+
+            this.input.removeAllListeners();
+
+            this.tweens.killAll();
+
+            this.scene.stop();
         }
         iterateGameMessage(){
             console.log("exd");
