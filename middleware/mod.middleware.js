@@ -85,7 +85,7 @@ const checkAccess = (moduleName, gameName) => {
         }
       }
 
-      /*// MODULE 3
+      // MODULE 3
       if (moduleName === "module3") {
         if (user.finished_m3 === "locked") {
           return res.status(403).json({ message: "Module 3 is locked" });
