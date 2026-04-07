@@ -1,30 +1,35 @@
 import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+
+
+import Menu from "../../components/menu.js";
 
 
 export default function M1Nav() {
     const navigate = useNavigate();
+    const [showMenu, setShowMenu] = useState(false);
     const nav = async (e) => {
         try {
             const jwt = localStorage.getItem("token");
             const response = await fetch("http://localhost:3001/api/game/module1/status", {
-                method:"GET",
-                headers:{
-                ContentType:"Application/json",
-                Authorization: `Bearer ${jwt}`
+                method: "GET",
+                headers: {
+                    ContentType: "Application/json",
+                    Authorization: `Bearer ${jwt}`
                 }
             }
             )
             const data = await response.json();
             console.log(data);
             // parse data
-            if(!data.symptoms)
+            if (!data.symptoms)
                 navigate('/module1/symptoms', { replace: true });
-            else if(!data.personalHygiene)
+            else if (!data.personalHygiene)
                 navigate('/module1/personalHygiene', { replace: true });
-            else if(!data.location)
+            else if (!data.location)
                 navigate('/module1/onLocation', { replace: true });
             else
-                navigate('/map', { replace: true });
+                setShowMenu(true);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -32,7 +37,67 @@ export default function M1Nav() {
 
     nav();
 
-    return(
-        <div>Redirecting...</div>
+    return (
+        <div>
+            <div>
+                {!showMenu && (
+                    <div>
+                        Redirecting...
+                    </div>
+                )}
+            </div>
+            <div
+                style={{
+                    height: "100vh",
+                    overflow: "hidden",
+                    position: "relative",
+                    backgroundColor: "black"
+                }}
+            >
+                {showMenu && (
+                    <div>
+                        <div
+                        style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}>
+                            <p style={{ color: "white" }}>You have already completed this module!</p>
+                        </div>
+                        <div
+                            style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                backgroundColor: "rgba(0, 0, 0, 0.1)",
+                                height: "100%",
+                                zIndex: 20,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}
+                        >
+                            <Menu />
+
+                            <div
+                                onClick={() => navigate('/map', { replace: true })}
+                                style={{
+                                    position: "absolute",
+                                    top: "2px",
+                                    right: "120px",
+                                    fontSize: "40px",
+                                    color: "white",
+                                    cursor: "pointer",
+                                    zIndex: 30
+                                }}
+                            >
+                                ✖
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
     )
 }

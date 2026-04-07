@@ -226,9 +226,9 @@ router.get('/moduleSummary', requireAuth, async (req, res) => {
 
       finished_m3: user.finished_m3,
       module3: {
-        module3part1: mod3?.module3part1 ?? false,
-        module3part2: mod3?.module3part2 ?? false,
-        module3part3: mod3?.module3part3 ?? false
+        cansort: mod3?.cansort ?? false,
+        expiration: mod3?.expiration ?? false,
+        allergenIdentification: mod3?.allergenIdentification ?? false
       },
       finished_m4: user.finished_m4,
       module4: {
