@@ -1,3 +1,5 @@
+const API = process.env.REACT_APP_API_URL;
+
 const callUpdate = async (e) => {
     sessionStorage.setItem(e, true);
     const data = {
@@ -5,7 +7,7 @@ const callUpdate = async (e) => {
         module: e
     };
     try {
-        const add = await fetch("http://localhost:3001/api/game/updateComplete", {
+        const add = await fetch(`${API}/api/game/updateComplete`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

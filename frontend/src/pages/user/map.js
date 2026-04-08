@@ -5,8 +5,9 @@ import "./map.css";
 import Phaser from "phaser";
 import menubutton from "../../assets/menubutton.png";
 import Menu from "../../components/menu.js";
-
-function Map() {
+import Settings from "../../components/settings";
+const API = process.env.REACT_APP_API_URL;
+function Map({ openMenu }) {
     const [showMenu, setShowMenu] = useState(false);
     const [summary, setSummary] = useState([]);
 
@@ -16,7 +17,7 @@ function Map() {
     useEffect(() => {
         const token = localStorage.getItem("token");
 
-        fetch("http://localhost:3001/api/game/moduleSummary", {
+        fetch(`${API}/api/game/moduleSummary`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -202,54 +203,20 @@ function Map() {
                     zIndex: 1
                 }}
             />
-
-            <img
-                src={menubutton}
-                alt="menu"
-                onClick={() => setShowMenu(true)}
-                style={{
+            
+            <div
+                  style={{
                     position: "absolute",
-                    top: "0px",
-                    right: "150px",
+                    top: "4px",
+                    right: "110px",
                     width: "100px",
-                    cursor: "pointer",
                     zIndex: 10
-                }}
-            />
-
-            {showMenu && (
-                <div
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        backgroundColor: "rgba(0,0,0,0.5)",
-                        height: "100%",
-                        zIndex: 20,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}
+                  }}
                 >
-                    <Menu />
-
-                    <div
-                        onClick={() => setShowMenu(false)}
-                        style={{
-                            position: "absolute",
-                            top: "2px",
-                            right: "120px",
-                            fontSize: "40px",
-                            color: "white",
-                            cursor: "pointer",
-                            zIndex: 30
-                        }}
-                    >
-                        ✖
-                    </div>
+                  <Settings openMenu={openMenu}/>
                 </div>
-            )}
+
+            
         </div>
     );
 }

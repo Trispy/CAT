@@ -2,7 +2,7 @@ import './login.css';
 import Button from '../../components/button';
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from "react";
-
+const API = process.env.REACT_APP_API_URL;
 function CreateAccount() {
     const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', username: '' })
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ function CreateAccount() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3001/api/users/createaccount', {
+      const response = await fetch(`${API}/api/users/createaccount`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

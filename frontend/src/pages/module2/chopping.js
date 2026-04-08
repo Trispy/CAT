@@ -29,8 +29,10 @@ import rag from "../../assets/M2G2/rag.png";
 import wetCuttingBoard from "../../assets/M2G2/watercuttingboard.png";
 import knife from "../../assets/M2G2/Knife.png";
 import mapbutton from "../../assets/mapbutton.png";
+import Settings from "../../components/settings";
+const API = process.env.REACT_APP_API_URL;
 
-export default function Cleaning() {
+export default function Cleaning({ openMenu }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
@@ -181,8 +183,8 @@ export default function Cleaning() {
                 const bg = this.add.rectangle(
                     width / 2,
                     height / 2,
-                    width * 0.8,
-                    height * 0.8,
+                    width * 0.75,
+                    height * 0.75,
                     0xffffff
                 ).setStrokeStyle(4, 0x000000);
 
@@ -198,13 +200,13 @@ export default function Cleaning() {
                 ).setOrigin(0.5);
 
                 const close = this.add.text(
-                    width * 0.85,
-                    height * 0.15,
+                    width * 0.84,
+                    height * 0.17,
                     "X",
                     {
                         font: "40px Arial",
-                        backgroundColor: "#e2e2e2",
-                        padding: { x: 10, y: 5 }
+                        backgroundColor: "#ff0000",
+                        padding: { x: 20, y: 10 }
                     }
                 )
                     .setInteractive()
@@ -222,14 +224,14 @@ export default function Cleaning() {
                 this.add.image(width / 2, height / 2, "volLocation").setDisplaySize(width, height);
                 let boardClean = false;
                 const helpButton = this.add.text(
-                    width * 0.78,
-                    height * 0.90,
+                    width * 0.89,
+                    height * 0.07,
                     "?",
                     {
-                        font: "60px Arial",
+                        font: "bold 70px sans-serif",
                         backgroundColor: "#ffffff",
                         color: "#5100ff",
-                        padding: { x: 50, y: 30 }
+                        padding: { x: 40, y: 20 }
                     }
                 )
                     .setOrigin(0.5)
@@ -905,7 +907,7 @@ export default function Cleaning() {
             checkWin() {
                 if (numberOfCutMaterials.current === 3) {
                     this.showMes("Win condition met");
-                    moduleUpdate("http://localhost:3001/api/game/module2/chopping/completed");
+                    moduleUpdate(`${API}/api/game/module2/chopping/completed`);
                     navigate('/module2/cooking', { replace: true });
                 }
             }
@@ -1160,19 +1162,18 @@ export default function Cleaning() {
 
                 }}
             />
-           <img
-                           src={mapbutton}
-                           alt="map"
-                           onClick={() => navigate("/map")}
-                           style={{
-                                           position: "absolute",
-                                           top: "4px",
-                                           right: "625px",
-                                           width: "100px",
-                                           cursor: "pointer",
-                                           zIndex: 10
-                                       }}
-                       />
+            <div
+                  style={{
+                    position: "absolute",
+                    top: "4px",
+                    right: "110px",
+                    width: "100px",
+                    zIndex: 10
+                  }}
+                >
+                  <Settings openMenu={openMenu}/>
+                </div>
+         
 
         </div>
     );

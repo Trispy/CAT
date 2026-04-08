@@ -83,96 +83,16 @@ const checkAccess = (moduleName, gameName) => {
         if (gameName !== startingModule2 && mod2[key] === false) {
             return res.status(403).json({ message: `${gameName} not unlocked` });
         }
+        
       }
-
-      /*// MODULE 3
-      if (moduleName === "module3") {
-        if (user.finished_m3 === "locked") {
-          return res.status(403).json({ message: "Module 3 is locked" });
-        }
-
-        const mod3 = await Module3.findOne({ username: user.username });
-
-        if (!mod3) {
-          return res.status(404).json({ message: "Module 3 data not found" });
-        }
-        if (gameName !== startingModule3 && mod3[startingModule3] === false) {
-            return res.status(403).json({ message: "You must start the first step first" });
-        }
-        let prev_number = 0; 
-        if (mod3_dic[gameName] - 1 >= 0) {
-          prev_number = mod3_dic[gameName] - 1; 
-        }
-        const key = Object.keys(mod3_dic).find(k => mod3_dic[k] === prev_number);
-
-        if (gameName !== startingModule3 && mod3[key] === false) {
-            return res.status(403).json({ message: `${gameName} not unlocked` });
+      else if (gameName === "module3" || gameName === "module4" || gameName === "module5" || gameName === "module6") {
+        if (user.finished_m1 === false || user.finished_m2 === false) {
+          return res.status(403).json({ message: `Module ${moduleName} is locked- must complete modules 1 and 2.` });
         }
       }
 
-      /*// MODULE 4
-      if (moduleName === "module4") {
-        if (user.finished_m4 === "locked") {
-          return res.status(403).json({ message: "Module 4 is locked" });
-        }
-
-        const mod4 = await Module4.findOne({ username: user.username });
-
-        if (!mod4) {
-          return res.status(404).json({ message: "Module 4 data not found" });
-        }
-        let prev_number = 0; 
-        if (mod4_dic[gameName] - 1 >= 0) {
-          prev_number = mod4_dic[gameName] - 1; 
-        }
-        const key = Object.keys(obj).find(k => obj[k] === prev_number);
-        if (gameName && mod4[key] === false) {
-          return res.status(403).json({ message: `${gameName} not unlocked` });
-        }
-      }
-
-      // MODULE 5
-      if (moduleName === "module5") {
-        if (user.finished_m5 === "locked") {
-          return res.status(403).json({ message: "Module 5 is locked" });
-        }
-
-        const mod5 = await Module5.findOne({ username: user.username });
-
-        if (!mod5) {
-          return res.status(404).json({ message: "Module 5 data not found" });
-        }
-        let prev_number = 0; 
-        if (mod5_dic[gameName] - 1 >= 0) {
-          prev_number = mod5_dic[gameName] - 1; 
-        }
-        const key = Object.keys(obj).find(k => obj[k] === prev_number);
-
-        if (gameName && mod5[key] === false) {
-          return res.status(403).json({ message: `${gameName} not unlocked` });
-        }
-      }
-
-      // MODULE 6
-      if (moduleName === "module6") {
-        if (user.finished_m6 === "locked") {
-          return res.status(403).json({ message: "Module 6 is locked" });
-        }
-
-        const mod6 = await Module6.findOne({ username: user.username });
-
-        if (!mod6) {
-          return res.status(404).json({ message: "Module 6 data not found" });
-        }
-        let prev_number = 0; 
-        if (mod6_dic[gameName] - 1 >= 0) {
-          prev_number = mod6_dic[gameName] - 1; 
-        }
-        const key = Object.keys(obj).find(k => obj[k] === prev_number);
-        if (gameName && mod6[key] === false) {
-          return res.status(403).json({ message: `${gameName} not unlocked` });
-        }
-      }*/
+      
+      
 
       next();
 

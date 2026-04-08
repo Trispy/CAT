@@ -1,3 +1,5 @@
+const API = process.env.REACT_APP_API_URL;
+
 const moduleUpdate = async (link) => {
 try {
 const jwt = localStorage.getItem("token");

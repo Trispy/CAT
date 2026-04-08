@@ -1,14 +1,16 @@
 import React, { useState , useEffect} from "react";
 import { useNavigate } from "react-router-dom";
+const API = process.env.REACT_APP_API_URL;
 
-export default function Menu() {
+
+export default function Menu({ closeMenu }) {
   const navigate = useNavigate();
   const [openIndex, setOpenIndex] = useState(null);
   const [summary, setSummary] = useState(null);
   useEffect(() => {
           const token = localStorage.getItem("token");
   
-          fetch("http://localhost:3001/api/game/moduleSummary", {
+          fetch(`${API}/api/game/moduleSummary`, {
               headers: {
                   Authorization: `Bearer ${token}`
               }
@@ -117,7 +119,7 @@ export default function Menu() {
     <div
       style={{
           position: "absolute",
-          top: "40%",
+          top: "49%",
           left: "50%",
           transform: "translate(-50%, -50%)",
 
@@ -174,7 +176,11 @@ export default function Menu() {
                     key={i}
                     onClick={() => {
                       if (!game.clickable) return;
-                      navigate(routeMap[mod.key][game.name]);
+                      if (!game.clickable) return;
+
+                        if (closeMenu) closeMenu(); 
+
+                        navigate(routeMap[mod.key][game.name]);
                     }}
                     style={{
                       marginTop: "1px",

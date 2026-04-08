@@ -22,8 +22,11 @@ import saltinecrackers from "../../assets/M3G2/saltinecrackers.png";
 import soup from "../../assets/M3G2/soup.png"; 
 import spoiledgreens from "../../assets/M3G2/spoiledgreen.png"; 
 import mapbutton from "../../assets/mapbutton.png";
+import Settings from "../../components/settings";
+import calendar from "../../assets/calendar.png";
+const API = process.env.REACT_APP_API_URL;
 
-export default function Expiration() {
+export default function Expiration({ openMenu }) {
     const navigate = useNavigate();
     let allInstructions = [
                 "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the expiration date or best by date.\n\nIf the item should be discarded, drag the item to the box with the X. If it is good to be used, drag it to the box with the check.",
@@ -32,7 +35,84 @@ export default function Expiration() {
                 "For this module, items with best buy dates should be disposed of if the date is 6 months after the expiration date."
                 
             ];
+    const today = new Date();
+    const formatDate = (date) => {
+            return date.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            });
+        };
 
+        const addDays = (date, days) => {
+            const newDate = new Date(date);
+            newDate.setDate(newDate.getDate() + days);
+            return newDate;
+        };
+
+        const addMonths = (date, months) => {
+            const newDate = new Date(date);
+            newDate.setMonth(newDate.getMonth() + months);
+            return newDate;
+        };
+        const NotepadCalendar = () => {
+            const today = new Date();
+
+            const month = today.toLocaleString("en-US", { month: "short" }).toUpperCase();
+            const day = today.getDate();
+
+            return (
+                <div
+                    style={{
+                        position: "absolute",
+                        top: "4px",
+                        right: "260px", 
+                        width: "50px",
+                        height: "50px",
+                        zIndex: 30000
+                    }}
+                >
+                    <img
+                        src={calendar}
+                        alt="calendar"
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "contain"
+                        }}
+                    />
+
+                   
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: "35%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            fontSize: "8px",
+                            fontWeight: "bold",
+                            color: "#000"
+                        }}
+                    >
+                        {month}
+                    </div>
+
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: "60%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            fontSize: "12px",
+                            fontWeight: "bold",
+                            color: "#000"
+                        }}
+                    >
+                        {day}
+                    </div>
+                </div>
+        );
+};
     useEffect(() => {
         window.navigateToPage = navigate;
 
@@ -93,8 +173,8 @@ export default function Expiration() {
                     const bg = this.add.rectangle(
                         width / 2,
                         height / 2,
-                        width * 0.8,
-                        height * 0.8,
+                        width * 0.6,
+                        height * 0.6,
                         0xffffff
                     ).setStrokeStyle(4, 0x000000);
 
@@ -103,9 +183,9 @@ export default function Expiration() {
                         height / 2,
                         allInstructions.join("\n\n"),
                         {
-                            font: "bold 32px sans-serif",
+                            font: "bold 30px sans-serif",
                             color: "#000",
-                            wordWrap: { width: width * 0.7 }
+                            wordWrap: { width: width * 0.58 }
                         }
                     ).setOrigin(0.5);
 
@@ -114,9 +194,9 @@ export default function Expiration() {
                         height * 0.15,
                         "X",
                         {
-                            font: "bold 40px sans-serif",
+                            font: "40px Arial",
                             backgroundColor: "#ff0000",
-                            padding: { x: 10, y: 5 }
+                            padding: { x: 20, y: 10 }
                         }
                     )
                     .setInteractive()
@@ -138,8 +218,8 @@ export default function Expiration() {
                     const bg = this.add.rectangle(
                         width / 2,
                         height / 2,
-                        width * 0.8,
-                        height * 0.8,
+                        width * 0.6,
+                        height * 0.6,
                         0xffffff
                     ).setStrokeStyle(4, 0x000000);
 
@@ -148,22 +228,22 @@ export default function Expiration() {
                         height / 2,
                         inputText,
                         {
-                            font: "bold 70px sans-serif",
+                            font: "bold 50px sans-serif",
                             color: "#000",
-                            wordWrap: { width: width * 0.7 }
+                            wordWrap: { width: width * 0.58}
                         }
                     ).setOrigin(0.5);
 
                     const close = this.add.text(
-                        width * 0.85,
-                        height * 0.15,
+                        width * 0.78,
+                        height * 0.24,
                         "X",
                         {
                             font: "40px Arial",
                             backgroundColor: "#ff0000",
                             stroke: "#000000",         
                             strokeThickness: 4,
-                            padding: { x: 15, y: 10 }
+                            padding: { x: 20, y: 10 }
                         }
                     )
                     .setInteractive()
@@ -210,14 +290,14 @@ export default function Expiration() {
                 this.canY = this.bg1.height / 2;
                 // Help Button
                 const helpButton = this.add.text(
-                    this.scale.width * 0.95,   // right side
-                    this.scale.height * 0.1,          
+                    this.scale.width * 0.88,   // right side
+                    this.scale.height * 0.07,          
                     "?",
                     {
                         font: "60px Arial",
                         backgroundColor: "#ffffff",
                         color: "#5100ff",
-                        padding: { x: 40, y: 40 }
+                        padding: { x: 40, y: 20 }
                     }
                 )
                 .setOrigin(0.5)
@@ -310,70 +390,70 @@ export default function Expiration() {
                 this.foodItems = [
                     {
                         key: "babyfood",
-                        label: "Expiration Date: March 20, 2026\n\nTodays Date: March 30, 2026",
+                        expirationDate: addDays(today, -10),
                         type: "expiration",
                         correct: "dispose",
                         reason: "8 days past expiration"
                     },
                     {
                         key: "infantformula",
-                        label: "Expiration Date: March 15, 2026\n\nTodays Date: March 30, 2026",
+                        expirationDate: addDays(today, -15),
                         type: "expiration",
                         correct: "dispose",
                         reason: "Expired"
                     },
                     {
                         key: "chickenexpired",
-                        label: "Expiration Date: March 27, 2026\n\nTodays Date: March 30, 2026",
+                        expirationDate: addDays(today, -3),
                         type: "expiration",
                         correct: "dispose",
                         reason: "1 day past"
                     },
                     {
                         key: "beefexpired",
-                        label: "Expiration Date: March 30, 2026\n\nTodays Date: March 30, 2026",
+                        expirationDate: addDays(today, 0),
                         type: "expiration",
                         correct: "keep",
                         reason: "Still valid"
                     },
                     {
                         key: "salad",
-                        label: "Expiration Date: March 29, 2026\n\nTodays Date: March 30, 2026",
+                        expirationDate: addDays(today, -1),
                         type: "expiration",
                         correct: "keep",
                         reason: "Valid today"
                     },
                     {
                         key: "greens",
-                        label: "Best By: August 2025\n\nTodays Date: March 30, 2026",
+                        bestByDate: addMonths(today, -7),
                         type: "bestby",
                         correct: "dispose",
                         reason: "7+ months past"
                     },
                     {
                         key: "saltinecrackers",
-                        label: "Best By: January 2026 (mold present)\n\nTodays Date: March 30, 2026",
+                        bestByDate: addMonths(today, -2),
                         type: "bestby",
                         correct: "dispose",
                         reason: "Mold present"
                     },
                     {
                         key: "peanutbutter",
-                        label: "Best By: February 2025\n\nTodays Date: March 30, 2026",
+                        bestByDate: addMonths(today, -13),
                         type: "bestby",
                         correct: "dispose",
                         reason: "Over 1 year past"
                     },
                     {
                         key: "pasta",
-                        label: "Best By: November 2025\n\nTodays Date: March 30, 2026",
+                        bestByDate: addMonths(today, -4),
                         type: "bestby",
                         correct: "keep",
                         reason: "~4 months past"
                     },
                     {
                         key: "soup",
-                        label: "Best By: October 2025\n\nTodays Date: March 30, 2026",
+                        bestByDate: addMonths(today, -5),
                         type: "bestby",
                         correct: "keep",
                         reason: "~5 months past, can intact"
@@ -413,7 +493,7 @@ export default function Expiration() {
 
                 this.textboxImage = this.add.image(0, 0, "textbox").setOrigin(0);
 
-                this.textboxText = this.add.text(100, 100, "", {
+                this.textboxText = this.add.text(100, 75, "", {
                     font: "bold 70px sans-serif",
                     color: "#000",
                     wordWrap: {
@@ -517,7 +597,17 @@ export default function Expiration() {
 
                         this.popupOpen = true;
 
-                        this.showPopup(`${this.currentItem.label}`);
+                        const item = this.currentItem;
+
+                        let labelText = "";
+
+                        if (item.type === "expiration") {
+                            labelText = `Expiration Date: ${formatDate(item.expirationDate)}\n\nToday's Date: ${formatDate(today)}`;
+                        } else {
+                            labelText = `Best By: ${formatDate(item.bestByDate)}\n\nToday's Date: ${formatDate(today)}`;
+                        }
+
+                        this.showPopup(labelText);
 
                         this.seeDateButton.destroy();
                         
@@ -527,7 +617,17 @@ export default function Expiration() {
 
                         this.popupOpen = true;
 
-                        this.showPopup(`${this.currentItem.label}`);
+                        const item = this.currentItem;
+
+                        let labelText = "";
+
+                        if (item.type === "expiration") {
+                            labelText = `Expiration Date: ${formatDate(item.expirationDate)}\n\nToday's Date: ${formatDate(today)}`;
+                        } else {
+                            labelText = `Best By: ${formatDate(item.bestByDate)}\n\nToday's Date: ${formatDate(today)}`;
+                        }
+
+                        this.showPopup(labelText);
 
                         // remove button after click
                         this.seeDateButton.destroy();
@@ -608,7 +708,7 @@ export default function Expiration() {
 
                     this.currentIndex++;
                     if (this.currentIndex >= this.foodItems.length) {
-                        moduleUpdate("http://localhost:3001/api/game/module3/expiration/completed");
+                        moduleUpdate(`${API}/api/game/module3/expiration/completed`);
                         navigate("/module3/allergenIdentification");
                     } else {
                         this.loadNextItem();
@@ -665,19 +765,7 @@ export default function Expiration() {
                 backgroundColor: "black"
             }}
         >
-            <img
-                src={mapbutton}
-                alt="map"
-                onClick={() => navigate("/map")}
-                style={{
-                                position: "absolute",
-                                top: "4px",
-                                right: "625px",
-                                width: "100px",
-                                cursor: "pointer",
-                                zIndex: 10
-                            }}
-            />
+           
             <div
                 id="phaser-game"
                 style={{
@@ -689,6 +777,18 @@ export default function Expiration() {
                     zIndex: 1
                 }}
             />
+            <NotepadCalendar />
+            <div
+                  style={{
+                    position: "absolute",
+                    top: "4px",
+                    right: "110px",
+                    width: "100px",
+                    zIndex: 30000
+                  }}
+                >
+                  <Settings openMenu={openMenu}/>
+                </div>
         </div>
     );
 }

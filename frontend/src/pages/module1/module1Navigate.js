@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+const API = process.env.REACT_APP_API_URL;
 
 
 export default function M1Nav() {
@@ -6,7 +7,7 @@ export default function M1Nav() {
     const nav = async (e) => {
         try {
             const jwt = localStorage.getItem("token");
-            const response = await fetch("http://localhost:3001/api/game/module1/status", {
+            const response = await fetch(`${API}/api/game/module1/status`, {
                 method:"GET",
                 headers:{
                 ContentType:"Application/json",
