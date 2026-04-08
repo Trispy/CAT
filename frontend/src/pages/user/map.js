@@ -40,9 +40,9 @@ function Map({ openMenu }) {
             summary.module2?.chopping &&
             summary.module2?.cooking;
         const isModule3Done =
-            summary.module3?.module3part1 &&
-            summary.module3?.module3part2 &&
-            summary.module3?.module3part3;
+            summary.module3?.cansort &&
+            summary.module3?.expiration &&
+            summary.module3?.allergenIdentification;
         const isModule4Done =
             summary.module4?.module4part1 &&
             summary.module4?.module4part2 &&

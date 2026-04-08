@@ -32,9 +32,9 @@ router.post('/createaccount', async (req, res) => {
     })
     await Module3.create({
       username: user.username, 
-      module3part1: false, 
-      module3part2: false, 
-      module3part3: false
+      cansort: false, 
+      expiration: false, 
+      allergenIdentification: false
     })
     await Module4.create({
       username: user.username, 

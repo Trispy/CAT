@@ -3,6 +3,7 @@ const API = process.env.REACT_APP_API_URL;
 
 
 export default function M2Nav() {
+    const [showMenu, setShowMenu] = useState(false);
     const navigate = useNavigate();
     const nav = async (e) => {
         try {
@@ -24,7 +25,7 @@ export default function M2Nav() {
             else if(!data.cooking)
                 navigate('/module2/cooking', { replace: true });
             else
-                navigate('/map', { replace: true });
+                setShowMenu(true);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -32,7 +33,67 @@ export default function M2Nav() {
 
     nav();
 
-    return(
-        <div>Redirecting...</div>
-    )
+    return (
+            <div>
+                <div>
+                    {!showMenu && (
+                        <div>
+                            Redirecting...
+                        </div>
+                    )}
+                </div>
+                <div
+                    style={{
+                        height: "100vh",
+                        overflow: "hidden",
+                        position: "relative",
+                        backgroundColor: "black"
+                    }}
+                >
+                    {showMenu && (
+                        <div>
+                            <div
+                            style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center"
+                                }}>
+                                <p style={{ color: "white" }}>You have already completed this module!</p>
+                            </div>
+                            <div
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    backgroundColor: "rgba(0, 0, 0, 0.1)",
+                                    height: "100%",
+                                    zIndex: 20,
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center"
+                                }}
+                            >
+                                <Menu />
+    
+                                <div
+                                    onClick={() => navigate('/map', { replace: true })}
+                                    style={{
+                                        position: "absolute",
+                                        top: "2px",
+                                        right: "120px",
+                                        fontSize: "40px",
+                                        color: "white",
+                                        cursor: "pointer",
+                                        zIndex: 30
+                                    }}
+                                >
+                                    ✖
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        )
 }

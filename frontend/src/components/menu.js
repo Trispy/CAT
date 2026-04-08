@@ -37,9 +37,9 @@ export default function Menu({ closeMenu }) {
       cooking: "/module2/cooking",
     },
     module3: {
-      module3part1: "/module3/expiration",
-      module3part2: "/module3/canSorting",
-      module3part3: "/module3/allergenIdentification",
+      cansort: "/module3/canSorting",
+      expiration: "/module3/expiration",
+      allergenIdentification: "/module3/allergenIdentification",
     },
     module4: {
       module4part1: "/module4/module4part1",
