@@ -460,16 +460,16 @@ export default function CleanTote() {
                             const sprayIcon = this.add.image(gameObject.x, gameObject.y, "spray")
                             sprayIcon.setScale(width * 0.3 / sprayIcon.width);
                             this.tweens.add({
-                            targets: sprayIcon,
-                            alpha: 0,
-                            duration: 10000,
-                            onComplete: () => {
-                                sprayIcon.destroy()
-                                sprays -= 1;
-                            }
-                        });
+                                targets: sprayIcon,
+                                alpha: 0,
+                                duration: 1000,
+                                onComplete: () => {
+                                    sprayIcon.destroy()
+                                    sprays -= 1;
+                                }
+                            });
                             sprays += 1;
-                            if(sprays === 3) {
+                            if (sprays === 3) {
                                 gameObject.destroy();
                                 this.dry(toteIcon);
                                 toteIcon.setTexture("cleanToteImg");
@@ -655,9 +655,9 @@ export default function CleanTote() {
                     }
                 }
 
-                const dirtyTote = this.add.image(width / 2, height / 2, "dirtyToteImg")
-                    .setDisplaySize(width, height);
-
+                const dirtyTote = this.add.image(width / 2, height / 2, "dirtyToteImg");
+                const toteScale = (width * 0.55) / dirtyTote.width;
+                dirtyTote.setScale(toteScale);
                 dirtyTote.setVisible(false);
 
                 // Create render texture same size as long hand
@@ -675,11 +675,6 @@ export default function CleanTote() {
                     dirtyTote.displayHeight / 2
                 );
 
-                const toteScale = (width * 0.55) / dirtyToteRT.width;
-                dirtyToteRT.setScale(toteScale);
-
-                dirtyTote.destroy();
-
                 const ragIcon = this.add.image(
                     width / 6,
                     height / 6,
@@ -690,7 +685,7 @@ export default function CleanTote() {
                 ragIcon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(ragIcon);
 
-                this.input.setDraggable(ragIcon);
+                dirtyTote.destroy();
 
                 ragIcon.on("dragstart", () => {
                     ragIcon.setScale(ragScale);
@@ -701,11 +696,15 @@ export default function CleanTote() {
                 });
 
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    console.log(dragX, dragY);
                     if (gameObject !== ragIcon) return;
                     ragIcon.x = dragX;
                     ragIcon.y = dragY;
 
-                    dirtyToteRT.erase(eraseBrush, dragX, dragY);
+                    const localX = dragX - (dirtyToteRT.x - dirtyToteRT.displayWidth / 2);
+                    const localY = dragY - (dirtyToteRT.y - dirtyToteRT.displayHeight / 2);
+
+                    dirtyToteRT.erase(eraseBrush, localX, localY);
                     cells2.forEach(cell => {
                         if (!cell.cleared) {
                             if (
