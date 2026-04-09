@@ -9,26 +9,12 @@ import Textbox from "../../components/textbox";
 import textbox from "../../assets/M1G1/Textbox.png";
 import useTypewriter from "../../components/typewriter";
 import sinkbg from "../../assets/M1G3/SinkBackground.png";
-import gloveBox from "../../assets/M1G3/gloveBox.png";
-import noGlove from "../../assets/M2G2/noGlove.png";
-import gloved from "../../assets/M2G2/gloved.png";
-import beef from "../../assets/M2G2/beef.png";
-import bellPeppers from "../../assets/M2G2/bellpeppers.png";
-import onion from "../../assets/M2G2/onion.png";
-import cuttingBoard from "../../assets/M2G2/cuttingBoard.png";
-import dirtyCuttingBoard from "../../assets/M2G2/cuttingboarddirty.png";
-import dirtyBellpepper from "../../assets/M2G2/dirtyBellpeppers.png";
-import dirtyOnion from "../../assets/M2G2/dirtyOnion.png";
-import beefBowl from "../../assets/M2G2/BeefBowl.png";
-import onionBowl from "../../assets/M2G2/OnionBowl.png";
-import pepperBowl from "../../assets/M2G2/PepperBowl.png";
 import sprayBottle from "../../assets/M2G2/Spraybottle.png";
 import rag from "../../assets/M2G2/rag.png";
-import wetCuttingBoard from "../../assets/M2G2/watercuttingboard.png";
-import knife from "../../assets/M2G2/Knife.png";
 import mapbutton from "../../assets/mapbutton.png";
 
 import cleanToteImg from "../../assets/M4G1/cleanTote.png";
+import sudsyTote from "../../assets/M4G1/sudsyTote.png";
 import dirtyTote from "../../assets/M4G1/dirtyTote.png";
 import leaf1 from "../../assets/M4G1/leaf1.png";
 import leaf2 from "../../assets/M4G1/leaf2.png";
@@ -60,13 +46,6 @@ export default function CleanTote({openMenu}) {
 
     const [gameStage, setGameStage] = useState("intro");
 
-    // const [showSoapText, setShowSoapText] = useState(false);
-    // const [handsClean, setHandsClean] = useState(false);
-    // const [gloveInstruction, setGloveInstruction] = useState(false);
-    // const [glovedHands, setGlovedHands] = useState(false);
-    // const [cutMaterials, setCutMaterials] = useState('');
-    // const [showCutText, setShowCutText] = useState(false);
-    // const [showCutSuccessText, setShowCutSuccessText] = useState(false);
     const [instructionStep, setInstructionStep] = useState(0);
     const numberOfCutMaterials = useRef(0);
     useEffect(() => {
@@ -74,24 +53,6 @@ export default function CleanTote({openMenu}) {
     }, [gameStage]);
     const introText = useTypewriter("Time to start prepping some food! Follow the instructions in the next slide!",
         gameStage === "intro");
-    /*const instructionText = useTypewriter("In the following game, we will be going through essential personal hygiene steps to follow once you arrive at the volunteer location. Progress in the game by dragging items to the correct area using your finger.",
-        gameStage === "instructions");
-    const apronSuccessText = useTypewriter("You are now fully dressed! Let's go wash our hands and put some gloves on before interacting with the food.",
-        gameStage === "apron")
-    const finalText = useTypewriter("You have now completed the basic hygiene module. Let's move on to the basic food safety module!",
-        gameStage === "finalStage")
-    const soapText = useTypewriter("Soap the hand.",
-        gameStage === "soapyHands" && showSoapText)
-    const soapSuccessText = useTypewriter("All clean! Now lets put on some gloves.",
-        gameStage === "soapyHands" && handsClean)
-    const gloveText = useTypewriter("Make sure to put gloves on before touching any food",
-        gameStage === "gloveStage" && gloveInstruction)
-    const gloveSuccessText = useTypewriter("Gloved up!",
-        gameStage === "gloveStage" && glovedHands)
-    const cutInstructionText = useTypewriter("Drag the knife over the food to chop it up.",
-        gameStage === "cutting" && showCutText)
-    const cutSuccessText = useTypewriter("You have successfully chopped the food!",
-        gameStage === "cutting" && showCutSuccessText)*/
     const instructionTexts = [
         "1. Remove the large debris from the tote by dragging the leaves to the trash icon.",
         "2. Wash the tote by dragging the spray bottle to the tote.",
@@ -152,24 +113,7 @@ export default function CleanTote({openMenu}) {
             preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
                 this.load.image("volLocation", Loc);
                 this.load.image("sinkbg", sinkbg);
-
-                this.load.image("noGlove", noGlove);
-                this.load.image("gloved", gloved);
-                this.load.image("beef", beef);
-                this.load.image("onion", onion);
-                this.load.image("bellpepper", bellPeppers);
-                this.load.image("dirtyOnion", dirtyOnion);
-                this.load.image("dirtyBellpepper", dirtyBellpepper);
-                this.load.image("beefBowl", beefBowl);
-                this.load.image("onionBowl", onionBowl);
-                this.load.image("pepperBowl", pepperBowl);
                 this.load.image("sprayBottle", sprayBottle);
-                this.load.image("cuttingBoard", cuttingBoard);
-                this.load.image("dirtyCuttingBoard", dirtyCuttingBoard);
-                this.load.image("wetCuttingBoard", wetCuttingBoard);
-                this.load.image("knife", knife);
-                this.load.image("gloveBox", gloveBox);
-
                 this.load.image("textbox", textbox);
 
                 this.load.image("cleanToteImg", cleanToteImg);
@@ -186,6 +130,7 @@ export default function CleanTote({openMenu}) {
                 this.load.image("sanitizer", sanitizer);
                 this.load.image("spray", spray);
                 this.load.image("rag", rag);
+                this.load.image("sudsyTote", sudsyTote);
             }
             showInstructions() {
                 const { width, height } = this.scale;
@@ -255,14 +200,20 @@ export default function CleanTote({openMenu}) {
                     this.showInstructions();
                 });
 
+                const cleanToteIcon = this.add.image(
+                    width * 0.5,
+                    height * 0.5,
+                    "cleanToteImg"
+                );
+                const toteScale = (width * 0.55) / cleanToteIcon.width;
+                cleanToteIcon.setScale(toteScale);
+
                 const toteIcon = this.add.image(
                     width * 0.5,
                     height * 0.5,
                     "dirtyToteImg"
                 );
-                const toteScale = (width * 0.55) / toteIcon.width;
                 toteIcon.setScale(toteScale);
-                toteIcon.setInteractive({ useHandCursor: true });
 
                 const toteZone = toteIcon.getBounds();
 
@@ -394,8 +345,10 @@ export default function CleanTote({openMenu}) {
                     height * 0.2,
                     "sinkbg"
                 );
-                const sinkScale = (width * 0.3) / sinkIcon.width;
+                const sinkScale = (width * 0.1) / sinkIcon.width;
                 sinkIcon.setScale(sinkScale);
+                sinkIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(sinkIcon);
 
                 const trashCanIcon = this.add.image(
                     width * 0.90,
@@ -410,27 +363,6 @@ export default function CleanTote({openMenu}) {
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     gameObject.x = dragX;
                     gameObject.y = dragY;
-                });
-
-                toteIcon.on("dragend", () => {
-
-                    const onionBounds = toteIcon.getBounds();
-                    if (Phaser.Geom.Intersects.RectangleToRectangle(onionBounds, toteZone)) {
-                        if (toteIcon.texture.key === "onion") {
-                            this.chopping("onion", "onionBowl", "knife");
-                            toteIcon.setTexture("onionBowl");
-                            const oScale = (width * 0.05) / toteIcon.width;
-                            toteIcon.setScale(oScale);
-                        }
-                        else if (toteIcon.texture.key === "dirtyOnion") {
-                            this.showMes("Wash the vegetables before chopping.");
-                        }
-                    }
-                    this.checkWin();
-                    toteIcon.setPosition(
-                        width * 0.5,
-                        height * 0.15,
-                    );
                 });
 
                 this.input.on("dragend", (pointer, gameObject) => {
@@ -449,9 +381,8 @@ export default function CleanTote({openMenu}) {
                         }
                     }
                     else if (gameObject === bottleIcon) {
-                        console.log(noDebris);
                         if (!noDebris) {
-                            this.showMes("Clear debris first!");
+                            this.showPopup("Clear debris first!");
                             bottleIcon.setPosition(
                                 width * 0.10,
                                 height * 0.7,
@@ -461,19 +392,52 @@ export default function CleanTote({openMenu}) {
                             const sprayIcon = this.add.image(gameObject.x, gameObject.y, "spray")
                             sprayIcon.setScale(width * 0.3 / sprayIcon.width);
                             this.tweens.add({
-                            targets: sprayIcon,
-                            alpha: 0,
-                            duration: 10000,
-                            onComplete: () => {
-                                sprayIcon.destroy()
-                                sprays -= 1;
-                            }
-                        });
+                                targets: sprayIcon,
+                                alpha: 0,
+                                duration: 5000,
+                                onComplete: () => {
+                                    sprayIcon.destroy()
+                                    sprays -= 1;
+                                }
+                            });
                             sprays += 1;
-                            if(sprays === 3) {
+                            if (sprays === 3) {
                                 gameObject.destroy();
                                 this.dry(toteIcon);
-                                toteIcon.setTexture("cleanToteImg");
+                                toteIcon.setTexture("sudsyTote");
+                            }
+                        }
+                    }
+                    else if (gameObject === sinkIcon) {
+                        if (Phaser.Geom.Intersects.RectangleToRectangle(iconBounds, toteZone)) {
+                            if (toteIcon.texture.key !== "sudsyTote") {
+                                sinkIcon.setPosition(
+                                    width * 0.10,
+                                    height * 0.2,
+                                );
+                                this.showPopup("Drag the spray bottle to the tote to wash it before rinsing.");
+                            }
+                            else {
+                                this.wash("sudsyTote", "cleanToteImg", "sinkbg");
+                                toteIcon.destroy();
+                                sinkIcon.destroy();
+                            }
+                        }
+                    }
+                    else if (gameObject === sanitizerIcon) {
+                        if (Phaser.Geom.Intersects.RectangleToRectangle(iconBounds, toteZone)) {
+                            if (!toteIcon) {
+                                sanitizerIcon.setPosition(
+                                    width * 0.90,
+                                    height * 0.2,
+                                );
+                                this.showPopup("Drag the sink icon to the tote to rinse before sanitizing.");
+                            }
+                            else {
+                                this.wash("cleanToteImg", "cleanToteImg", "sanitizer");
+                                cleanToteIcon.preFX.addShine(3, 0.2, 5);
+                                sanitizerIcon.destroy();
+                                this.showPopup("This tote is now ready for use!");
                             }
                         }
                     }
@@ -488,7 +452,7 @@ export default function CleanTote({openMenu}) {
                 });
             }
 
-            wash(dirty, clean) {
+            wash(dirty, clean, moveable) {
                 const { width, height } = this.scale;
                 this.volScreen = this.add.container(0, 0);
                 const bg = this.add.image(width / 2, height / 2, "sinkbg")
@@ -496,27 +460,30 @@ export default function CleanTote({openMenu}) {
                 this.volScreen.add(bg);
 
                 const cleanIcon = this.add.image(
-                    width / 4,
-                    height / 4,
+                    width / 2,
+                    height / 2,
                     clean
                 );
 
                 const icon = this.add.image(
-                    width / 4,
-                    height / 4,
+                    width / 2,
+                    height / 2,
                     dirty
                 );
 
-                const scale = (width * 0.10) / icon.width;
+                const sinkIcon = this.add.image(
+                    width / 4,
+                    height / 4,
+                    moveable
+                );
+
+                const scale = (width * 0.8) / icon.width;
                 icon.setScale(scale);
                 cleanIcon.setScale(scale);
+                sinkIcon.setScale(width * 0.1 / sinkIcon.width);
 
-                // Make draggable immediately
-                icon.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(icon);
-
-                cleanIcon.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(cleanIcon);
+                sinkIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(sinkIcon);
 
                 const waterZone = new Phaser.Geom.Polygon( //interactive sink area
                     [
@@ -537,21 +504,20 @@ export default function CleanTote({openMenu}) {
                 graphics.fillPoints(waterZone.points);
 
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-                    if (gameObject === icon) {
+                    if (gameObject === sinkIcon) {
 
                         gameObject.x = dragX;
                         gameObject.y = dragY;
 
-                        cleanIcon.x = dragX;
-                        cleanIcon.y = dragY;
-
                         const bounds = icon.getBounds();
-                        if (Phaser.Geom.Intersects.RectangleToRectangle(bounds, waterZone)) {
-                            icon.alpha = Math.max(0, icon.alpha - 0.025);
+                        const sinkBounds = sinkIcon.getBounds();
+                        if (Phaser.Geom.Intersects.RectangleToRectangle(bounds, sinkBounds)) {
+                            icon.alpha = Math.max(0, icon.alpha - 0.0025);
 
                             if (icon.alpha <= 0) {
                                 icon.destroy();
                                 cleanIcon.destroy();
+                                sinkIcon.destroy();
                                 graphics.destroy();
                                 this.volScreen.destroy(true);
                                 return;
@@ -656,9 +622,9 @@ export default function CleanTote({openMenu}) {
                     }
                 }
 
-                const dirtyTote = this.add.image(width / 2, height / 2, "dirtyToteImg")
-                    .setDisplaySize(width, height);
-
+                const dirtyTote = this.add.image(width / 2, height / 2, "dirtyToteImg");
+                const toteScale = (width * 0.55) / dirtyTote.width;
+                dirtyTote.setScale(toteScale);
                 dirtyTote.setVisible(false);
 
                 // Create render texture same size as long hand
@@ -676,11 +642,6 @@ export default function CleanTote({openMenu}) {
                     dirtyTote.displayHeight / 2
                 );
 
-                const toteScale = (width * 0.55) / dirtyToteRT.width;
-                dirtyToteRT.setScale(toteScale);
-
-                dirtyTote.destroy();
-
                 const ragIcon = this.add.image(
                     width / 6,
                     height / 6,
@@ -691,7 +652,7 @@ export default function CleanTote({openMenu}) {
                 ragIcon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(ragIcon);
 
-                this.input.setDraggable(ragIcon);
+                dirtyTote.destroy();
 
                 ragIcon.on("dragstart", () => {
                     ragIcon.setScale(ragScale);
@@ -706,7 +667,10 @@ export default function CleanTote({openMenu}) {
                     ragIcon.x = dragX;
                     ragIcon.y = dragY;
 
-                    dirtyToteRT.erase(eraseBrush, dragX, dragY);
+                    const localX = dragX - (dirtyToteRT.x - dirtyToteRT.displayWidth / 2);
+                    const localY = dragY - (dirtyToteRT.y - dirtyToteRT.displayHeight / 2);
+
+                    dirtyToteRT.erase(eraseBrush, localX, localY);
                     cells2.forEach(cell => {
                         if (!cell.cleared) {
                             if (
@@ -729,203 +693,68 @@ export default function CleanTote({openMenu}) {
                 });
             }
 
-            chopping(uncutfoodstring, cutfoodstring, knifestring) {
+            showPopup(inputText) {
                 const { width, height } = this.scale;
 
-                const bg = this.add.image(width / 2, height / 2, "cuttingBoard")
-                    .setDisplaySize(width, height);
+                const overlay = this.add.container(0, 0);
+                overlay.setDepth(1000);
 
-                const uncutfood = this.add.image(
+                const bg = this.add.rectangle(
                     width / 2,
                     height / 2,
-                    uncutfoodstring);
-                const uncutScale = (width * 0.30) / uncutfood.width;
-                uncutfood.setScale(uncutScale);
-
-                const cutfood = this.add.image(
-                    width / 2,
-                    height / 2,
-                    cutfoodstring);
-                const cutScale = (width * 0.30) / cutfood.width;
-                cutfood.setScale(cutScale);
-
-                const uncutRT = this.add.renderTexture(
-                    uncutfood.x,
-                    uncutfood.y,
-                    uncutfood.displayWidth,
-                    uncutfood.displayHeight
-                );
-
-                // Draw the hidden long hand into render texture so user can erase it
-                uncutRT.draw(
-                    uncutfood,
-                    uncutfood.displayWidth / 2,
-                    uncutfood.displayHeight / 2
-                );
-
-                uncutfood.destroy();
-
-                cutfood.setDepth(0);
-                uncutRT.setDepth(1);
-
-
-                const boardZone = new Phaser.Geom.Rectangle( //interactive cutting board area
-                    width / 2 - width * 0.22,
-                    height / 2 - height * 0.05,
-                    width * 0.15,
-                    height * 0.13
-                );
-
-                const gridSize = 20; // size of each cell
-                const cells = [];
-
-                for (let x = boardZone.x; x < boardZone.right; x += gridSize) {
-                    for (let y = boardZone.y; y < boardZone.bottom; y += gridSize) {
-                        cells.push({
-                            x,
-                            y,
-                            cleared: false
-                        });
-                    }
-                }
-                let chopped = false;
-
-                uncutfood.destroy();
-                const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
-                eraseBrush.fillStyle(0xffffff);
-                eraseBrush.fillCircle(0, 0, width * 0.04);
-
-                const knifeStartX = cutfood.x + cutfood.displayWidth / 2 + width * 0.05;
-                const knifeStartY = cutfood.y;
-
-                const knife = this.add.image(
-                    knifeStartX,
-                    knifeStartY,
-                    knifestring);
-                const knifeScale = (width * 0.30) / knife.width;
-                knife.setScale(knifeScale);
-                knife.setInteractive({ useHandCursor: true });
-                const baseScale = (width * 0.10) / knife.width;
-                this.input.setDraggable(knife);
-
-                knife.on("dragstart", () => {
-                    knife.setScale(knifeScale);
-                });
-
-                knife.on("dragend", () => {
-                    knife.setScale(baseScale)
-                });
-
-                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-                    if (gameObject !== knife) return;
-
-
-                    knife.x = dragX;
-                    knife.y = dragY;
-
-
-                    const tipOffsetX = -knife.displayWidth * 0.28;
-                    const tipOffsetY = knife.displayHeight * 0.18;
-
-                    const tipX = dragX + tipOffsetX;
-                    const tipY = dragY + tipOffsetY;
-
-
-                    const localX = (tipX - uncutRT.x) / uncutRT.scaleX + uncutRT.width / 2;
-                    const localY = (tipY - uncutRT.y) / uncutRT.scaleY + uncutRT.height / 2;
-
-
-                    uncutRT.erase(eraseBrush, localX, localY);
-                    cells.forEach(cell => {
-                        if (!cell.cleared) {
-                            if (
-                                tipX > cell.x &&
-                                tipX < cell.x + gridSize &&
-                                tipY > cell.y &&
-                                tipY < cell.y + gridSize
-                            ) {
-                                cell.cleared = true;
-                            }
-                        }
-                    });
-                    const clearedCount = cells.filter(c => c.cleared).length;
-                    const percentCleared = clearedCount / cells.length;
-                    if (!chopped && percentCleared > 0.20) {
-                        chopped = true;
-                        //setCutMaterials(cutfoodstring);
-                        uncutRT.destroy();
-                        knife.destroy();
-                        cutfood.destroy();
-                        bg.destroy();
-                        numberOfCutMaterials.current += 1;
-                        this.checkWin();
-                        return;
-                    }
-
-                });
-            }
-
-            checkWin() {
-                if (numberOfCutMaterials.current === 3) {
-                    this.showMes("Win condition met");
-                    moduleUpdate("http://localhost:3001/api/game/module2/chopping/completed");
-                    navigate('/module2/cooking', { replace: true });
-                }
-            }
-
-            showMes(message) {
-                const { width, height } = this.scale;
-
-                const box = this.add.container(width / 2, height / 2);
-
-                const bg = this.add.image(0, 0, "textbox")
-                    .setDisplaySize(width * 0.7, height * 0.5)
-                    .setInteractive();
-
-                let displayText = "";
-
-                if (Array.isArray(message)) {
-                    displayText = message.join("\n\n");
-                }
-                else {
-                    displayText = message;
-                }
+                    width * 0.6,
+                    height * 0.6,
+                    0xffffff
+                ).setStrokeStyle(4, 0x000000);
 
                 const text = this.add.text(
-                    0,
-                    0,
-                    "",
+                    width / 2,
+                    height / 2,
+                    inputText,
                     {
-                        fontFamily: "sans-serif",
-                        fontSize: "45px",
-                        fontStyle: "bold",
+                        font: "bold 50px sans-serif",
                         color: "#000",
-                        wordWrap: { width: width * 0.55 },
-                        align: "center"
+                        wordWrap: { width: width * 0.58 }
                     }
                 ).setOrigin(0.5);
 
-                box.add([bg, text]);
+                const close = this.add.text(
+                    width * 0.78,
+                    height * 0.24,
+                    "X",
+                    {
+                        font: "40px Arial",
+                        backgroundColor: "#ff0000",
+                        stroke: "#000000",
+                        strokeThickness: 4,
+                        padding: { x: 20, y: 10 }
+                    }
+                )
+                    .setInteractive()
+                    .setOrigin(0.5);
 
-                // Typewriter
-                let i = 0;
+                close.on("pointerdown", () => {
+                    overlay.destroy(true);
+                    this.popupOpen = false;
 
-                const typingEvent = this.time.addEvent({
-                    delay: 30,
-                    repeat: displayText.length - 1,
-                    callback: () => {
-                        if (!text || !text.scene) return;
-                        text.setText(text.text + displayText[i]);
-                        i++;
+                    if (inputText === "This tote is now ready for use!")
+                        navigate("/map", { replace: true });
+
+
+                    if (this.currentSprite && this.currentSprite.scene) {
+                        this.currentSprite.setInteractive({ useHandCursor: true });
+                        this.input.setDraggable(this.currentSprite, true);
+                    }
+
+                    if (this.shouldApplyShine && this.pendingShineTarget) {
+                        this.pendingShineTarget.preFX.clear();
+                        this.pendingShineTarget.preFX.addShine(1, 0.5, 5);
+                        this.pendingShineTarget = null;
+                        this.shouldApplyShine = false;
                     }
                 });
 
-                bg.once("pointerdown", () => {
-                    typingEvent.remove();
-                    box.destroy(true);
-                });
-
-                return box;
+                overlay.add([bg, text, close]);
             }
         }
 

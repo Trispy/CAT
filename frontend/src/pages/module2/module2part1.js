@@ -55,22 +55,22 @@ function Module2Part1({ openMenu }) {
 
     const navigate = useNavigate();
     useEffect(() => {
-    return () => {
-        if (phaserGameRef.current) {
-            phaserGameRef.current.destroy(true);
-            phaserGameRef.current = null;
-        }
-    };
-}, []);
-useEffect(() => {
-    startPhaser();
+        return () => {
+            if (phaserGameRef.current) {
+                phaserGameRef.current.destroy(true);
+                phaserGameRef.current = null;
+            }
+        };
+    }, []);
+    useEffect(() => {
+        startPhaser();
 
-    setTimeout(() => {
-        if (phaserGameRef.current) {
-            phaserGameRef.current.scene.start("IntroScene");
-        }
-    }, 100);
-}, []);
+        setTimeout(() => {
+            if (phaserGameRef.current) {
+                phaserGameRef.current.scene.start("IntroScene");
+            }
+        }, 100);
+    }, []);
 
     const backgroundStyle = {
         backgroundImage: `url(${module2Background})`,
@@ -110,8 +110,8 @@ useEffect(() => {
         return typedText;
     }
     const startPhaser = () => {
-        if (phaserGameRef.current) return; 
-         const createClickIndicator = (scene, x, y) => {
+        if (phaserGameRef.current) return;
+        const createClickIndicator = (scene, x, y) => {
 
             const indicatorContainer = scene.add.container(x, y);
 
@@ -137,27 +137,27 @@ useEffect(() => {
             return indicatorContainer;
         };
         class IntroScene extends Phaser.Scene {
-                constructor() {
-                    super("IntroScene");
-                }
-        
-                preload() {
-                    this.load.image("introBg", module2Background);
-                }
-        
-                create() {
-                    const { width, height } = this.scale;
-        
-                    this.add.image(width / 2, height / 2, "introBg")
+            constructor() {
+                super("IntroScene");
+            }
+
+            preload() {
+                this.load.image("introBg", module2Background);
+            }
+
+            create() {
+                const { width, height } = this.scale;
+
+                this.add.image(width / 2, height / 2, "introBg")
                     .setDisplaySize(width, height);
-                }
+            }
         }
         class ThermometerScene extends Phaser.Scene {
 
             constructor() {
                 super("ThermometerScene");
             }
-            
+
 
             preload() {
                 this.load.image("thermometerhand", thermometerhand);
@@ -195,12 +195,12 @@ useEffect(() => {
 
                 hand.setScale(thermScale);
 
-            // position indicator relative to the hand tip
-            const tipOffsetY = hand.displayHeight * 0.02;
-            const tipOffsetX = hand.displayWidth * 0.02;
-            const indicator = createClickIndicator(this, tipOffsetX, tipOffsetY);
-            pivot.add(indicator);
-                
+                // position indicator relative to the hand tip
+                const tipOffsetY = hand.displayHeight * 0.02;
+                const tipOffsetX = hand.displayWidth * 0.02;
+                const indicator = createClickIndicator(this, tipOffsetX, tipOffsetY);
+                pivot.add(indicator);
+
                 // Use true center to avoid PNG padding issues.
                 hand.setOrigin(0.5, 0.5);
 
@@ -210,27 +210,27 @@ useEffect(() => {
 
                 pivot.add(hand);
 
-          
-            pivot.angle = 0;
+
+                pivot.angle = 0;
 
 
 
                 hand.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(hand);
 
-        let finalAngle = null;
-        // When dragging, rotate based on pointer
-        hand.on("drag", (pointer) => {
-            if (indicator) indicator.destroy();
-            if (thermometerState === "fail") {
-            setThermometerState("playing");
-        }
-            const angleRad = Phaser.Math.Angle.Between(
-                pivot.x,
-                pivot.y,
-                pointer.x,
-                pointer.y
-            );
+                let finalAngle = null;
+                // When dragging, rotate based on pointer
+                hand.on("drag", (pointer) => {
+                    if (indicator) indicator.destroy();
+                    if (thermometerState === "fail") {
+                        setThermometerState("playing");
+                    }
+                    const angleRad = Phaser.Math.Angle.Between(
+                        pivot.x,
+                        pivot.y,
+                        pointer.x,
+                        pointer.y
+                    );
 
                     let angleDeg = Phaser.Math.RadToDeg(angleRad);
 
@@ -412,12 +412,12 @@ useEffect(() => {
                     milk: "middle"
                 };
 
-            const zoneTop = new Phaser.Geom.Rectangle(
-                width * 0.59,
-                height * 0.04,
-                width * 0.28,
-                height * 0.24
-            );
+                const zoneTop = new Phaser.Geom.Rectangle(
+                    width * 0.59,
+                    height * 0.04,
+                    width * 0.28,
+                    height * 0.24
+                );
 
                 const zoneShelf1 = new Phaser.Geom.Rectangle(
                     width * 0.59,
@@ -570,205 +570,205 @@ useEffect(() => {
             }
         }
         class HandScene extends Phaser.Scene {
-                    constructor() {
-                        super("HandScene");
+            constructor() {
+                super("HandScene");
+            }
+
+            preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
+                this.load.image("sinkbg", sinkbg);
+
+                this.load.image("cleanHand", cleanHand);
+                this.load.image("dirtyHand", dirtyHand);
+                this.load.image("soapSprite", soapSprite);
+                this.load.image("sudImg", sudImg);
+            }
+
+            create() {
+                const { width, height } = this.scale;
+                let timeLeft = 20;
+
+                const timerText = this.add.text(
+                    width * 0.85,
+                    height * 0.05,
+                    ":20",
+                    {
+                        fontSize: "48px",
+                        color: "#ff0000",
+                        fontStyle: "bold"
                     }
-        
-                    preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
-                        this.load.image("sinkbg", sinkbg);
-                     
-                        this.load.image("cleanHand", cleanHand);
-                        this.load.image("dirtyHand", dirtyHand);
-                        this.load.image("soapSprite", soapSprite);
-                        this.load.image("sudImg", sudImg);
-                    }
-        
-                    create() {
-                        const { width, height } = this.scale;
-                         let timeLeft = 20;
-        
-                                const timerText = this.add.text(
-                                    width * 0.85,
-                                    height * 0.05,
-                                    ":20",
-                                    {
-                                        fontSize: "48px",
-                                        color: "#ff0000",
-                                        fontStyle: "bold"
-                                    }
-                                ).setOrigin(0.5);
-                                timerText.setDepth(1000);
-                                this.time.addEvent({
-                                    delay: 1000, //one second
-                                    loop: true,
-                                    callback: () => {
-                                        if (timeLeft <= 0) return;
-                                        timeLeft--;
-                                        timerText.setText(":" + timeLeft.toString());
-        
-                                        if (timeLeft <= 0) {
-        
-                                            timerText.setText("Done!");
-                                            setTimerDone(true);
-        
-                                        }
-        
-                                    }
-                                });
-                        this.input.addPointer(3);
-                        this.input.dragDistanceThreshold = 0;
-                        this.input.dragTimeThreshold = 0;
-                        this.add.image(width / 2, height / 2, "sinkbg")
-                            .setDisplaySize(width, height);
-                        // Bottom layer (trimmed hand)
-                        const cleanHand = this.add.image(
-                            width / 2,
-                            height / 2 + height * 0.05,
-                            "cleanHand"
-                        )
-                        const handMaxWidth = width * 0.8;
-                        const scale = handMaxWidth / cleanHand.width;
-                        cleanHand.setScale(scale);
-        
-        
-                        const dirtyHand = this.add.image(
-                            width / 2,
-                            height / 2 + height * 0.05,
-                            "dirtyHand"
-                        );
-        
-                        const scale1 = (width * 0.8) / dirtyHand.width;
-                        dirtyHand.setScale(scale1);
-        
-        
-                        
-        
-                        const handZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
-                            width / 2 - width * 0.30, 
-                            height / 2 - height * 0.37, 
-                            width * 0.60,
-                            height * 0.85
-                        );
-                      
-        
-        
-                        const gridSize = 40; // size of each cell
-                        const cells = [];
-        
-                        for (let x = handZone.x; x < handZone.right; x += gridSize) {
-                            for (let y = handZone.y; y < handZone.bottom; y += gridSize) {
-                                cells.push({
-                                    x,
-                                    y,
-                                    cleared: false
-                                });
-                            }
+                ).setOrigin(0.5);
+                timerText.setDepth(1000);
+                this.time.addEvent({
+                    delay: 1000, //one second
+                    loop: true,
+                    callback: () => {
+                        if (timeLeft <= 0) return;
+                        timeLeft--;
+                        timerText.setText(":" + timeLeft.toString());
+
+                        if (timeLeft <= 0) {
+
+                            timerText.setText("Done!");
+                            setTimerDone(true);
+
                         }
-        
-                        // Create render texture same size as long hand
-                        const dirtyHandRT = this.add.renderTexture(
-                            dirtyHand.x,
-                            dirtyHand.y,
-                            dirtyHand.displayWidth,
-                            dirtyHand.displayHeight
-                        );
-                        const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
-                        eraseBrush.fillStyle(0xffffff);
-                        eraseBrush.fillCircle(0, 0, width * 0.02);
-                        // Draw the hidden long hand into render texture so user can erase it
-                        dirtyHandRT.draw(
-                            dirtyHand,
-                            dirtyHand.displayWidth / 2,
-                            dirtyHand.displayHeight / 2
-                        );
-                        dirtyHand.setVisible(false);
-                        // Store original position
-                        const soapStartX = cleanHand.x + cleanHand.displayWidth / 2 + width * 0.05;
-                        const soapStartY = cleanHand.y;
-        
-                        // Create soap sprite
-                        const soap = this.add.image(
-                            soapStartX,
-                            soapStartY,
-                            "soapSprite"
-                        ).setInteractive({ draggable: true });
-                        const soapMaxWidth = width * 0.18;
-                        const baseScale = soapMaxWidth / soap.width;
-                        soap.setScale(baseScale);
-        
-        
-                        this.input.setDraggable(soap);
-        
-                        soap.on("dragstart", () => {
-                            soap.setScale(baseScale);
+
+                    }
+                });
+                this.input.addPointer(3);
+                this.input.dragDistanceThreshold = 0;
+                this.input.dragTimeThreshold = 0;
+                this.add.image(width / 2, height / 2, "sinkbg")
+                    .setDisplaySize(width, height);
+                // Bottom layer (trimmed hand)
+                const cleanHand = this.add.image(
+                    width / 2,
+                    height / 2 + height * 0.05,
+                    "cleanHand"
+                )
+                const handMaxWidth = width * 0.8;
+                const scale = handMaxWidth / cleanHand.width;
+                cleanHand.setScale(scale);
+
+
+                const dirtyHand = this.add.image(
+                    width / 2,
+                    height / 2 + height * 0.05,
+                    "dirtyHand"
+                );
+
+                const scale1 = (width * 0.8) / dirtyHand.width;
+                dirtyHand.setScale(scale1);
+
+
+
+
+                const handZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
+                    width / 2 - width * 0.30,
+                    height / 2 - height * 0.37,
+                    width * 0.60,
+                    height * 0.85
+                );
+
+
+
+                const gridSize = 40; // size of each cell
+                const cells = [];
+
+                for (let x = handZone.x; x < handZone.right; x += gridSize) {
+                    for (let y = handZone.y; y < handZone.bottom; y += gridSize) {
+                        cells.push({
+                            x,
+                            y,
+                            cleared: false
                         });
-        
-                        soap.on("dragend", () => {
-                            soap.setScale(baseScale);
-                        });
-                        soap.on("drag", (pointer, dragX, dragY) => {
-                            soap.x = dragX;
-                            soap.y = dragY;
-        
-        
-                            const localX = (dragX - dirtyHandRT.x) / dirtyHandRT.scaleX + dirtyHandRT.width / 2;
-                            const localY = (dragY - dirtyHandRT.y) / dirtyHandRT.scaleY + dirtyHandRT.height / 2;
-        
-                           
-                            if (Math.random() < 0.2) {
-                                const sud = this.add.image(dragX, dragY, "sudImg");
-        
-                                const sudMaxWidth = width * 0.1 * Math.random();
-                                sud.setScale(sudMaxWidth / sud.width);
-        
-                                this.tweens.add({
-                                    targets: sud,
-                                    alpha: 0,
-                                    duration: 800,
-                                    onComplete: () => sud.destroy()
-                                });
-                            }
-                            
-        
-                            dirtyHandRT.erase(eraseBrush, localX, localY);
-                            cells.forEach(cell => {
-                                if (!cell.cleared) {
-                                    if (
-                                        dragX > cell.x &&
-                                        dragX < cell.x + gridSize &&
-                                        dragY > cell.y &&
-                                        dragY < cell.y + gridSize
-                                    ) {
-                                        cell.cleared = true;
-                                    }
-                                }
-                            });
-                            const clearedCount = cells.filter(c => c.cleared).length;
-                            const percentCleared = clearedCount / cells.length;
-                            if (!handsClean && percentCleared > 0.45) {
-                                setHandsClean(true);
-                                console.log("Hands fully clean.");
-                                dirtyHandRT.setVisible(false);
-                            }
-        
-                        });
-        
-                        // Show textbox when scene loads
-                        setShowSoapText(true);
-        
-                        // when clipper is clicked hide the textbox
-                     
-                        this.events.on("shutdown", () => {
-                        this.input.removeAllListeners();
-        
-                            if (dirtyHandRT) {
-                                dirtyHandRT.destroy();
-                            }
-                        });
-                       
                     }
                 }
-        
+
+                // Create render texture same size as long hand
+                const dirtyHandRT = this.add.renderTexture(
+                    dirtyHand.x,
+                    dirtyHand.y,
+                    dirtyHand.displayWidth,
+                    dirtyHand.displayHeight
+                );
+                const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
+                eraseBrush.fillStyle(0xffffff);
+                eraseBrush.fillCircle(0, 0, width * 0.02);
+                // Draw the hidden long hand into render texture so user can erase it
+                dirtyHandRT.draw(
+                    dirtyHand,
+                    dirtyHand.displayWidth / 2,
+                    dirtyHand.displayHeight / 2
+                );
+                dirtyHand.setVisible(false);
+                // Store original position
+                const soapStartX = cleanHand.x + cleanHand.displayWidth / 2 + width * 0.05;
+                const soapStartY = cleanHand.y;
+
+                // Create soap sprite
+                const soap = this.add.image(
+                    soapStartX,
+                    soapStartY,
+                    "soapSprite"
+                ).setInteractive({ draggable: true });
+                const soapMaxWidth = width * 0.18;
+                const baseScale = soapMaxWidth / soap.width;
+                soap.setScale(baseScale);
+
+
+                this.input.setDraggable(soap);
+
+                soap.on("dragstart", () => {
+                    soap.setScale(baseScale);
+                });
+
+                soap.on("dragend", () => {
+                    soap.setScale(baseScale);
+                });
+                soap.on("drag", (pointer, dragX, dragY) => {
+                    soap.x = dragX;
+                    soap.y = dragY;
+
+
+                    const localX = (dragX - dirtyHandRT.x) / dirtyHandRT.scaleX + dirtyHandRT.width / 2;
+                    const localY = (dragY - dirtyHandRT.y) / dirtyHandRT.scaleY + dirtyHandRT.height / 2;
+
+
+                    if (Math.random() < 0.2) {
+                        const sud = this.add.image(dragX, dragY, "sudImg");
+
+                        const sudMaxWidth = width * 0.1 * Math.random();
+                        sud.setScale(sudMaxWidth / sud.width);
+
+                        this.tweens.add({
+                            targets: sud,
+                            alpha: 0,
+                            duration: 800,
+                            onComplete: () => sud.destroy()
+                        });
+                    }
+
+
+                    dirtyHandRT.erase(eraseBrush, localX, localY);
+                    cells.forEach(cell => {
+                        if (!cell.cleared) {
+                            if (
+                                dragX > cell.x &&
+                                dragX < cell.x + gridSize &&
+                                dragY > cell.y &&
+                                dragY < cell.y + gridSize
+                            ) {
+                                cell.cleared = true;
+                            }
+                        }
+                    });
+                    const clearedCount = cells.filter(c => c.cleared).length;
+                    const percentCleared = clearedCount / cells.length;
+                    if (!handsClean && percentCleared > 0.45) {
+                        setHandsClean(true);
+                        console.log("Hands fully clean.");
+                        dirtyHandRT.setVisible(false);
+                    }
+
+                });
+
+                // Show textbox when scene loads
+                setShowSoapText(true);
+
+                // when clipper is clicked hide the textbox
+
+                this.events.on("shutdown", () => {
+                    this.input.removeAllListeners();
+
+                    if (dirtyHandRT) {
+                        dirtyHandRT.destroy();
+                    }
+                });
+
+            }
+        }
+
         class GloveScene extends Phaser.Scene {
             constructor() {
                 super("GloveScene");
@@ -876,27 +876,27 @@ useEffect(() => {
         }
 
         const config = {
-                type: Phaser.AUTO,
-                scale: {
-                    mode: Phaser.Scale.FIT,
-                    autoCenter: Phaser.Scale.CENTER_BOTH,
-                    width: 1920,
-                    height: 1080
-                },
-                render: {
-                    pixelArt: false,
-                    antialias: true
-                },
-                audio: {noAudio: true},
-                transparent: false,
-                backgroundColor: "#000000",
-                 scene: [IntroScene, ThermometerScene, FridgeScene, HandScene, GloveScene],
-                parent: "phaser-game"
-            };
-        
-       
+            type: Phaser.AUTO,
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: 1920,
+                height: 1080
+            },
+            render: {
+                pixelArt: false,
+                antialias: true
+            },
+            audio: { noAudio: true },
+            transparent: false,
+            backgroundColor: "#000000",
+            scene: [IntroScene, ThermometerScene, FridgeScene, HandScene, GloveScene],
+            parent: "phaser-game"
+        };
 
-        
+
+
+
 
         phaserGameRef.current = new Phaser.Game(config);
     };
@@ -1011,67 +1011,67 @@ useEffect(() => {
         (gameStage === "HandScene" && (!handsClean || !timerDone)) ||
         (gameStage === "gloveStage" && !glovedHands);
     const overlayStyle = {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            zIndex: 15000,
-            backgroundColor: "rgba(0,0,0,0)",
-            cursor: "pointer"
-        };
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        zIndex: 15000,
+        backgroundColor: "rgba(0,0,0,0)",
+        cursor: "pointer"
+    };
     const handOverlayStyle = {
-    position: "fixed",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    zIndex: 15000
-};
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        zIndex: 15000
+    };
     return (
         <div
             className="form"
             style={{
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundColor: "black",
-            height: "100dvh",
-            overflow: "hidden",
-            position: "relative"
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundColor: "black",
+                height: "100dvh",
+                overflow: "hidden",
+                position: "relative"
             }}
-  >
-       
-            <button
-                   className="next-button"
-                   disabled={isNextDisabled}
-                   onClick={handleNextClick}
-                   style={{
-                       position: "absolute",
-                       bottom: "5%",
-                       right: "15%",
-                       opacity: isNextDisabled ? 0.5 : 1,
-                       pointerEvents: isNextDisabled ? "none" : "auto",
-                       background: "none",
-                       border: "none",
-                       padding: 0,
-                       zIndex: 20000
-                   }}
-               >
-                   <img 
-                       src={nextButton} 
-                       alt="Next" 
-                       style={{ 
-                           width: "20vw",
-                           minWidth: "120px"
-                       }} 
-                   />
-               </button>
-                
+        >
 
-                {gameStage === "intro" && (
-                    <div
+            <button
+                className="next-button"
+                disabled={isNextDisabled}
+                onClick={handleNextClick}
+                style={{
+                    position: "absolute",
+                    bottom: "5%",
+                    right: "15%",
+                    opacity: isNextDisabled ? 0.5 : 1,
+                    pointerEvents: isNextDisabled ? "none" : "auto",
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                    zIndex: 20000
+                }}
+            >
+                <img
+                    src={nextButton}
+                    alt="Next"
                     style={{
-                        position: "fixed", 
+                        width: "20vw",
+                        minWidth: "120px"
+                    }}
+                />
+            </button>
+
+
+            {gameStage === "intro" && (
+                <div
+                    style={{
+                        position: "fixed",
                         top: 0,
                         left: 0,
                         width: "100dvw",
@@ -1089,19 +1089,19 @@ useEffect(() => {
                         placeHolderColor="#000000"
                         placeHolderfontSize="2vw"
                     />
-                    </div>
-                )}
-            
+                </div>
+            )}
+
             <div
-            id="phaser-game"
-            style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100dvw",
-                height: "100dvh",
-                zIndex: 10000
-            }}
+                id="phaser-game"
+                style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100dvw",
+                    height: "100dvh",
+                    zIndex: 10000
+                }}
             />
             {gameStage === "ThermometerScene" && thermometerState === "instructions" && (
                 <div
@@ -1234,10 +1234,10 @@ useEffect(() => {
                 </div>
             )}
             {gameStage === "HandScene" && showSoapText && (
-                 <div
-                onClick={() => setShowSoapText(false)}
-            style={{
-                        position: "fixed", 
+                <div
+                    onClick={() => setShowSoapText(false)}
+                    style={{
+                        position: "fixed",
                         top: 0,
                         left: 0,
                         width: "100dvw",
@@ -1247,22 +1247,22 @@ useEffect(() => {
                         alignItems: "center",
                         zIndex: 10000
                     }}
-            >
-                
-                <Textbox
-                    width="70dvw"
-                    height="70dvh"
-                    placeholder={soapText}
-                    placeHolderColor="#000000"
-                    placeHolderfontSize="1.8vw"
-                />
+                >
+
+                    <Textbox
+                        width="70dvw"
+                        height="70dvh"
+                        placeholder={soapText}
+                        placeHolderColor="#000000"
+                        placeHolderfontSize="1.8vw"
+                    />
                 </div>
             )}
 
             {gameStage === "HandScene" && handsClean && timerDone && (
-             <div
-                style={{
-                        position: "fixed", 
+                <div
+                    style={{
+                        position: "fixed",
                         top: 0,
                         left: 0,
                         width: "100dvw",
@@ -1272,81 +1272,81 @@ useEffect(() => {
                         alignItems: "center",
                         zIndex: 10000
                     }}
-            >
-   
-      <Textbox
-        width="70dvw"
-        height="70dvh"
-        placeholder={soapSuccessText}
-        placeHolderColor="#000000"
-        placeHolderfontSize="1.8vw"
-      />
-    </div>
+                >
+
+                    <Textbox
+                        width="70dvw"
+                        height="70dvh"
+                        placeholder={soapSuccessText}
+                        placeHolderColor="#000000"
+                        placeHolderfontSize="1.8vw"
+                    />
+                </div>
 
             )}
 
             {gameStage === "gloveStage" && gloveInstruction && (
-              <div
-    style={{
-            position: "fixed", 
-            top: 0,
-            left: 0,
-            width: "100dvw",
-            height: "100dvh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 10000
-        }}
-  >
-    <div
-      onClick={() => setGloveInstruction(false)}
-     style={{
-            position: "fixed", 
-            top: 0,
-            left: 0,
-            width: "100dvw",
-            height: "100dvh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 10000
-        }}
-    >
-      <Textbox
-        width="70%"
-        height="70%"
-        placeholder={gloveText}
-        placeHolderColor="#000000"
-        placeHolderfontSize="1.8vw"
-      />
-    </div>
-  </div>
+                <div
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100dvw",
+                        height: "100dvh",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 10000
+                    }}
+                >
+                    <div
+                        onClick={() => setGloveInstruction(false)}
+                        style={{
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            width: "100dvw",
+                            height: "100dvh",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            zIndex: 10000
+                        }}
+                    >
+                        <Textbox
+                            width="70%"
+                            height="70%"
+                            placeholder={gloveText}
+                            placeHolderColor="#000000"
+                            placeHolderfontSize="1.8vw"
+                        />
+                    </div>
+                </div>
             )}
 
             {gameStage === "gloveStage" && glovedHands && (
-               <div
-                style={{
-            position: "fixed", 
-            top: 0,
-            left: 0,
-            width: "100dvw",
-            height: "100dvh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 10000
-        }}
-  >
-   
-      <Textbox
-       width="70dvw"
-        height="70dvh"
-        placeholder={gloveSuccessText}
-        placeHolderColor="#000000"
-        placeHolderfontSize="1.8vw"
-      />
-    </div>
+                <div
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100dvw",
+                        height: "100dvh",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 10000
+                    }}
+                >
+
+                    <Textbox
+                        width="70dvw"
+                        height="70dvh"
+                        placeholder={gloveSuccessText}
+                        placeHolderColor="#000000"
+                        placeHolderfontSize="1.8vw"
+                    />
+                </div>
             )}
 
             {gameStage === "FridgeScene" && fridgeState === "success" && (
@@ -1372,17 +1372,17 @@ useEffect(() => {
                 </div>
             )}
             <div
-                  style={{
+                style={{
                     position: "absolute",
                     top: "4px",
                     right: "110px",
                     width: "100px",
                     zIndex: 30000
-                  }}
-                >
-                  <Settings openMenu={openMenu}/>
-                </div>
-          
+                }}
+            >
+                <Settings openMenu={openMenu} />
+            </div>
+
 
         </div>
     );

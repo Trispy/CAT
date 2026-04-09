@@ -14,6 +14,9 @@ import Can from './pages/module3/cansort.js'
 import Map from "./pages/user/map.js";
 import OrientationGuard from "./components/orientationguard";
 import Allergen from './pages/module3/allergens.js';
+import CleanTote from './pages/module4/cleanTote.js';
+import CoolerPack from './pages/module4/sorting.js';
+import TruckPack from './pages/module4/packing.js';
 import ColdPrepTransport from './pages/module5/coldPreparedTransport.js';
 import HotPrepTransport from './pages/module5/hotPreparedTransport.js';
 import FoodServiceMishaps from './pages/module6/foodServiceMishaps.js';
@@ -49,7 +52,9 @@ function App() {
           <Route path="/module3/expiration" element={<Expiration openMenu={() => setShowMenu(true)}/>} />
           <Route path="/module3/canSorting" element={<Can openMenu={() => setShowMenu(true)}/>} />
           <Route path="/module3/allergenIdentification" element={<Allergen openMenu={() => setShowMenu(true)}/>} />
-          <Route path="/module4/cleanTote" element={<CleanTote openMenu={() => setShowMenu(true)}/>} />
+          <Route path="/module4/toteCleaning" element={<CleanTote openMenu={() => setShowMenu(true)}/>} />
+          <Route path="/module4/coolerPack" element={<CoolerPack openMenu={() => setShowMenu(true)}/> } />
+          <Route path="/module4/packTruck" element={<TruckPack openMenu={() => setShowMenu(true)}/> } />
           <Route path="/module5/coldPreparedTransport" element={<ColdPrepTransport openMenu={() => setShowMenu(true)}/>} />
           <Route path="/module5/hotPreparedTransport" element={<HotPrepTransport openMenu={() => setShowMenu(true)}/>} />
           <Route path="/module6/foodServiceMishaps" element={<FoodServiceMishaps openMenu={() => setShowMenu(true)}/>} />
