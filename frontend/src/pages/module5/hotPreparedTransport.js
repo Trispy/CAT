@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Phaser, { Game } from "phaser";
 
 
+
 import bg1 from "../../assets/M2Cooking/CookingBackground.png";
 import healthy from "../../assets/M1G1/Healthy.png";
 import textbox from "../../assets/M1G1/Textbox.png";
@@ -30,10 +31,10 @@ import { defaultFont } from "../../formatting";
 import { defaultFontSize } from "../../formatting";
 import { defaultFontColor } from "../../formatting";
 import { defaultTypingSpeed } from "../../formatting";
-
+import Settings from "../../components/settings";
 import { useNavigate } from "react-router-dom";
-
-export default function HotPrepTransport() {
+const API = process.env.REACT_APP_API_URL;
+export default function HotPrepTransport({ openMenu }) {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -133,7 +134,7 @@ export default function HotPrepTransport() {
                         height / 2,
                         inputText,
                         {
-                            font: "60px Arial",
+                            font: "bold 60px sans-serif",
                             color: "#000",
                             wordWrap: { width: width * 0.7 }
                         }
@@ -405,7 +406,7 @@ export default function HotPrepTransport() {
                 this.textboxImage = this.add.image(0, 0, "erinText").setOrigin(0);
 
                 this.textboxText = this.add.text(600, 100, "", {
-                    font: "70px Arial",
+                    font: "bold 70px sans-serif",
                     color: "#000",
                     wordWrap: {
                         width: this.textboxImage.width * 0.6
@@ -779,8 +780,6 @@ export default function HotPrepTransport() {
             }
 
             
-
-            
         }
 
         const config = {
@@ -828,6 +827,17 @@ export default function HotPrepTransport() {
                     zIndex: 1
                 }}
             />
+            <div
+                  style={{
+                    position: "absolute",
+                    top: "4px",
+                    right: "110px",
+                    width: "100px",
+                    zIndex: 30000
+                  }}
+                >
+                  <Settings openMenu={openMenu}/>
+                </div>
         </div>
     );
 }

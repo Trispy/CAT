@@ -31,10 +31,13 @@ import gloveBox from "../../assets/M1G3/gloveBox.png";
 import handLeft from "../../assets/M1G3/handLeft.png";
 import handRight from "../../assets/M1G3/handRight.png";
 import sudImg from "../../assets/M1G3/sud.png";
+import mapbutton from "../../assets/mapbutton.png";
+import Settings from "../../components/settings";
+const API = process.env.REACT_APP_API_URL;
 
 
 
-function Module2Part1() {
+function Module2Part1({ openMenu }) {
     const [gameStage, setgameStage] = useState('intro');
     const phaserGameRef = useRef(null);
     const [thermometerState, setThermometerState] = useState("instructions");
@@ -258,6 +261,9 @@ useEffect(() => {
             constructor() {
                 super("FridgeScene");
             }
+            init() {
+                this.instructions = ["Sort the following items into the correct shelves in the fridge based on the following rules:", "1. Ready made food goes on the top shelf because it is usually precooked.", "2. Dairy goes on the middle shelf where the temperature is most consistent.", "3. Meat goes on the bottom shelf to prevent cross-contamination.", "4. Veggies go in the crisper drawer to maintain freshness."];
+            }
             preload() {
                 this.load.image("readymadefood1", readymadefood1);
                 this.load.image("readymadefood2", readymadefood2);
@@ -273,9 +279,70 @@ useEffect(() => {
                 this.load.image("milk", milk);
                 this.load.image("bellpepper", bellpepper);
             }
-            create() {
+            showInstructions() {
                 const { width, height } = this.scale;
 
+                const overlay = this.add.container(0, 0);
+
+                const bg = this.add.rectangle(
+                    width / 2,
+                    height / 2,
+                    width * 0.7,
+                    height * 0.7,
+                    0xffffff
+                ).setStrokeStyle(4, 0x000000);
+
+                const text = this.add.text(
+                    width / 2,
+                    height / 2,
+                    this.instructions.join("\n\n"),
+                    {
+                        font: "32px Arial",
+                        color: "#000",
+                        wordWrap: { width: width * 0.7 }
+                    }
+                ).setOrigin(0.5);
+
+                const close = this.add.text(
+                    width * 0.82,
+                    height * 0.20,
+                    "X",
+                    {
+                        font: "40px Arial",
+                        backgroundColor: "#ff0000",
+                        padding: { x: 20, y: 10 }
+                    }
+                )
+                    .setInteractive()
+                    .setOrigin(0.5);
+
+                close.on("pointerdown", () => {
+                    overlay.destroy(true);
+                });
+
+                overlay.add([bg, text, close]);
+            }
+            create() {
+                const { width, height } = this.scale;
+                const helpButton = this.add.text(
+                    width * 0.89,
+                    height * 0.07,
+                    "?",
+                    {
+                        font: "bold 70px sans-serif",
+                        backgroundColor: "#ffffff",
+                        color: "#5100ff",
+                        padding: { x: 40, y: 20 }
+                    }
+                )
+                    .setOrigin(0.5)
+                    .setInteractive({ useHandCursor: true })
+                    .setDepth(1000)
+                    .setStroke("#000000", 4);
+
+                helpButton.on("pointerdown", () => {
+                    this.showInstructions();
+                });
                 // Background
                 this.add.image(width / 2, height / 2, "fridgeScene").setDisplaySize(width, height);
                 const box = this.add.image(width / 2 - width * 0.25, height / 2 + height * 0.30, "foodbox")
@@ -458,19 +525,19 @@ useEffect(() => {
 
                         if (droppedShelf === "drawer"
                         ) {
-                            setfridgeSuccessState("Thats correct! Veggies go in the crisper drawer to mantain freshness.")
+                            setfridgeSuccessState("Thats correct! Veggies go in the crisper drawer to mantain freshness. Click anywhere to get out of the textbox.")
                             gameObject.destroy();
                         }
                         if (droppedShelf === "bottom") {
-                            setfridgeSuccessState("Thats correct! Meat goes on the bottom shelf to prevent cross-contamination.")
+                            setfridgeSuccessState("Thats correct! Meat goes on the bottom shelf to prevent cross-contamination. Click anywhere to get out of the textbox.")
                             gameObject.disableInteractive();
                         }
                         if (droppedShelf === "top") {
-                            setfridgeSuccessState("Thats correct! Ready made food goes on the top shelf because it is usually precooked.")
+                            setfridgeSuccessState("Thats correct! Ready made food goes on the top shelf because it is usually precooked. Click anywhere to get out of the textbox.")
                             gameObject.disableInteractive();
                         }
                         if (droppedShelf === "middle") {
-                            setfridgeSuccessState("Thats correct! Dairy goes on the middle shelf where the temperature is most consistent.")
+                            setfridgeSuccessState("Thats correct! Dairy goes on the middle shelf where the temperature is most consistent. Click anywhere to get out of the textbox.")
                             gameObject.disableInteractive();
                         }
 
@@ -874,7 +941,7 @@ useEffect(() => {
             setgameStage("gloveStage");
         }
         if (gameStage === "gloveStage") {
-            moduleUpdate("http://localhost:3001/api/game/module2/module2part1/completed");
+            moduleUpdate(`${API}/api/game/module2/module2part1/completed`);
             navigate('/module2/cleaning', { replace: true });
         }
     };
@@ -884,7 +951,7 @@ useEffect(() => {
         true
     );
     const thermometerInstructions = useTypewriter(
-        "Drag the bottom of the thermometer hand to the correct position to determine if the food is safe or not for the fridge.",
+        "Drag the bottom of the thermometer hand to the correct position to determine if the food is safe or not for the fridge. Click anywhere to click out of the textbox.",
         thermometerState === "instructions"
     );
     const thermometerSuccessText = useTypewriter(
@@ -900,7 +967,7 @@ useEffect(() => {
         fridgeState === "fail"
     );
     const fridgeInstructions = useTypewriter(
-        "Click on the box for the food item to appear. Drag it to the correct shelf.",
+        "Click on the box for the food item to appear and drag to the correct shelf. Press on the \"?\" for the specific rules. Click anywhere to click out of the textbox.",
         fridgeInstructionsState === "instructions"
     );
 
@@ -908,11 +975,11 @@ useEffect(() => {
         fridgeSuccessState,
         fridgeState === "success"
     );
-    const soapText = useTypewriter("Drag the soap to the hand to clean them.",
+    const soapText = useTypewriter("Drag the soap to the hand to clean them. Click anywhere to click out of the textbox.",
         gameStage === "HandScene" && showSoapText)
     const soapSuccessText = useTypewriter("All clean! Now lets put on some gloves.",
         gameStage === "HandScene" && handsClean && timerDone)
-    const gloveText = useTypewriter("Make sure to put gloves on before touching any food",
+    const gloveText = useTypewriter("Make sure to put gloves on before touching any food. Click anywhere to click out of the textbox.",
         gameStage === "gloveStage" && gloveInstruction)
     const gloveSuccessText = useTypewriter("Gloved up!",
         gameStage === "gloveStage" && glovedHands)
@@ -962,16 +1029,16 @@ useEffect(() => {
 };
     return (
         <div
-    className="form"
-    style={{
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      backgroundColor: "black",
-      height: "100dvh",
-      overflow: "hidden",
-      position: "relative"
-    }}
+            className="form"
+            style={{
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundColor: "black",
+            height: "100dvh",
+            overflow: "hidden",
+            position: "relative"
+            }}
   >
        
             <button
@@ -1045,12 +1112,12 @@ useEffect(() => {
                         style={{
                             position: "fixed",
                             right: "18vw",
-                            bottom: "10vh"
+                            bottom: "20vh"
                         }}
                     >
                         <Textbox
                             width="30vw"
-                            height="42vh"
+                            height="50vh"
                             placeholder={thermometerInstructions}
                             placeHolderColor="#000000"
                             placeHolderfontSize="1.1vw"
@@ -1067,12 +1134,12 @@ useEffect(() => {
                         style={{
                             position: "fixed",
                             right: "18vw",
-                            bottom: "10vh"
+                            bottom: "20vh"
                         }}
                     >
                         <Textbox
                             width="30vw"
-                            height="30vh"
+                            height="40vh"
                             placeholder={thermometerFailText}
                             placeHolderColor="#000000"
                             placeHolderfontSize="1.1vw"
@@ -1085,13 +1152,13 @@ useEffect(() => {
                     style={{
                         position: "fixed",
                         right: "18vw",
-                        bottom: "10vh",
+                        bottom: "20vh",
                         zIndex: 15000
                     }}
                 >
                     <Textbox
                         width="30vw"
-                        height="30vh"
+                        height="40vh"
                         placeholder={thermometerSuccessText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.1vw"
@@ -1107,12 +1174,12 @@ useEffect(() => {
                         style={{
                             position: "fixed",
                             right: "18vw",
-                            bottom: "10vh"
+                            bottom: "20vh"
                         }}
                     >
                         <Textbox
-                            width="30vw"
-                            height="30vh"
+                            width="40vw"
+                            height="50vh"
                             placeholder={fridgeInstructions}
                             placeHolderColor="#000000"
                             placeHolderfontSize="1.1vw"
@@ -1131,12 +1198,12 @@ useEffect(() => {
                         style={{
                             position: "fixed",
                             right: "18vw",
-                            bottom: "10vh"
+                            bottom: "20vh"
                         }}
                     >
                         <Textbox
                             width="30vw"
-                            height="30vh"
+                            height="40vh"
                             placeholder={fridgeFailText}
                             placeHolderColor="#000000"
                             placeHolderfontSize="1.1vw"
@@ -1153,12 +1220,12 @@ useEffect(() => {
                         style={{
                             position: "fixed",
                             right: "18vw",
-                            bottom: "10vh"
+                            bottom: "20vh"
                         }}
                     >
                         <Textbox
                             width="30vw"
-                            height="30vh"
+                            height="40vh"
                             placeholder={fridgeComplete}
                             placeHolderColor="#000000"
                             placeHolderfontSize="1.1vw"
@@ -1259,7 +1326,7 @@ useEffect(() => {
 
             {gameStage === "gloveStage" && glovedHands && (
                <div
-    style={{
+                style={{
             position: "fixed", 
             top: 0,
             left: 0,
@@ -1291,12 +1358,12 @@ useEffect(() => {
                         style={{
                             position: "fixed",
                             right: "18vw",
-                            bottom: "10vh"
+                            bottom: "15vh"
                         }}
                     >
                         <Textbox
                             width="30vw"
-                            height="30vh"
+                            height="40vh"
                             placeholder={fridgeSuccessText}
                             placeHolderColor="#000000"
                             placeHolderfontSize="1.1vw"
@@ -1304,6 +1371,18 @@ useEffect(() => {
                     </div>
                 </div>
             )}
+            <div
+                  style={{
+                    position: "absolute",
+                    top: "4px",
+                    right: "110px",
+                    width: "100px",
+                    zIndex: 30000
+                  }}
+                >
+                  <Settings openMenu={openMenu}/>
+                </div>
+          
 
         </div>
     );

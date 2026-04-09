@@ -25,14 +25,14 @@ import panOnion from "../../assets/M2Cooking/Pan_Onions.png";
 import panPepper from "../../assets/M2Cooking/Pan_Peppers.png";
 import thermometerHand from "../../assets/M2Cooking/ThermometerHand.png";
 import next from "../../assets/M1G1/nextbutton.png";
-
+import mapbutton from "../../assets/mapbutton.png";
 import {defaultFontSize} from "../../formatting";
 import {defaultFontColor} from "../../formatting";
 import {defaultTypingSpeed} from "../../formatting";
-
 import { useNavigate } from "react-router-dom";
-
-export default function Cooking() {
+import Settings from "../../components/settings";
+const API = process.env.REACT_APP_API_URL;
+export default function Cooking({ openMenu }) {
   const navigate = useNavigate();
   useEffect(() => {
       window.navigateToPage = navigate;
@@ -163,7 +163,7 @@ export default function Cooking() {
         }
         else{
           callUpdate("m2");
-          moduleUpdate("http://localhost:3001/api/game/module2/cooking/completed");
+          moduleUpdate(`${API}/api/game/module2/cooking/completed`);
           window.navigateToPage("/map");
         }  
 });
@@ -393,6 +393,18 @@ typewriteText(text, speed = defaultTypingSpeed, fontSize = null) {
           zIndex: 1
         }}
       />
+      <div
+            style={{
+              position: "absolute",
+              top: "4px",
+              right: "110px",
+              width: "100px",
+              zIndex: 10
+            }}
+          >
+            <Settings openMenu={openMenu}/>
+          </div>
+       
     </div>
 );
 }

@@ -3,8 +3,12 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 const Module1 = require('../models/module1.model'); 
-const Module2 = require('../models/module2.model'); 
-const module3Model = require('../models/module3.model');
+const Module2 = require('../models/module2.model');
+const Module3 = require('../models/module3.model');
+const Module4 = require('../models/module4.model');
+const Module5 = require('../models/module5.model');
+const Module6 = require('../models/module6.model');
+
 
 router.post('/createaccount', async (req, res) => {
   try {
@@ -26,12 +30,31 @@ router.post('/createaccount', async (req, res) => {
       chopping: false, 
       cooking: false
     })
-    await module3Model.create({
+    await Module3.create({
       username: user.username, 
       cansort: false, 
       expiration: false, 
       allergenIdentification: false
     })
+    await Module4.create({
+      username: user.username, 
+      module4part1: false, 
+      module4part2: false, 
+      module4part3: false
+    })
+    await Module5.create({
+      username: user.username, 
+      module5part1: false, 
+      module5part2: false, 
+      module5part3: false
+    })
+    await Module6.create({
+      username: user.username, 
+      module6part1: false, 
+      module6part2: false, 
+      module6part3: false
+    })
+
     await user.save();
     res.status(201).json({ message: 'Account created successfully with user: ', user });
   } 

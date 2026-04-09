@@ -2,7 +2,7 @@ import './login.css';
 import Button from '../../components/button';
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from "react";
-
+const API = process.env.REACT_APP_API_URL;
 function Login() {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
@@ -17,22 +17,30 @@ function Login() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        const userData = {
-            email: email,
-            username: username,
-        };
+    e.preventDefault();
 
-        try {
-            const add = await fetch("http://localhost:3001/api/users/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(userData),
-            });
-            console.log(add)
-            const data = await add.json();
+    const userData = {
+        email: email,
+        username: username,
+    };
+
+    try {
+        const add = await fetch(`${API}/api/users/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+        });
+
+        console.log(add);
+        console.log("API: ", API);
+
+  
+        const data = await add.json();
+
+        if (add.status === 200) {
+         
             sessionStorage.setItem("username", data.user.username);
             sessionStorage.setItem("m1", data.user.finished_m1);
             sessionStorage.setItem("m2", data.user.finished_m2);
@@ -41,31 +49,27 @@ function Login() {
             sessionStorage.setItem("m5", data.user.finished_m5);
             sessionStorage.setItem("m6", data.user.finished_m6);
 
-            const token = data.token;
+          
+            localStorage.setItem("token", data.token);
 
+            console.log("JWT Token:", data.token);
 
-            console.log("JWT Token:", token);
-
-            localStorage.setItem("token", token);
-            if (add.status === 200) {
-                navigate('/map', { replace: true });
-                // link to module 1 start
-                // Check for jwt token ? Special status for if they have a token?
-            }
-            else if (add.status === 400) {
-                setMissing(true);
-                if (noUser)
-                    setNoUser(false);
-            }
-            else if (add.status === 404) {
-                setNoUser(true);
-                if (missing)
-                    setMissing(false);
-            }
-        } catch (err) {
-            console.error()
+    
+            window.location.href = "/map";
         }
-    };
+        else if (add.status === 400) {
+            setMissing(true);
+            setNoUser(false);
+        }
+        else if (add.status === 404) {
+            setNoUser(true);
+            setMissing(false);
+        }
+
+    } catch (err) {
+        console.error("Login error:", err);
+    }
+};
 
     return (
         <div className='form'>
@@ -93,7 +97,7 @@ function Login() {
 
                 <div className="home">
                     <Link to="/createaccount">
-                        <Button text="Create a New Account"></Button>
+                        <input type="submit" value="Create a New Account" />
                     </Link>
                 </div>
             </form>

@@ -1,0 +1,31 @@
+service: cat-api
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    MONGODB_URI: ${env:MONGODB_URI}
+    JWT_SECRET: ${env:JWT_SECRET}
+    REACT_APP_API_URL: ${env:REACT_APP_API_URL}
+
+functions:
+  app:
+    handler: server.handler
+    events:
+      - httpApi: '*'
+
+package:
+  individually: true
+  excludeDevDependencies: true
+
+build:
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: false
+    external:
+      - aws-sdk
+    target: node18

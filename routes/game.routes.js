@@ -4,6 +4,9 @@ const User = require('../models/user.model');
 const Module1 = require("../models/module1.model");
 const Module2 = require("../models/module2.model");
 const Module3 = require("../models/module3.model");
+const Module4 = require("../models/module4.model");
+const Module5 = require("../models/module5.model");
+const Module6 = require("../models/module6.model");
 const requireAuth = require('../middleware/auth.middleware');
 
 const checkAccess = require("../middleware/mod.middleware");
@@ -186,6 +189,70 @@ router.post('/updateComplete', async (req, res) => {
   catch (error) {
     console.error('Error creating account:', error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+router.get('/moduleSummary', requireAuth, async (req, res) => {
+  try {
+    const username = req.user.username;
+
+    const [user, mod1, mod2, mod3, mod4, mod5, mod6] = await Promise.all([
+      User.findOne({ username }),
+      Module1.findOne({ username }),
+      Module2.findOne({ username }),
+      Module3.findOne({ username }),
+      Module4.findOne({ username }),
+      Module5.findOne({ username }),
+      Module6.findOne({ username }),
+    ]);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      finished_m1: user.finished_m1,
+      module1: {
+        symptoms: mod1?.symptoms ?? false,
+        personalHygiene: mod1?.personalHygiene ?? false,
+        location: mod1?.location ?? false
+      },
+
+      finished_m2: user.finished_m2,
+      module2: {
+        module2part1: mod2?.module2part1 ?? false,
+        chopping: mod2?.chopping ?? false,
+        cooking: mod2?.cooking ?? false
+      },
+
+      finished_m3: user.finished_m3,
+      module3: {
+        cansort: mod3?.cansort ?? false,
+        expiration: mod3?.expiration ?? false,
+        allergenIdentification: mod3?.allergenIdentification ?? false
+      },
+      finished_m4: user.finished_m4,
+      module4: {
+        module4part1: mod4?.module4part1 ?? false,
+        module4part2: mod4?.module4part2 ?? false,
+        module4part3: mod4?.module4part3 ?? false
+      },
+
+      finished_m5: user.finished_m5,
+      module5: {
+        module5part1: mod5?.module5part1 ?? false,
+        module5part2: mod5?.module5part2 ?? false,
+        module5part3: mod5?.module5part3 ?? false
+      },
+      finished_m6: user.finished_m6,
+      module6: {
+        module6part1: mod6?.module6part1 ?? false,
+        module6part2: mod6?.module6part2 ?? false,
+        module6part3: mod6?.module6part3 ?? false
+      }
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 

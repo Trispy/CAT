@@ -21,8 +21,12 @@ import gloveBox from "../../assets/M1G3/gloveBox.png";
 import handLeft from "../../assets/M1G3/handLeft.png";
 import handRight from "../../assets/M1G3/handRight.png";
 import sudImg from "../../assets/M1G3/sud.png";
+import mapbutton from "../../assets/mapbutton.png";
+import Settings from "../../components/settings";
+const API = process.env.REACT_APP_API_URL;
 
-export default function Location() {
+
+export default function Location({ openMenu }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
 
@@ -54,6 +58,7 @@ export default function Location() {
     const [gloveInstruction, setGloveInstruction] = useState(false);
     const [glovedHands, setGlovedHands] = useState(false);
     const [timerDone, setTimerDone] = useState(false);
+    
 
     const introText = useTypewriter("We've arrived at the volunteer location, let's finish getting ready.",
         gameStage === "intro");
@@ -63,11 +68,11 @@ export default function Location() {
         gameStage === "apron" && fullyDressed)
     const finalText = useTypewriter("You have now completed the basic hygiene module. Let's move on to the basic food safety module!",
         gameStage === "finalStage")
-    const soapText = useTypewriter("Drag the soap to the hands and rub it around to clean them.",
+    const soapText = useTypewriter("Drag the soap to the hands and rub it around to clean them. Click anywhere to click out of the textbox.",
         gameStage === "soapyHands" && showSoapText)
     const soapSuccessText = useTypewriter("All clean! Now lets put on some gloves.",
         gameStage === "soapyHands" && handsClean)
-    const gloveText = useTypewriter("Make sure to put gloves on before touching any food",
+    const gloveText = useTypewriter("Make sure to put gloves on before touching any food. Click anywhere to click out of the textbox.",
         gameStage === "gloveStage" && gloveInstruction)
     const gloveSuccessText = useTypewriter("Gloved up!",
         gameStage === "gloveStage" && glovedHands)
@@ -615,7 +620,7 @@ export default function Location() {
 
         if (gameStage === "finalStage") {
             callUpdate("m1");
-            moduleUpdate("http://localhost:3001/api/game/module1/location/completed");
+            moduleUpdate(`${API}/api/game/module1/location/completed`);
             navigate('/map', { replace: true });
         }
     };
@@ -890,6 +895,20 @@ export default function Location() {
                 </div>
 
             )}
+            <div
+                  style={{
+                    position: "absolute",
+                    top: "4px",
+                    right: "110px",
+                    width: "100px",
+                    zIndex: 10
+                  }}
+                >
+                  <Settings openMenu={openMenu}/>
+                </div>
+           
+              
         </div>
+
     );
 }

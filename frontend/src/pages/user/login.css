@@ -1,33 +1,88 @@
+/* Center the whole page */
 .form {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 100vh;
+  padding: 10px;
+
+  background: #f5e6c8;
 }
 
-label {display: block;}
+/* Card container */
+.form form {
+  display: flex;
+  flex-direction: column;
 
-.input[type=text], select {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  display: inline-block;
+  width: 90vw;
+  max-width: 320px;       /* 🔥 prevents full-width stretch */
+
+  background: #fff;
+  padding: 15px;
+
+  border-radius: 12px;
+  border: 2px solid black;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Title */
+.form h1 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Labels */
+.input {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+/* Inputs */
+.input input {
+  padding: 6px;
+  font-size: 16px;
+
+  border-radius: 6px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
 }
 
-input[type=submit] {
-  width: 100%;
-  background-color: rgb(245, 192, 123);
-  color: black;
-  padding: 14px;
-  margin: 8px 0;
+/* Login button */
+input[type="submit"] {
+  margin-top: 10px;
+  padding: 8px;
+
+  font-size: 16px;
+
+  border-radius: 8px;
   border: none;
-  border-radius: 4px;
+
+  background-color: #e6c89c;
   cursor: pointer;
-  font-size: 24px;
 }
 
-input[type=submit]:hover {
-  opacity: 0.8;
+input[type="submit"] {
+  width: 100%;
+  max-width: 200px;   
+  align-self: center;
+}
+
+/* Error messages */
+.form p {
+  font-size: 11px;
+  color: red;
+  margin: 4px 0;
+  text-align: center;
+}
+
+/* Create account button container */
+.home {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
 }

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Phaser from "phaser";
 
+
 import bg1 from "../../assets/M5G1/ClosedFridgeOpenCooler.png";
 import healthy from "../../assets/M1G1/Healthy.png";
 import textbox from "../../assets/M1G1/Textbox.png";
@@ -19,15 +20,15 @@ import prepFood1 from "../../assets/M5G1/PreparedFood1.png"
 import prepFood2 from "../../assets/M5G1/PreparedFood2.png"
 import hand from "../../assets/M2Cooking/ThermometerHand.png";
 
-
 import { defaultFont } from "../../formatting";
 import { defaultFontSize } from "../../formatting";
 import { defaultFontColor } from "../../formatting";
 import { defaultTypingSpeed } from "../../formatting";
-
+import Settings from "../../components/settings";
 import { useNavigate } from "react-router-dom";
+const API = process.env.REACT_APP_API_URL;
 
-export default function ColdPrepTransport() {
+export default function ColdPrepTransport({ openMenu }) {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -118,7 +119,7 @@ export default function ColdPrepTransport() {
                         height / 2,
                         inputText,
                         {
-                            font: "70px Arial",
+                            font: "bold 70px sans-serif",
                             color: "#000",
                             wordWrap: { width: width * 0.7 }
                         }
@@ -129,7 +130,7 @@ export default function ColdPrepTransport() {
                         height * 0.15,
                         "X",
                         {
-                            font: "40px Arial",
+                            font: "bold 40px sans-serif",
                             backgroundColor: "#e2e2e2",
                             padding: { x: 10, y: 5 }
                         }
@@ -299,7 +300,7 @@ export default function ColdPrepTransport() {
                 this.textboxImage = this.add.image(0, 0, "erinText").setOrigin(0);
 
                 this.textboxText = this.add.text(600, 100, "", {
-                    font: "70px Arial",
+                    font: "bold 70px sans-serif",
                     color: "#000",
                     wordWrap: {
                         width: this.textboxImage.width * 0.6
@@ -666,6 +667,17 @@ export default function ColdPrepTransport() {
                     zIndex: 1
                 }}
             />
+            <div
+                  style={{
+                    position: "absolute",
+                    top: "4px",
+                    right: "110px",
+                    width: "100px",
+                    zIndex: 30000
+                  }}
+                >
+                  <Settings openMenu={openMenu}/>
+                </div>
         </div>
     );
 }
