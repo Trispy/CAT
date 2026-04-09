@@ -16,7 +16,8 @@ import OrientationGuard from "./components/orientationguard";
 import Allergen from './pages/module3/allergens.js';
 import ColdPrepTransport from './pages/module5/coldPreparedTransport.js';
 import HotPrepTransport from './pages/module5/hotPreparedTransport.js';
-
+import FoodServiceMishaps from './pages/module6/foodServiceMishaps.js';
+import ServiceSetUps from './pages/module6/serviceSetUp.js';
 
 import M1Nav from './pages/module1/module1Navigate.js';
 import M2Nav from './pages/module2/module2Navigate.js';
@@ -46,6 +47,8 @@ function App() {
           <Route path="/module3/allergenIdentification" element={<Allergen />} />
           <Route path="/module5/coldPreparedTransport" element={<ColdPrepTransport />} />
           <Route path="/module5/hotPreparedTransport" element={<HotPrepTransport />} />
+          <Route path="/module6/foodServiceMishaps" element={<FoodServiceMishaps />} />
+          <Route path="/module6/foodServiceSetUp" element={<ServiceSetUps />} />
         </Routes>
       </OrientationGuard>
     </BrowserRouter>
