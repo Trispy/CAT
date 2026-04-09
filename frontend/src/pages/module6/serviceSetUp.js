@@ -522,7 +522,7 @@ export default function ServiceSetUps() {
                         this.transitions.shift();
                     }
                     else {
-                        //this.cleanupScene();
+                        this.cleanupScene();
                         window.navigateToPage("/map");
                     }
                 });
@@ -778,7 +778,85 @@ export default function ServiceSetUps() {
 
         
 
+            
             }
+
+            cleanupScene() {
+    // Stop timers & tweens first
+    if (this.typingEvent) {
+        this.typingEvent.remove(false);
+        this.typingEvent = null;
+    }
+
+    this.time.removeAllEvents();
+    this.tweens.killAll();
+
+    // Disable input
+    this.input.removeAllListeners();
+    this.input.enabled = false;
+
+    // ---- BACKGROUND & UI ----
+    this.bg1?.destroy();
+    this.next?.destroy();
+    this.textboxImage?.destroy();
+    this.textboxText?.destroy();
+    this.textbox?.destroy();
+
+    // ---- SPACES ----
+    this.space1?.destroy();
+    this.space2?.destroy();
+    this.space3?.destroy();
+
+    // ---- CHAFER DISHES ----
+    this.chaferDish1?.destroy();
+    this.chaferDish2?.destroy();
+    this.chaferDish3?.destroy();
+
+    // ---- COOLER / ICE ----
+    this.emptyBox?.destroy();
+    this.fullBox?.destroy();
+    this.closedBox?.destroy();
+    this.ice?.destroy();
+
+    // ---- FOOD ----
+    this.chickenBowl?.destroy();
+    this.soupBowl?.destroy();
+    this.coldFood?.destroy();
+
+    // ---- THERMOMETERS ----
+    this.hotTherm1?.destroy();
+    this.hotTherm2?.destroy();
+    this.coldTherm?.destroy();
+
+    // ---- HANDS ----
+    this.hotHand1?.destroy();
+    this.hotHand2?.destroy();
+    this.coldHand?.destroy();
+
+    // ---- LABELS ----
+    this.chickenLabel?.destroy();
+    this.soupLabel?.destroy();
+    this.melonLabel?.destroy();
+
+    // ---- UTENSILS ----
+    this.ladle?.destroy();
+    this.tongs?.destroy();
+    this.spatula?.destroy();
+
+    // ---- UTENSIL DISHES ----
+    this.ladleDish?.destroy();
+    this.tongsDish?.destroy();
+    this.spatulaDish?.destroy();
+
+    // ---- TIMER TEXT ----
+    this.timerText?.destroy();
+
+    // ---- FINAL SAFETY CLEAN ----
+    this.children.removeAll();
+
+    // Remove global reference
+    delete window.navigateToPage;
+}
             showThermometer(therm){
                 if(therm === this.hotTherm1){
 
