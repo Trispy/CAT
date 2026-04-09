@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Phaser from "phaser";
 
+import moduleUpdate from "../../components/moduleupdate";
 
 import bg1 from "../../assets/M5G1/ClosedFridgeOpenCooler.png";
 import healthy from "../../assets/M1G1/Healthy.png";
@@ -334,6 +335,7 @@ export default function ColdPrepTransport({ openMenu }) {
                     }
                     else {
                         this.cleanupScene();
+                        moduleUpdate(`${API}/api/game/module5/coldPreparedTransport/completed`);
                         window.navigateToPage("/module5/hotPreparedTransport");
                     }
                 });

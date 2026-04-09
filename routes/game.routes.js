@@ -339,4 +339,66 @@ router.get("/module3/status", requireAuth, async (req, res) => {
   }
 });
 
+//mod 5 routes
+
+// mark as complete
+router.post(
+  "/module5/coldPreparedTransport/completed",
+  checkAccess("module5", "cold"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+      console.log(req.user);
+
+      const updated = await Module5.findOneAndUpdate(
+        { username },
+        { cold: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+router.post(
+  "/module5/hotPreparedTransport/completed",
+  checkAccess("module5", "hot"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const updated = await Module5.findOneAndUpdate(
+        { username },
+        { hot: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+// status
+router.get("/module5/status", requireAuth, async (req, res) => {
+  try {
+    const username = req.user.username;
+    console.log("TESTING");
+    console.log(req.user);
+
+    const data = await Module5.findOne({ username });
+
+    res.json({
+      cold: data?.cold || false,
+      hot: data?.hot || false,
+    });
+  } catch (err) {
+    res.status(500).json({ message: req.user.username });
+  }
+});
+
 module.exports = router;

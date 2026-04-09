@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import Phaser, { Game } from "phaser";
 
-
+import moduleUpdate from "../../components/moduleupdate";
+import callUpdate from "../../components/callupdate";
 
 import bg1 from "../../assets/M2Cooking/CookingBackground.png";
 import healthy from "../../assets/M1G1/Healthy.png";
@@ -442,6 +443,8 @@ export default function HotPrepTransport({ openMenu }) {
                     }
                     else {
                         this.cleanupScene();
+                        moduleUpdate(`${API}/api/game/module5/hotPreparedTransport/completed`);
+                        callUpdate("m5");
                         window.navigateToPage("/map");
                     }
                 });

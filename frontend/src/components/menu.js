@@ -47,9 +47,8 @@ export default function Menu({ closeMenu }) {
       module4part3: "/module4/module4part3",
     },
     module5: {
-      module5part1: "/module5/module5part1",
-      module5part2: "/module5/module5part2",
-      module5part3: "/module5/module5part3",
+      coldPreparedTransport: "/module5/coldPreparedTransport",
+      hotPreparedTransport: "/module5/hotPreparedTransport",
     },
     module6: {
       module6part1: "/module6/module6part1",
