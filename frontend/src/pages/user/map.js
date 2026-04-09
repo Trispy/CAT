@@ -40,30 +40,26 @@ function Map({ openMenu }) {
             summary.module2?.chopping &&
             summary.module2?.cooking;
         const isModule3Done =
-            summary.module3?.cansort &&
-            summary.module3?.expiration &&
-            summary.module3?.allergenIdentification;
+            summary.finished_m1 && 
+            summary.finished_m2; 
         const isModule4Done =
-            summary.module4?.module4part1 &&
-            summary.module4?.module4part2 &&
-            summary.module4?.module4part3;
+            summary.finished_m1 && 
+            summary.finished_m2; 
         const isModule5Done =
-            summary.module5?.module5part1 &&
-            summary.module5?.module5part2 &&
-            summary.module5?.module5part3;
+            summary.finished_m1 && 
+            summary.finished_m2
         const isModule6Done =
-            summary.module6?.module6part1 &&
-            summary.module6?.module6part2 &&
-            summary.module6?.module6part3;
+            summary.finished_m1 && 
+            summary.finished_m2
         
 
         const unlocked = {
             module1: true,
-            module2: summary.finished_m1,
-            module3: isModule2Done, 
-            module4: isModule3Done,
-            module5: isModule4Done,
-            module6: isModule5Done
+            module2: isModule2Done,
+            module3: isModule3Done, 
+            module4: isModule4Done,
+            module5: isModule5Done,
+            module6: isModule6Done
         };
 
         window.navigateToPage = navigate;
@@ -153,6 +149,67 @@ function Map({ openMenu }) {
                         window.navigateToPage("/module3");
                     });
                 }
+                // mod 4
+                const x4 = this.map.x - this.map.displayWidth / 2 + this.map.displayWidth * 0.67;
+                const y4 = this.map.y - this.map.displayHeight / 2 + this.map.displayHeight * 0.70;
+
+                if (unlocked.module4) {
+                    const mod4 = this.add.circle(x4, y4, 50, 0xfff600);
+
+                    this.tweens.add({
+                        targets: mod4,
+                        alpha: 0.2,
+                        duration: 500,
+                        yoyo: true,
+                        repeat: -1
+                    });
+
+                    mod4.setInteractive();
+                    mod4.on("pointerdown", () => {
+                        window.navigateToPage("/module4");
+                    });
+                }
+                // mod 5
+                const x5 = this.map.x - this.map.displayWidth / 2 + this.map.displayWidth * 0.40;
+                const y5 = this.map.y - this.map.displayHeight / 2 + this.map.displayHeight * 0.70;
+
+                if (unlocked.module5) {
+                    const mod5 = this.add.circle(x5, y5, 50, 0xfff600);
+
+                    this.tweens.add({
+                        targets: mod5,
+                        alpha: 0.2,
+                        duration: 500,
+                        yoyo: true,
+                        repeat: -1
+                    });
+
+                    mod5.setInteractive();
+                    mod5.on("pointerdown", () => {
+                        window.navigateToPage("/module5");
+                    });
+                }
+                // mod 6
+                const x6 = this.map.x - this.map.displayWidth / 2 + this.map.displayWidth * 0.10;
+                const y6 = this.map.y - this.map.displayHeight / 2 + this.map.displayHeight * 0.70;
+
+                if (unlocked.module6) {
+                    const mod6 = this.add.circle(x6, y6, 50, 0xfff600);
+
+                    this.tweens.add({
+                        targets: mod6,
+                        alpha: 0.2,
+                        duration: 500,
+                        yoyo: true,
+                        repeat: -1
+                    });
+
+                    mod6.setInteractive();
+                    mod6.on("pointerdown", () => {
+                        window.navigateToPage("/module6");
+                    });
+                } 
+
             }
         }
 
