@@ -120,7 +120,7 @@ export default function ColdPrepTransport({ openMenu }) {
                         height / 2,
                         inputText,
                         {
-                            font: "bold 70px sans-serif",
+                            font: "50px Arial",
                             color: "#000",
                             wordWrap: { width: width * 0.7 }
                         }
@@ -132,8 +132,8 @@ export default function ColdPrepTransport({ openMenu }) {
                         "X",
                         {
                             font: "bold 40px sans-serif",
-                            backgroundColor: "#e2e2e2",
-                            padding: { x: 10, y: 5 }
+                            backgroundColor: "#ff0000",
+                            padding: { x: 20, y: 10 }
                         }
                     )
                     .setInteractive()
@@ -157,14 +157,14 @@ export default function ColdPrepTransport({ openMenu }) {
                 );
                    // Help Button
                 const helpButton = this.add.text(
-                    this.scale.width * 0.95,   // right side
-                    this.scale.height * 0.1,          
+                    this.scale.width * 0.89,
+                    this.scale.height * 0.07,
                     "?",
                     {
-                        font: "60px Arial",
+                        font: "bold 70px sans-serif",
                         backgroundColor: "#ffffff",
                         color: "#5100ff",
-                        padding: { x: 40, y: 40 }
+                        padding: { x: 40, y: 20 }
                     }
                 )
                 .setOrigin(0.5)

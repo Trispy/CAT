@@ -19,10 +19,10 @@ import { defaultFont } from "../../formatting";
 import { defaultFontSize } from "../../formatting";
 import { defaultFontColor } from "../../formatting";
 import { defaultTypingSpeed } from "../../formatting";
-
+import Settings from "../../components/settings";
 import { useNavigate } from "react-router-dom";
 
-export default function FoodServiceMishaps() {
+export default function FoodServiceMishaps({ openMenu }) {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -105,7 +105,7 @@ export default function FoodServiceMishaps() {
                         height / 2,
                         inputText,
                         {
-                            font: "70px Arial",
+                            font: "bold 50px sans-serif",
                             color: "#000",
                             wordWrap: { width: width * 0.7 }
                         }
@@ -142,14 +142,14 @@ export default function FoodServiceMishaps() {
                 );
                    // Help Button
                 const helpButton = this.add.text(
-                    this.scale.width * 0.95,   // right side
-                    this.scale.height * 0.1,          
+                    this.scale.width * 0.89,
+                    this.scale.height * 0.09,
                     "?",
                     {
-                        font: "60px Arial",
+                        font: "bold 70px sans-serif",
                         backgroundColor: "#ffffff",
                         color: "#5100ff",
-                        padding: { x: 40, y: 40 }
+                        padding: { x: 20, y: 20 }
                     }
                 )
                 .setOrigin(0.5)
@@ -263,7 +263,7 @@ export default function FoodServiceMishaps() {
                 this.textboxImage = this.add.image(0, 0, "erinText").setOrigin(0);
 
                 this.textboxText = this.add.text(600, 100, "", {
-                    font: "70px Arial",
+                    font: "bold 70px sans-serif",
                     color: "#000",
                     wordWrap: {
                         width: this.textboxImage.width * 0.6
@@ -472,6 +472,17 @@ export default function FoodServiceMishaps() {
                     zIndex: 1
                 }}
             />
+            <div
+                  style={{
+                    position: "absolute",
+                    top: "4px",
+                    right: "110px",
+                    width: "100px",
+                    zIndex: 30000
+                  }}
+                >
+                  <Settings openMenu={openMenu}/>
+                </div>            
         </div>
     );
 }

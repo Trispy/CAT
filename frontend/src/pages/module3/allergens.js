@@ -410,7 +410,7 @@ export default function Allergens({ openMenu }) {
                 ];
                 
                 // Interactions
-                this.next.on("pointerdown", () => {
+                this.next.on('pointerdown', async () => {
                     if (this.welcomeTexts.length > 0) {
                         this.typewriteText(this.welcomeTexts[0]);
                         this.welcomeTexts.shift();
@@ -437,9 +437,9 @@ export default function Allergens({ openMenu }) {
                         this.cycleScenarios();
 
                     } else {
-                        moduleUpdate(`${API}/api/game/module3/allergenIdentification/completed`);
                         callUpdate("m3");
-                        window.navigateToPage("/map");
+                        await moduleUpdate(`${API}/api/game/module3/allergenIdentification/completed`);
+                        navigate("/map");
                     }
                 });
 

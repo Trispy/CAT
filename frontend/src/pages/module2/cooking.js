@@ -130,7 +130,7 @@ export default function Cooking({ openMenu }) {
         this.textbox.add([this.textboxImage, this.textboxText]);
         this.textbox.setScale(this.textboxScale);
 
-        this.next.on('pointerdown', () => {
+        this.next.on('pointerdown', async () => {
         if(this.welcomeTexts.length > 0) {
             this.typewriteText(this.welcomeTexts[0]);
             this.welcomeTexts.shift();
@@ -142,7 +142,7 @@ export default function Cooking({ openMenu }) {
             this.instructions.shift();
         }
         else if (this.gameMessages.length > 0){
-          this.textbox.setScale(0.52);
+          this.textbox.setScale(0.57);
           this.typewriteText(this.gameMessages[0], defaultTypingSpeed);
           this.beefPan.setVisible(true);
           this.beefBowl.setVisible(true);
@@ -163,8 +163,8 @@ export default function Cooking({ openMenu }) {
         }
         else{
           callUpdate("m2");
-          moduleUpdate(`${API}/api/game/module2/cooking/completed`);
-          window.navigateToPage("/map");
+          await moduleUpdate(`${API}/api/game/module2/cooking/completed`);
+          navigate("/map");
         }  
 });
 

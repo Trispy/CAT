@@ -567,7 +567,7 @@ export default function Location({ openMenu }) {
         }, 100);
     }
 
-    const handleNextClick = (e) => { //handles the logic for transitioning between scenes based on the current game stage and user actions. It checks the current game stage and relevant state variables to determine if the user has completed the necessary actions to move to the next stage, then updates the game stage and starts the appropriate Phaser scene.
+    const handleNextClick = async (e) => { //handles the logic for transitioning between scenes based on the current game stage and user actions. It checks the current game stage and relevant state variables to determine if the user has completed the necessary actions to move to the next stage, then updates the game stage and starts the appropriate Phaser scene.
         e.stopPropagation();
 
         if (gameStage === "intro") {
@@ -620,8 +620,8 @@ export default function Location({ openMenu }) {
 
         if (gameStage === "finalStage") {
             callUpdate("m1");
-            moduleUpdate(`${API}/api/game/module1/location/completed`);
-            navigate('/map', { replace: true });
+            await moduleUpdate(`${API}/api/game/module1/location/completed`);
+            navigate("/map");
         }
     };
 

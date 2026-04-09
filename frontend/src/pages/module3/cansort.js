@@ -42,7 +42,7 @@ export default function Cans({ openMenu }) {
             ];
 
             instructions = [
-                "In the following game, the volunteer will sort items based on whether the packaging is damaged and should be discarded.\n\nIf the item is questionable, drag the item to the box with the X to ask a supervisor. If it is good to be used, drag it to the box with the check."
+                "In the following game, the volunteer will sort items based on whether the packaging is damaged and should be discarded.\n\nIf the item is questionable, drag the item to the box with the ❌ to ask a supervisor. If it is good to be used, drag it to the box with the ✅."
             ];
 
             transitions = [

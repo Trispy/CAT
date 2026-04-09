@@ -172,14 +172,14 @@ export default function HotPrepTransport({ openMenu }) {
                 );
                    // Help Button
                 const helpButton = this.add.text(
-                    this.scale.width * 0.95,   // right side
-                    this.scale.height * 0.1,          
+                    this.scale.width * 0.89,
+                    this.scale.height * 0.07,
                     "?",
                     {
-                        font: "60px Arial",
+                        font: "bold 70px sans-serif",
                         backgroundColor: "#ffffff",
                         color: "#5100ff",
-                        padding: { x: 40, y: 40 }
+                        padding: { x: 40, y: 20 }
                     }
                 )
                 .setOrigin(0.5)
@@ -421,7 +421,7 @@ export default function HotPrepTransport({ openMenu }) {
                 this.textbox.setScale(this.textboxScale);
               
                 // Interactions
-                this.next.on("pointerdown", () => {
+                this.next.on('pointerdown', async () => {
                     if(this.instructions.length > 0){
                         this.showPopup(this.instructions[0]);
                         this.emptyBag.setInteractive();
@@ -443,9 +443,9 @@ export default function HotPrepTransport({ openMenu }) {
                     }
                     else {
                         this.cleanupScene();
-                        moduleUpdate(`${API}/api/game/module5/hotPreparedTransport/completed`);
+                        await moduleUpdate(`${API}/api/game/module5/hotPreparedTransport/completed`);
                         callUpdate("m5");
-                        window.navigateToPage("/map");
+                        navigate("/map");
                     }
                 });
                    this.input.on("drag", (pointer, gameObject, dragX, dragY) => {

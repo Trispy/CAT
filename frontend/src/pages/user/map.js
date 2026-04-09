@@ -15,30 +15,50 @@ function Map({ openMenu }) {
 
     // fetch module summary
     useEffect(() => {
-        const token = localStorage.getItem("token");
+  let isMounted = true;
 
-        fetch(`${API}/api/game/moduleSummary`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(res => {
-                if (!res.ok) throw new Error("Auth failed");
-                return res.json();
-                console.log("RESPONSE:", res);
-            })
-            .then(data => setSummary(data))
-            .catch(err => console.error("FETCH ERROR:", err));
-    }, []);
+  const fetchSummary = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`${API}/api/game/moduleSummary`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Cache-Control": "no-cache"
+        }
+      });
+
+      if (!res.ok) throw new Error("Auth failed");
+
+      const data = await res.json();
+
+      if (isMounted) {
+        setSummary(data);
+      }
+    } catch (err) {
+      console.error("FETCH ERROR:", err);
+    }
+  };
+
+  // initial load
+  fetchSummary();
+
+
+  window.addEventListener("focus", fetchSummary);
+
+
+  return () => {
+    isMounted = false;
+    window.removeEventListener("focus", fetchSummary);
+  };
+}, []);
 
     // phaser
     useEffect(() => {
         if (!summary) return;
 
         const isModule2Done =
-            summary.module2?.module2part1 &&
-            summary.module2?.chopping &&
-            summary.module2?.cooking;
+            summary.finished_m1;
         const isModule3Done =
             summary.finished_m1 && 
             summary.finished_m2; 
@@ -166,7 +186,7 @@ function Map({ openMenu }) {
 
                     mod4.setInteractive();
                     mod4.on("pointerdown", () => {
-                        window.navigateToPage("/module4");
+                        window.navigateToPage("/module4/cleanTote");
                     });
                 }
                 // mod 5
@@ -186,7 +206,7 @@ function Map({ openMenu }) {
 
                     mod5.setInteractive();
                     mod5.on("pointerdown", () => {
-                        window.navigateToPage("/module5");
+                        window.navigateToPage("/module5/coldPreparedTransport");
                     });
                 }
                 // mod 6
@@ -206,7 +226,7 @@ function Map({ openMenu }) {
 
                     mod6.setInteractive();
                     mod6.on("pointerdown", () => {
-                        window.navigateToPage("/module6");
+                        window.navigateToPage("/module6/foodServiceSetUp");
                     });
                 } 
 

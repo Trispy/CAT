@@ -41,8 +41,9 @@ import leaf8 from "../../assets/M4G1/leaf8.png";
 import trashCan from "../../assets/M4G1/trashCan.png";
 import sanitizer from "../../assets/M4G1/sanitizerOutlined.png";
 import spray from "../../assets/M4G1/spray.png";
+import Settings from "../../components/settings";
 
-export default function CleanTote() {
+export default function CleanTote({openMenu}) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
@@ -216,8 +217,8 @@ export default function CleanTote() {
                     "X",
                     {
                         font: "40px Arial",
-                        backgroundColor: "#e2e2e2",
-                        padding: { x: 10, y: 5 }
+                        backgroundColor: "#ff0000",
+                        padding: { x: 20, y: 10 }
                     }
                 )
                     .setInteractive()
@@ -1114,19 +1115,18 @@ export default function CleanTote() {
 
                 }}
             />
-            <img
-                src={mapbutton}
-                alt="map"
-                onClick={() => navigate("/map")}
-                style={{
+            <div
+                  style={{
                     position: "absolute",
                     top: "4px",
-                    right: "625px",
+                    right: "110px",
                     width: "100px",
-                    cursor: "pointer",
-                    zIndex: 10
-                }}
-            />
+                    zIndex: 30000
+                  }}
+                >
+                  <Settings openMenu={openMenu}/>
+                </div>            
+            
 
         </div>
     );

@@ -29,7 +29,7 @@ const API = process.env.REACT_APP_API_URL;
 export default function Expiration({ openMenu }) {
     const navigate = useNavigate();
     let allInstructions = [
-                "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the expiration date or best by date.\n\nIf the item should be discarded, drag the item to the box with the X. If it is good to be used, drag it to the box with the check.",
+                "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the expiration date or best by date.\n\nIf the item should be discarded, drag the item to the box with the ❌. If it is good to be used, drag it to the box with the ✅.",
                 "Items with expiraton dates should be disposed of if the date is even one more day after the expiration date. Expiration date is a hard deadline.",
                 "For best by date, we will use a specific rule, but many food banks use a different rule. Thus, remember to consult your supervisor on the rules.",
                 "For this module, items with best buy dates should be disposed of if the date is 6 months after the expiration date."

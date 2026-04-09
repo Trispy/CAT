@@ -42,18 +42,18 @@ export default function Menu({ closeMenu }) {
       allergenIdentification: "/module3/allergenIdentification",
     },
     module4: {
-      module4part1: "/module4/module4part1",
-      module4part2: "/module4/module4part2",
-      module4part3: "/module4/module4part3",
+      cleanTote: "/module4/cleanTote",
+      sorting: "/module4/sorting",
+      packing: "/module4/packing",
     },
     module5: {
       coldPreparedTransport: "/module5/coldPreparedTransport",
       hotPreparedTransport: "/module5/hotPreparedTransport",
     },
     module6: {
-      module6part1: "/module6/module6part1",
-      module6part2: "/module6/module6part2",
-      module6part3: "/module6/module6part3",
+      serviceSetup: "/module6/foodServiceSetup",
+      foodServiceMishaps: "/module6/foodServiceMishaps",
+      
     },
   };
 
@@ -66,7 +66,17 @@ export default function Menu({ closeMenu }) {
     { name: "Module 6", key: "module6" },
   ];
 
-  
+  const nameMap = {
+  module2part1: "module2part1",
+  module3part1: "cansort",
+  module3part2: "expiration",
+  module3part3: "allergenIdentification",
+  module4part1: "cleanTote",
+  cold: "coldPreparedTransport",
+  hot: "hotPreparedTransport",
+  module6part1: "serviceSetup",
+  module6part2: "foodServiceMishaps",
+};
  const getGames = (moduleObj) => {
       if (!summary) return [];
 
@@ -98,19 +108,38 @@ export default function Menu({ closeMenu }) {
       });
 
       const nextIndex = lastTrue === -1 ? 0 : lastTrue + 1;
-
+      const m1Done = summary?.finished_m1 === true;
+      const m2Done = summary?.finished_m2 === true;
+      const unlockNextModules = m1Done && m2Done;
       const moduleEntries = Object.entries(moduleObj || {})
-      .filter(([key]) => key !== "_id" && key !== "username" && key !== "__v");
+  .filter(([key]) => key !== "_id" && key !== "username" && key !== "__v");
 
-      return moduleEntries.map(([name, val]) => {
-      const globalIndex = allEntries.findIndex((entry) => entry[0] === name);
+      return moduleEntries.map(([rawName, val], index) => {
+        const name = nameMap[rawName] || rawName;
 
-      return {
-        name,
-        completed: val,
-        clickable: val === true || globalIndex === nextIndex
-      };
+        const globalIndex = allEntries.findIndex((entry) => {
+          const mapped = nameMap[entry[0]] || entry[0];
+          return mapped === name;
+        });
 
+        let clickable = val === true || globalIndex === nextIndex;
+
+
+        const m1Done = summary?.finished_m1 === true;
+        const m2Done = summary?.finished_m2 === true;
+        const unlockModules = m1Done && m2Done;
+
+        const isFirstGame = index === 0;
+
+        if (unlockModules && isFirstGame) {
+          clickable = true;
+        }
+
+        return {
+          name,
+          completed: val,
+          clickable,
+        };
 });
 };
 
@@ -127,7 +156,7 @@ export default function Menu({ closeMenu }) {
 
           height: "auto",
           maxHeight: openIndex !== null ? " 100vh" : "80vh",
-        overflowY: "auto",
+          overflowY: "auto",
 
           backgroundColor: "#f5e6c8",
           border: "2px solid black",
@@ -141,8 +170,8 @@ export default function Menu({ closeMenu }) {
 
             {modules.map((mod, index) => {
               const games = summary?.[mod.key]
-  ? getGames(summary[mod.key])
-  : [];
+                ? getGames(summary[mod.key])
+                : [];
 
         return (
           <div key={index} style={{ marginBottom: "10px" }}>
