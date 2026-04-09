@@ -16,7 +16,7 @@ import hand from "../../assets/M2Cooking/ThermometerHand.png";
 import coldThermometer from "../../assets/M5G1/IceTherm.png";
 import chaferDish from "../../assets/M6G1/ChaferDish.PNG";
 import chickenBowl from "../../assets/M6G1/ChickenBowl.png";
-import chickenDish from "../../assets/M6G1/ChickenDish.PNG";
+import chickenDish from "../../assets/M6G1/ChickenDish.png";
 import chickenLabel from "../../assets/M6G1/ChickenLabel.PNG";
 import coldFood from "../../assets/M6G1/ColdFood.png";
 import ladle from "../../assets/M6G1/Ladel.PNG";
@@ -75,12 +75,12 @@ export default function ServiceSetUps() {
                 "Tap on all three dishes to turn them on!",
                 "Drag the ice to the cooler!",
                 "Tap on the cooler to close it!",
-                "Wait for the hot holding dishes to warm up and cooler to cool down.!",
-                "Check the temperature of the chicken before putting it in a dish",
+                "Wait for the hot holding dishes to warm up and cooler to cool down!",
+                "Check the temperature of the chicken before putting it in a dish!",
                 "It's above 165 °F. Drag the chicken to a hot holding dish!"                ,
-                "Check the temperature of the soup before putting it in a dish",
+                "Check the temperature of the soup before putting it in a dish!",
                 "It's above 165 °F. Drag the soup to a hot holding dish!",
-                "Check the temperature of the watermelon before putting it in a dish",
+                "Check the temperature of the watermelon before putting it in a dish!",
                 "It's below 40 °F. Drag the watermelon to a cooler!",
                 "All food must be labeled! Drag the watermelon label to the cooler.",
                 "Drag the chicken label to the chicken dish!",
@@ -523,7 +523,6 @@ export default function ServiceSetUps() {
                     }
                     else {
                         this.cleanupScene();
-                        window.navigateToPage("/map");
                     }
                 });
                
@@ -741,11 +740,11 @@ export default function ServiceSetUps() {
                         this.fullBox.setVisible(false);
                         //this.fullBox.disableInteractive();
                             this.timerStart = true;
-                            let timeLeft = 1;
+                            let timeLeft = 5;
                             this.timerText = this.add.text(
                                 this.bg1.width * 0.8,
                                 this.bg1.height * 0.06,
-                                ":1",
+                                ":5",
                             {
                                 font: "bold 60px Arial",
                                 color: "#000000"
@@ -858,6 +857,7 @@ export default function ServiceSetUps() {
     delete window.navigateToPage;
 }
             showThermometer(therm){
+                this.timerText.setVisible(false);
                 if(therm === this.hotTherm1){
 
                 this.hotTherm1.setVisible(true);
@@ -890,7 +890,7 @@ export default function ServiceSetUps() {
             this.tweens.add({
                 targets: hand,
                 angle: 270,
-                duration: 5,
+                duration: 5000,
                 ease:'Linear',
                 onComplete: () => {
                     this.iterateGameMessage();
@@ -918,7 +918,7 @@ export default function ServiceSetUps() {
             this.tweens.add({
                 targets: hand,
                 angle: -235,
-                duration: 5,
+                duration: 5000,
                 ease:'Linear',
                 onComplete: () => {
                     this.iterateGameMessage();
@@ -954,7 +954,7 @@ export default function ServiceSetUps() {
                 this.typewriteText(this.gameMessages[0]);
                 this.gameMessages.shift();
         }
-            typewriteText(text, type, speed = 2) {
+            typewriteText(text, type, speed = 30) {
                 //removes old timer before new one starts
                 if (this.typingEvent) {
                     this.typingEvent.remove(false);
