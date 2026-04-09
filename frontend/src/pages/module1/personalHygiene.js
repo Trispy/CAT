@@ -27,9 +27,13 @@ import hairtie from "../../assets/M1G2/Hairtie.png";
 import erintextbox from "../../assets/erintextbox.png";
 import TextboxErin from "../../components/textboxerin";
 import moduleUpdate from "../../components/moduleupdate";
+import mapbutton from "../../assets/mapbutton.png";
+import Settings from "../../components/settings";
+const API = process.env.REACT_APP_API_URL;
+
 //has multiple scenes for each step of the personal hygiene process. Each scene has its own interactive elements and logic. The main component manages the overall game state and transitions between scenes based on user actions and progress.
 
-function PersonalHygiene() {
+function PersonalHygiene({ openMenu }) {
     const [gameStage, setGameStage] = useState("intro");
     const backgroundStyle = {
         backgroundImage: gameStage === "intro" ? `url(${firstBackground})` : "none",
@@ -109,7 +113,7 @@ useEffect(() => {
     nailsTrimmed && !removeClipSuccess
     );
     const clothesText = useTypewriter(
-    "Now let's put on some clean clothes! Drag the shirt and pants onto the character to get them dressed.",
+    "Now let's put on some clean clothes! Drag the shirt and pants onto the character to get them dressed. Click anywhere to click out of the textbox.",
     gameStage === "clothes" && ringRemoved
     );
     const clothesSuccessText = useTypewriter(
@@ -852,7 +856,7 @@ class FinalScene extends Phaser.Scene {
         return;
     }
     if (gameStage === "final") {
-        moduleUpdate("http://localhost:3001/api/game/module1/personalHygiene/completed");
+        moduleUpdate(`${API}/api/game/module1/personalHygiene/completed`);
         navigate('/module1/onLocation', { replace: true });
     }
     
@@ -1052,7 +1056,7 @@ class FinalScene extends Phaser.Scene {
                         >
                             <Textbox
                                 width="30dvw"
-                                height="40dvh"
+                                height="50dvh"
                                 placeholder={clothesText}
                                 placeHolderColor="#000000"
                                 placeHolderfontSize="1.1vw"
@@ -1101,6 +1105,7 @@ class FinalScene extends Phaser.Scene {
                 )}
             </div>
         )}
+          
 
         {showFinalText && gameStage === "final" && (
            <div
@@ -1121,6 +1126,18 @@ class FinalScene extends Phaser.Scene {
                     />
         </div>
         )}
+    <div
+          style={{
+            position: "absolute",
+            top: "4px",
+            right: "110px",
+            width: "100px",
+            zIndex: 10
+          }}
+        >
+          <Settings openMenu={openMenu}/>
+        </div>
+        
   </div>
     );
 }

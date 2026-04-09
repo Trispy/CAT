@@ -12,16 +12,17 @@ import check from "../../assets/M1G1/Check.png";
 import xMark from "../../assets/M1G1/X.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import next from "../../assets/M1G1/nextbutton.png";
-
-
+import mapbutton from "../../assets/mapbutton.png";
 import { useNavigate } from "react-router-dom";
+import Settings from "../../components/settings";
+const API = process.env.REACT_APP_API_URL;
 
-export default function Symptoms() {
+export default function Symptoms({ openMenu }) {
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     window.navigateToPage = navigate;
-
+    
     class Symptom extends Phaser.Scene {
       erinX = 1300;
       erinY = 175;
@@ -188,7 +189,7 @@ export default function Symptoms() {
             this.check.setVisible(true);
             this.next.setVisible(false);
           } else {
-            moduleUpdate("http://localhost:3001/api/game/module1/symptoms/completed");
+            moduleUpdate(`${API}/api/game/module1/symptoms/completed`);
             window.navigateToPage("/module1/personalHygiene");
           }
         });
@@ -315,6 +316,18 @@ export default function Symptoms() {
           zIndex: 1
         }}
       />
+     
+    <div
+      style={{
+        position: "absolute",
+        top: "4px",
+        right: "110px",
+        width: "100px",
+        zIndex: 10
+      }}
+    >
+      <Settings openMenu={openMenu}/>
+    </div>
     </div>
   );
 }

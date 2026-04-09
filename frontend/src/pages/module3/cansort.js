@@ -18,12 +18,11 @@ import xMark from "../../assets/M3G1/foodboxX.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import erinText from "../../assets/M3G1/erintextbox.png"
 import next from "../../assets/M1G1/nextbutton.png";
-
-
-
+import mapbutton from "../../assets/mapbutton.png";
 import { useNavigate } from "react-router-dom";
-
-export default function Cans() {
+import Settings from "../../components/settings";
+const API = process.env.REACT_APP_API_URL;
+export default function Cans({ openMenu }) {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -47,7 +46,7 @@ export default function Cans() {
             ];
 
             transitions = [
-                "As a volunteer, you may be hands-on with all sorts of food products. While understanding when a package is good to use is important, it is equally as important to ask a supervisor if you have any questions, or aren't sure whether a package or can is bad."
+                "As a volunteer, you may handle various food products, so it’s important to recognize when items are safe to use and to ask a supervisor if you're unsure about any package or can."
             ];
 
             constructor() {
@@ -90,7 +89,7 @@ export default function Cans() {
                         height / 2,
                         inputText,
                         {
-                            font: "70px Arial",
+                            font: "bold 50px sans-serif",
                             color: "#000",
                             wordWrap: { width: width * 0.7 }
                         }
@@ -102,8 +101,8 @@ export default function Cans() {
                         "X",
                         {
                             font: "40px Arial",
-                            backgroundColor: "#e2e2e2",
-                            padding: { x: 10, y: 5 }
+                            backgroundColor: "#ff0000",
+                            padding: { x: 20, y: 10 }
                         }
                     )
                     .setInteractive()
@@ -194,7 +193,7 @@ export default function Cans() {
 
                 this.next = this.add.image(
                     this.erinX * 1.25,
-                    this.erinY * 4.35,
+                    this.erinY * 5.00,
                     "next"
                 )
                     .setOrigin(0)
@@ -272,12 +271,12 @@ export default function Cans() {
                 this.canScenario[this.canScenario.length - 1].damageType.setVisible(true);
 
                 // Textbox
-                this.textbox = this.add.container(145, 112);
+                this.textbox = this.add.container(150, 130);
 
                 this.textboxImage = this.add.image(0, 0, "textbox").setOrigin(0);
 
-                this.textboxText = this.add.text(100, 100, "", {
-                    font: "70px Arial",
+                this.textboxText = this.add.text(100, 75, "", {
+                    font: "bold 70px sans-serif",
                     color: "#000",
                     wordWrap: {
                         width: this.textboxImage.width * 0.9
@@ -304,7 +303,7 @@ export default function Cans() {
                         console.log(this.canScenario);
                         this.textbox.setVisible(false);
                         this.textboxText = this.add.text(this.textboxErinImage.width * 0.47, this.textboxErinImage.height * 0.22, "", {
-                            font: "54px Arial",
+                            font: "bold 50px sans-serif",
                             color: "#000000",
                             wordWrap: {
                                 // change the value to adjust how close the text gets to the edge of the box
@@ -316,7 +315,7 @@ export default function Cans() {
                         this.cycleScenarios();
 
                     } else {
-                        moduleUpdate("http://localhost:3001/api/game/module3/canSorting/completed");
+                        moduleUpdate(`${API}/api/game/module3/canSorting/completed`);
                         window.navigateToPage("/module3/expiration");
                     }
                 });
@@ -470,6 +469,7 @@ export default function Cans() {
                 backgroundColor: "black"
             }}
         >
+            
             <div
                 id="phaser-game"
                 style={{
@@ -481,6 +481,17 @@ export default function Cans() {
                     zIndex: 1
                 }}
             />
+            <div
+                  style={{
+                    position: "absolute",
+                    top: "4px",
+                    right: "110px",
+                    width: "100px",
+                    zIndex: 30000
+                  }}
+                >
+                  <Settings openMenu={openMenu}/>
+                </div>
         </div>
     );
 }

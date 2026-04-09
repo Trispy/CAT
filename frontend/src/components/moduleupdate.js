@@ -1,27 +1,29 @@
+const API = process.env.REACT_APP_API_URL;
 
 const moduleUpdate = async (link) => {
-    const data = {
-      username: sessionStorage.getItem("username")
-    };
-    try {
-      const jwt = localStorage.getItem("token");
-      const add = await fetch(link, {
-        method: "POST",
-        headers: {
-          ContentType: "application/json",
-          Authorization: `Bearer ${jwt}`
-        },
-        body: JSON.stringify(data),
-      });
-      const adddata = await add.json();
-      if (add.status !== 200) {
-        console.log(adddata);
-      }
-    } catch (err) {
-      console.log("Error");
-      console.log(err);
-      console.error()
-    }
-  };
+try {
+const jwt = localStorage.getItem("token");
+
+const res = await fetch(link, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${jwt}`
+  }
+});
+
+const data = await res.json();
+
+console.log("MODULE UPDATE STATUS:", res.status);
+console.log("MODULE UPDATE RESPONSE:", data);
+
+if (!res.ok) {
+  console.error("Module update failed:", data);
+}
+
+} catch (err) {
+console.error("Module update error:", err);
+}
+};
 
 export default moduleUpdate;

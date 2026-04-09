@@ -28,8 +28,11 @@ import sprayBottle from "../../assets/M2G2/Spraybottle.png";
 import rag from "../../assets/M2G2/rag.png";
 import wetCuttingBoard from "../../assets/M2G2/watercuttingboard.png";
 import knife from "../../assets/M2G2/Knife.png";
+import mapbutton from "../../assets/mapbutton.png";
+import Settings from "../../components/settings";
+const API = process.env.REACT_APP_API_URL;
 
-export default function Cleaning() {
+export default function Cleaning({ openMenu }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
@@ -71,7 +74,7 @@ export default function Cleaning() {
     const introText = useTypewriter("Time to start prepping some food! Follow the instructions in the next slide!",
         gameStage === "intro");
     const instructionText = useTypewriter("In the following game, we will be going through essential personal hygiene steps to follow once you arrive at the volunteer location. Progress in the game by dragging items to the correct area using your finger.",
-        gameStage === "instruction");
+        gameStage === "instructions");
     const apronSuccessText = useTypewriter("You are now fully dressed! Let's go wash our hands and put some gloves on before interacting with the food.",
         gameStage === "apron")
     const finalText = useTypewriter("You have now completed the basic hygiene module. Let's move on to the basic food safety module!",
@@ -180,8 +183,8 @@ export default function Cleaning() {
                 const bg = this.add.rectangle(
                     width / 2,
                     height / 2,
-                    width * 0.8,
-                    height * 0.8,
+                    width * 0.75,
+                    height * 0.75,
                     0xffffff
                 ).setStrokeStyle(4, 0x000000);
 
@@ -197,13 +200,13 @@ export default function Cleaning() {
                 ).setOrigin(0.5);
 
                 const close = this.add.text(
-                    width * 0.85,
-                    height * 0.15,
+                    width * 0.84,
+                    height * 0.17,
                     "X",
                     {
                         font: "40px Arial",
-                        backgroundColor: "#e2e2e2",
-                        padding: { x: 10, y: 5 }
+                        backgroundColor: "#ff0000",
+                        padding: { x: 20, y: 10 }
                     }
                 )
                     .setInteractive()
@@ -221,14 +224,14 @@ export default function Cleaning() {
                 this.add.image(width / 2, height / 2, "volLocation").setDisplaySize(width, height);
                 let boardClean = false;
                 const helpButton = this.add.text(
-                    width * 0.78,
-                    height * 0.90,
+                    width * 0.89,
+                    height * 0.07,
                     "?",
                     {
-                        font: "60px Arial",
+                        font: "bold 70px sans-serif",
                         backgroundColor: "#ffffff",
                         color: "#5100ff",
-                        padding: { x: 50, y: 30 }
+                        padding: { x: 40, y: 20 }
                     }
                 )
                     .setOrigin(0.5)
@@ -904,7 +907,7 @@ export default function Cleaning() {
             checkWin() {
                 if (numberOfCutMaterials.current === 3) {
                     this.showMes("Win condition met");
-                    moduleUpdate("http://localhost:3001/api/game/module2/chopping/completed");
+                    moduleUpdate(`${API}/api/game/module2/chopping/completed`);
                     navigate('/module2/cooking', { replace: true });
                 }
             }
@@ -992,26 +995,32 @@ export default function Cleaning() {
         }, 100);
     }
 
-    const handleNextClick = (e) => { //handles the logic for transitioning between scenes based on the current game stage and user actions. It checks the current game stage and relevant state variables to determine if the user has completed the necessary actions to move to the next stage, then updates the game stage and starts the appropriate Phaser scene.
-        if (gameStage === "intro") {
-            setGameStage("instructions");
+    const handleNextClick = () => {
+    if (gameStage === "intro") {
+        setGameStage("instructions");
 
-            if (phaserGameRef.current) {
-                phaserGameRef.current.scene.start("InstructionScene");
-            }
+        phaserGameRef.current?.scene.start("InstructionScene");
+    }
+    else if (gameStage === "instructions") { 
+        setGameStage("cleanStage");
 
-            return;
-        }
-        else {
-            setGameStage("cleanStage");
-            setInstructionStep(0);
-            if (phaserGameRef.current) {
-                phaserGameRef.current.scene.start("CleanScene", {
-                    instructions: instructionTexts
-                });
-            }
-        }
-    };
+        phaserGameRef.current?.scene.start("CleanScene", {
+            instructions: instructionTexts
+        });
+    }
+    else if (gameStage === "instructions") {
+    if (instructionStep < instructionTexts.length - 1) {
+        setInstructionStep(prev => prev + 1);
+    } 
+    else {
+        setGameStage("cleanStage");
+
+        phaserGameRef.current?.scene.start("CleanScene", {
+            instructions: instructionTexts
+        });
+    }
+}
+};
     const handleInstructionClick = () => {
 
         if (instructionStep < instructionTexts.length - 1) {
@@ -1068,8 +1077,7 @@ export default function Cleaning() {
                         display: "block"
                     }}
                 />
-
-
+                  
                 <div
                     onClick={handleNextClick}
                     style={{
@@ -1087,7 +1095,7 @@ export default function Cleaning() {
 
             {gameStage === "intro" && (
                 <div
-                    onClick={handleInstructionClick}
+                    onClick={handleNextClick}
                     style={{
                         position: "fixed",
                         top: -50,
@@ -1113,7 +1121,10 @@ export default function Cleaning() {
             )}
             {gameStage === "instructions" && (
                 <div
-                    onClick={handleInstructionClick}
+                    onClick={(e) => {
+                    e.stopPropagation();
+                    handleInstructionClick();
+                    }}
                     style={{
                         position: "fixed",
                         top: -50,
@@ -1151,6 +1162,19 @@ export default function Cleaning() {
 
                 }}
             />
+            <div
+                  style={{
+                    position: "absolute",
+                    top: "4px",
+                    right: "110px",
+                    width: "100px",
+                    zIndex: 10
+                  }}
+                >
+                  <Settings openMenu={openMenu}/>
+                </div>
+         
+
         </div>
     );
 }

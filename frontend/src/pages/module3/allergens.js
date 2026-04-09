@@ -25,12 +25,16 @@ import sauce from "../../assets/M3G3/Sauce.png";
 import seaweed from "../../assets/M3G3/Seaweed.png";
 import stock from "../../assets/M3G3/Stock.png";
 import yogurt from "../../assets/M3G3/Yogurt.png";
+import mapbutton from "../../assets/mapbutton.png";
+import Settings from "../../components/settings";
 
 import { useNavigate } from "react-router-dom";
+const API = process.env.REACT_APP_API_URL;
 
-export default function Allergens() {
+export default function Allergens({ openMenu }) {
     const navigate = useNavigate();
 
+           
     useEffect(() => {
         window.navigateToPage = navigate;
 
@@ -110,7 +114,7 @@ export default function Allergens() {
                         height / 2,
                         inputText,
                         {
-                            font: "70px Arial",
+                            font: "bold 50px sans-serif",
                             color: "#000",
                             wordWrap: { width: width * 0.7 }
                         }
@@ -122,8 +126,8 @@ export default function Allergens() {
                         "X",
                         {
                             font: "40px Arial",
-                            backgroundColor: "#e2e2e2",
-                            padding: { x: 10, y: 5 }
+                            backgroundColor: "#ff0000",
+                            padding: { x: 20, y: 10 }
                         }
                     )
                     .setInteractive()
@@ -283,8 +287,8 @@ export default function Allergens() {
                     .setVisible(false);
                 
                 this.next = this.add.image(
-                    1300 * 1.25,
-                    175 * 4.35,
+                    300 * 5.45,
+                    175 * 5.00,
                     "next"
                 )
                     .setOrigin(0)
@@ -314,7 +318,7 @@ export default function Allergens() {
                 this.textboxImage = this.add.image(0, 0, "textbox").setOrigin(0);
 
                 this.textboxText = this.add.text(100, 100, "", {
-                    font: "70px Arial",
+                    font: "bold 70px sans-serif",
                     color: "#000",
                     wordWrap: {
                         width: this.textboxImage.width * 0.9
@@ -420,7 +424,7 @@ export default function Allergens() {
                         this.erin.setVisible(false);
                         this.textbox.setVisible(false);
                         this.textboxText = this.add.text(this.textboxErinImage.width * 0.47, this.textboxErinImage.height * 0.22, "", {
-                            font: "54px Arial",
+                            font: "bold 40px sans-serif",
                             color: "#000000",
                             wordWrap: {
                                 // change the value to adjust how close the text gets to the edge of the box
@@ -433,7 +437,7 @@ export default function Allergens() {
                         this.cycleScenarios();
 
                     } else {
-                        moduleUpdate("http://localhost:3001/api/game/module3/allergenIdentification/completed");
+                        moduleUpdate(`${API}/api/game/module3/allergenIdentification/completed`);
                         callUpdate("m3");
                         window.navigateToPage("/map");
                     }
@@ -584,6 +588,7 @@ export default function Allergens() {
                 backgroundColor: "black"
             }}
         >
+            
             <div
                 id="phaser-game"
                 style={{
@@ -595,6 +600,17 @@ export default function Allergens() {
                     zIndex: 1
                 }}
             />
+            <div
+                  style={{
+                    position: "absolute",
+                    top: "4px",
+                    right: "110px",
+                    width: "100px",
+                    zIndex: 30000
+                  }}
+                >
+                  <Settings openMenu={openMenu}/>
+                </div>
         </div>
     );
 }
