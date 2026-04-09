@@ -38,9 +38,9 @@ router.post('/createaccount', async (req, res) => {
     })
     await Module4.create({
       username: user.username,
-      module4part1: false,
-      module4part2: false,
-      module4part3: false
+      cleanTote: false,
+      sorting: false,
+      packing: false
     })
     await Module5.create({
       username: user.username,
@@ -49,9 +49,8 @@ router.post('/createaccount', async (req, res) => {
     })
     await Module6.create({
       username: user.username,
-      module6part1: false,
-      module6part2: false,
-      module6part3: false
+      serviceSetup: false,
+      foodServiceMishaps: false,
     })
 
     await user.save();

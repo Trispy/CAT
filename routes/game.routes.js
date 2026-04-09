@@ -232,22 +232,20 @@ router.get('/moduleSummary', requireAuth, async (req, res) => {
       },
       finished_m4: user.finished_m4,
       module4: {
-        module4part1: mod4?.module4part1 ?? false,
-        module4part2: mod4?.module4part2 ?? false,
-        module4part3: mod4?.module4part3 ?? false
+        cleanTote: mod4?.module4part1 ?? false,
+        sorting: mod4?.module4part2 ?? false,
+        packing: mod4?.module4part3 ?? false
       },
 
       finished_m5: user.finished_m5,
       module5: {
-        module5part1: mod5?.module5part1 ?? false,
-        module5part2: mod5?.module5part2 ?? false,
-        module5part3: mod5?.module5part3 ?? false
+        cold: mod5?.module5part1 ?? false,
+        hot: mod5?.module5part2 ?? false,
       },
       finished_m6: user.finished_m6,
       module6: {
-        module6part1: mod6?.module6part1 ?? false,
-        module6part2: mod6?.module6part2 ?? false,
-        module6part3: mod6?.module6part3 ?? false
+        serviceSetup: mod6?.serviceSetup ?? false,
+        foodServiceMishaps: mod6?.foodServiceMishaps ?? false,
       }
     });
 
@@ -387,7 +385,6 @@ router.post(
 router.get("/module5/status", requireAuth, async (req, res) => {
   try {
     const username = req.user.username;
-    console.log("TESTING");
     console.log(req.user);
 
     const data = await Module5.findOne({ username });
