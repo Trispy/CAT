@@ -4,28 +4,20 @@ import Phaser from "phaser";
 
 import moduleUpdate from "../../components/moduleupdate.js";
 
-import Loc from "../../assets/Background1.png";
 import Textbox from "../../components/textbox";
 import useTypewriter from "../../components/typewriter";
 import nextButton from "../../assets/nextbutton.png";
-import onion from "../../assets/M2G2/onion.png";
 import mapbutton from "../../assets/mapbutton.png";
 import Settings from "../../components/settings";
 
-import module2Background from "../../assets/finalbackground.png"
-import readymadefood1 from "../../assets/readymadefood1.png"
-import readymadefood2 from "../../assets/readymadefood2.png"
-import egg from "../../assets/egg.png"
-import bellpepper from "../../assets/bellpeppers.png"
-import beefpackage from "../../assets/beefpackage.png"
-import foodbox from "../../assets/M5G1/icecooler.png"
-import chickenpackage from "../../assets/packagedchicken.png"
-import chicken from "../../assets/chicken.png"
-import fridgeSceneBackground from "../../assets/fridgescreen.png"
-import milk from "../../assets/milk.png"
+import dirtyProduce from "../../assets/M4G3/dirtyProduceTote.png";
+import cleanProduce from "../../assets/M4G3/cleanProduceTote.png";
+import cooler from "../../assets/M5G1/closedcooler.png";
+import sceneBackground from "../../assets/M4G3/TruckBackground.png"
+
 const API = process.env.REACT_APP_API_URL;
 
-export default function CoolerPack({ openMenu }) {
+export default function TruckPack({ openMenu }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
@@ -41,14 +33,6 @@ export default function CoolerPack({ openMenu }) {
     }, []);
 
     const [gameStage, setGameStage] = useState("intro");
-    const backgroundStyle = {
-        backgroundImage: gameStage === "CoolerStage" ? "none" : `url(${Loc})`,
-        minHeight: '100vh',
-        backgroundSize: 'contain',
-        backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: 'black'
-    };
 
     const [fridgeState, setFridgeState] = useState("playing");
     const [fridgefailState, setfridgefailState] = useState('');
@@ -59,10 +43,10 @@ export default function CoolerPack({ openMenu }) {
     useEffect(() => {
         window.handleNext = handleNextClick;
     }, [gameStage]);
-    const introText = useTypewriter("In this game, we'll pack a cooler for trasport!",
+    const introText = useTypewriter("In this game, we'll pack a truck with the cooler, and send it to its final destination!",
         gameStage === "intro");
     const instructionTexts = [
-        "The items in the fridge should be packed from the bottom up, starting with the raw meats, to the ready-to-eat food! The produce should go last.",
+        "There is a tote of dirty produce, a tote of clean produce, and a cooler packed with raw meat. Anything that could contaminate something else should be put on the bottom.",
         "Click the '?' button in the bottom right side if you want to refer back to these instructions."
     ];
 
@@ -101,7 +85,7 @@ export default function CoolerPack({ openMenu }) {
             }
 
             preload() {
-                this.load.image("introBg", Loc);
+                this.load.image("introBg", sceneBackground);
             }
 
             create() {
@@ -117,7 +101,7 @@ export default function CoolerPack({ openMenu }) {
             }
 
             preload() {
-                this.load.image("instructionBg", Loc); // reuse same background
+                this.load.image("instructionBg", sceneBackground); // reuse same background
             }
 
             create() {
@@ -128,26 +112,18 @@ export default function CoolerPack({ openMenu }) {
 
             }
         }
-        class CoolerScene extends Phaser.Scene {
+        class PackingScene extends Phaser.Scene {
             constructor() {
-                super("CoolerScene");
+                super("PackingScene");
             }
             init() {
-                this.instructions = ["Sort the following items into the correct shelves in the fridge based on the following rules:", "1. Ready made food goes on the top shelf because it is usually precooked.", "2. Dairy goes on the middle shelf where the temperature is most consistent.", "3. Meat goes on the bottom shelf to prevent cross-contamination.", "4. Veggies go in the crisper drawer to maintain freshness."];
+                this.instructions = ["Sort the following items into the correct shelves in the truck based on the following rules:", "1. Raw meat goes on the bottom shelf to prevent cross-contamination.", "2. Dirty produce goes on the bottom shelf so none of the dirt falls on something clean.", "3. Clean produce goes on the shelf to keep it above other contaminants."];
             }
-
             preload() {
-                this.load.image("readymadefood1", readymadefood1);
-                this.load.image("readymadefood2", readymadefood2);
-                this.load.image("egg", egg);
-                this.load.image("onion", onion);
-                this.load.image("beefpackage", beefpackage);
-                this.load.image("chicken", chicken);
-                this.load.image("fridgeScene", fridgeSceneBackground);
-                this.load.image("foodbox", foodbox);
-                this.load.image("chickenpackage", chickenpackage);
-                this.load.image("milk", milk);
-                this.load.image("bellpepper", bellpepper);
+                this.load.image("fridgeScene", sceneBackground);
+                this.load.image("cleanProduce", cleanProduce);
+                this.load.image("dirtyProduce", dirtyProduce);
+                this.load.image("coolerImg", cooler);
             }
             showInstructions() {
                 const { width, height } = this.scale;
@@ -215,86 +191,51 @@ export default function CoolerPack({ openMenu }) {
                 });
                 // Background
                 this.add.image(width / 2, height / 2, "fridgeScene").setDisplaySize(width, height);
-                const box = this.add.image(width / 2 - width * 0.25, height / 2 + height * 0.15, "foodbox")
-                const boxScale = (height * 0.65) / box.height;
-                box.setScale(boxScale);
+                const coolerIcon = this.add.image(width / 2 + width * 0.25, height / 2 - height * 0.30, "coolerImg")
+                const coolerScale = (height * 0.3) / coolerIcon.height;
+                coolerIcon.setScale(coolerScale);
+                coolerIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(coolerIcon);
 
+                const cleanIcon = this.add.image(width / 2 + width * 0.25, height / 2, "cleanProduce")
+                const cleanScale = (height * 0.30) / cleanIcon.height;
+                cleanIcon.setScale(cleanScale);
+                cleanIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(cleanIcon);
 
-                const chickenpkg = this.add.image(width / 2 + width * 0.30, height / 2 + height * 0.17, "beefpackage")
-                const chickenpkgScale = (height * 0.18) / chickenpkg.height;
-                chickenpkg.setScale(chickenpkgScale);
-                chickenpkg.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(chickenpkg);
-
-                const beefpkg = this.add.image(width / 2 + width * 0.20, height / 2 + height * 0.17, "beefpackage")
-                const beefpkgScale = (height * 0.20) / beefpkg.height;
-                beefpkg.setScale(beefpkgScale);
-                beefpkg.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(beefpkg);
-
-                const onion = this.add.image(width / 2 + width * 0.30, height / 2 + height * 0.27, "onion")
-                const onionScale = (height * 0.20) / onion.height;
-                onion.setScale(onionScale);
-                onion.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(onion);
-
-                const ready1 = this.add.image(width / 2 + width * 0.28, height / 2 - height * 0.28, "readymadefood1")
-                const ready1Scale = (height * 0.20) / ready1.height;
-                ready1.setScale(ready1Scale);
-                ready1.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(ready1);
-
-                const ready2 = this.add.image(width / 2 + width * 0.17, height / 2 - height * 0.28, "readymadefood2")
-                const ready2Scale = (height * 0.20) / ready2.height;
-                ready2.setScale(ready2Scale);
-                ready2.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(ready2);
-
-                const egg = this.add.image(width / 2 + width * 0.15, height / 2, "egg")
-                const eggScale = (height * 0.20) / egg.height;
-                egg.setScale(eggScale);
-                egg.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(egg);
-
-                const milk = this.add.image(width / 2 + width * 0.30, height / 2, "milk")
-                const milkScale = (height * 0.20) / milk.height;
-                milk.setScale(milkScale);
-                milk.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(milk);
-
-                const bellpepper = this.add.image(width / 2 + width * 0.16, height / 2 + height * 0.27, "bellpepper")
-                const bellpepperScale = (height * 0.20) / bellpepper.height;
-                bellpepper.setScale(bellpepperScale);
-                bellpepper.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(bellpepper);
-
+                const dirtyIcon = this.add.image(width / 2 + width * 0.25, height / 2 + height * 0.30, "dirtyProduce")
+                dirtyIcon.setScale(cleanScale);
+                dirtyIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(dirtyIcon);
 
                 let foodItems = [
-                    { key: "chickenpackage", sprite: chickenpkg },
-                    { key: "beefpackage", sprite: beefpkg },
-                    { key: "onion", sprite: onion },
-                    { key: "readymadefood1", sprite: ready1 },
-                    { key: "readymadefood2", sprite: ready2 },
-                    { key: "egg", sprite: egg },
-                    { key: "milk", sprite: milk },
-                    { key: "bellpepper", sprite: bellpepper }
+                    { key: "coolerImg", sprite: coolerIcon },
+                    { key: "cleanProduce", sprite: cleanIcon },
+                    { key: "dirtyProduce", sprite: dirtyIcon }
                 ];
 
-                let fooditems = [chickenpkg, beefpkg, onion, ready1, ready2, egg, milk, bellpepper];
+                let fooditems = [coolerIcon, cleanIcon, dirtyIcon];
                 const correctShelf = {
-                    chickenpackage: "bottom",
-                    beefpackage: "bottom",
-                    bellpepper: "drawer",
-                    onion: "drawer",
-                    readymadefood1: "top",
-                    readymadefood2: "top",
-                    egg: "middle",
-                    milk: "middle"
+                    coolerImg: "bottom",
+                    dirtyProduce: "bottom",
+                    cleanProduce: "top",
                 };
 
-                let currentFood = null;
-                let currentSprite = null;
-                let foodAway = 0;
+                const zoneTop = new Phaser.Geom.Rectangle(
+                    width * 0.06,
+                    height * 0.04,
+                    width * 0.42,
+                    height * 0.35
+                );
+
+                const zoneBottom = new Phaser.Geom.Rectangle(
+                    width * 0.06,
+                    height * 0.55,
+                    width * 0.42,
+                    height * 0.28
+                );
+
+                let items = 2;
 
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     gameObject.x = dragX;
@@ -305,83 +246,58 @@ export default function CoolerPack({ openMenu }) {
                     gameObject.startY = gameObject.y;
                 });
                 this.input.on("dragend", (pointer, gameObject) => {
-                    const coolerBounds = box.getBounds();
-                    const bounds = gameObject.getBounds();
+                    const x = gameObject.x;
+                    const y = gameObject.y;
 
-                    if (Phaser.Geom.Intersects.RectangleToRectangle(coolerBounds, bounds)) {
-                        let droppedShelf = null;
+                    let droppedShelf = null;
 
-                        if (foodAway < 2) {
-                            droppedShelf = "bottom";
-                        }
-                        else if (foodAway < 4) {
-                            droppedShelf = "middle";
-                        }
-                        else if (foodAway < 6) {
-                            droppedShelf = "top";
-                        }
-                        else {
-                            droppedShelf = "drawer";
-                        }
-
-                        const group = correctShelf[gameObject.texture.key];
-
-                        console.log(foodAway);
-
-                        if (droppedShelf === group) {
-                            foodItems = foodItems.filter(item => item !== currentFood);
-                            if (foodAway >= 7) {
-                                setFridgeState("complete");
-
-                            } else {
-                                setFridgeState("success");
-                            }
-                            currentFood = null;
-
-                            if (droppedShelf === "drawer"
-                            ) {
-                                setfridgeSuccessState("Thats correct! Veggies go in last. Click anywhere to get out of the textbox.")
-                            }
-                            if (droppedShelf === "bottom") {
-                                setfridgeSuccessState("Thats correct! Meat goes in first prevent cross-contamination, in case of leakage. Click anywhere to get out of the textbox.")
-                            }
-                            if (droppedShelf === "top") {
-                                setfridgeSuccessState("Thats correct! Ready made food goes in almost last because it is usually precooked. Click anywhere to get out of the textbox.")
-                            }
-                            if (droppedShelf === "middle") {
-                                setfridgeSuccessState("Thats correct! Dairy goes in second where the temperature is most consistent. Click anywhere to get out of the textbox.")
-                            }
-
-                            gameObject.destroy();
-                            foodAway += 1;
-
-                            console.log("Correct!");
-                            currentFood = null;
-                            currentSprite = null;
-
-                        }
-                        else {
-                            setFridgeState("fail"); // React textbox trigger
-                            gameObject.x = gameObject.startX;
-                            gameObject.y = gameObject.startY;
-                            if (group === "drawer") {
-                                setfridgefailState("Not quite! Veggies go in last.")
-                            }
-                            if (group === "bottom") {
-                                setfridgefailState("Not quite! Meat goes in first to prevent cross-contamination.")
-                            }
-                            if (group === "top") {
-                                setfridgefailState("Not quite! Ready made food goes in almost last because it is usually precooked.")
-                            }
-                            if (group === "middle") {
-                                setfridgefailState("Not quite! Dairy goes in the middle where the temperature is most consistent.")
-                            }
-                        }
+                    if (Phaser.Geom.Rectangle.Contains(zoneTop, x, y)) {
+                        droppedShelf = "top";
+                    }
+                    else if (Phaser.Geom.Rectangle.Contains(zoneBottom, x, y)) {
+                        droppedShelf = "bottom";
                     }
                     else {
                         gameObject.x = gameObject.startX;
                         gameObject.y = gameObject.startY;
+                        return;
                     }
+
+                    const correct = correctShelf[gameObject.texture.key];
+
+                    if (droppedShelf === correct) {
+                        console.log(items);
+                        if (items <= 0) {
+                            setFridgeState("complete");
+
+                        } else {
+                            items -= 1;
+                            setFridgeState("success");
+                        }
+                        if (droppedShelf === "bottom") {
+                            setfridgeSuccessState("Thats correct! Meat and dirty produce go on the bottom shelf to prevent cross-contamination. Click anywhere to get out of the textbox.")
+                            gameObject.disableInteractive();
+                        }
+                        else if (droppedShelf === "top") {
+                            setfridgeSuccessState("Thats correct! Clean produce goes on the top shelf so no contaminants fall on it. Click anywhere to get out of the textbox.")
+                            gameObject.disableInteractive();
+                        }
+
+                        console.log("Correct!");
+                    }
+                    else {
+                        setFridgeState("fail"); // React textbox trigger
+                        gameObject.x = gameObject.startX;
+                        gameObject.y = gameObject.startY;
+
+                        if (correct === "bottom") {
+                            setfridgefailState("Not quite! Meat goes on the bottom shelf to prevent cross-contamination.")
+                        }
+                        if (correct === "top") {
+                            setfridgefailState("Not quite! Ready made food goes on the top shelf because it is usually precooked.")
+                        }
+                    }
+
                 });
             }
         }
@@ -401,7 +317,7 @@ export default function CoolerPack({ openMenu }) {
             audio: { noAudio: true },
             transparent: false,
             backgroundColor: "#000000",
-            scene: [IntroScene, InstructionScene, CoolerScene],
+            scene: [IntroScene, InstructionScene, PackingScene],
             parent: "phaser-game"
         };
         phaserGameRef.current = new Phaser.Game(config);
@@ -422,7 +338,7 @@ export default function CoolerPack({ openMenu }) {
         else if (gameStage === "instructions") {
             setGameStage("CoolerStage");
 
-            phaserGameRef.current?.scene.start("CoolerScene", {
+            phaserGameRef.current?.scene.start("PackingScene", {
                 instructions: instructionTexts
             });
         }
@@ -433,7 +349,7 @@ export default function CoolerPack({ openMenu }) {
             else {
                 setGameStage("CoolerStage");
 
-                phaserGameRef.current?.scene.start("CoolerScene", {
+                phaserGameRef.current?.scene.start("PackingScene", {
                     instructions: instructionTexts
                 });
             }
@@ -449,7 +365,7 @@ export default function CoolerPack({ openMenu }) {
             setGameStage("CoolerStage");
 
             if (phaserGameRef.current) {
-                phaserGameRef.current.scene.start("CoolerScene", {
+                phaserGameRef.current.scene.start("PackingScene", {
                     instructions: instructionTexts
                 });
             }
@@ -625,7 +541,7 @@ export default function CoolerPack({ openMenu }) {
                         <Textbox
                             width="30vw"
                             height="40vh"
-                            placeholder={"Good job! We have successfully packed the cooler. Let's go get it all into the truck now!"}
+                            placeholder={"Good job! We have successfully packed the truck. Get everything in the cooler to its destination within two hours."}
                             placeHolderColor="#000000"
                             placeHolderfontSize="1.1vw"
                         />
