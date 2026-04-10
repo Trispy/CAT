@@ -1,71 +1,87 @@
 name: Full CI/CD (Frontend + Backend)
 
 on:
-  push:
-    branches: [main]
+push:
+branches: [main]
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+deploy:
+runs-on: ubuntu-latest
 
-    steps:
-      # 1. Checkout repo
-      - name: Checkout code
-        uses: actions/checkout@v3
+```
+steps:
+  # 1. Checkout repo
+  - name: Checkout code
+    uses: actions/checkout@v3
 
-      # 2. Setup Node
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+  # 2. Setup Node
+  - name: Setup Node
+    uses: actions/setup-node@v3
+    with:
+      node-version: 20
 
-      # 3. Install backend deps (root)
-      - name: Install backend dependencies
-        run: npm install
+  # 3. Install backend dependencies (root)
+  - name: Install backend dependencies
+    run: npm install
 
-      # 4. Install frontend deps
-      - name: Install frontend dependencies
-        run: npm install
-        working-directory: ./frontend
+  # 4. Install frontend dependencies
+  - name: Install frontend dependencies
+    run: npm install
+    working-directory: ./frontend
 
-      # 5. Build frontend
-      - name: Build frontend
-        run: npm run build
-        working-directory: ./frontend
-        env:
-          CI: false
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+  # 5. DEBUG: confirm API URL is available
+  - name: Debug REACT_APP_API_URL
+    run: |
+      echo "VALUE: $REACT_APP_API_URL"
+      if [ -z "$REACT_APP_API_URL" ]; then
+        echo "❌ EMPTY"
+        exit 1
+      else
+        echo "✅ PRESENT"
+      fi
+    env:
+      REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
-      # 6. Configure AWS
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+  # 6. Build frontend (IMPORTANT: env must be here)
+  - name: Build frontend
+    run: |
+      echo "BUILD API: $REACT_APP_API_URL"
+      npm run build
+    working-directory: ./frontend
+    env:
+      CI: false
+      REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
-      # 7. Deploy frontend to S3
-      - name: Upload to S3
-        run: |
-          aws s3 sync ./frontend/build s3://${{ secrets.S3_BUCKET_NAME }} --delete
+  # 7. Configure AWS credentials
+  - name: Configure AWS credentials
+    uses: aws-actions/configure-aws-credentials@v2
+    with:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws-region: us-east-1
 
-      # 8. Install Serverless
-      - name: Install Serverless
-        run: npm install -g serverless
+  # 8. Deploy frontend to S3
+  - name: Upload to S3
+    run: |
+      aws s3 sync ./frontend/build s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
-      # 9. Deploy backend (Lambda)
-      - name: Deploy Lambda
-        run: serverless deploy
-        env:
-          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+  # 9. Install Serverless
+  - name: Install Serverless
+    run: npm install -g serverless
 
+  # 10. Deploy backend (Lambda)
+  - name: Deploy Lambda
+    run: serverless deploy --debug
+    env:
+      SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
-      # 10. Invalidate CloudFront
-      - name: Invalidate CloudFront
-        run: |
-          aws cloudfront create-invalidation \
-            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
-            --paths "/*"
+  # 11. Invalidate CloudFront cache
+  - name: Invalidate CloudFront
+    run: |
+      aws cloudfront create-invalidation \
+        --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+        --paths "/*"
+```
