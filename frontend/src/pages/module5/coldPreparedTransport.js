@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 
 import moduleUpdate from "../../components/moduleupdate";
@@ -30,12 +30,14 @@ import { useNavigate } from "react-router-dom";
 const API = process.env.REACT_APP_API_URL;
 
 export default function ColdPrepTransport({ openMenu }) {
+    const phaserGameRef = useRef(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         window.navigateToPage = navigate;
 
         class ColdTransport extends Phaser.Scene {
+            
             textboxScale = 1;
             erinScale = 1.2;
             iceboxX = 519;
@@ -45,7 +47,7 @@ export default function ColdPrepTransport({ openMenu }) {
             zoomedY = -20;
             zoomedScale = 1.2;
             
-          
+            
             welcomeTexts = [
                 "We will be learning about how to transport cold prepared food and hot prepared food.",
                 "In this game, we'll practice setting up a cooler for cold prepared food."
@@ -120,9 +122,9 @@ export default function ColdPrepTransport({ openMenu }) {
                         height / 2,
                         inputText,
                         {
-                            font: "50px Arial",
+                            font: "40px Arial",
                             color: "#000",
-                            wordWrap: { width: width * 0.7 }
+                            wordWrap: { width: width * 0.58  }
                         }
                     ).setOrigin(0.5);
 
@@ -146,7 +148,49 @@ export default function ColdPrepTransport({ openMenu }) {
                     overlay.add([blocker, bg, text, close]);
                     overlay.setDepth(1000);
                 }
+                showInstructions() {
+                const { width, height } = this.scale;
 
+                const overlay = this.add.container(0, 0);
+                overlay.setDepth(1000);
+                const bg = this.add.rectangle(
+                    width / 2,
+                    height / 2,
+                    width * 0.8,
+                    height * 0.8,
+                    0xffffff
+                ).setStrokeStyle(4, 0x000000);
+
+                const text = this.add.text(
+                    width / 2,
+                    height / 2,
+                    this.instructions.join("\n\n"),
+                    {
+                        font: "40px Arial",
+                        color: "#000",
+                        wordWrap: { width: width * 0.7 }
+                    }
+                ).setOrigin(0.5);
+
+                const close = this.add.text(
+                    width * 0.85,
+                    height * 0.15,
+                    "X",
+                    {
+                        font: "40px Arial",
+                        backgroundColor: "#ff0000",
+                        padding: { x: 20, y: 10 }
+                    }
+                )
+                    .setInteractive()
+                    .setOrigin(0.5);
+
+                close.on("pointerdown", () => {
+                    overlay.destroy(true);
+                });
+
+                overlay.add([bg, text, close]);
+            }
             create() {
                 // Background
                 
@@ -156,7 +200,7 @@ export default function ColdPrepTransport({ openMenu }) {
                     "bg1"
                 );
                    // Help Button
-                const helpButton = this.add.text(
+                /*const helpButton = this.add.text(
                     this.scale.width * 0.89,
                     this.scale.height * 0.07,
                     "?",
@@ -175,7 +219,7 @@ export default function ColdPrepTransport({ openMenu }) {
 
                 helpButton.on("pointerdown", () => {
                     this.showPopup("1. Place ice in cooler.\n2. Close the lid to allow the cooler to chill.\n3. Wait for the timer to finish, then check the temperature in the cooler. Once it gets down to 40 degrees, you can put food in.\n4. Place the food in the cooler.\n5. Place more ice on top of the food.\n6. Close the cooler and don't open it again.");
-                });
+                });*/
                 this.timerText = "";
                 const scaleX = this.scale.width / this.bg1.width;
                 const scaleY = this.scale.height / this.bg1.height;
@@ -325,8 +369,9 @@ export default function ColdPrepTransport({ openMenu }) {
                         this.showPopup(this.instructions[0]);
                         this.emptyBox.setInteractive();
                         this.next.setVisible(false);
-                        this.instructions.shift();
-                        helpButton.setVisible(true);
+                        const instructionText = this.instructions[0];
+                        this.showPopup(instructionText);
+                        //helpButton.setVisible(true);
                         this.iterateGameMessage();
                     }
                     else if (this.transitions.length > 0){
@@ -506,7 +551,7 @@ export default function ColdPrepTransport({ openMenu }) {
                     this.bg1.setTexture("bg3");
                     this.openBox.setVisible(false);
                     this.ice.setVisible(false);
-                    helpButton.setVisible(false);
+                    //helpButton.setVisible(false);
                     this.textbox.setVisible(true);
                     //this.textbox.setScale(this.textboxScale);
                     //this.textbox.setPosition(150, 100);
@@ -642,10 +687,10 @@ export default function ColdPrepTransport({ openMenu }) {
             parent: "phaser-game"
         };
 
-        const game = new Phaser.Game(config);
+        phaserGameRef.current = new Phaser.Game(config);
 
         return () => {
-            game.destroy(true);
+            phaserGameRef.current.destroy(true);
         };
     }, []);
 
@@ -669,17 +714,37 @@ export default function ColdPrepTransport({ openMenu }) {
                     zIndex: 1
                 }}
             />
-            <div
-                  style={{
-                    position: "absolute",
-                    top: "4px",
-                    right: "110px",
-                    width: "100px",
-                    zIndex: 30000
-                  }}
-                >
-                  <Settings openMenu={openMenu}/>
-                </div>
+           <div
+                       style={{
+                           position: "absolute",
+                           top: "10px",
+                           right: "190px",
+                           display: "flex",
+                           gap: "10px",
+                           alignItems: "center",
+                           zIndex: 30000
+                       }}
+                       >
+           
+                           <button
+                           onClick={() => {
+                               if (phaserGameRef.current) {
+                               const scene = phaserGameRef.current.scene.getScene("ColdPrepTransportScene");
+                               scene.showInstructions();
+                               }
+                           }}
+                           style={{
+                               font: "bold 20px sans-serif",
+                               backgroundColor: "#ffffff",
+                               color: "#5100ff",
+                               padding: "5px 9px",
+                               cursor: "pointer"
+                           }}
+                           >
+                           ?
+                           </button>
+                       <Settings openMenu={openMenu} />
+                       </div>
         </div>
     );
 }

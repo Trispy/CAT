@@ -297,9 +297,9 @@ function Module2Part1({ openMenu }) {
                     height / 2,
                     this.instructions.join("\n\n"),
                     {
-                        font: "32px Arial",
+                        font: "40px Arial",
                         color: "#000",
-                        wordWrap: { width: width * 0.7 }
+                        wordWrap: { width: width * 0.58 }
                     }
                 ).setOrigin(0.5);
 
@@ -324,7 +324,7 @@ function Module2Part1({ openMenu }) {
             }
             create() {
                 const { width, height } = this.scale;
-                const helpButton = this.add.text(
+                /*const helpButton = this.add.text(
                     width * 0.89,
                     height * 0.07,
                     "?",
@@ -342,7 +342,7 @@ function Module2Part1({ openMenu }) {
 
                 helpButton.on("pointerdown", () => {
                     this.showInstructions();
-                });
+                });*/
                 // Background
                 this.add.image(width / 2, height / 2, "fridgeScene").setDisplaySize(width, height);
                 const box = this.add.image(width / 2 - width * 0.25, height / 2 + height * 0.30, "foodbox")
@@ -586,7 +586,7 @@ function Module2Part1({ openMenu }) {
             create() {
                 const { width, height } = this.scale;
                 let timeLeft = 20;
-
+                
                 const timerText = this.add.text(
                     width * 0.85,
                     height * 0.05,
@@ -1087,7 +1087,7 @@ function Module2Part1({ openMenu }) {
                         height="70vh"
                         placeholder={introText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="2vw"
+                        placeHolderfontSize="1.8vw"
                     />
                 </div>
             )}
@@ -1111,16 +1111,16 @@ function Module2Part1({ openMenu }) {
                     <div
                         style={{
                             position: "fixed",
-                            right: "18vw",
-                            bottom: "20vh"
+                            right: "15vw",
+                            bottom: "10vh"
                         }}
                     >
                         <Textbox
-                            width="30vw"
-                            height="50vh"
+                            width="70vw"
+                            height="60vh"
                             placeholder={thermometerInstructions}
                             placeHolderColor="#000000"
-                            placeHolderfontSize="1.1vw"
+                            placeHolderfontSize="1.8vw"
                         />
                     </div>
                 </div>
@@ -1133,16 +1133,16 @@ function Module2Part1({ openMenu }) {
                     <div
                         style={{
                             position: "fixed",
-                            right: "18vw",
-                            bottom: "20vh"
+                            right: "15vw",
+                            bottom: "10vh"
                         }}
                     >
                         <Textbox
-                            width="30vw"
-                            height="40vh"
+                            width="70vw"
+                            height="60vh"
                             placeholder={thermometerFailText}
                             placeHolderColor="#000000"
-                            placeHolderfontSize="1.1vw"
+                            placeHolderfontSize="1.8vw"
                         />
                     </div>
                 </div>
@@ -1151,17 +1151,17 @@ function Module2Part1({ openMenu }) {
                 <div
                     style={{
                         position: "fixed",
-                        right: "18vw",
-                        bottom: "20vh",
+                            right: "15vw",
+                            bottom: "10vh",
                         zIndex: 15000
                     }}
                 >
                     <Textbox
-                        width="30vw"
-                        height="40vh"
+                        width="70vw"
+                        height="60vh"
                         placeholder={thermometerSuccessText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.1vw"
+                        placeHolderfontSize="1.8vw"
                     />
                 </div>
             )}
@@ -1173,16 +1173,16 @@ function Module2Part1({ openMenu }) {
                     <div
                         style={{
                             position: "fixed",
-                            right: "18vw",
-                            bottom: "20vh"
+                            right: "15vw",
+                            bottom: "10vh"
                         }}
                     >
                         <Textbox
-                            width="40vw"
-                            height="50vh"
+                            width="70vw"
+                            height="60vh"
                             placeholder={fridgeInstructions}
                             placeHolderColor="#000000"
-                            placeHolderfontSize="1.1vw"
+                            placeHolderfontSize="1.8vw"
                         />
                     </div>
                 </div>
@@ -1197,16 +1197,16 @@ function Module2Part1({ openMenu }) {
                     <div
                         style={{
                             position: "fixed",
-                            right: "18vw",
-                            bottom: "20vh"
+                            right: "15vw",
+                            bottom: "10vh"
                         }}
                     >
                         <Textbox
-                            width="30vw"
-                            height="40vh"
+                            width="70vw"
+                            height="60vh"
                             placeholder={fridgeFailText}
                             placeHolderColor="#000000"
-                            placeHolderfontSize="1.1vw"
+                            placeHolderfontSize="1.8vw"
                         />
                     </div>
                 </div>
@@ -1219,16 +1219,16 @@ function Module2Part1({ openMenu }) {
                     <div
                         style={{
                             position: "fixed",
-                            right: "18vw",
-                            bottom: "20vh"
+                            right: "15vw",
+                            bottom: "10vh"
                         }}
                     >
                         <Textbox
-                            width="30vw"
-                            height="40vh"
+                            width="70vw"
+                            height="60vh"
                             placeholder={fridgeComplete}
                             placeHolderColor="#000000"
-                            placeHolderfontSize="1.1vw"
+                            placeHolderfontSize="1.8vw"
                         />
                     </div>
                 </div>
@@ -1279,7 +1279,7 @@ function Module2Part1({ openMenu }) {
                         height="70dvh"
                         placeholder={soapSuccessText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.8vw"
+                        placeHolderfontSize="2.3vw"
                     />
                 </div>
 
@@ -1318,7 +1318,7 @@ function Module2Part1({ openMenu }) {
                             height="70%"
                             placeholder={gloveText}
                             placeHolderColor="#000000"
-                            placeHolderfontSize="1.8vw"
+                            placeHolderfontSize="2vw"
                         />
                     </div>
                 </div>
@@ -1357,32 +1357,56 @@ function Module2Part1({ openMenu }) {
                     <div
                         style={{
                             position: "fixed",
-                            right: "18vw",
-                            bottom: "15vh"
+                            right: "15vw",
+                            bottom: "10vh"
                         }}
                     >
                         <Textbox
-                            width="30vw"
-                            height="40vh"
+                            width="70vw"
+                            height="60vh"
                             placeholder={fridgeSuccessText}
                             placeHolderColor="#000000"
-                            placeHolderfontSize="1.1vw"
+                            placeHolderfontSize="1.8vw"
                         />
                     </div>
                 </div>
             )}
             <div
-                style={{
-                    position: "absolute",
-                    top: "4px",
-                    right: "110px",
-                    width: "100px",
-                    zIndex: 30000
-                }}
+            style={{
+                position: "absolute",
+                top: "10px",
+                right: "190px",
+                display: "flex",
+                gap: "10px",
+                alignItems: "center",
+                zIndex: 30000
+            }}
             >
-                <Settings openMenu={openMenu} />
-            </div>
 
+            {gameStage === "FridgeScene" && (
+                <button
+                onClick={() => {
+                    if (phaserGameRef.current) {
+                    const scene = phaserGameRef.current.scene.getScene("FridgeScene");
+                    if (scene) {
+                        scene.showInstructions();
+                    }
+                    }
+                }}
+                style={{
+                    font: "bold 20px sans-serif",
+                    backgroundColor: "#ffffff",
+                    color: "#5100ff",
+                    padding: "5px 9px",
+                    cursor: "pointer"
+                }}
+                >
+                ?
+                </button>
+            )}
+
+            <Settings openMenu={openMenu} />
+            </div>
 
         </div>
     );

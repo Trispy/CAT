@@ -116,8 +116,8 @@ export default function TruckPack({ openMenu }) {
             constructor() {
                 super("PackingScene");
             }
-            init() {
-                this.instructions = ["Sort the following items into the correct shelves in the truck based on the following rules:", "1. Raw meat goes on the bottom shelf to prevent cross-contamination.", "2. Dirty produce goes on the bottom shelf so none of the dirt falls on something clean.", "3. Clean produce goes on the shelf to keep it above other contaminants."];
+            init(data) {
+                this.instructions = data.instructions || ["Sort the following items into the correct shelves in the truck based on the following rules:", "1. Raw meat goes on the bottom shelf to prevent cross-contamination.", "2. Dirty produce goes on the bottom shelf so none of the dirt falls on something clean.", "3. Clean produce goes on the shelf to keep it above other contaminants."];
             }
             preload() {
                 this.load.image("fridgeScene", sceneBackground);
@@ -143,9 +143,9 @@ export default function TruckPack({ openMenu }) {
                     height / 2,
                     this.instructions.join("\n\n"),
                     {
-                        font: "32px Arial",
+                        font: "40px Arial",
                         color: "#000",
-                        wordWrap: { width: width * 0.7 }
+                        wordWrap: { width: width * 0.58  }
                     }
                 ).setOrigin(0.5);
 
@@ -168,9 +168,15 @@ export default function TruckPack({ openMenu }) {
 
                 overlay.add([bg, text, close]);
             }
-            create() {
+            create(data) {
                 const { width, height } = this.scale;
-                const helpButton = this.add.text(
+                    this.instructions =  [
+                        "Sort the following items...",
+                        "1. Raw meat goes on the bottom...",
+                        "2. Dirty produce goes on the bottom...",
+                        "3. Clean produce goes on the top..."
+                    ];
+                /*const helpButton = this.add.text(
                     width * 0.89,
                     height * 0.07,
                     "?",
@@ -188,7 +194,7 @@ export default function TruckPack({ openMenu }) {
 
                 helpButton.on("pointerdown", () => {
                     this.showInstructions();
-                });
+                });*/
                 // Background
                 this.add.image(width / 2, height / 2, "fridgeScene").setDisplaySize(width, height);
                 const coolerIcon = this.add.image(width / 2 + width * 0.25, height / 2 - height * 0.30, "coolerImg")
@@ -559,20 +565,45 @@ export default function TruckPack({ openMenu }) {
                     width: "100vw",
                     height: "100dvh",
                     zIndex: 1,
+                   
 
                 }}
             />
-            <div
-                style={{
-                    position: "absolute",
-                    top: "4px",
-                    right: "110px",
-                    width: "100px",
-                    zIndex: 10
-                }}
-            >
-                <Settings openMenu={openMenu} />
-            </div>
+         <div
+             style={{
+                 position: "absolute",
+                 top: "10px",
+                 right: "190px",
+                 display: "flex",
+                 gap: "10px",
+                 alignItems: "center",
+                 zIndex: 30000
+             }}
+             >
+ 
+             {gameStage === "CoolerStage" && (
+                 <button
+                 onClick={() => {
+                     if (phaserGameRef.current) {
+                     const scene = phaserGameRef.current.scene.getScene("PackingScene");
+                     if (scene){scene.showInstructions();}
+                     
+                     }
+                 }}
+                 style={{
+                     font: "bold 20px sans-serif",
+                     backgroundColor: "#ffffff",
+                     color: "#5100ff",
+                     padding: "5px 9px",
+                     cursor: "pointer"
+                 }}
+                 >
+                 ?
+                 </button>
+             )}
+ 
+             <Settings openMenu={openMenu} />
+             </div>  
 
 
         </div>

@@ -186,7 +186,7 @@ function Map({ openMenu }) {
 
                     mod4.setInteractive();
                     mod4.on("pointerdown", () => {
-                        window.navigateToPage("/module4/cleanTote");
+                        window.navigateToPage("/module4/toteCleaning");
                     });
                 }
                 // mod 5

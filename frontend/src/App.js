@@ -14,7 +14,6 @@ import Can from './pages/module3/cansort.js'
 import Map from "./pages/user/map.js";
 import OrientationGuard from "./components/orientationguard";
 import Allergen from './pages/module3/allergens.js';
-import CleanTote from './pages/module4/cleanTote.js';
 import CoolerPack from './pages/module4/sorting.js';
 import TruckPack from './pages/module4/packing.js';
 import ColdPrepTransport from './pages/module5/coldPreparedTransport.js';
@@ -68,7 +67,7 @@ function App() {
                         top: 0,
                         left: 0,
                         width: "100%",
-                        backgroundColor: "rgba(0,0,0,0.5)",
+                        backgroundColor: "rgba(0,0,0,0.85)",
                         height: "100%",
                         zIndex: 80000,
                         display: "flex",
@@ -83,7 +82,7 @@ function App() {
                   position: "absolute",
                   top: "2px",
                   right: "120px",
-                  fontSize: "40px",
+                  fontSize: "60px",
                   color: "white",
                   cursor: "pointer",
                   zIndex: 80000

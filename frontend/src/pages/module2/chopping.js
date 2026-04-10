@@ -222,7 +222,7 @@ export default function Cleaning({ openMenu }) {
                 this.scale.refresh();
                 this.add.image(width / 2, height / 2, "volLocation").setDisplaySize(width, height);
                 let boardClean = false;
-                const helpButton = this.add.text(
+                /*const helpButton = this.add.text(
                     width * 0.89,
                     height * 0.07,
                     "?",
@@ -240,7 +240,7 @@ export default function Cleaning({ openMenu }) {
 
                 helpButton.on("pointerdown", () => {
                     this.showInstructions();
-                });
+                });*/
                 // Character
                 const character = this.add.image(
                     width - width * 0.40,
@@ -1161,17 +1161,42 @@ export default function Cleaning({ openMenu }) {
 
                 }}
             />
-            <div
-                  style={{
-                    position: "absolute",
-                    top: "4px",
-                    right: "110px",
-                    width: "100px",
-                    zIndex: 10
-                  }}
+ <div
+            style={{
+                position: "absolute",
+                top: "10px",
+                right: "190px",
+                display: "flex",
+                gap: "10px",
+                alignItems: "center",
+                zIndex: 30000
+            }}
+            >
+
+            {gameStage === "cleanStage" && (
+                <button
+                onClick={() => {
+                    if (phaserGameRef.current) {
+                    const scene = phaserGameRef.current.scene.getScene("CleanScene");
+                    if (scene?.scene?.isActive()) {
+                        scene.showInstructions();
+                    }
+                    }
+                }}
+                style={{
+                    font: "bold 20px sans-serif",
+                    backgroundColor: "#ffffff",
+                    color: "#5100ff",
+                    padding: "5px 9px",
+                    cursor: "pointer"
+                }}
                 >
-                  <Settings openMenu={openMenu}/>
-                </div>
+                ?
+                </button>
+            )}
+
+            <Settings openMenu={openMenu} />
+            </div>
          
 
         </div>

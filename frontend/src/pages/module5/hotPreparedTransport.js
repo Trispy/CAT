@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Phaser, { Game } from "phaser";
 
 import moduleUpdate from "../../components/moduleupdate";
@@ -36,6 +36,7 @@ import Settings from "../../components/settings";
 import { useNavigate } from "react-router-dom";
 const API = process.env.REACT_APP_API_URL;
 export default function HotPrepTransport({ openMenu }) {
+    const phaserGameRef = useRef(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -135,7 +136,7 @@ export default function HotPrepTransport({ openMenu }) {
                         height / 2,
                         inputText,
                         {
-                            font: "bold 60px sans-serif",
+                            font: "40px Arial",
                             color: "#000",
                             wordWrap: { width: width * 0.7 }
                         }
@@ -161,7 +162,49 @@ export default function HotPrepTransport({ openMenu }) {
                     overlay.add([blocker, bg, text, close]);
                     overlay.setDepth(1000);
                 }
+            showInstructions() {
+                const { width, height } = this.scale;
 
+                const overlay = this.add.container(0, 0);
+                overlay.setDepth(1000);
+                const bg = this.add.rectangle(
+                    width / 2,
+                    height / 2,
+                    width * 0.8,
+                    height * 0.8,
+                    0xffffff
+                ).setStrokeStyle(4, 0x000000);
+
+                const text = this.add.text(
+                    width / 2,
+                    height / 2,
+                    this.instructions.join("\n\n"),
+                    {
+                        font: "40px Arial",
+                        color: "#000",
+                        wordWrap: { width: width * 0.58  }
+                    }
+                ).setOrigin(0.5);
+
+                const close = this.add.text(
+                    width * 0.85,
+                    height * 0.15,
+                    "X",
+                    {
+                        font: "40px Arial",
+                        backgroundColor: "#ff0000",
+                        padding: { x: 20, y: 10 }
+                    }
+                )
+                    .setInteractive()
+                    .setOrigin(0.5);
+
+                close.on("pointerdown", () => {
+                    overlay.destroy(true);
+                });
+
+                overlay.add([bg, text, close]);
+            }
             create() {
                 // Background
                 
@@ -171,7 +214,7 @@ export default function HotPrepTransport({ openMenu }) {
                     "bg1"
                 );
                    // Help Button
-                const helpButton = this.add.text(
+                /*const helpButton = this.add.text(
                     this.scale.width * 0.89,
                     this.scale.height * 0.07,
                     "?",
@@ -189,7 +232,7 @@ export default function HotPrepTransport({ openMenu }) {
                 .setVisible(false);
 
                 helpButton.on("pointerdown", () => {
-                    this.showPopup("1. Drag the thermometers to food on the stove. It must be at least 140 degrees fahrenheit.\n2. Drag the soup into the insulated mug and the chicken into the tupperware.\n3. Put the containers of food into the insulated bag and close it up. Don't open until the timer runs out. \n4. Drag the food to the stove, then drag the thermometers to the food and reheat until it reaches at least 165 degrees.")});
+                    this.showPopup("1. Drag the thermometers to food on the stove. It must be at least 140 degrees fahrenheit.\n2. Drag the soup into the insulated mug and the chicken into the tupperware.\n3. Put the containers of food into the insulated bag and close it up. Don't open until the timer runs out. \n4. Drag the food to the stove, then drag the thermometers to the food and reheat until it reaches at least 165 degrees.")});*/
                 this.timerText = "";
                 const scaleX = this.scale.width / this.bg1.width;
                     const scaleY = this.scale.height / this.bg1.height;
@@ -426,14 +469,14 @@ export default function HotPrepTransport({ openMenu }) {
                         this.showPopup(this.instructions[0]);
                         this.emptyBag.setInteractive();
                         this.next.setVisible(false);
-                        this.instructions.shift();
-                        helpButton.setVisible(true);
+                        //this.instructions.shift();
+                        //helpButton.setVisible(true);
                         this.iterateGameMessage();
                         this.input.setDraggable(this.therm1);
                         this.input.setDraggable(this.therm2);
                     }
                     else if (this.transitions.length > 0){
-                        helpButton.setVisible(false);
+                        //helpButton.setVisible(false);
                         this.bg1.setTexture("bg3");
                         this.textboxText.setFontSize("70px");
                         this.textbox.setPosition(150, 100);
@@ -803,10 +846,13 @@ export default function HotPrepTransport({ openMenu }) {
             parent: "phaser-game"
         };
 
-        const game = new Phaser.Game(config);
+        phaserGameRef.current = new Phaser.Game(config);
 
         return () => {
-            game.destroy(true);
+            if (phaserGameRef.current) {
+                    phaserGameRef.current.destroy(true);
+                    phaserGameRef.current = null;
+                }
         };
     }, []);
 
@@ -830,17 +876,37 @@ export default function HotPrepTransport({ openMenu }) {
                     zIndex: 1
                 }}
             />
-            <div
-                  style={{
-                    position: "absolute",
-                    top: "4px",
-                    right: "110px",
-                    width: "100px",
-                    zIndex: 30000
-                  }}
-                >
-                  <Settings openMenu={openMenu}/>
-                </div>
+           <div
+                       style={{
+                           position: "absolute",
+                           top: "10px",
+                           right: "190px",
+                           display: "flex",
+                           gap: "10px",
+                           alignItems: "center",
+                           zIndex: 30000
+                       }}
+                       >
+           
+                           <button
+                           onClick={() => {
+                               if (phaserGameRef.current) {
+                               const scene = phaserGameRef.current.scene.getScene("HotPrepTransportScene");
+                               scene.showInstructions();
+                               }
+                           }}
+                           style={{
+                               font: "bold 20px sans-serif",
+                               backgroundColor: "#ffffff",
+                               color: "#5100ff",
+                               padding: "5px 9px",
+                               cursor: "pointer"
+                           }}
+                           >
+                           ?
+                           </button>
+                       <Settings openMenu={openMenu} />
+                       </div>
         </div>
     );
 }

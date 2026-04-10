@@ -167,9 +167,9 @@ export default function CoolerPack({ openMenu }) {
                     height / 2,
                     this.instructions.join("\n\n"),
                     {
-                        font: "32px Arial",
+                        font: "40px Arial",
                         color: "#000",
-                        wordWrap: { width: width * 0.7 }
+                        wordWrap: { width: width * 0.58  }
                     }
                 ).setOrigin(0.5);
 
@@ -192,9 +192,11 @@ export default function CoolerPack({ openMenu }) {
 
                 overlay.add([bg, text, close]);
             }
-            create() {
+            create(data) {
+                this.instructions = ["Sort the following items into the correct shelves in the fridge based on the following rules:", "1. Ready made food goes on the top shelf because it is usually precooked.", "2. Dairy goes on the middle shelf where the temperature is most consistent.", "3. Meat goes on the bottom shelf to prevent cross-contamination.", "4. Veggies go in the crisper drawer to maintain freshness."];
+
                 const { width, height } = this.scale;
-                const helpButton = this.add.text(
+                /*const helpButton = this.add.text(
                     width * 0.89,
                     height * 0.07,
                     "?",
@@ -212,7 +214,7 @@ export default function CoolerPack({ openMenu }) {
 
                 helpButton.on("pointerdown", () => {
                     this.showInstructions();
-                });
+                });*/
                 // Background
                 this.add.image(width / 2, height / 2, "fridgeScene").setDisplaySize(width, height);
                 const box = this.add.image(width / 2 - width * 0.25, height / 2 + height * 0.15, "foodbox")
@@ -612,7 +614,7 @@ export default function CoolerPack({ openMenu }) {
             )}
             {fridgeState === "complete" && (
                 <div
-                    onClick={() => navigate("/map", { replace: true })}
+                    onClick={() => navigate("/module4/packTruck", { replace: true })}
                     style={overlayStyle}
                 >
                     <div
@@ -646,16 +648,41 @@ export default function CoolerPack({ openMenu }) {
 
                 }}
             />
-            <div
-                style={{
-                    position: "absolute",
-                    top: "4px",
-                    right: "110px",
-                    width: "100px",
-                    zIndex: 10
-                }}
+        <div
+            style={{
+                position: "absolute",
+                top: "10px",
+                right: "190px",
+                display: "flex",
+                gap: "10px",
+                alignItems: "center",
+                zIndex: 30000
+            }}
             >
-                <Settings openMenu={openMenu} />
+
+            {gameStage === "CoolerStage" && (
+                <button
+                onClick={() => {
+                    if (phaserGameRef.current) {
+                    const scene = phaserGameRef.current.scene.getScene("CoolerScene");
+                    if (scene) {
+                        scene.showInstructions();
+                    }
+                    }
+                }}
+                style={{
+                    font: "bold 20px sans-serif",
+                    backgroundColor: "#ffffff",
+                    color: "#5100ff",
+                    padding: "5px 9px",
+                    cursor: "pointer"
+                }}
+                >
+                ?
+                </button>
+            )}
+
+            <Settings openMenu={openMenu} />
             </div>
 
 

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 
 import bg1 from "../../assets/M6G2/ClearCounterBackground.png";
@@ -34,8 +34,6 @@ import emptyBowl from "../../assets/M6G2/emptyBowl.png";
 import newSpatula from "../../assets/M6G2/newSpatula.png";
 import tempLog from "../../assets/M6G2/TempLog.png";
 import chickenPan from "../../assets/M5G2/ChickenPan.png";
-
-
 import { defaultFont } from "../../formatting";
 import { defaultFontSize } from "../../formatting";
 import { defaultFontColor } from "../../formatting";
@@ -44,6 +42,7 @@ import Settings from "../../components/settings";
 import { useNavigate } from "react-router-dom";
 
 export default function FoodServiceMishaps({ openMenu }) {
+    const phaserGameRef = useRef(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -135,7 +134,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                 this.load.image("newSpatula", newSpatula);
                 this.load.image("emptyBowl", emptyBowl);
                 this.load.image("tempLog", tempLog);
-                              this.load.image("chickenPan", chickenPan);
+                this.load.image("chickenPan", chickenPan);
 
 
             }
@@ -189,7 +188,49 @@ export default function FoodServiceMishaps({ openMenu }) {
                     overlay.add([blocker, bg, text, close]);
                     overlay.setDepth(1000);
                 }
+           showInstructions() {
+                const { width, height } = this.scale;
 
+                const overlay = this.add.container(0, 0);
+                overlay.setDepth(1000);
+                const bg = this.add.rectangle(
+                    width / 2,
+                    height / 2,
+                    width * 0.8,
+                    height * 0.8,
+                    0xffffff
+                ).setStrokeStyle(4, 0x000000);
+
+                const text = this.add.text(
+                    width / 2,
+                    height / 2,
+                    this.instructions.join("\n\n"),
+                    {
+                        font: "50px Arial",
+                        color: "#000",
+                        wordWrap: { width: width * 0.58  }
+                    }
+                ).setOrigin(0.5);
+
+                const close = this.add.text(
+                    width * 0.85,
+                    height * 0.15,
+                    "X",
+                    {
+                        font: "40px Arial",
+                        backgroundColor: "#ff0000",
+                        padding: { x: 20, y: 10 }
+                    }
+                )
+                    .setInteractive()
+                    .setOrigin(0.5);
+
+                close.on("pointerdown", () => {
+                    overlay.destroy(true);
+                });
+
+                overlay.add([bg, text, close]);
+            }
             create() {    // Background
                 
                 this.bg1 = this.add.image(
@@ -199,7 +240,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                 );
                 //this.bg1.setScale(1.5);
                    // Help Button
-                const helpButton = this.add.text(
+                /*const helpButton = this.add.text(
                     this.scale.width * 0.89,
                     this.scale.height * 0.09,
                     "?",
@@ -217,9 +258,9 @@ export default function FoodServiceMishaps({ openMenu }) {
                 .setVisible(false);
 
                 helpButton.on("pointerdown", () => {
-                    this.showPopup(                "1. Follow the procedure for changing gloves when yours become dirty.\n2. Follow the procedure for handling cross contamination.\n3. Follow the procedure for handling food found at the incorrect temperature."
+                    this.showPopup("1. Follow the procedure for changing gloves when yours become dirty.\n2. Follow the procedure for handling cross contamination.\n3. Follow the procedure for handling food found at the incorrect temperature."
 );
-                });
+                });*/
                 this.timerText = "";
                 const scaleX = this.scale.width / this.bg1.width;
                 const scaleY = this.scale.height / this.bg1.height;
@@ -290,10 +331,6 @@ export default function FoodServiceMishaps({ openMenu }) {
                 .setOrigin(0)
                 .setScale(0.3)
                 .setVisible(false);
-
-                
-
-                
 
                 this.space3 = this.add.rectangle(this.manager.x,0, 500, 1600).setOrigin(0);
                 //this.space3.setStrokeStyle(10, 0x000000, 1);
@@ -434,7 +471,7 @@ export default function FoodServiceMishaps({ openMenu }) {
 
                 this.textboxImage = this.add.image(0, 0, "textbox").setOrigin(0);
 
-                this.textboxText = this.add.text(600, 100, "", {
+                this.textboxText = this.add.text(100, 100, "", {
                     font: "bold 70px sans-serif",
                     color: "#000",
                     wordWrap: {
@@ -453,8 +490,8 @@ export default function FoodServiceMishaps({ openMenu }) {
                         this.iterateGameMessage();
                         this.showPopup(this.instructions[0]);
                         this.next.setVisible(false);
-                        this.instructions.shift();
-                        helpButton.setVisible(true);
+                        //this.instructions.shift();
+                        //helpButton.setVisible(true);
                         this.erin.setInteractive();
                         this.erin.setPosition(this.erinX, this.erinY)
                         this.erin.setScale(1);
@@ -493,7 +530,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                         this.coldTherm.setInteractive();
                     }  
                     else if (this.transitions3.length > 0){    
-                        helpButton.setVisible(false);
+                        //helpButton.setVisible(false);
                         this.textboxText.setFontSize("70px");
                         this.textbox.setPosition(150, 100);
                         this.textbox.setScale(this.textboxScale);
@@ -979,10 +1016,13 @@ export default function FoodServiceMishaps({ openMenu }) {
             parent: "phaser-game"
         };
 
-        const game = new Phaser.Game(config);
+        phaserGameRef.current = new Phaser.Game(config);
 
         return () => {
-            game.destroy(true);
+            if (phaserGameRef.current) {
+                phaserGameRef.current.destroy(true);
+                phaserGameRef.current = null;
+            }
         };
     }, []);
 
@@ -1007,16 +1047,38 @@ export default function FoodServiceMishaps({ openMenu }) {
                 }}
             />
             <div
-                  style={{
-                    position: "absolute",
-                    top: "4px",
-                    right: "110px",
-                    width: "100px",
-                    zIndex: 30000
-                  }}
-                >
-                  <Settings openMenu={openMenu}/>
-                </div>            
+                        style={{
+                            position: "absolute",
+                            top: "10px",
+                            right: "190px",
+                            display: "flex",
+                            gap: "10px",
+                            alignItems: "center",
+                            zIndex: 30000
+                        }}
+                        >
+            
+                            <button
+                            onClick={() => {
+                                if (phaserGameRef.current) {
+                                const scene = phaserGameRef.current.scene.getScene("ServiceSetUpsScene");
+                                if (scene?.scene?.isActive()) {
+                                    scene.showInstructions();
+                                }
+                                }
+                            }}
+                            style={{
+                                font: "bold 20px sans-serif",
+                                backgroundColor: "#ffffff",
+                                color: "#5100ff",
+                                padding: "5px 9px",
+                                cursor: "pointer"
+                            }}
+                            >
+                            ?
+                            </button>
+                        <Settings openMenu={openMenu} />
+                        </div>     
         </div>
     );
 }

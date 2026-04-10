@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 
 import moduleUpdate from "../../components/moduleupdate";
@@ -27,6 +27,7 @@ import calendar from "../../assets/calendar.png";
 const API = process.env.REACT_APP_API_URL;
 
 export default function Expiration({ openMenu }) {
+    const phaserGameRef = useRef(null);
     const navigate = useNavigate();
     let allInstructions = [
                 "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the expiration date or best by date.\n\nIf the item should be discarded, drag the item to the box with the ❌. If it is good to be used, drag it to the box with the ✅.",
@@ -156,7 +157,7 @@ export default function Expiration({ openMenu }) {
                 this.load.image("babyfood", babyfood); 
                 this.load.image("beefexpired", beefexpired); 
                 this.load.image("chickenexpired", chickenexpired); 
-                this.load.image("greens", greens); 
+                //this.load.image("greens", greens); 
                 this.load.image("infantformula", infantformula); 
                 this.load.image("pasta", pasta); 
                 this.load.image("peanutbutter", peanutbutter); 
@@ -183,15 +184,15 @@ export default function Expiration({ openMenu }) {
                         height / 2,
                         allInstructions.join("\n\n"),
                         {
-                            font: "bold 30px sans-serif",
+                            font: "30px Arial",
                             color: "#000",
                             wordWrap: { width: width * 0.58 }
                         }
                     ).setOrigin(0.5);
 
                     const close = this.add.text(
-                        width * 0.85,
-                        height * 0.15,
+                        width * 0.77,
+                        height * 0.25,
                         "X",
                         {
                             font: "40px Arial",
@@ -289,7 +290,7 @@ export default function Expiration({ openMenu }) {
                 this.canX = this.bg1.width / 2 - this.bg1.width * 0.15;
                 this.canY = this.bg1.height / 2;
                 // Help Button
-                const helpButton = this.add.text(
+                /*const helpButton = this.add.text(
                     this.scale.width * 0.88,   // right side
                     this.scale.height * 0.07,          
                     "?",
@@ -307,7 +308,7 @@ export default function Expiration({ openMenu }) {
 
                 helpButton.on("pointerdown", () => {
                     this.showInstructions();
-                });
+                });*/
                 // Characters
                 this.babyfood = this.add.image(this.canX, this.canY, "babyfood")
                     .setOrigin(0)
@@ -324,10 +325,7 @@ export default function Expiration({ openMenu }) {
                     .setScale(this.erinScale)
                     .setVisible(false);
 
-                this.greens = this.add.image(this.canX, this.canY, "greens")
-                    .setOrigin(0)
-                    .setScale(this.erinScale)
-                    .setVisible(false);
+                
 
                 this.infantformula = this.add.image(this.canX, this.canY, "infantformula")
                     .setOrigin(0)
@@ -357,11 +355,7 @@ export default function Expiration({ openMenu }) {
                     .setOrigin(0)
                     .setScale(this.erinScale)
                     .setVisible(false);
-                this.spoiledgreens = this.add.image(this.canX, this.canY, "spoiledgreens")
-                    .setOrigin(0)
-                    .setScale(this.erinScale)
-                    .setVisible(false);
-
+               
                 // Buttons
                 this.xMark = this.add.image(this.bg1.width / 2 - this.bg1.width * 0.27, this.markY, "x")
                     .setScale(0.5)
@@ -423,13 +417,7 @@ export default function Expiration({ openMenu }) {
                         correct: "keep",
                         reason: "Valid today"
                     },
-                    {
-                        key: "greens",
-                        bestByDate: addMonths(today, -7),
-                        type: "bestby",
-                        correct: "dispose",
-                        reason: "7+ months past"
-                    },
+                  
                     {
                         key: "saltinecrackers",
                         bestByDate: addMonths(today, -2),
@@ -749,10 +737,13 @@ export default function Expiration({ openMenu }) {
             parent: "phaser-game"
         };
 
-        const game = new Phaser.Game(config);
+        phaserGameRef.current = new Phaser.Game(config);
 
         return () => {
-            game.destroy(true);
+            if (phaserGameRef.current) {
+                phaserGameRef.current.destroy(true);
+                phaserGameRef.current = null;
+            }
         };
     }, []);
 
@@ -779,16 +770,41 @@ export default function Expiration({ openMenu }) {
             />
             <NotepadCalendar />
             <div
-                  style={{
+                style={{
                     position: "absolute",
-                    top: "4px",
-                    right: "110px",
-                    width: "100px",
-                    zIndex: 30000
-                  }}
-                >
-                  <Settings openMenu={openMenu}/>
-                </div>
+                    top: "10px",
+                            right: "190px",
+                            display: "flex",
+                            gap: "10px",
+                            alignItems: "center",
+                            zIndex: 30000
+                        }}
+                        >
+            
+                       
+                    <button
+                            onClick={() => {
+                                if (phaserGameRef.current) {
+                                const scene = phaserGameRef.current.scene.getScene("CanScene");
+                                if (scene) {
+                                    scene.showInstructions();
+                                }
+                                }
+                            }}
+                            style={{
+                                font: "bold 20px sans-serif",
+                                backgroundColor: "#ffffff",
+                                color: "#5100ff",
+                                padding: "5px 9px",
+                                cursor: "pointer"
+                            }}
+                            >
+                            ?
+                            </button>
+                     
+            
+                <Settings openMenu={openMenu} />
+            </div>
         </div>
     );
 }

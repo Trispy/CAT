@@ -67,7 +67,7 @@ export default function Cooking({ openMenu }) {
         this.load.image("cookedPepper", cookedPepper);
         this.load.image("stoveBg", stoveBg);
         this.load.image("thermometer", thermometer);
-       this.load.image("vegThermometer", vegThermometer);
+        this.load.image("vegThermometer", vegThermometer);
         this.load.image("meatThermometer", meatThermometer);
 
         this.load.image("erinTextbox", erinTextbox);

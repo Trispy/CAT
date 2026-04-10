@@ -42,7 +42,7 @@ export default function Menu({ closeMenu }) {
       allergenIdentification: "/module3/allergenIdentification",
     },
     module4: {
-      cleanTote: "/module4/cleanTote",
+      cleanTote: "/module4/toteCleaning",
       sorting: "/module4/sorting",
       packing: "/module4/packing",
     },

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 import callUpdate from "../../components/callupdate";
 import moduleUpdate from "../../components/moduleupdate";
-
 import Loc from "../../assets/Background1.png";
 import plainClothes from "../../assets/Tieduphair.png";
 import apron from "../../assets/M1G3/apron.png";

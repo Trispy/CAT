@@ -12,7 +12,6 @@ import sinkbg from "../../assets/M1G3/SinkBackground.png";
 import sprayBottle from "../../assets/M2G2/Spraybottle.png";
 import rag from "../../assets/M2G2/rag.png";
 import mapbutton from "../../assets/mapbutton.png";
-
 import cleanToteImg from "../../assets/M4G1/cleanTote.png";
 import sudsyTote from "../../assets/M4G1/sudsyTote.png";
 import dirtyTote from "../../assets/M4G1/dirtyTote.png";
@@ -35,7 +34,7 @@ export default function CleanTote({openMenu}) {
     useEffect(() => {
         return () => {
             if (phaserGameRef.current) {
-                phaserGameRef.current.destroy(false);
+                phaserGameRef.current.destroy(true);
                 phaserGameRef.current = null;
             }
         };
@@ -150,9 +149,9 @@ export default function CleanTote({openMenu}) {
                     height / 2,
                     this.instructions.join("\n\n"),
                     {
-                        font: "32px Arial",
+                        font: "40px Arial",
                         color: "#000",
-                        wordWrap: { width: width * 0.7 }
+                        wordWrap: { width: width * 0.58  }
                     }
                 ).setOrigin(0.5);
 
@@ -180,7 +179,8 @@ export default function CleanTote({openMenu}) {
                 const { width, height } = this.scale;
                 this.scale.refresh();
                 this.add.image(width / 2, height / 2, "volLocation").setDisplaySize(width, height);
-                const helpButton = this.add.text(
+                this.children.removeAll();
+                /*const helpButton = this.add.text(
                     width * 0.78,
                     height * 0.90,
                     "?",
@@ -198,7 +198,7 @@ export default function CleanTote({openMenu}) {
 
                 helpButton.on("pointerdown", () => {
                     this.showInstructions();
-                });
+                });*/
 
                 const cleanToteIcon = this.add.image(
                     width * 0.5,
@@ -738,7 +738,7 @@ export default function CleanTote({openMenu}) {
                     this.popupOpen = false;
 
                     if (inputText === "This tote is now ready for use!")
-                        navigate("/map", { replace: true });
+                        navigate("/module4/coolerPack", { replace: true });
 
 
                     if (this.currentSprite && this.currentSprite.scene) {
@@ -944,18 +944,44 @@ export default function CleanTote({openMenu}) {
 
                 }}
             />
-            <div
-                  style={{
-                    position: "absolute",
-                    top: "4px",
-                    right: "110px",
-                    width: "100px",
-                    zIndex: 30000
-                  }}
+ 
+        <div
+            style={{
+                position: "absolute",
+                top: "10px",
+                right: "190px",
+                display: "flex",
+                gap: "10px",
+                alignItems: "center",
+                zIndex: 30000
+            }}
+            >
+
+            { gameStage === "cleanStage" && (
+                <button
+                onClick={() => {
+                    if (phaserGameRef.current) {
+                    const scene = phaserGameRef.current.scene.getScene("CleanToteScene");
+                    if (scene?.scene?.isActive()) {
+                        scene.showInstructions();
+                    }
+                    }
+                }}
+                style={{
+                    font: "bold 20px sans-serif",
+                    backgroundColor: "#ffffff",
+                    color: "#5100ff",
+                    padding: "5px 9px",
+                    cursor: "pointer"
+                }}
                 >
-                  <Settings openMenu={openMenu}/>
-                </div>            
-            
+                ?
+                </button>
+            )}
+
+            <Settings openMenu={openMenu} />
+            </div>  
+          
 
         </div>
     );
