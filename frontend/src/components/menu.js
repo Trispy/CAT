@@ -42,9 +42,9 @@ export default function Menu({ closeMenu }) {
       allergenIdentification: "/module3/allergenIdentification",
     },
     module4: {
-      cleanTote: "/module4/cleanTote",
-      sorting: "/module4/sorting",
-      packing: "/module4/packing",
+      cleanTote: "/module4/toteCleaning",
+      coolerPack: "/module4/coolerPack",
+      truckPack: "/module4/packTruck",
     },
     module5: {
       coldPreparedTransport: "/module5/coldPreparedTransport",
@@ -71,7 +71,9 @@ export default function Menu({ closeMenu }) {
   module3part1: "cansort",
   module3part2: "expiration",
   module3part3: "allergenIdentification",
-  module4part1: "cleanTote",
+  cleanTote: "cleanTote",
+  coolerPack: "coolerPack",
+  truckPack: "truckPack",
   cold: "coldPreparedTransport",
   hot: "hotPreparedTransport",
   module6part1: "serviceSetup",

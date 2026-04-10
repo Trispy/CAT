@@ -21,11 +21,13 @@ import ColdPrepTransport from './pages/module5/coldPreparedTransport.js';
 import HotPrepTransport from './pages/module5/hotPreparedTransport.js';
 import FoodServiceMishaps from './pages/module6/foodServiceMishaps.js';
 import ServiceSetUps from './pages/module6/serviceSetUp.js';
-import CleanTote from './pages/module4/cleanTote.js';
 
 import M1Nav from './pages/module1/module1Navigate.js';
 import M2Nav from './pages/module2/module2Navigate.js';
 import M3Nav from './pages/module3/module3Navigate.js';
+import M4Nav from './pages/module4/module4Navigate.js';
+import M5Nav from './pages/module5/module5Navigate.js';
+import M6Nav from './pages/module6/module6Navigate.js';
 
 import Expiration from './pages/module3/expiration.js'; 
 import Menu from './components/menu.js';
@@ -52,11 +54,14 @@ function App() {
           <Route path="/module3/expiration" element={<Expiration openMenu={() => setShowMenu(true)}/>} />
           <Route path="/module3/canSorting" element={<Can openMenu={() => setShowMenu(true)}/>} />
           <Route path="/module3/allergenIdentification" element={<Allergen openMenu={() => setShowMenu(true)}/>} />
+          <Route path="/module4" element={<M4Nav openMenu={() => setShowMenu(true)}/>} />
           <Route path="/module4/toteCleaning" element={<CleanTote openMenu={() => setShowMenu(true)}/>} />
           <Route path="/module4/coolerPack" element={<CoolerPack openMenu={() => setShowMenu(true)}/> } />
           <Route path="/module4/packTruck" element={<TruckPack openMenu={() => setShowMenu(true)}/> } />
+          <Route path="/module5" element={<M5Nav openMenu={() => setShowMenu(true)}/>} />
           <Route path="/module5/coldPreparedTransport" element={<ColdPrepTransport openMenu={() => setShowMenu(true)}/>} />
           <Route path="/module5/hotPreparedTransport" element={<HotPrepTransport openMenu={() => setShowMenu(true)}/>} />
+          <Route path="/module6" element={<M6Nav openMenu={() => setShowMenu(true)}/>} />
           <Route path="/module6/foodServiceMishaps" element={<FoodServiceMishaps openMenu={() => setShowMenu(true)}/>} />
           <Route path="/module6/foodServiceSetUp" element={<ServiceSetUps openMenu={() => setShowMenu(true)}/>} />
             

@@ -612,7 +612,7 @@ export default function CoolerPack({ openMenu }) {
             )}
             {fridgeState === "complete" && (
                 <div
-                    onClick={() => navigate("/map", { replace: true })}
+                    onClick={() => navigate("/module4/packTruck", { replace: true })}
                     style={overlayStyle}
                 >
                     <div

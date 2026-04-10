@@ -738,7 +738,7 @@ export default function CleanTote({openMenu}) {
                     this.popupOpen = false;
 
                     if (inputText === "This tote is now ready for use!")
-                        navigate("/map", { replace: true });
+                        navigate("/module4/coolerPack", { replace: true });
 
 
                     if (this.currentSprite && this.currentSprite.scene) {
