@@ -171,37 +171,39 @@ export default function Expiration({ openMenu }) {
 
                     const overlay = this.add.container(0, 0);
 
-                    const bg = this.add.rectangle(
-                        width / 2,
-                        height / 2,
-                        width * 0.6,
-                        height * 0.6,
-                        0xffffff
-                    ).setStrokeStyle(4, 0x000000);
 
-                    const text = this.add.text(
-                        width / 2,
-                        height / 2,
-                        allInstructions.join("\n\n"),
-                        {
-                            font: "30px Arial",
-                            color: "#000",
-                            wordWrap: { width: width * 0.58 }
-                        }
-                    ).setOrigin(0.5);
+                  const bg = this.add.rectangle(
+                    width / 2,
+                    height / 2,
+                    width * 0.7,
+                    height * 0.7,
+                    0xffffff
+                ).setStrokeStyle(4, 0x000000);
 
-                    const close = this.add.text(
-                        width * 0.77,
-                        height * 0.25,
-                        "X",
-                        {
-                            font: "40px Arial",
-                            backgroundColor: "#ff0000",
-                            padding: { x: 20, y: 10 }
-                        }
-                    )
+                const text = this.add.text(
+                    width / 2,
+                    height / 2,
+                    this.instructions.join("\n\n"),
+                    {
+                        font: "30px Arial",
+                        color: "#000",
+                        wordWrap: { width: width * 0.58 }
+                    }
+                ).setOrigin(0.5);
+
+                const close = this.add.text(
+                    width * 0.82,
+                    height * 0.20,
+                    "X",
+                    {
+                        font: "40px Arial",
+                        backgroundColor: "#ff0000",
+                        padding: { x: 20, y: 10 }
+                    }
+                )
                     .setInteractive()
                     .setOrigin(0.5);
+
 
                     close.on("pointerdown", () => {
                         overlay.destroy(true);

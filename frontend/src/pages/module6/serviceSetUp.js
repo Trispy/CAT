@@ -187,11 +187,11 @@ export default function ServiceSetUps({ openMenu }) {
 
                 const overlay = this.add.container(0, 0);
                 overlay.setDepth(1000);
-                const bg = this.add.rectangle(
+ const bg = this.add.rectangle(
                     width / 2,
                     height / 2,
-                    width * 0.8,
-                    height * 0.8,
+                    width * 0.7,
+                    height * 0.7,
                     0xffffff
                 ).setStrokeStyle(4, 0x000000);
 
@@ -200,15 +200,15 @@ export default function ServiceSetUps({ openMenu }) {
                     height / 2,
                     this.instructions.join("\n\n"),
                     {
-                        font: "50px Arial",
+                        font: "40px Arial",
                         color: "#000",
-                        wordWrap: { width: width * 0.58  }
+                        wordWrap: { width: width * 0.58 }
                     }
                 ).setOrigin(0.5);
 
                 const close = this.add.text(
-                    width * 0.85,
-                    height * 0.15,
+                    width * 0.82,
+                    height * 0.20,
                     "X",
                     {
                         font: "40px Arial",

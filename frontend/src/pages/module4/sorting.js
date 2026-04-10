@@ -154,7 +154,7 @@ export default function CoolerPack({ openMenu }) {
 
                 const overlay = this.add.container(0, 0);
 
-                const bg = this.add.rectangle(
+ const bg = this.add.rectangle(
                     width / 2,
                     height / 2,
                     width * 0.7,
@@ -169,7 +169,7 @@ export default function CoolerPack({ openMenu }) {
                     {
                         font: "40px Arial",
                         color: "#000",
-                        wordWrap: { width: width * 0.58  }
+                        wordWrap: { width: width * 0.58 }
                     }
                 ).setOrigin(0.5);
 
