@@ -945,17 +945,17 @@ export default function CleanTote({openMenu}) {
                 }}
             />
  
-        <div
-            style={{
-                position: "absolute",
-                top: "10px",
-                right: "190px",
-                display: "flex",
-                gap: "10px",
-                alignItems: "center",
-                zIndex: 30000
-            }}
-            >
+                    <div
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        right: 180,
+                        padding: "10px",
+                        display: "flex",
+                        gap: "10px",
+                        zIndex: 30000
+                    }}
+                    >
 
             { gameStage === "cleanStage" && (
                 <button

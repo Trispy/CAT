@@ -66,8 +66,10 @@ export default function Expiration({ openMenu }) {
                 <div
                     style={{
                         position: "absolute",
-                        top: "4px",
-                        right: "260px", 
+                        top: 0,
+                        right: 260,
+                        padding: "10px",
+                        display: "flex",
                         width: "50px",
                         height: "50px",
                         zIndex: 30000
@@ -87,7 +89,7 @@ export default function Expiration({ openMenu }) {
                     <div
                         style={{
                             position: "absolute",
-                            top: "35%",
+                            top: "40%",
                             left: "50%",
                             transform: "translate(-50%, -50%)",
                             fontSize: "8px",
@@ -771,17 +773,17 @@ export default function Expiration({ openMenu }) {
                 }}
             />
             <NotepadCalendar />
-            <div
-                style={{
-                    position: "absolute",
-                    top: "10px",
-                            right: "190px",
-                            display: "flex",
-                            gap: "10px",
-                            alignItems: "center",
-                            zIndex: 30000
-                        }}
-                        >
+                    <div
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        right: 180,
+                        padding: "10px",
+                        display: "flex",
+                        gap: "10px",
+                        zIndex: 30000
+                    }}
+                    >
             
                        
                     <button

@@ -1076,23 +1076,23 @@ export default function ServiceSetUps({ openMenu }) {
                     zIndex: 1
                 }}
             />
-             <div
-                         style={{
-                             position: "absolute",
-                             top: "10px",
-                             right: "190px",
-                             display: "flex",
-                             gap: "10px",
-                             alignItems: "center",
-                             zIndex: 30000
-                         }}
-                         >
+                    <div
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        right: 180,
+                        padding: "10px",
+                        display: "flex",
+                        gap: "10px",
+                        zIndex: 30000
+                    }}
+                    >
              
                              <button
                              onClick={() => {
                                  if (phaserGameRef.current) {
                                  const scene = phaserGameRef.current.scene.getScene("ServiceSetUpsScene");
-                                 if (scene?.scene?.isActive()) {
+                                 if (scene) {
                                      scene.showInstructions();
                                  }
                                  }

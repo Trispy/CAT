@@ -317,15 +317,16 @@ export default function Symptoms({ openMenu }) {
         }}
       />
      
-    <div
-      style={{
-        position: "absolute",
-        top: "4px",
-        right: "110px",
-        width: "100px",
-        zIndex: 10
-      }}
-    >
+   <div
+  style={{
+    position: "absolute",
+    top: 0,
+    right: 180,
+    padding: "10px",
+    display: "flex",
+    zIndex: 30000
+  }}
+>
       <Settings openMenu={openMenu}/>
     </div>
     </div>
