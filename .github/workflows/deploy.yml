@@ -8,7 +8,7 @@ jobs:
 deploy:
 runs-on: ubuntu-latest
 
-```
+
 steps:
   # 1. Checkout repo
   - name: Checkout code
@@ -84,4 +84,3 @@ steps:
       aws cloudfront create-invalidation \
         --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
         --paths "/*"
-```
