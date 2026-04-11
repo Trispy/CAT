@@ -37,7 +37,18 @@ function Login() {
         console.log("API: ", API);
 
   
-        const data = await add.json();
+        const text = await add.text();
+            console.log("RAW RESPONSE:", text);
+            console.log("STATUS:", add.status);
+            console.log("API:", API);
+
+            // Try parsing manually (so it doesn't crash silently)
+            let data;
+            try {
+            data = JSON.parse(text);
+            } catch (err) {
+            console.error("JSON parse failed:", err);
+            }
 
         if (add.status === 200) {
          
