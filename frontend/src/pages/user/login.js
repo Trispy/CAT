@@ -33,15 +33,12 @@ function Login() {
             body: JSON.stringify(userData),
         });
 
-        console.log(add);
-        console.log("API: ", API);
+       
+        
 
   
         const text = await add.text();
-            console.log("RAW RESPONSE:", text);
-            console.log("STATUS:", add.status);
-            console.log("API:", API);
-
+        
             // Try parsing manually (so it doesn't crash silently)
             let data;
             try {
