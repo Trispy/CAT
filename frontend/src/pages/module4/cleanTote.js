@@ -57,9 +57,11 @@ export default function CleanTote({openMenu}) {
     const instructionTexts = [
         "1. Remove the large debris from the tote by dragging the leaves to the trash icon.",
         "2. Wash the tote by dragging the spray bottle to the tote.",
-        "3. Rinse the soap out by dragging the tote to the sink.",
-        "4. Finally, sanitize the tote by dragging the red sanitizer bucket to it.",
-        "Click the '?' button in the bottom right side if you want to refer back to these instructions."
+        "3. Dry the tote by dragging the rag to it to wipe off the water.",
+        "4. Rinse the soap out by dragging the faucet to the tote.",
+        "5. Drag the faucet to the tote to rinse off the soap suds.",
+        "6. Finally, sanitize the tote by dragging the red sanitizer bucket to it.",
+        "Click the '?' button in the top right corner if you want to refer back to these instructions."
     ];
 
     const instructionTypewriter = useTypewriter(
