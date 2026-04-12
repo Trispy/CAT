@@ -54,6 +54,7 @@ export default function HotPrepTransport({ openMenu }) {
             therm1Done = false;
             therm2Done = false;
             chickenPacked = false;
+            instructionsShown = false;
             soupPacked = false;
             timerStart = false;
             serveReady = false;
@@ -466,8 +467,9 @@ export default function HotPrepTransport({ openMenu }) {
               
                 // Interactions
                 this.next.on('pointerdown', async () => {
-                    if(this.instructions.length > 0){
+                    if(!this.instructionsShown){
                         this.showPopup(this.instructions[0]);
+                          this.instructionsShown = true;
                         this.emptyBag.setInteractive();
                         this.next.setVisible(false);
                         //this.instructions.shift();
@@ -489,7 +491,7 @@ export default function HotPrepTransport({ openMenu }) {
                         this.cleanupScene();
                         await moduleUpdate(`${API}/api/game/module5/hotPreparedTransport/completed`);
                         callUpdate("m5");
-                        navigate("/map");
+                        window.navigateToPage("/map");
                     }
                 });
                    this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
@@ -744,7 +746,7 @@ export default function HotPrepTransport({ openMenu }) {
             this.hand2.y = this.therm2.getCenter().y + 10;
     }
     iterateGameMessage(){
-         console.log("exd");
+         if (!this.gameMessages || this.gameMessages.length === 0) return;
             this.textbox.setScale(0.6);
             this.textboxText.setFontSize(90);
             this.textbox.setPosition(500,720);
@@ -803,6 +805,7 @@ export default function HotPrepTransport({ openMenu }) {
     
             typewriteText(text, type, speed = 30) {
                 //removes old timer before new one starts
+                if (!text) return;
                 if (this.typingEvent) {
                     this.typingEvent.remove(false);
                 }

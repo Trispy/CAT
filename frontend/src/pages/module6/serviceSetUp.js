@@ -47,6 +47,8 @@ export default function ServiceSetUps({ openMenu }) {
             textboxScale = 1;
 
             iceboxX = 1350;
+            instructionsShown = false;
+            gameMessageIndex = 0;
             iceboxY = 160;
             iceboxScale = 0.5;
 
@@ -540,7 +542,8 @@ export default function ServiceSetUps({ openMenu }) {
 
                 // Interactions
                 this.next.on("pointerdown", () => {
-                    if(this.instructions.length > 0){
+                    if(!this.instructionsShown){
+                        this.instructionsShown = true;
                         this.showPopup(this.instructions[0]);
                         this.next.setVisible(false);
                         //this.instructions.shift();
@@ -991,7 +994,7 @@ export default function ServiceSetUps({ openMenu }) {
                 this.emptyBox.setInteractive({dropZone: true});
             }
              iterateGameMessage(){
-                console.log("exd");
+                if (!this.gameMessages || this.gameMessageIndex >= this.gameMessages.length) return;
                 this.textbox.setScale(0.6);
                 this.textboxText.setFontSize(90);
                 this.textbox.setPosition(0,0);
@@ -1000,6 +1003,7 @@ export default function ServiceSetUps({ openMenu }) {
         }
             typewriteText(text, type, speed = 30) {
                 //removes old timer before new one starts
+                if (!text) return;
                 if (this.typingEvent) {
                     this.typingEvent.remove(false);
                 }

@@ -698,6 +698,7 @@ export default function ColdPrepTransport({ openMenu }) {
             }
             typewriteText(text, type, speed = 30) {
                 //removes old timer before new one starts
+                if (!text) return;
                 if (this.typingEvent) {
                     this.typingEvent.remove(false);
                 }

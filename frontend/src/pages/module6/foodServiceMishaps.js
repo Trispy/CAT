@@ -54,7 +54,8 @@ export default function FoodServiceMishaps({ openMenu }) {
             erinY = 340;
             erinScale = 1.35;
         
-
+            instructionsShown = false;
+            gameMessageIndex = 0;
             itemScale = 0.5;
             itemX = 720;
             itemY = 270;
@@ -487,7 +488,8 @@ export default function FoodServiceMishaps({ openMenu }) {
 
                 // Interactions
                 this.next.on("pointerdown", () => {
-                    if(this.instructions.length > 0){
+                    if(!this.instructionsShown){
+                        this.instructionsShown = true;
                         this.iterateGameMessage();
                         this.showPopup(this.instructions[0]);
                         this.next.setVisible(false);
@@ -540,7 +542,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                     }          
                     else {
                         this.cleanUpScene();
-                        navigate("/map");
+                        window.navigateToPage("/map");
                     }
                 });
 
@@ -909,19 +911,23 @@ export default function FoodServiceMishaps({ openMenu }) {
                 //this.hotHand2.setPosition(this.hotTherm2.getCenter().x - 20, this.hotTherm2.getCenter().y + 10);
                 this.coldHand.setPosition(this.coldTherm.getCenter().x + 5, this.coldTherm.getCenter().y - 25);
     }
-             iterateGameMessage(section){
-                console.log("exd");
+            iterateGameMessage(section){
+                if (!this.gameMessages || this.gameMessageIndex >= this.gameMessages.length) return;
+
                 this.textbox.setScale(0.6);
                 this.textboxText.setFontSize(90);
                 this.textbox.setPosition(0,0);
-                this.typewriteText(this.gameMessages[0]);
-                this.gameMessages.shift();
+
+                this.typewriteText(this.gameMessages[this.gameMessageIndex]);
+                this.gameMessageIndex++;
+
                 if(section === "cupboard"){
                     this.textbox.setPosition(990,755);
                 }
-        }
+            }
             typewriteText(text, type, speed = 30) {
                 //removes old timer before new one starts
+                if (!text) return;
                 if (this.typingEvent) {
                     this.typingEvent.remove(false);
                 }
