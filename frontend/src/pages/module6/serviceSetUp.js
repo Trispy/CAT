@@ -146,8 +146,8 @@ export default function ServiceSetUps({ openMenu }) {
                     const bg = this.add.rectangle(
                         width / 2,
                         height / 2,
-                        width * 0.8,
-                        height * 0.8,
+                        width * 0.7,
+                        height * 0.7,
                         0xffffff
                     ).setStrokeStyle(4, 0x000000);
 
@@ -163,11 +163,11 @@ export default function ServiceSetUps({ openMenu }) {
                     ).setOrigin(0.5);
 
                     const close = this.add.text(
-                        width * 0.85,
-                        height * 0.15,
+                    width * 0.82,
+                    height * 0.20,
                         "X",
                         {
-                            font: "40px Arial",
+                            font: "bold 40px sans-serif",
                             backgroundColor: "#ff0000",
                             padding: { x: 20, y: 10 }
                         }
@@ -543,7 +543,7 @@ export default function ServiceSetUps({ openMenu }) {
                     if(this.instructions.length > 0){
                         this.showPopup(this.instructions[0]);
                         this.next.setVisible(false);
-                        this.instructions.shift();
+                        //this.instructions.shift();
                         //helpButton.setVisible(true);
                         this.chaferDish3.setVisible(true);
                         this.space1.setInteractive({dropZone: true});
