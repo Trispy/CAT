@@ -684,7 +684,7 @@ export default function ColdPrepTransport({ openMenu }) {
                 this.rect2 = this.add.rectangle(730,500, 450, 390);
                 const itemBounds = draggedItem.getBounds();
                 //this.rect1.setStrokeStyle(4, 0o0);
-                this.rect2.setStrokeStyle(4, 0o0);
+                //this.rect2.setStrokeStyle(4, 0o0);
                 let targetBounds = this.openBox.getBounds();
                 if(draggedItem === this.prepFood1|| draggedItem === this.prepFood2){
                      targetBounds =  this.rect2.getBounds();                
