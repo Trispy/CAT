@@ -954,7 +954,7 @@ function Module2Part1({ openMenu }) {
         true
     );
     const thermometerInstructions = useTypewriter(
-        "Drag the bottom of the thermometer hand to the correct position to determine if the food is safe or not for the fridge. Click anywhere to click out of the textbox.",
+        "Drag the bottom of the thermometer hand to the light blue to light red area of the thermometer to set the fridge to the correct temperature. Click anywhere to click out of the textbox.",
         thermometerState === "instructions"
     );
     const thermometerSuccessText = useTypewriter(
