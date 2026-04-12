@@ -242,7 +242,10 @@ export default function Location({ openMenu }) {
                     height * 0.05,
                     ":20",
                     {
-                        fontSize: "48px",
+                        backgroundColor: "#000000",
+                        borderColor: "#ffffff",
+                        borderWidth: 4,
+                        fontSize: "52px",
                         color: "#ff0000",
                         fontStyle: "bold"
                     }

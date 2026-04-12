@@ -574,8 +574,12 @@ export default function FoodServiceMishaps({ openMenu }) {
                                 this.bg1.height * 0.3,
                                 ":20",
                             {
-                                font: "bold 60px Arial",
-                                color: "#000000"
+                                backgroundColor: "#000000",
+                                borderColor: "#ffffff",
+                                borderWidth: 4,
+                                fontSize: "52px",
+                                color: "#ff0000",
+                                fontStyle: "bold"
                             }
                         ).setOrigin(0.5);
                         this.timerText.setDepth(1000);

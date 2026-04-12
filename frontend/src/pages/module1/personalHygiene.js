@@ -958,10 +958,10 @@ class FinalScene extends Phaser.Scene {
             >
                 <Textbox
                     width="30dvw"
-                    height="30dvh"
+                    height="35dvh"
                     placeholder={clipperText}
                     placeHolderColor="#000000"
-                    placeHolderfontSize="1.1vw"
+                    placeHolderfontSize="1.3vw"
                 />
             </div>
         )}
@@ -978,50 +978,50 @@ class FinalScene extends Phaser.Scene {
                 {!removeClipSuccess && (
                     <Textbox
                         width="30dvw"
-                        height="30dvh"
+                        height="35dvh"
                         placeholder={clipperSuccessText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.1vw"
+                        placeHolderfontSize="1.3vw"
                     />
                 )}
 
                 {nailsTrimmed && removeClipSuccess && !showRingText && (gameStage === "rings") && (
                     <Textbox
                         width="30dvw"
-                        height="30dvh"
+                        height="35dvh"
                         placeholder={ringText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.1vw"
+                        placeHolderfontSize="1.3vw"
                     />
                 )}
 
                 {showRingText && (
                     <Textbox
                         width="30dvw"
-                        height="30dvh"
+                        height="35dvh"
                         placeholder={ringSuccessText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.1vw"
+                        placeHolderfontSize="1.3vw"
                     />
                 )}
 
                 {clothesRemoved && (
                     <Textbox
                         width="30dvw"
-                        height="30dvh"
+                        height="35dvh"
                         placeholder={clothesSuccessText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.1vw"
+                        placeHolderfontSize="1.3vw"
                     />
                 )}
 
                 {gameStage === "tyehair" && hairTied && !showTyedHairText && (
                     <Textbox
                         width="30dvw"
-                        height="30dvh"
+                        height="35dvh"
                         placeholder={tiedHairSuccessText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.1vw"
+                        placeHolderfontSize="1.3vw"
                     />
                 )}
 
@@ -1098,7 +1098,7 @@ class FinalScene extends Phaser.Scene {
                                 height="40dvh"
                                 placeholder={tiedHairText}
                                 placeHolderColor="#000000"
-                                placeHolderfontSize="1.1vw"
+                                placeHolderfontSize="1.2vw"
                             />
                         </div>
                     </div>
