@@ -37,15 +37,19 @@ export default function ColdPrepTransport({ openMenu }) {
         window.navigateToPage = navigate;
 
         class ColdTransport extends Phaser.Scene {
-            
+            food1Placed = false;
+            food2Placed = false;
             textboxScale = 1;
             erinScale = 1.2;
             iceboxX = 519;
             iceboxY = 200;
             iceboxScale = 0.48;
-            zoomedX = 400;
-            zoomedY = -20;
-            zoomedScale = 1.2;
+            zoomedX = 0;
+            zoomedY = 0;
+            zoomedScale = 1;
+            zoomedX1 = 400; 
+            zoomedY1 = -20; 
+            instructionsShown = false;
             
             
             welcomeTexts = [
@@ -112,8 +116,8 @@ export default function ColdPrepTransport({ openMenu }) {
                     const bg = this.add.rectangle(
                         width / 2,
                         height / 2,
-                        width * 0.8,
-                        height * 0.8,
+                        width * 0.7,
+                        height * 0.7,
                         0xffffff
                     ).setStrokeStyle(4, 0x000000);
 
@@ -129,8 +133,8 @@ export default function ColdPrepTransport({ openMenu }) {
                     ).setOrigin(0.5);
 
                     const close = this.add.text(
-                        width * 0.85,
-                        height * 0.15,
+                    width * 0.82,
+                    height * 0.20,
                         "X",
                         {
                             font: "bold 40px sans-serif",
@@ -153,7 +157,7 @@ export default function ColdPrepTransport({ openMenu }) {
 
                 const overlay = this.add.container(0, 0);
                 overlay.setDepth(1000);
-  const bg = this.add.rectangle(
+                const bg = this.add.rectangle(
                     width / 2,
                     height / 2,
                     width * 0.7,
@@ -245,27 +249,27 @@ export default function ColdPrepTransport({ openMenu }) {
                     .setVisible(true);
 
                 this.emptyBox = this.add.image(
-                    this.iceboxX, 
-                    this.iceboxY, 
+                    this.iceboxX - 205, 
+                    this.iceboxY + 20, 
                     "emptyBox")
                 .setOrigin(0)
-                .setScale(this.iceboxScale)
+                .setScale(this.iceboxScale * 0.98)
                 .setVisible(true);
 
                 this.closedBox = this.add.image(
-                    this.iceboxX - 20, 
-                    this.iceboxY + 150, 
+                    this.iceboxX - 205, 
+                    this.iceboxY + 20, 
                     "closedBox")
                 .setOrigin(0)
-                .setScale(this.iceboxScale)
+                .setScale(this.iceboxScale* 0.98)
                 .setVisible(false);
 
                  this.openBox = this.add.image(
-                    this.iceboxX, 
-                    this.iceboxY, 
+                    this.iceboxX - 205, 
+                    this.iceboxY + 20, 
                     "openBox")
                 .setOrigin(0)
-                .setScale(this.iceboxScale)
+                .setScale(this.iceboxScale* 0.98)
                 .setVisible(false);
 
                 this.erin = this.add.image(
@@ -284,6 +288,8 @@ export default function ColdPrepTransport({ openMenu }) {
                 .setAngle(-25)
                 .setScale(0.7)
                 .setVisible(false);
+                this.therm.startX = this.therm.x;
+                this.therm.startY = this.therm.y;
 
                 this.hand = this.add.image(
                     this.therm.getCenter().x, 
@@ -301,6 +307,8 @@ export default function ColdPrepTransport({ openMenu }) {
                 .setOrigin(0)
                 .setScale(0.7)
                 .setVisible(false);
+                this.ice.startX = this.ice.x;
+                this.ice.startY = this.ice.y;
 
                 this.prepFood1 = this.add.image(
                     1450, 
@@ -317,6 +325,10 @@ export default function ColdPrepTransport({ openMenu }) {
                 .setOrigin(0)
                 .setScale(0.2)
                 .setVisible(false);
+                this.prepFood1.startX = this.prepFood1.x;
+                this.prepFood1.startY = this.prepFood1.y;
+                this.prepFood2.startX = this.prepFood2.x;
+                this.prepFood2.startY = this.prepFood2.y;
 
                 this.coolertop1 = this.add.rectangle(650,10, 1000, 350).setOrigin(0);
                 //this.coolertop1.setStrokeStyle(4, 0o0);
@@ -365,14 +377,11 @@ export default function ColdPrepTransport({ openMenu }) {
                         this.typewriteText(this.welcomeTexts[0]);
                         this.welcomeTexts.shift();
                     }
-                    else if(this.instructions.length > 0){
-                        //this.textbox.setVisible(false);
+                    else if(!this.instructionsShown){
                         this.showPopup(this.instructions[0]);
-                        this.emptyBox.setInteractive();
+                        this.instructionsShown = true; 
+                        if (this.emptyBox) this.emptyBox.setInteractive();
                         this.next.setVisible(false);
-                        const instructionText = this.instructions[0];
-                        this.showPopup(instructionText);
-                        //helpButton.setVisible(true);
                         this.iterateGameMessage();
                     }
                     else if (this.transitions.length > 0){
@@ -430,6 +439,15 @@ export default function ColdPrepTransport({ openMenu }) {
                         this.coolertop3.setVisible(true);
                     }
                     }
+                    else {
+                    this.tweens.add({
+                        targets: this.ice,
+                        x: this.ice.startX,
+                        y: this.ice.startY,
+                        duration: 300,
+                        ease: "Power2"
+                    });
+                }
                 });
 
                 this.coolertop1.on("pointerdown", () =>{
@@ -437,7 +455,8 @@ export default function ColdPrepTransport({ openMenu }) {
                     this.coolertop1.disableInteractive();
                     this.coolertop1.destroy();
                        this.bg1.setTexture("bg3");
-                        this.emptyBox.destroy();
+                        this.emptyBox.setVisible(false);
+                        this.emptyBox.disableInteractive();
                         this.emptyBox = null;
                         this.openBox.setVisible(false);
                         this.closedBox.setVisible(true);
@@ -451,7 +470,7 @@ export default function ColdPrepTransport({ openMenu }) {
                                 ":10",
                             {
                                 font: "bold 60px Arial",
-                                color: "#000000"
+                                color: "#ffffff"
                             }
                         ).setOrigin(0.5);
                         this.timerText.setDepth(1000);
@@ -466,7 +485,7 @@ export default function ColdPrepTransport({ openMenu }) {
                                 if (timeLeft <= 0) {
 
                                     this.timerText.setText("Done!");
-                                    this.closedBox.setInteractive();
+                                    if (this.closedBox) this.closedBox.setInteractive();
                                     this.iterateGameMessage();
                                 }
 
@@ -489,7 +508,7 @@ export default function ColdPrepTransport({ openMenu }) {
                     this.input.setDraggable(this.prepFood2);
                     this.openBox.setVisible(true);
                     this.openBox.setScale(this.iceboxScale);
-                    this.openBox.setPosition(this.iceboxX, this.iceboxY);
+                    this.openBox.setPosition(this.iceboxX - 205, this.iceboxY + 20);
                     
                 })
                   this.closedBox.on("pointerdown", () => {
@@ -497,7 +516,7 @@ export default function ColdPrepTransport({ openMenu }) {
                     this.timerText.destroy();
                     //this.erin.setVisible(false);
                     this.closedBox.setVisible(false);
-                    this.openBox.setVisible();
+                    this.openBox.setVisible(true);
                     this.bg1.setTexture("bg4");
                     this.therm.setInteractive();
                     this.therm.setVisible(true);
@@ -510,30 +529,67 @@ export default function ColdPrepTransport({ openMenu }) {
                     if(this.checkBounds(this.therm)){
                         this.growTemp(this.hand);
                     }
+                    else {
+  
+                    this.tweens.add({
+                        targets: this.therm,
+                        x: this.therm.startX,
+                        y: this.therm.startY,
+                        duration: 300,
+                        ease: "Power2"
+                    });
+                }
                 });
 
                 this.prepFood1.on("dragend", () =>{
-                    if(this.checkBounds(this.prepFood1)){
-                        this.prepFood1.setScale(0.13);                    
+                       if (this.checkBounds(this.prepFood1)) {
+                        this.prepFood1.setScale(0.13);
+                        this.food1Placed = true;
+                    } else {
+                        this.food1Placed = false;
+
+                        this.tweens.add({
+                            targets: this.prepFood1,
+                            x: this.prepFood1.startX,
+                            y: this.prepFood1.startY,
+                            duration: 300,
+                            ease: "Power2"
+                        });
                     }
-                    if(this.prepFood2.scale === this.prepFood1.scale){
-                        this.openBox.setInteractive();
+                    if (this.food1Placed && this.food2Placed) {
+                        if (this.openBox) {
+                            this.openBox.setInteractive();
+                        }
                         this.prepFood1.disableInteractive();
                         this.prepFood2.disableInteractive();
                         this.iterateGameMessage();
                     }
-                })
-                 this.prepFood2.on("dragend", () =>{
-                    if(this.checkBounds(this.prepFood2)){
-                        this.prepFood2.setScale(0.13);                    
+
+                    });
+                this.prepFood2.on("dragend", () =>{
+                  if (this.checkBounds(this.prepFood2)) {
+                        this.prepFood2.setScale(0.13);
+                        this.food2Placed = true;
+                    } else {
+                        this.food2Placed = false;
+
+                        this.tweens.add({
+                            targets: this.prepFood2,
+                            x: this.prepFood2.startX,
+                            y: this.prepFood2.startY,
+                            duration: 300,
+                            ease: "Power2"
+                        });
                     }
-                    if(this.prepFood1.scale === this.prepFood2.scale){
-                        this.openBox.setInteractive();
+                    if (this.food1Placed && this.food2Placed) {
+                        if (this.openBox) {
+                            this.openBox.setInteractive();
+                        }
                         this.prepFood1.disableInteractive();
                         this.prepFood2.disableInteractive();
                         this.iterateGameMessage();
                     }
-                })
+                });
 
                 this.openBox.on("pointerdown", () => {
                     //this.erin.setVisible(false);
@@ -603,7 +659,7 @@ export default function ColdPrepTransport({ openMenu }) {
             this.scene.stop();
         }
         iterateGameMessage(){
-            console.log("exd");
+            if (this.gameMessages.length === 0) return;
             this.textbox.setScale(0.6);
             this.textboxText.setFontSize(90);
             this.textbox.setPosition(500,720);
@@ -625,10 +681,10 @@ export default function ColdPrepTransport({ openMenu }) {
         }
         checkBounds(draggedItem){
                 this.rect1 = this.add.rectangle(940,550, 800, 250);
-                this.rect2 = this.add.rectangle(725,425, 250, 80);
+                this.rect2 = this.add.rectangle(730,500, 450, 390);
                 const itemBounds = draggedItem.getBounds();
                 //this.rect1.setStrokeStyle(4, 0o0);
-                //this.rect2.setStrokeStyle(4, 0o0);
+                this.rect2.setStrokeStyle(4, 0o0);
                 let targetBounds = this.openBox.getBounds();
                 if(draggedItem === this.prepFood1|| draggedItem === this.prepFood2){
                      targetBounds =  this.rect2.getBounds();                

@@ -27,6 +27,8 @@ import trashCan from "../../assets/M4G1/trashCan.png";
 import sanitizer from "../../assets/M4G1/sanitizerOutlined.png";
 import spray from "../../assets/M4G1/spray.png";
 import Settings from "../../components/settings";
+import plainBackground from "../../assets/Plainbackground.png";
+import faucet from "../../assets/M4G1/faucet.png";
 
 export default function CleanTote({openMenu}) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
@@ -74,7 +76,7 @@ export default function CleanTote({openMenu}) {
             }
 
             preload() {
-                this.load.image("introBg", Loc);
+                this.load.image("introBg", plainBackground);
             }
 
             create() {
@@ -90,7 +92,7 @@ export default function CleanTote({openMenu}) {
             }
 
             preload() {
-                this.load.image("instructionBg", Loc); // reuse same background
+                this.load.image("instructionBg", plainBackground); // reuse same background
             }
 
             create() {
@@ -110,11 +112,11 @@ export default function CleanTote({openMenu}) {
                 this.instructions = data.instructions || [];
             }
             preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
-                this.load.image("volLocation", Loc);
+                this.load.image("volLocation", plainBackground);
                 this.load.image("sinkbg", sinkbg);
                 this.load.image("sprayBottle", sprayBottle);
                 this.load.image("textbox", textbox);
-
+                this.load.image("faucet", faucet);
                 this.load.image("cleanToteImg", cleanToteImg);
                 this.load.image("dirtyToteImg", dirtyTote);
                 this.load.image("leaf1", leaf1);
@@ -224,7 +226,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.50,
                     "leaf1"
                 );
-                leaf1Icon.setScale(toteScale);
+                leaf1Icon.setScale(toteScale * 1.5);
                 leaf1Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf1Icon);
 
@@ -235,7 +237,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.40,
                     "leaf2"
                 );
-                leaf2Icon.setScale(toteScale);
+                leaf2Icon.setScale(toteScale* 1.5);
                 leaf2Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf2Icon);
 
@@ -246,7 +248,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.40,
                     "leaf3"
                 );
-                leaf3Icon.setScale(toteScale);
+                leaf3Icon.setScale(toteScale* 1.5);
                 leaf3Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf3Icon);
 
@@ -257,7 +259,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.55,
                     "leaf4"
                 );
-                leaf4Icon.setScale(toteScale);
+                leaf4Icon.setScale(toteScale* 2);
                 leaf4Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf4Icon);
 
@@ -268,7 +270,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.65,
                     "leaf5"
                 );
-                leaf5Icon.setScale(toteScale);
+                leaf5Icon.setScale(toteScale* 2);
                 leaf5Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf5Icon);
 
@@ -279,7 +281,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.60,
                     "leaf6"
                 );
-                leaf6Icon.setScale(toteScale);
+                leaf6Icon.setScale(toteScale* 1.5);
                 leaf6Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf6Icon);
 
@@ -290,7 +292,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.45,
                     "leaf7"
                 );
-                leaf7Icon.setScale(toteScale);
+                leaf7Icon.setScale(toteScale* 1.5);
                 leaf7Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf7Icon);
 
@@ -301,7 +303,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.60,
                     "leaf8"
                 );
-                leaf8Icon.setScale(toteScale);
+                leaf8Icon.setScale(toteScale* 1.5);
                 leaf8Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf8Icon);
 
@@ -332,7 +334,7 @@ export default function CleanTote({openMenu}) {
 
                 const sanitizerIcon = this.add.image(
                     width * 0.90,
-                    height * 0.2,
+                    height * 0.30,
                     "sanitizer"
                 );
                 const sanitizerScale = (width * 0.15) / sanitizerIcon.width;
@@ -341,11 +343,11 @@ export default function CleanTote({openMenu}) {
                 this.input.setDraggable(sanitizerIcon);
 
                 const sinkIcon = this.add.image(
-                    width * 0.10,
+                    width * 0.13,
                     height * 0.2,
-                    "sinkbg"
+                    "faucet"
                 );
-                const sinkScale = (width * 0.1) / sinkIcon.width;
+                const sinkScale = (width * 0.40) / sinkIcon.width;
                 sinkIcon.setScale(sinkScale);
                 sinkIcon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(sinkIcon);
@@ -357,6 +359,7 @@ export default function CleanTote({openMenu}) {
                 );
                 const trashCanScale = (width * 0.15) / trashCanIcon.width;
                 trashCanIcon.setScale(trashCanScale);
+                
 
                 let sprays = 0;
 
@@ -379,6 +382,7 @@ export default function CleanTote({openMenu}) {
                                 console.log("All icons trashed!");
                             }
                         }
+                        
                     }
                     else if (gameObject === bottleIcon) {
                         if (!noDebris) {
@@ -418,7 +422,7 @@ export default function CleanTote({openMenu}) {
                                 this.showPopup("Drag the spray bottle to the tote to wash it before rinsing.");
                             }
                             else {
-                                this.wash("sudsyTote", "cleanToteImg", "sinkbg");
+                                this.wash("sudsyTote", "cleanToteImg", "faucet");
                                 toteIcon.destroy();
                                 sinkIcon.destroy();
                             }
@@ -480,7 +484,7 @@ export default function CleanTote({openMenu}) {
                 const scale = (width * 0.8) / icon.width;
                 icon.setScale(scale);
                 cleanIcon.setScale(scale);
-                sinkIcon.setScale(width * 0.1 / sinkIcon.width);
+                sinkIcon.setScale(width * 0.5 / sinkIcon.width);
 
                 sinkIcon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(sinkIcon);

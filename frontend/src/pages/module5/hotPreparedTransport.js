@@ -657,7 +657,7 @@ export default function HotPrepTransport({ openMenu }) {
                                 ":10",
                             {
                                 font: "bold 60px Arial",
-                                color: "#000000"
+                                color: "#ffffff"
                             }
                         ).setOrigin(0.5);
                         this.timerText.setDepth(1000);

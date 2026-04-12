@@ -660,12 +660,13 @@ export default function Location({ openMenu }) {
                         zIndex: 10000
                     }}
                 >
+                    
                     <Textbox
                         width="70dvw"
                         height="70dvh"
                         placeholder={introText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.5vw"
+                        placeHolderfontSize="1.8vw"
                     />
                 </div>
             )}
@@ -688,7 +689,7 @@ export default function Location({ openMenu }) {
                         height="70dvh"
                         placeholder={instructionText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.5vw"
+                        placeHolderfontSize="1.8vw"
                     />
                 </div>
             )}
@@ -734,22 +735,22 @@ export default function Location({ openMenu }) {
             />
 
             {gameStage === "apron" && fullyDressed && (
-                <div
-                    style={{
-                        position: "fixed",
-                        right: "18vw",
-                        bottom: "10vh",
-                        zIndex: 10000
-                    }}
-                >
+                            <div
+                style={{
+                    position: "fixed",
+                    right: "15vw",
+                    bottom: "10vh",
+                    zIndex: 10000
+                }}
+            >
 
 
                     <Textbox
-                        width="30dvw"
-                        height="45dvh"
+                        width="70dvw"
+                        height="60dvh"
                         placeholder={apronSuccessText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.1vw"
+                        placeHolderfontSize="1.8vw"
                     />
                 </div>
 

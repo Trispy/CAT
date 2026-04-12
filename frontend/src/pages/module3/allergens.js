@@ -168,55 +168,55 @@ export default function Allergens({ openMenu }) {
 
                 // Characters
                 this.fish = this.add.image(this.itemX, this.itemY, "sauce")
-                    .setDepth(20)
+                    .setDepth(30)
                     .setOrigin(0)
                     .setScale(1.1)
                     .setVisible(false);
 
                 this.shellfish = this.add.image(this.itemX, this.itemY, "stock")
-                    .setDepth(20)
+                    .setDepth(30)
                     .setOrigin(0)
                     .setScale(this.itemScale)
                     .setVisible(false);
 
                 this.nowheat = this.add.image(this.itemX, this.itemY, "bar")
-                    .setDepth(20)
+                    .setDepth(30)
                     .setOrigin(0)
                     .setScale(this.itemScale)
                     .setVisible(false);
 
                 this.sesame = this.add.image(this.itemX, this.itemY, "seaweed")                    
-                    .setDepth(20)
+                    .setDepth(30)
                     .setOrigin(0)
                     .setScale(this.itemScale)
                     .setVisible(false);
 
                 this.soy = this.add.image(this.itemX, this.itemY, "crackers")
-                    .setDepth(20)
+                    .setDepth(30)
                     .setOrigin(0)
                     .setScale(this.itemScale)
                     .setVisible(false);
 
                 this.nosesame = this.add.image(this.itemX, this.itemY, "sauce")
-                    .setDepth(20)
+                    .setDepth(30)
                     .setOrigin(0)
                     .setScale(1.1)
                     .setVisible(false);
 
                 this.wheateggs = this.add.image(this.itemX, this.itemY, "cookies")
-                    .setDepth(20)
+                    .setDepth(30)
                     .setOrigin(0)
                     .setScale(this.itemScale)
                     .setVisible(false);
 
                 this.nuts = this.add.image(this.itemX, this.itemY, "bar")
-                    .setDepth(20)
+                    .setDepth(30)
                     .setOrigin(0)
                     .setScale(this.itemScale)
                     .setVisible(false);
 
                 this.milk = this.add.image(this.itemX, this.itemY, "yogurt")
-                    .setDepth(20)
+                    .setDepth(30)
                     .setOrigin(0)
                     .setScale(this.itemScale)
                     .setVisible(false);

@@ -468,6 +468,15 @@ export default function Expiration({ openMenu }) {
                     } else if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, xBounds)) {
                         this.handleFoodAnswer(this.xMark);
                     }
+                     else {
+                        this.tweens.add({
+                            targets: gameObject,
+                            x: this.startX,
+                            y: this.startY,
+                            duration: 300,
+                            ease: "Power2"
+                        });
+                    }
                 });
                 this.textboxErin = this.add.container(this.bg1.width / 2 - 640, 50);
 
@@ -567,7 +576,7 @@ export default function Expiration({ openMenu }) {
                         buttonHeight,
                         0xffffff // fill
                     )
-                    .setStrokeStyle(4, 0x000000); // ✅ black outline
+                    .setStrokeStyle(4, 0x000000); 
 
                     const buttonText = this.add.text(
                         buttonBg.x,
