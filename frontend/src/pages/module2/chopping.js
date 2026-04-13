@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
 import moduleUpdate from "../../components/moduleupdate.js";
-
-import Loc from "../../assets/Background1.png";
+import thermometerhand from "../../assets/thermometerhand.png"
+import thermometer from "../../assets/thermometer.png"
+import thermometerBackground from "../../assets/thermometerbackground.png"
+import Loc from "../../assets/backopen.png";
 import Textbox from "../../components/textbox";
 import textbox from "../../assets/M1G1/Textbox.png";
 import useTypewriter from "../../components/typewriter";
@@ -13,7 +15,7 @@ import sinkbg from "../../assets/M1G3/SinkBackground.png";
 import gloveBox from "../../assets/M1G3/gloveBox.png";
 import noGlove from "../../assets/M2G2/noGlove.png";
 import gloved from "../../assets/M2G2/gloved.png";
-import beef from "../../assets/M2G2/beef.png";
+import beef from "../../assets/beefpackage.png";
 import bellPeppers from "../../assets/M2G2/bellpeppers.png";
 import onion from "../../assets/M2G2/onion.png";
 import cuttingBoard from "../../assets/M2G2/cuttingBoard.png";
@@ -173,6 +175,10 @@ export default function Cleaning({ openMenu }) {
                 this.load.image("knife", knife);
                 this.load.image("gloveBox", gloveBox);
                 this.load.image("textbox", textbox);
+                this.load.image("thermometer", thermometer);
+                this.load.image("thermometerhand", thermometerhand);
+                this.load.image("thermometerbackground", thermometerBackground);
+
             }
             showInstructions() {
                 const { width, height } = this.scale;
@@ -247,6 +253,14 @@ export default function Cleaning({ openMenu }) {
                     height * 0.65,
                     "gloved"
                 );
+                const therm = this.add.image(width / 2 + width * 0.335, height / 2 - height * 0.30, "thermometer")
+                const thermScale = (height * 0.07) / therm.height;
+                therm.setScale(thermScale);
+
+                const thermhHand = this.add.image(width / 2 + width * 0.335, height / 2 - height * 0.30, "thermometerhand")
+                const thermHandScale = (height * 0.07) / thermhHand.height;
+                thermhHand.setScale(thermHandScale);
+                thermhHand.setAngle(-70);
                 const charScale = (height * 0.7) / character.height;
                 character.setScale(charScale);
 
@@ -265,8 +279,8 @@ export default function Cleaning({ openMenu }) {
                 );
 
                 const onionIcon = this.add.image(
-                    width * 0.5,
-                    height * 0.15,
+                    width * 0.78,
+                    height * 0.68,
                     "dirtyOnion"
                 );
                 const onionScale = (width * 0.05) / onionIcon.width;
@@ -275,8 +289,8 @@ export default function Cleaning({ openMenu }) {
                 this.input.setDraggable(onionIcon);
 
                 const pepperIcon = this.add.image(
-                    width * 0.40,
-                    height * 0.10,
+                    width * 0.85,
+                    height * 0.68,
                     "dirtyBellpepper"
                 );
                 const pepperScale = (width * 0.10) / pepperIcon.width;
@@ -286,10 +300,10 @@ export default function Cleaning({ openMenu }) {
 
                 const beefIcon = this.add.image(
                     width * 0.80,
-                    height * 0.10,
+                    height * 0.58,
                     "beef"
                 );
-                const beefScale = (width * 0.06) / beefIcon.width;
+                const beefScale = (width * 0.12) / beefIcon.width;
                 beefIcon.setScale(beefScale);
                 beefIcon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(beefIcon);
@@ -380,8 +394,8 @@ export default function Cleaning({ openMenu }) {
                     }
                     this.checkWin();
                     onionIcon.setPosition(
-                        width * 0.5,
-                        height * 0.15,
+                        width * 0.78,
+                        height * 0.68,
                     );
                 });
 
@@ -410,8 +424,8 @@ export default function Cleaning({ openMenu }) {
                     }
                     this.checkWin();
                     pepperIcon.setPosition(
-                        width * 0.40,
-                        height * 0.15
+                        width * 0.85,
+                        height * 0.68
                     );
                 });
 
@@ -436,7 +450,7 @@ export default function Cleaning({ openMenu }) {
                     this.checkWin();
                     beefIcon.setPosition(
                         width * 0.80,
-                        height * 0.10,
+                        height * 0.58,
                     );
                 });
 
