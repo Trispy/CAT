@@ -113,7 +113,7 @@ useEffect(() => {
     nailsTrimmed && !removeClipSuccess
     );
     const clothesText = useTypewriter(
-    "Now let's put on some clean clothes! Drag the shirt and pants onto the character to get them dressed. Click anywhere to click out of the textbox.",
+    "Now let's put on some clean clothes! Drag the shirt and pants onto the character to get them dressed. Click anywhere to continue.",
     gameStage === "clothes" && ringRemoved
     );
     const clothesSuccessText = useTypewriter(
@@ -121,7 +121,7 @@ useEffect(() => {
     gameStage === "clothes" && clothesRemoved
     );
     const tiedHairText = useTypewriter(
-    "Last step! Drag the hair tie onto the character to tie up the hair.",
+    "Last step! Drag the hair tie onto the character to tie up the hair. Click anywhere to continue.",
     gameStage === "tyehair" && !hairTied
     );
     const tiedHairSuccessText = useTypewriter(
@@ -180,6 +180,7 @@ useEffect(() => {
                 this.load.image("tieduphair", tieduphair);
                 this.load.image("hairtie", hairtie);
                 this.load.image("erininstructions", erintextbox); 
+                this.load.image("ringonfinger", ringonfinger);
 
             }
 
@@ -189,6 +190,7 @@ useEffect(() => {
                 this.add.image(width / 2, height / 2, "bathroombg")
                     .setDisplaySize(width, height);
               // Bottom layer (trimmed hand)
+              
                 const trimmedHand = this.add.image(
                     width / 2,
                     height / 2 + height * 0.05, 
@@ -210,7 +212,14 @@ useEffect(() => {
             
 
                 longHandImage.setVisible(false);
-                
+                const ringOnFinger1 = this.add.image(
+                    width / 2 + width * 0.005,
+                    height / 2 - height * 0.15,
+                    "ringonfinger"
+                ).setVisible(true); 
+
+                ringOnFinger1.setScale((width * 0.37) / ringOnFinger1.width);
+                ringOnFinger1.setDepth(10);
                 const nailZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                     width / 2 - width * 0.15, 
                     height / 2 - height * 0.47,  
@@ -475,7 +484,7 @@ useEffect(() => {
 
             const radius = Math.max(target.displayWidth, target.displayHeight) / 2 + 10;
                     const circle = this.add.circle(0, 0, radius, 0xFFFF00, 0.45);
-                    const text = this.add.text(0, -80, "CLICK HERE", {
+                    const text = this.add.text(0, -80, "DRAG THIS", {
                         fontSize: "28px",
                         color: "#ffffff",
                         fontStyle: "bold"
@@ -1094,8 +1103,8 @@ class FinalScene extends Phaser.Scene {
                             }}
                         >
                             <Textbox
-                                width="30dvw"
-                                height="40dvh"
+                                width="40dvw"
+                                height="50dvh"
                                 placeholder={tiedHairText}
                                 placeHolderColor="#000000"
                                 placeHolderfontSize="1.2vw"
@@ -1118,11 +1127,11 @@ class FinalScene extends Phaser.Scene {
                 }}
             >
                     <TextboxErin
-                        width="65dvw"
+                        width="70dvw"
                         height="75dvh"
                         placeholder={finalText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.5vw"
+                        placeHolderfontSize="1.4vw"
                     />
         </div>
         )}

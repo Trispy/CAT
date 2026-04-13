@@ -29,6 +29,9 @@ export default function CoolerPack({ openMenu }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
+    window.navigateToPage = navigate;
+}, [navigate]);
+    useEffect(() => {
         return () => {
             if (phaserGameRef.current) {
                 phaserGameRef.current.destroy(false);
@@ -614,7 +617,7 @@ export default function CoolerPack({ openMenu }) {
             )}
             {fridgeState === "complete" && (
                 <div
-                    onClick={() => navigate("/module4/packTruck", { replace: true })}
+                    onClick={() => window.navigateToPage("/module4/packTruck")}
                     style={overlayStyle}
                 >
                     <div

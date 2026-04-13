@@ -21,6 +21,9 @@ export default function TruckPack({ openMenu }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
+    window.navigateToPage = navigate;
+}, [navigate]);
+    useEffect(() => {
         return () => {
             if (phaserGameRef.current) {
                 phaserGameRef.current.destroy(false);
@@ -535,7 +538,7 @@ export default function TruckPack({ openMenu }) {
             )}
             {fridgeState === "complete" && (
                 <div
-                    onClick={() => navigate("/map", { replace: true })}
+                    onClick={() => window.navigateToPage("/map")}
                     style={overlayStyle}
                 >
                     <div

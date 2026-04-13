@@ -37,9 +37,14 @@ export default function Location({ openMenu }) {
             }
         };
     }, []);
-    useEffect(() => {
-        startPhaser();
-    }, []);
+        const hasInitialized = useRef(false);
+
+        useEffect(() => {
+            if (!hasInitialized.current) {
+                startPhaser();
+                hasInitialized.current = true;
+            }
+        }, []);
     //backgroundImage: `url(${Loc})`,
     const backgroundStyle = {
         backgroundImage: `url(${Loc})`,
@@ -130,7 +135,7 @@ export default function Location({ openMenu }) {
 
                     const radius = Math.max(target.displayWidth, target.displayHeight) / 2 + 10;
                     const circle = this.add.circle(0, 0, radius, 0xFFFF00, 0.45);
-                    const text = this.add.text(0, -80, "CLICK HERE", {
+                    const text = this.add.text(0, -80, "DRAG THIS", {
                         fontSize: "40px",
                         color: "#ffffff",
                         fontStyle: "bold"
@@ -236,6 +241,7 @@ export default function Location({ openMenu }) {
             create() {
                 const { width, height } = this.scale;
                 let timeLeft = 20;
+                let timerStarted = false;
 
                 const timerText = this.add.text(
                     width * 0.77,
@@ -251,9 +257,10 @@ export default function Location({ openMenu }) {
                     }
                 ).setOrigin(0.5);
                 timerText.setDepth(1000);
-                this.time.addEvent({
+                const timerEvent =this.time.addEvent({
                     delay: 1000, //one second
                     loop: true,
+                    paused: true,
                     callback: () => {
                         if (timeLeft <= 0) return;
                         timeLeft--;
@@ -366,7 +373,10 @@ export default function Location({ openMenu }) {
 
                     const localX = (dragX - dirtyHandRT.x) / dirtyHandRT.scaleX + dirtyHandRT.width / 2;
                     const localY = (dragY - dirtyHandRT.y) / dirtyHandRT.scaleY + dirtyHandRT.height / 2;
-
+                        if (!timerStarted) {
+                            timerStarted = true;
+                            timerEvent.paused = false; 
+                        }
 
                     if (Math.random() < 0.2) {
                         const sud = this.add.image(dragX, dragY, "sudImg");

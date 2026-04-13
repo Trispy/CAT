@@ -586,6 +586,7 @@ function Module2Part1({ openMenu }) {
             create() {
                 const { width, height } = this.scale;
                 let timeLeft = 20;
+                let timerStarted = false;
                 
                 const timerText = this.add.text(
                     width * 0.77,
@@ -601,9 +602,10 @@ function Module2Part1({ openMenu }) {
                     }
                 ).setOrigin(0.5);
                 timerText.setDepth(1000);
-                this.time.addEvent({
+                const timerEvent =this.time.addEvent({
                     delay: 1000, //one second
                     loop: true,
+                    paused: true, 
                     callback: () => {
                         if (timeLeft <= 0) return;
                         timeLeft--;
@@ -717,7 +719,10 @@ function Module2Part1({ openMenu }) {
                     const localX = (dragX - dirtyHandRT.x) / dirtyHandRT.scaleX + dirtyHandRT.width / 2;
                     const localY = (dragY - dirtyHandRT.y) / dirtyHandRT.scaleY + dirtyHandRT.height / 2;
 
-
+                    if (!timerStarted) {
+                            timerStarted = true;
+                            timerEvent.paused = false; 
+                        }
                     if (Math.random() < 0.2) {
                         const sud = this.add.image(dragX, dragY, "sudImg");
 
