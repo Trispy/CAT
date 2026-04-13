@@ -55,8 +55,9 @@ export default function FoodServiceMishaps({ openMenu }) {
             erinScale = 1.35;
         
             instructionsShown = false;
-            gameMessageIndex = 0;
+            instructionStep = 0;
             itemScale = 0.5;
+            allowSpatula = false;
             itemX = 720;
             itemY = 270;
             instructions = [
@@ -490,7 +491,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                 this.next.on("pointerdown", () => {
                     if(!this.instructionsShown){
                         this.instructionsShown = true;
-                        this.iterateGameMessage();
+                        this.iterateGameMessage(0);
                         this.showPopup(this.instructions[0]);
                         this.next.setVisible(false);
                         //this.instructions.shift();
@@ -504,7 +505,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                         this.space2.setInteractive({dropZone: true});                        
                     }
                     else if (this.transitions1.length > 0){
-                        this.iterateGameMessage();
+                        this.iterateGameMessage(this.instructionStep + 1);
                         this.transitions1.shift();
                         this.next.setVisible(false);
                         this.manager.setVisible(true);
@@ -515,11 +516,12 @@ export default function FoodServiceMishaps({ openMenu }) {
                         this.soupBowl.setVisible(true);
                         this.ladle.setVisible(true);
                         this.spatula.setVisible(true);
+                        this.allowSpatula = true;
                         this.space3.setInteractive({dropZone: true});
                     }    
                     else if(this.transitions2.length > 0) {
                         this.trashcan.setVisible(false);
-                        this.iterateGameMessage("cupboard");
+                        this.iterateGameMessage(this.instructionStep + 1, "cupboard");
                         this.spatula.setVisible(false);
                         this.transitions2.shift();
                         this.next.setVisible(false);
@@ -563,7 +565,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                 this.input.on("drop", (pointer, gameObject, dropZone) => {
                     if(gameObject === this.erin && dropZone === this.space1){
                         dropZone.disableInteractive();
-                        this.iterateGameMessage();
+                        this.iterateGameMessage(this.instructionStep + 1);
                         this.erin.setPosition(dropZone.x, this.erinY);
                         this.input.setDraggable(this.erin, false);
                          if(!this.timerStart){
@@ -593,7 +595,7 @@ export default function FoodServiceMishaps({ openMenu }) {
 
                                 if (timeLeft <= 0) {
                                     this.timerText.setText("Done!");
-                                    this.iterateGameMessage();
+                                    this.iterateGameMessage(this.instructionStep + 1);
                                     this.gloveBox.setVisible(true);
                                     this.gloveBox.setInteractive();
                                     this.input.setDraggable(this.gloveBox);
@@ -605,7 +607,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                         
                     }
                     else if(gameObject === this.erin && dropZone === this.space2){
-                        this.iterateGameMessage();
+                        this.iterateGameMessage(this.instructionStep + 1);
                         //this.trashcan.setVisible(false);
                         this.erin.setPosition(dropZone.x, this.erinY);
                         this.erin.setTexture("erinNotGloved");
@@ -614,7 +616,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                     }
                     else if (gameObject === this.gloveBox && dropZone.texture.key === "erinNotGloved"){
                         this.timerText?.destroy();
-                        this.iterateGameMessage();
+                       this.iterateGameMessage(this.instructionStep + 1);
                         this.erin.setTexture("erinGloved");
                         dropZone.disableInteractive();
                         this.gloveBox.setVisible(false);
@@ -623,7 +625,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                     }
                      else if (gameObject === this.erin && dropZone === this.space3){
             
-                        this.iterateGameMessage();
+                        this.iterateGameMessage(this.instructionStep + 1);
                         this.erin.setPosition(this.manager.x, this.manager.y / 1.5);
                         this.space2.setInteractive();
                         this.soupBowl.setInteractive();
@@ -637,28 +639,39 @@ export default function FoodServiceMishaps({ openMenu }) {
                         this.soupBowl.setPosition(680, 400);
                         this.soupBowl.disableInteractive();
 
-                        this.iterateGameMessage();
+                        this.iterateGameMessage(this.instructionStep + 1);
                         this.ladle.setInteractive();
                         this.input.setDraggable(this.ladle);
                         
                         this.spatula.setInteractive();
                         this.input.setDraggable(this.spatula);
+                        this.allowSpatula = true;
 
                         this.space1.setInteractive();
                         dropZone.disableInteractive();
 
                      }
                      else if (gameObject === this.spatula && dropZone === this.space1){
-                            
+
+                       
+                            if(!this.allowSpatula){
+                                return;
+                            }
+
                             this.spatula.setVisible(false);
-                        if(!this.utensilWashed){    
-                            this.utensilWashed = true;
-                            return;
-                        }
+
+                            if(!this.utensilWashed){    
+                                this.utensilWashed = true;
+                                return;
+                            }
+
                             this.soupBowl.setInteractive();
                             this.input.setDraggable(this.soupBowl);
-                            this.iterateGameMessage();
-                     }
+
+                            this.allowSpatula = false; 
+
+                            this.iterateGameMessage(this.instructionStep + 1);
+                        }
                       else if (gameObject === this.ladle && dropZone === this.space1){
                             this.ladle.setVisible(false);
                         if(!this.utensilWashed){
@@ -667,10 +680,10 @@ export default function FoodServiceMishaps({ openMenu }) {
                         }
                             this.soupBowl.setInteractive();
                             this.input.setDraggable(this.soupBowl);
-                            this.iterateGameMessage();
+                            this.iterateGameMessage(this.instructionStep + 1);
                      }
                      else if(gameObject === this.soupBowl && dropZone === this.space1){
-                          this.iterateGameMessage("cupboard");
+                         this.iterateGameMessage(this.instructionStep + 1, "cupboard");
                                  this.spatula.setTexture("newSpatula");
                             this.spatula.setPosition(this.itemX, this.itemY - 400);
                             this.spatula.setVisible(true);
@@ -682,7 +695,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                             this.soupBowl.setVisible(false);
                      }
                      else if(gameObject === this.spatula && dropZone === this.chickenBowl){
-                        this.iterateGameMessage();
+                        this.iterateGameMessage(this.instructionStep + 1);
                         this.spatula.setPosition(this.chickenBowl.x, this.chickenBowl.y - 50);
                         this.spatula.setAngle(-30);
                         this.spatula.disableInteractive();
@@ -722,7 +735,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                        this.growTemp(this.hotHand1, "good");
                      }
                      else if(gameObject === this.coldFood && dropZone === this.space3){
-                        this.iterateGameMessage("cupboard");
+                        this.iterateGameMessage(this.instructionStep + 1, "cupboard");
                         this.coldFood.setVisible(false);
                         this.chickenBowl.setInteractive();
                         this.input.setDraggable(this.chickenBowl);
@@ -744,8 +757,12 @@ export default function FoodServiceMishaps({ openMenu }) {
                                 this.bg1.height * 0.3,
                                 ":7",
                             {
-                                font: "bold 60px Arial",
-                                color: "#000000"
+                                backgroundColor: "#000000",
+                                borderColor: "#ffffff",
+                                borderWidth: 4,
+                                fontSize: "52px",
+                                color: "#ff0000",
+                                fontStyle: "bold"
                             }
                         ).setOrigin(0.5);
                         this.timerText.setDepth(1000);
@@ -763,7 +780,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                                     this.coldFood.setVisible(true);
                                     //this.showThermometer(this.hotTherm1);]
                                     // this.hotTherm1.setPosition(780, 70);
-                                    this.iterateGameMessage("cupboard");
+                                    this.iterateGameMessage(this.instructionStep + 1, "cupboard");
                                     this.showThermometer(this.coldTherm);
                                     this.coldTherm.setPosition(580, 50);
                                     this.centerHands();
@@ -783,7 +800,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                 });
 
                 this.tempLog.on("pointerdown", () => {
-                    this.iterateGameMessage();
+                    this.iterateGameMessage(this.instructionStep + 1);
                     this.showPopup("Item: Grilled Chicken, Date: Today, Time: 1 Hour Ago, Temp: 170 °F.\n\n\nItem: Watermelon, Date: Today, Time: One Hour Ago, Temp: 38°F.");
                    if(!this.logOpened){
                     this.logOpened = true;
@@ -882,7 +899,7 @@ export default function FoodServiceMishaps({ openMenu }) {
         }
     });
 
-    // Clear references (helps GC)
+    // Clear references
     this.bg1 = null;
     this.erin = null;
     this.manager = null;
@@ -915,15 +932,16 @@ export default function FoodServiceMishaps({ openMenu }) {
                 //this.hotHand2.setPosition(this.hotTherm2.getCenter().x - 20, this.hotTherm2.getCenter().y + 10);
                 this.coldHand.setPosition(this.coldTherm.getCenter().x + 5, this.coldTherm.getCenter().y - 25);
     }
-            iterateGameMessage(section){
-                if (!this.gameMessages || this.gameMessageIndex >= this.gameMessages.length) return;
+            iterateGameMessage(step, section){
+                if (!this.gameMessages || step >= this.gameMessages.length) return;
+
+                this.instructionStep = step;
 
                 this.textbox.setScale(0.6);
                 this.textboxText.setFontSize(90);
                 this.textbox.setPosition(0,0);
 
-                this.typewriteText(this.gameMessages[this.gameMessageIndex]);
-                this.gameMessageIndex++;
+                this.typewriteText(this.gameMessages[this.instructionStep]);
 
                 if(section === "cupboard"){
                     this.textbox.setPosition(990,755);
@@ -967,7 +985,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                 duration: 5000,
                 ease:'Linear',
                 onComplete: () => {
-                    this.iterateGameMessage("cupboard");
+                    this.iterateGameMessage(this.instructionStep + 1, "cupboard");
                     this.hotTherm1.setVisible(true);
                     this.hotHand1.setVisible(true);
                           this.hotTherm1.setPosition(580, 50);
@@ -995,7 +1013,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                 ease:'Linear',
                 onComplete: () => {
                     
-                        this.iterateGameMessage();
+                       this.iterateGameMessage(this.instructionStep + 1);
                     if(val === "good"){
                         this.tempLog.disableInteractive();
                         this.next.setVisible(true);

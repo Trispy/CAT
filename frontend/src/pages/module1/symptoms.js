@@ -253,9 +253,9 @@ export default function Symptoms({ openMenu }) {
             this.xMark.preFX.addShine(1, 0.5, 5);
           }
 
-          this.textboxText.setFontSize(this.textFontSize * 0.8);
+          this.textboxText.setFontSize(this.textFontSize * 0.7);
           this.textboxText.setColor("rgb(252, 0, 0)");
-          this.typewriteText(this.scenario.popup);
+          this.typewriteText(this.scenario.popup + "\nTap the ❌ button to continue.");
         }
 
         if (scenarios.length === 0) {

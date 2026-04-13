@@ -588,8 +588,8 @@ function Module2Part1({ openMenu }) {
                 let timeLeft = 20;
                 
                 const timerText = this.add.text(
-                    width * 0.85,
-                    height * 0.05,
+                    width * 0.77,
+                    height * 0.07,
                     ":20",
                     {
                         backgroundColor: "#000000",
@@ -950,7 +950,7 @@ function Module2Part1({ openMenu }) {
     };
 
     const introText = useTypewriter(
-        "Let's move on to understanding food saftey. Follow the instructions to complete each minigame.",
+        "Let's move on to understanding food safety. Follow the instructions to complete each minigame.",
         true
     );
     const thermometerInstructions = useTypewriter(

@@ -238,8 +238,8 @@ export default function Location({ openMenu }) {
                 let timeLeft = 20;
 
                 const timerText = this.add.text(
-                    width * 0.85,
-                    height * 0.05,
+                    width * 0.77,
+                    height * 0.07,
                     ":20",
                     {
                         backgroundColor: "#000000",
