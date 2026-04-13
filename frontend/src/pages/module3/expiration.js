@@ -233,7 +233,7 @@ export default function Expiration({ openMenu }) {
                         height / 2,
                         inputText,
                         {
-                            font: "bold 50px sans-serif",
+                            font: "bold 45px sans-serif",
                             color: "#000",
                             wordWrap: { width: width * 0.58}
                         }

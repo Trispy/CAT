@@ -789,8 +789,8 @@ export default function ServiceSetUps({ openMenu }) {
                             this.timerStart = true;
                             let timeLeft = 5;
                             this.timerText = this.add.text(
-                                this.bg1.width * 0.8,
-                                this.bg1.height * 0.06,
+                                this.bg1.width * 0.81,
+                                this.bg1.height * 0.25,
                                 ":5",
                             {
                                 backgroundColor: "#000000",

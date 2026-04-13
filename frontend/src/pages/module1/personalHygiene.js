@@ -895,7 +895,7 @@ class FinalScene extends Phaser.Scene {
         <div
         style={{
             position: "fixed", 
-            top: 0,
+            top: -10,
             left: 0,
             width: "100dvw",
             height: "100dvh",
@@ -907,10 +907,10 @@ class FinalScene extends Phaser.Scene {
         >
                     <Textbox
                         width="70dvw"
-                        height="70dvh"
+                        height="82dvh"
                         placeholder={introText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.5vw"
+                        placeHolderfontSize="1.8vw"
                     />
         </div>
         )}
@@ -961,13 +961,13 @@ class FinalScene extends Phaser.Scene {
                 style={{
                     position: "fixed",
                     right: "18vw",
-                    bottom: "50vh",
+                    bottom: "40vh",
                     zIndex: 10000
                 }}
             >
                 <Textbox
                     width="30dvw"
-                    height="35dvh"
+                    height="40dvh"
                     placeholder={clipperText}
                     placeHolderColor="#000000"
                     placeHolderfontSize="1.3vw"
@@ -987,7 +987,7 @@ class FinalScene extends Phaser.Scene {
                 {!removeClipSuccess && (
                     <Textbox
                         width="30dvw"
-                        height="35dvh"
+                        height="40dvh"
                         placeholder={clipperSuccessText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.3vw"
@@ -997,7 +997,7 @@ class FinalScene extends Phaser.Scene {
                 {nailsTrimmed && removeClipSuccess && !showRingText && (gameStage === "rings") && (
                     <Textbox
                         width="30dvw"
-                        height="35dvh"
+                        height="40dvh"
                         placeholder={ringText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.3vw"
@@ -1007,7 +1007,7 @@ class FinalScene extends Phaser.Scene {
                 {showRingText && (
                     <Textbox
                         width="30dvw"
-                        height="35dvh"
+                        height="42dvh"
                         placeholder={ringSuccessText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.3vw"
@@ -1017,7 +1017,7 @@ class FinalScene extends Phaser.Scene {
                 {clothesRemoved && (
                     <Textbox
                         width="30dvw"
-                        height="35dvh"
+                        height="50dvh"
                         placeholder={clothesSuccessText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.3vw"
@@ -1027,7 +1027,7 @@ class FinalScene extends Phaser.Scene {
                 {gameStage === "tyehair" && hairTied && !showTyedHairText && (
                     <Textbox
                         width="30dvw"
-                        height="35dvh"
+                        height="42dvh"
                         placeholder={tiedHairSuccessText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.3vw"
@@ -1064,11 +1064,11 @@ class FinalScene extends Phaser.Scene {
                             }}
                         >
                             <Textbox
-                                width="30dvw"
-                                height="50dvh"
+                                width="50dvw"
+                                height="60dvh"
                                 placeholder={clothesText}
                                 placeHolderColor="#000000"
-                                placeHolderfontSize="1.1vw"
+                                placeHolderfontSize="1.3vw"
                             />
                         </div>
                     </div>
@@ -1107,7 +1107,7 @@ class FinalScene extends Phaser.Scene {
                                 height="50dvh"
                                 placeholder={tiedHairText}
                                 placeHolderColor="#000000"
-                                placeHolderfontSize="1.2vw"
+                                placeHolderfontSize="1.3vw"
                             />
                         </div>
                     </div>
@@ -1120,7 +1120,7 @@ class FinalScene extends Phaser.Scene {
            <div
                 style={{
                     position: "fixed",
-                    top: "50%",
+                    top: "45%",
                     left: "51%",
                     transform: "translate(-50%, -50%)",
                     zIndex: 10000
@@ -1128,10 +1128,10 @@ class FinalScene extends Phaser.Scene {
             >
                     <TextboxErin
                         width="70dvw"
-                        height="75dvh"
+                        height="80dvh"
                         placeholder={finalText}
                         placeHolderColor="#000000"
-                        placeHolderfontSize="1.4vw"
+                        placeHolderfontSize="1.6vw"
                     />
         </div>
         )}
