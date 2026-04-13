@@ -465,8 +465,8 @@ export default function ColdPrepTransport({ openMenu }) {
                             this.timerStart = true;
                             let timeLeft = 10;
                             this.timerText = this.add.text(
-                                this.bg1.width * 1,
-                                this.bg1.height * 0.3,
+                                this.bg1.width * 0.81,
+                                this.bg1.height * 0.25,
                                 ":10",
                             {
                                 backgroundColor: "#000000",
