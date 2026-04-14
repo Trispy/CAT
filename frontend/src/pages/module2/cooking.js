@@ -37,8 +37,8 @@ export default function Cooking({ openMenu }) {
   useEffect(() => {
       window.navigateToPage = navigate;
     class Cooking extends Phaser.Scene {
-      welcomeTexts = ["You will  practice by cooking a meal with the ingredients you just finished preparing."];
-      instructions = ["In this game, drag the bowls of prepared ingredients over to the pans on the stove.\nThen, wait until the thermometer reaches the safe green zone before moving to the next step"];
+      welcomeTexts = ["You will practice by cooking a meal with the ingredients you just finished preparing."];
+      instructions = ["In this game, drag the bowls of prepared ingredients over to the pans on the stove.\nThen, wait until the thermometer reaches the safe green zone before moving to the next step."];
       gameMessages = ["Drag the bowl of raw beef into the empty pan!", 
         "Drag the bowl of raw peppers into the empty pan! Make sure to keep the vegetables separate from the beef.", 
         "Drag the bowl of raw onions into the pan with peppers! It’s important to keep the vegetables separate from the meat.",
@@ -125,7 +125,7 @@ export default function Cooking({ openMenu }) {
         this.meatThermometerHand = this.add.image(0,0,'thermometerHand').setOrigin(0).setScale(0.3).setVisible(false).setAngle(90);
 
         this.next = this.add.image(1500, 835, 'next').setOrigin(0).setScale(0.35).setInteractive().setVisible(true);
-        this.typewriteText("In this section, we will practice cooking foods to their proper temperature.");
+        this.typewriteText("In this section, you will practice cooking foods to their proper temperature.");
         this.textbox.setSize(this.textboxImage.width, this.textboxImage.height);
         this.textbox.add([this.textboxImage, this.textboxText]);
         this.textbox.setScale(this.textboxScale);

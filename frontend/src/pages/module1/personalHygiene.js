@@ -92,7 +92,7 @@ useEffect(() => {
   startPhaser();
 }, []);
     const introText = useTypewriter(
-        "In the following game, you will complete  essential personal hygiene before volunteering. Progress in the game by using your finger to drag items to the correct area.",
+        "In the following game, you will complete essential personal hygiene before volunteering. Progress in the game by using your finger to drag items to the correct area.",
         true
     );
 
@@ -105,11 +105,11 @@ useEffect(() => {
     gameStage === "rings" && !showRingText
     );
    const ringSuccessText = useTypewriter(
-    "Great job for removing the ring! Click the next button to continue.",
+    "Great job removing the ring! Click the next button to continue.",
     showRingText
     );
     const clipperSuccessText = useTypewriter(
-    "Great job for clipping the nails! Click the next button to continue.",
+    "Great job clipping the nails! Click the next button to continue.",
     nailsTrimmed && !removeClipSuccess
     );
     const clothesText = useTypewriter(

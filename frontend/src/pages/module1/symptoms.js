@@ -37,10 +37,10 @@ export default function Symptoms({ openMenu }) {
       ];
 
       instructions = [
-        "In the following game, the volunteer will share different symptoms with you, and you will determine if they can volunteer or should stay home. If they can volunteer, tap the green check, but if they should stay home, tap the red X."      ];
+        "In the following game, the volunteer will share different symptoms with you, and you will determine if they can volunteer or should stay home. If they can volunteer, tap the green ✅, but if they should stay home, tap the red ❌."      ];
 
       transitions = [
-        "Great job identifying when volunteers should stay home! In the next section,  you will prepare  this volunteer for their shift"
+        "Great job identifying when volunteers should stay home! In the next section, you will prepare this volunteer for their shift."
       ];
 
       constructor() {
