@@ -43,8 +43,8 @@ export default function Menu({ closeMenu }) {
     },
     module4: {
       cleanTote: "/module4/toteCleaning",
-      sorting: "/module4/sorting",
-      packing: "/module4/packing",
+      sorting: "/module4/coolerPack",
+      packing: "/module4/packTruck",
     },
     module5: {
       coldPreparedTransport: "/module5/coldPreparedTransport",

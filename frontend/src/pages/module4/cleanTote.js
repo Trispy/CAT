@@ -746,7 +746,7 @@ export default function CleanTote({openMenu}) {
                     this.popupOpen = false;
 
                     if (inputText === "This tote is now ready for use!") {
-                        moduleUpdate(`${API}/api/game/module4/toteCleaning/completed`)
+                        moduleUpdate(`${API}/api/game/module4/cleanTote/completed`)
                         navigate("/module4/coolerPack", { replace: true });
                     }
 

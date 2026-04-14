@@ -341,7 +341,7 @@ router.get("/module3/status", requireAuth, async (req, res) => {
 
 // mark as complete
 router.post(
-  "/module4/toteCleaning/completed",
+  "/module4/cleanTote/completed",
   checkAccess("module4", "cleanTote"),
   async (req, res) => {
     try {
