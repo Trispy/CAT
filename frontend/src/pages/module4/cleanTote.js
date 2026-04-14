@@ -32,7 +32,7 @@ import faucet from "../../assets/M4G1/faucet.png";
 
 const API = process.env.REACT_APP_API_URL;
 
-export default function CleanTote({openMenu}) {
+export default function CleanTote({ openMenu }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
@@ -47,10 +47,20 @@ export default function CleanTote({openMenu}) {
         startPhaser();
     }, []);
 
+    const overlayStyle = {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        zIndex: 15000,
+        backgroundColor: "rgba(0,0,0,0)",
+        cursor: "pointer"
+    };
+
     const [gameStage, setGameStage] = useState("intro");
 
     const [instructionStep, setInstructionStep] = useState(0);
-    const numberOfCutMaterials = useRef(0);
     useEffect(() => {
         window.handleNext = handleNextClick;
     }, [gameStage]);
@@ -142,7 +152,7 @@ export default function CleanTote({openMenu}) {
 
                 const overlay = this.add.container(0, 0);
 
-               const bg = this.add.rectangle(
+                const bg = this.add.rectangle(
                     width / 2,
                     height / 2,
                     width * 0.7,
@@ -182,6 +192,8 @@ export default function CleanTote({openMenu}) {
             }
             create() {
                 let noDebris = false;
+                let toteClean = false;
+                let toteSanitized = false;
                 const { width, height } = this.scale;
                 this.scale.refresh();
                 this.add.image(width / 2, height / 2, "volLocation").setDisplaySize(width, height);
@@ -241,7 +253,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.40,
                     "leaf2"
                 );
-                leaf2Icon.setScale(toteScale* 1.5);
+                leaf2Icon.setScale(toteScale * 1.5);
                 leaf2Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf2Icon);
 
@@ -252,7 +264,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.40,
                     "leaf3"
                 );
-                leaf3Icon.setScale(toteScale* 1.5);
+                leaf3Icon.setScale(toteScale * 1.5);
                 leaf3Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf3Icon);
 
@@ -263,7 +275,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.55,
                     "leaf4"
                 );
-                leaf4Icon.setScale(toteScale* 2);
+                leaf4Icon.setScale(toteScale * 2);
                 leaf4Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf4Icon);
 
@@ -274,7 +286,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.65,
                     "leaf5"
                 );
-                leaf5Icon.setScale(toteScale* 2);
+                leaf5Icon.setScale(toteScale * 2);
                 leaf5Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf5Icon);
 
@@ -285,7 +297,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.60,
                     "leaf6"
                 );
-                leaf6Icon.setScale(toteScale* 1.5);
+                leaf6Icon.setScale(toteScale * 1.5);
                 leaf6Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf6Icon);
 
@@ -296,7 +308,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.45,
                     "leaf7"
                 );
-                leaf7Icon.setScale(toteScale* 1.5);
+                leaf7Icon.setScale(toteScale * 1.5);
                 leaf7Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf7Icon);
 
@@ -307,7 +319,7 @@ export default function CleanTote({openMenu}) {
                     height * 0.60,
                     "leaf8"
                 );
-                leaf8Icon.setScale(toteScale* 1.5);
+                leaf8Icon.setScale(toteScale * 1.5);
                 leaf8Icon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(leaf8Icon);
 
@@ -322,19 +334,6 @@ export default function CleanTote({openMenu}) {
                 bottleIcon.setScale(bottleScale);
                 bottleIcon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(bottleIcon);
-
-                const ragIcon = this.add.image(
-                    width * 0.10,
-                    height * 0.7,
-                    "rag"
-                );
-                const ragScale = (width * 0.15) / ragIcon.width;
-                ragIcon.setScale(ragScale);
-                ragIcon.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(ragIcon);
-                ragIcon.setVisible(false);
-
-
 
                 const sanitizerIcon = this.add.image(
                     width * 0.90,
@@ -363,7 +362,7 @@ export default function CleanTote({openMenu}) {
                 );
                 const trashCanScale = (width * 0.15) / trashCanIcon.width;
                 trashCanIcon.setScale(trashCanScale);
-                
+
 
                 let sprays = 0;
 
@@ -386,7 +385,7 @@ export default function CleanTote({openMenu}) {
                                 console.log("All icons trashed!");
                             }
                         }
-                        
+
                     }
                     else if (gameObject === bottleIcon) {
                         if (!noDebris) {
@@ -412,7 +411,6 @@ export default function CleanTote({openMenu}) {
                             if (sprays === 3) {
                                 gameObject.destroy();
                                 this.dry(toteIcon);
-                                toteIcon.setTexture("sudsyTote");
                             }
                         }
                     }
@@ -429,12 +427,13 @@ export default function CleanTote({openMenu}) {
                                 this.wash("sudsyTote", "cleanToteImg", "faucet");
                                 toteIcon.destroy();
                                 sinkIcon.destroy();
+                                toteClean = true;
                             }
                         }
                     }
                     else if (gameObject === sanitizerIcon) {
                         if (Phaser.Geom.Intersects.RectangleToRectangle(iconBounds, toteZone)) {
-                            if (!toteIcon) {
+                            if (!toteClean) {
                                 sanitizerIcon.setPosition(
                                     width * 0.90,
                                     height * 0.2,
@@ -442,10 +441,9 @@ export default function CleanTote({openMenu}) {
                                 this.showPopup("Drag the sink icon to the tote to rinse before sanitizing.");
                             }
                             else {
-                                this.wash("cleanToteImg", "cleanToteImg", "sanitizer");
-                                cleanToteIcon.preFX.addShine(3, 0.2, 5);
-                                sanitizerIcon.destroy();
-                                this.showPopup("This tote is now ready for use!");
+                                    this.wash("cleanToteImg", "cleanToteImg", "sanitizer");
+                                    cleanToteIcon.preFX.addShine(3, 0.5, 5);
+                                    sanitizerIcon.destroy();
                             }
                         }
                     }
@@ -504,13 +502,6 @@ export default function CleanTote({openMenu}) {
                     ]
                 );
 
-                const graphics = this.add.graphics({
-                    fillStyle: { color: 0x4f59a8 },
-                    lineStyle: { width: 4, color: 0x4f59a8 }
-                });
-                graphics.alpha = 0.5;
-                graphics.fillPoints(waterZone.points);
-
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     if (gameObject === sinkIcon) {
 
@@ -523,10 +514,13 @@ export default function CleanTote({openMenu}) {
                             icon.alpha = Math.max(0, icon.alpha - 0.0025);
 
                             if (icon.alpha <= 0) {
+                                if (moveable === "sanitizer") {
+                                    this.toteSanitized = true;
+                                    this.showPopup("This tote is now ready for use!");
+                                }
                                 icon.destroy();
                                 cleanIcon.destroy();
                                 sinkIcon.destroy();
-                                graphics.destroy();
                                 this.volScreen.destroy(true);
                                 return;
                             }
@@ -534,79 +528,6 @@ export default function CleanTote({openMenu}) {
                     }
                 });
             }
-
-            /*dry(icon) {
-                const { width, height } = this.scale;
-
-                const gridSize = 20; // size of each cell
-                const cells = [];
-
-                const iconZone = icon.getBounds();
-
-                for (let x = iconZone.x; x < iconZone.right; x += gridSize) {
-                    for (let y = iconZone.y; y < iconZone.bottom; y += gridSize) {
-                        cells.push({
-                            x,
-                            y,
-                            cleared: false
-                        });
-                    }
-                }
-
-                // Create render texture same size as long hand
-                const dirtyBoardRT = this.add.renderTexture(
-                    dirtyBoard.x,
-                    dirtyBoard.y,
-                    dirtyBoard.displayWidth,
-                    dirtyBoard.displayHeight
-                );
-
-                // Draw the hidden long hand into render texture so user can erase it
-                dirtyBoardRT.draw(
-                    dirtyBoard,
-                    dirtyBoard.displayWidth / 2,
-                    dirtyBoard.displayHeight / 2
-                );
-
-                dirtyBoard.destroy();
-
-                const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
-                eraseBrush.fillStyle(0xffffff);
-                eraseBrush.fillCircle(0, 0, width * 0.08);
-
-                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-                    if (gameObject !== bottleIcon) return;
-
-
-                    bottleIcon.x = dragX;
-                    bottleIcon.y = dragY;
-
-                    dirtyBoardRT.erase(eraseBrush, dragX, dragY);
-                    cells.forEach(cell => {
-                        if (!cell.cleared) {
-                            if (
-                                dragX > cell.x &&
-                                dragX < cell.x + gridSize &&
-                                dragY > cell.y &&
-                                dragY < cell.y + gridSize
-                            ) {
-                                cell.cleared = true;
-                            }
-                        }
-                    });
-                    const clearedCount = cells.filter(c => c.cleared).length;
-                    const percentCleared = clearedCount / cells.length;
-                    if (!sprayed && percentCleared > 0.13) {
-                        bottleIcon.destroy();
-                        dirtyBoardRT.destroy();
-                        sprayed = true;
-                        wetBoard.destroy();
-                        this.dryBoard();
-                        this.volScreen.destroy(true);
-                        return;
-                    }
-                });
-            }*/
 
             dry(icon) {
                 const { width, height } = this.scale;
@@ -651,8 +572,8 @@ export default function CleanTote({openMenu}) {
                 );
 
                 const ragIcon = this.add.image(
-                    width / 6,
-                    height / 6,
+                    width * 0.10,
+                    height * 0.7,
                     "rag"
                 );
                 const ragScale = (width * 0.15) / ragIcon.width;
@@ -696,6 +617,7 @@ export default function CleanTote({openMenu}) {
                     if (percentCleared > 0.10) {
                         ragIcon.destroy();
                         dirtyToteRT.destroy();
+                        icon.setTexture("sudsyTote");
                         return;
                     }
                 });
@@ -745,8 +667,9 @@ export default function CleanTote({openMenu}) {
                     overlay.destroy(true);
                     this.popupOpen = false;
 
-                    if (inputText === "This tote is now ready for use!") {
-                        moduleUpdate(`${API}/api/game/module4/cleanTote/completed`)
+                    if (this.toteSanitized) {
+                        this.showPopup("This tote is now ready for use!");
+                        moduleUpdate(`${API}/api/game/module4/cleanTote/completed`);
                         navigate("/module4/coolerPack", { replace: true });
                     }
 
@@ -954,44 +877,44 @@ export default function CleanTote({openMenu}) {
 
                 }}
             />
- 
-                    <div
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 180,
-                        padding: "10px",
-                        display: "flex",
-                        gap: "10px",
-                        zIndex: 30000
-                    }}
-                    >
 
-            { gameStage === "cleanStage" && (
-                <button
-                onClick={() => {
-                    if (phaserGameRef.current) {
-                    const scene = phaserGameRef.current.scene.getScene("CleanToteScene");
-                    if (scene?.scene?.isActive()) {
-                        scene.showInstructions();
-                    }
-                    }
-                }}
+            <div
                 style={{
-                    font: "bold 20px sans-serif",
-                    backgroundColor: "#ffffff",
-                    color: "#5100ff",
-                    padding: "5px 9px",
-                    cursor: "pointer"
+                    position: "absolute",
+                    top: 0,
+                    right: 180,
+                    padding: "10px",
+                    display: "flex",
+                    gap: "10px",
+                    zIndex: 30000
                 }}
-                >
-                ?
-                </button>
-            )}
+            >
 
-            <Settings openMenu={openMenu} />
-            </div>  
-          
+                {gameStage === "cleanStage" && (
+                    <button
+                        onClick={() => {
+                            if (phaserGameRef.current) {
+                                const scene = phaserGameRef.current.scene.getScene("CleanToteScene");
+                                if (scene?.scene?.isActive()) {
+                                    scene.showInstructions();
+                                }
+                            }
+                        }}
+                        style={{
+                            font: "bold 20px sans-serif",
+                            backgroundColor: "#ffffff",
+                            color: "#5100ff",
+                            padding: "5px 9px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        ?
+                    </button>
+                )}
+
+                <Settings openMenu={openMenu} />
+            </div>
+
 
         </div>
     );
