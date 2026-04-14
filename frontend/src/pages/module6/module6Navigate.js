@@ -21,7 +21,7 @@ export default function M6Nav() {
             const data = await response.json();
             // parse data
             if(!data.serviceSetup)
-                navigate('/module6/foodServieSetUp', { replace: true });
+                navigate('/module6/foodServiceSetUp', { replace: true });
             else if(!data.foodServiceMishaps)
                 navigate('/module6/foodServiceMishaps', { replace: true });
             else

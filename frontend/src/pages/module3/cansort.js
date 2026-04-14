@@ -42,7 +42,7 @@ export default function Cans({ openMenu }) {
             ];
 
             instructions = [
-                "In the following game, the volunteer will sort items based on whether the packaging is damaged and should be discarded.\n\nIf the item is questionable, drag the item to the box with the ❌ to ask a supervisor. If it is good to be used, drag it to the box with the ✅."
+                "In the following game, the volunteer will sort items based on whether the packaging is damaged and should be discarded.\n\nIf the item is questionable, drag the item to the box with the X to ask a supervisor. If it is good to be used, drag it to the box with the check."
             ];
 
             transitions = [
@@ -70,50 +70,50 @@ export default function Cans({ openMenu }) {
                 this.load.image("erinText", erinText);
                 this.load.image("next", next);
             }
-            
+
             showPopup(inputText) {
-                    const { width, height } = this.scale;
+                const { width, height } = this.scale;
 
-                    const overlay = this.add.container(0, 0);
+                const overlay = this.add.container(0, 0);
 
-                    const bg = this.add.rectangle(
-                        width / 2,
-                        height / 2,
-                        width * 0.8,
-                        height * 0.8,
-                        0xffffff
-                    ).setStrokeStyle(4, 0x000000);
+                const bg = this.add.rectangle(
+                    width / 2,
+                    height / 2,
+                    width * 0.8,
+                    height * 0.8,
+                    0xffffff
+                ).setStrokeStyle(4, 0x000000);
 
-                    const text = this.add.text(
-                        width / 2,
-                        height / 2,
-                        inputText,
-                        {
-                            font: "bold 50px sans-serif",
-                            color: "#000",
-                            wordWrap: { width: width * 0.7 }
-                        }
-                    ).setOrigin(0.5);
+                const text = this.add.text(
+                    width / 2,
+                    height / 2,
+                    inputText,
+                    {
+                        font: "bold 50px sans-serif",
+                        color: "#000",
+                        wordWrap: { width: width * 0.7 }
+                    }
+                ).setOrigin(0.5);
 
-                    const close = this.add.text(
-                        width * 0.85,
-                        height * 0.15,
-                        "X",
-                        {
-                            font: "40px Arial",
-                            backgroundColor: "#ff0000",
-                            padding: { x: 20, y: 10 }
-                        }
-                    )
+                const close = this.add.text(
+                    width * 0.85,
+                    height * 0.15,
+                    "X",
+                    {
+                        font: "40px Arial",
+                        backgroundColor: "#ff0000",
+                        padding: { x: 20, y: 10 }
+                    }
+                )
                     .setInteractive()
                     .setOrigin(0.5);
 
-                    close.on("pointerdown", () => {
-                        overlay.destroy(true);
-                    });
+                close.on("pointerdown", () => {
+                    overlay.destroy(true);
+                });
 
-                    overlay.add([bg, text, close]);
-                }
+                overlay.add([bg, text, close]);
+            }
 
             create() {
                 // Background
@@ -130,6 +130,16 @@ export default function Cans({ openMenu }) {
                 const scale = Math.min(scaleX, scaleY);
 
                 this.bg1.setScale(scale);
+
+                this.xMark = this.add.image(this.bg1.width / 2 - this.bg1.width * 0.27, this.markY, "x")
+                    .setScale(0.5)
+                    .setInteractive({ pixelPerfect: true })
+                    .setVisible(false);
+
+                this.check = this.add.image(this.bg1.width / 2 + this.bg1.width * 0.30, this.markY, "check")
+                    .setScale(0.5)
+                    .setInteractive()
+                    .setVisible(false);
 
                 this.canX = this.bg1.width / 2 - 150;
                 this.canY = this.bg1.height / 2;
@@ -181,16 +191,6 @@ export default function Cans({ openMenu }) {
                     .setVisible(false);
 
                 // Buttons
-                this.xMark = this.add.image(this.bg1.width / 2 - this.bg1.width * 0.27, this.markY, "x")
-                    .setScale(0.5)
-                    .setInteractive({ pixelPerfect: true })
-                    .setVisible(false);
-
-                this.check = this.add.image(this.bg1.width / 2 + this.bg1.width * 0.30, this.markY, "check")
-                    .setScale(0.5)
-                    .setInteractive()
-                    .setVisible(false);
-
                 this.next = this.add.image(
                     this.erinX * 1.25,
                     this.erinY * 5.00,
@@ -323,7 +323,7 @@ export default function Cans({ openMenu }) {
             }
 
             typewriteText(text, type, speed = 5) {
-                if (type == "popup"){
+                if (type == "popup") {
                     this.showPopup(text);
                     return;
                 }
@@ -351,40 +351,44 @@ export default function Cans({ openMenu }) {
             }
 
             cycleScenarios() {
-                    console.log(this.canScenario);
-                        this.typewriteText(this.canScenario[0].question);
+                console.log(this.canScenario);
+                this.typewriteText(this.canScenario[0].question);
 
-                        this.canScenario[this.canScenario.length - 1].damageType.setVisible(false);
-                        this.canScenario[0].damageType.setVisible(true);
-                        this.canScenario[0].damageType.setInteractive({ useHandCursor: true });
-                        this.input.setDraggable(this.canScenario[0].damageType);
+                this.canScenario[this.canScenario.length - 1].damageType.setVisible(false);
+                this.canScenario[0].damageType.setVisible(true);
+                this.canScenario[0].damageType.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(this.canScenario[0].damageType);
 
-                        this.xMark.setVisible(true);
-                        this.check.setVisible(true);
-                        this.next.setVisible(false);
+                this.xMark.setVisible(true);
+                this.check.setVisible(true);
+                this.next.setVisible(false);
 
-                        this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-                            gameObject.x = dragX;
-                            gameObject.y = dragY;
-                        });
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    gameObject.x = dragX;
+                    gameObject.y = dragY;
+                });
 
-                        this.canScenario[0].damageType.on("dragend", () => {
+                this.canScenario[0].damageType.on("dragend", () => {
 
-                            const itemBounds = this.canScenario[0].damageType.getBounds();
-                            const checkBounds = this.check.getBounds();
-                            const xBounds = this.xMark.getBounds();
+                    const itemBounds = this.canScenario[0].damageType.getBounds();
+                    const checkBounds = this.check.getBounds();
+                    const xBounds = this.xMark.getBounds();
 
-                            if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, checkBounds)) {
-                                this.handleAnswer(this.canScenario, this.check);
-                            }
-                            else if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, xBounds)) {
-                                this.handleAnswer(this.canScenario, this.xMark);
-                            }
-                        });
-                };
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, checkBounds)) {
+                        this.handleAnswer(this.canScenario, this.check);
+                    }
+                    else if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, xBounds)) {
+                        this.handleAnswer(this.canScenario, this.xMark);
+                    }
+                    else {
+                        this.canScenario[0].damageType.x = this.canX;
+                        this.canScenario[0].damageType.y = this.canY;
+                    }
+                });
+            };
 
             handleAnswer(scenarios, button) {
-                
+
                 this.scenario = scenarios[0];
 
                 if (
@@ -395,7 +399,7 @@ export default function Cans({ openMenu }) {
                     this.textboxText.setColor("rgb(0, 133, 0)");
                     this.typewriteText(this.scenario.popup, "popup");
                     scenarios.shift();
-                    
+
                     if (scenarios.length > 0) {
                         this.textboxText.setColor("#000");
                         this.textbox.setScale(this.textboxScale);
@@ -418,7 +422,7 @@ export default function Cans({ openMenu }) {
                     this.textboxText.setColor("rgb(252, 0, 0)");
                     this.typewriteText(this.scenario.popup, "popup");
                 }
-                
+
                 if (scenarios.length === 0) {
                     this.textboxText.setColor("#000");
                     this.textboxErin.setScale(1.05);
@@ -469,7 +473,7 @@ export default function Cans({ openMenu }) {
                 backgroundColor: "black"
             }}
         >
-            
+
             <div
                 id="phaser-game"
                 style={{
@@ -481,18 +485,17 @@ export default function Cans({ openMenu }) {
                     zIndex: 1
                 }}
             />
-                    <div
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 180,
-                        padding: "10px",
-                        display: "flex",
-                        zIndex: 30000
-                    }}
-                    >
-                  <Settings openMenu={openMenu}/>
-                </div>
+            <div
+                style={{
+                    position: "absolute",
+                    top: "4px",
+                    right: "110px",
+                    width: "100px",
+                    zIndex: 30000
+                }}
+            >
+                <Settings openMenu={openMenu} />
+            </div>
         </div>
     );
 }
