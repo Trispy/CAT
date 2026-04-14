@@ -232,15 +232,15 @@ router.get('/moduleSummary', requireAuth, async (req, res) => {
       },
       finished_m4: user.finished_m4,
       module4: {
-        cleanTote: mod4?.module4part1 ?? false,
-        sorting: mod4?.module4part2 ?? false,
-        packing: mod4?.module4part3 ?? false
+        cleanTote: mod4?.cleanTote ?? false,
+        sorting: mod4?.sorting ?? false,
+        packing: mod4?.packing ?? false
       },
 
       finished_m5: user.finished_m5,
       module5: {
-        cold: mod5?.module5part1 ?? false,
-        hot: mod5?.module5part2 ?? false,
+        cold: mod5?.cold ?? false,
+        hot: mod5?.hot ?? false,
       },
       finished_m6: user.finished_m6,
       module6: {
@@ -337,6 +337,90 @@ router.get("/module3/status", requireAuth, async (req, res) => {
   }
 });
 
+//mod 4 routes
+
+// mark as complete
+router.post(
+  "/module4/toteCleaning/completed",
+  checkAccess("module4", "cleanTote"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+      console.log(req.user);
+
+      const updated = await Module4.findOneAndUpdate(
+        { username },
+        { cleanTote: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+router.post(
+  "/module4/sorting/completed",
+  checkAccess("module4", "sorting"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const updated = await Module4.findOneAndUpdate(
+        { username },
+        { sorting: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+router.post(
+  "/module4/packing/completed",
+  checkAccess("module4", "packing"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const updated = await Module4.findOneAndUpdate(
+        { username },
+        { packing: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+// status
+router.get("/module4/status", requireAuth, async (req, res) => {
+  try {
+    const username = req.user.username;
+    console.log("TESTING");
+    console.log(req.user);
+
+    const data = await Module4.findOne({ username });
+
+    res.json({
+      cleanTote: data?.cleanTote || false,
+      sorting: data?.sorting || false,
+      packing: data?.packing || false
+    });
+  } catch (err) {
+    res.status(500).json({ message: req.user.username });
+  }
+});
+
+
 //mod 5 routes
 
 // mark as complete
@@ -397,5 +481,68 @@ router.get("/module5/status", requireAuth, async (req, res) => {
     res.status(500).json({ message: req.user.username });
   }
 });
+
+//mod 6 routes
+
+// mark as complete
+router.post(
+  "/module6/serviceSetup/completed",
+  checkAccess("module6", "serviceSetup"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+      console.log(req.user);
+
+      const updated = await Module6.findOneAndUpdate(
+        { username },
+        { serviceSetup: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+router.post(
+  "/module6/foodServiceMishaps/completed",
+  checkAccess("module6", "foodServiceMishaps"),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const updated = await Module6.findOneAndUpdate(
+        { username },
+        { foodServiceMishaps: true },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  }
+);
+
+// status
+router.get("/module6/status", requireAuth, async (req, res) => {
+  try {
+    const username = req.user.username;
+    console.log("TESTING");
+    console.log(req.user);
+
+    const data = await Module6.findOne({ username });
+
+    res.json({
+      serviceSetup: data?.serviceSetup || false,
+      foodServiceMishaps: data?.foodServiceMishaps || false,
+    });
+  } catch (err) {
+    res.status(500).json({ message: req.user.username });
+  }
+});
+
 
 module.exports = router;

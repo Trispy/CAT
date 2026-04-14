@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 
+import callUpdate from "../../components/callupdate";
+import moduleUpdate from "../../components/moduleupdate";
+
 import bg1 from "../../assets/M6G2/ClearCounterBackground.png";
 import bg2 from "../../assets/M6G1/FoodScene.PNG";
 import healthy from "../../assets/M1G1/Healthy.png";
@@ -544,6 +547,8 @@ export default function FoodServiceMishaps({ openMenu }) {
                     }          
                     else {
                         this.cleanUpScene();
+                        callUpdate("m6");
+                        moduleUpdate(`${API}/api/game/module6/foodServiceMishaps/completed`);
                         window.navigateToPage("/map");
                     }
                 });

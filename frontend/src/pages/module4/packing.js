@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
+import callUpdate from "../../components/callupdate.js";
 import moduleUpdate from "../../components/moduleupdate.js";
 
 import Textbox from "../../components/textbox";
@@ -541,7 +542,11 @@ export default function TruckPack({ openMenu }) {
             )}
             {fridgeState === "complete" && (
                 <div
-                    onClick={() => window.navigateToPage("/map")}
+                    onClick={() => {
+                        moduleUpdate(`${API}/api/game/module4/packing/completed`);
+                        callUpdate("m4");
+                        window.navigateToPage("/map")
+                    }}
                     style={overlayStyle}
                 >
                     <div

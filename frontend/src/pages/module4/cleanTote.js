@@ -743,8 +743,10 @@ export default function CleanTote({openMenu}) {
                     overlay.destroy(true);
                     this.popupOpen = false;
 
-                    if (inputText === "This tote is now ready for use!")
+                    if (inputText === "This tote is now ready for use!") {
+                        moduleUpdate(`${API}/api/game/module4/toteCleaning/completed`)
                         navigate("/module4/coolerPack", { replace: true });
+                    }
 
 
                     if (this.currentSprite && this.currentSprite.scene) {

@@ -186,7 +186,7 @@ function Map({ openMenu }) {
 
                     mod4.setInteractive();
                     mod4.on("pointerdown", () => {
-                        window.navigateToPage("/module4/toteCleaning");
+                        window.navigateToPage("/module4");
                     });
                 }
                 // mod 5
@@ -206,7 +206,7 @@ function Map({ openMenu }) {
 
                     mod5.setInteractive();
                     mod5.on("pointerdown", () => {
-                        window.navigateToPage("/module5/coldPreparedTransport");
+                        window.navigateToPage("/module5");
                     });
                 }
                 // mod 6
@@ -226,7 +226,7 @@ function Map({ openMenu }) {
 
                     mod6.setInteractive();
                     mod6.on("pointerdown", () => {
-                        window.navigateToPage("/module6/foodServiceSetUp");
+                        window.navigateToPage("/module6");
                     });
                 } 
 
