@@ -364,6 +364,9 @@ export default function TruckPack({ openMenu }) {
                 });
             }
         }
+        else if (fridgeState === "complete") {
+            window.navigateToPage("/map");
+        }
     };
     const handleInstructionClick = () => {
 
