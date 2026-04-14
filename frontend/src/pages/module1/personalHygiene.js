@@ -60,7 +60,7 @@ function PersonalHygiene({ openMenu }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate(); // link to next game when finished
 
-    function useTypewriter(text, isActive, speed = 50) { //this is the type writer that actually types the text out one character at a time. It takes in the text to display, whether it should be active, and the speed of typing.
+    function useTypewriter(text, isActive, speed = 25) { //this is the type writer that actually types the text out one character at a time. It takes in the text to display, whether it should be active, and the speed of typing.
         const [typedText, setTypedText] = useState("");
         const hasStarted = useRef(false);
 

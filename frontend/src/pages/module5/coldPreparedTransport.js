@@ -701,7 +701,7 @@ export default function ColdPrepTransport({ openMenu }) {
                 }
                 return false;
             }
-            typewriteText(text, type, speed = 50) {
+            typewriteText(text, type, speed = 25) {
                 //removes old timer before new one starts
                 if (!text) return;
                 if (this.typingEvent) {

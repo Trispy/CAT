@@ -322,7 +322,7 @@ export default function Cans({ openMenu }) {
 
             }
 
-            typewriteText(text, type, speed = 5) {
+            typewriteText(text, type, speed = 25) {
                 if (type == "popup") {
                     this.showPopup(text);
                     return;

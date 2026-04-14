@@ -637,7 +637,7 @@ export default function Expiration({ openMenu }) {
                     this.xMark.setVisible(true);
                     this.check.setVisible(true);
                 }
-            typewriteText(text, type, speed = 5) {
+            typewriteText(text, type, speed = 25) {
                 if (type == "popup"){
                     this.showPopup(text);
                     return;

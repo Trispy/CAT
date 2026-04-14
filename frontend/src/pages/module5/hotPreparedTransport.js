@@ -807,7 +807,7 @@ export default function HotPrepTransport({ openMenu }) {
             })
         }
     
-            typewriteText(text, type, speed = 50) {
+            typewriteText(text, type, speed = 25) {
                 //removes old timer before new one starts
                 if (!text) return;
                 if (this.typingEvent) {

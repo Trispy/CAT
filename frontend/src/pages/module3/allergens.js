@@ -446,7 +446,7 @@ export default function Allergens({ openMenu }) {
 
             }
 
-            typewriteText(text, type, speed = 30) {
+            typewriteText(text, type, speed = 25) {
                 //removes old timer before new one starts
                 if (this.typingEvent) {
                     this.typingEvent.remove(false);

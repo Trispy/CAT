@@ -1010,7 +1010,7 @@ export default function ServiceSetUps({ openMenu }) {
                 this.typewriteText(this.gameMessages[0]);
                 this.gameMessages.shift();
         }
-            typewriteText(text, type, speed = 50) {
+            typewriteText(text, type, speed = 25) {
                 //removes old timer before new one starts
                 if (!text) return;
                 if (this.typingEvent) {

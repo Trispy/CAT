@@ -81,7 +81,7 @@ function Module2Part1({ openMenu }) {
         backgroundColor: 'black'
     };
 
-    function useTypewriter(text, isActive, speed = 50) {
+    function useTypewriter(text, isActive, speed = 25) {
         const [typedText, setTypedText] = useState("");
         const hasStarted = useRef(false);
 
