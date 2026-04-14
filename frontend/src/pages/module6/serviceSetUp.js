@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 
+import moduleUpdate from "../../components/moduleupdate";
+
 import bg1 from "../../assets/M6G1/SetUpScene.PNG";
 import bg2 from "../../assets/M6G1/FoodScene.PNG";
 import healthy from "../../assets/M1G1/Healthy.png";
@@ -35,6 +37,8 @@ import { defaultFontColor } from "../../formatting";
 import { defaultTypingSpeed } from "../../formatting";
 import Settings from "../../components/settings";
 import { useNavigate } from "react-router-dom";
+
+const API = process.env.REACT_APP_API_URL;
 
 export default function ServiceSetUps({ openMenu }) {
     const phaserGameRef = useRef(null);
@@ -568,6 +572,7 @@ export default function ServiceSetUps({ openMenu }) {
                         this.transitions.shift();
                     }
                     else {
+                        moduleUpdate(`${API}/api/game/module6/serviceSetup/completed`);
                         navigate("/module6/foodServiceMishaps")
                         this.cleanupScene();
                     }

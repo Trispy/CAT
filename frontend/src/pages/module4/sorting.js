@@ -617,7 +617,10 @@ export default function CoolerPack({ openMenu }) {
             )}
             {fridgeState === "complete" && (
                 <div
-                    onClick={() => window.navigateToPage("/module4/packTruck")}
+                    onClick={() => {
+                        moduleUpdate(`${API}/api/game/module4/sorting/completed`);
+                        window.navigateToPage("/module4/packTruck")
+                    }}
                     style={overlayStyle}
                 >
                     <div

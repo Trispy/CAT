@@ -30,6 +30,8 @@ import Settings from "../../components/settings";
 import plainBackground from "../../assets/Plainbackground.png";
 import faucet from "../../assets/M4G1/faucet.png";
 
+const API = process.env.REACT_APP_API_URL;
+
 export default function CleanTote({openMenu}) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
@@ -743,8 +745,10 @@ export default function CleanTote({openMenu}) {
                     overlay.destroy(true);
                     this.popupOpen = false;
 
-                    if (inputText === "This tote is now ready for use!")
+                    if (inputText === "This tote is now ready for use!") {
+                        moduleUpdate(`${API}/api/game/module4/cleanTote/completed`)
                         navigate("/module4/coolerPack", { replace: true });
+                    }
 
 
                     if (this.currentSprite && this.currentSprite.scene) {
