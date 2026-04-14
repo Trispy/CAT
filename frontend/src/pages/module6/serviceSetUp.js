@@ -102,7 +102,7 @@ export default function ServiceSetUps({ openMenu }) {
                 "If you are serving food, remember not to touch areas food touches.",
                 "Make sure that ice is always served using a scoop rather than hands.",
                 "Finally, continue to check the food temperature during food service, to ensure the serving containers are maintaining food at a safe temperature.",
-                "Click the next button to return to the modules map."
+                "Click the next button to learn about food service mishaps."
             ];
 
             constructor() {

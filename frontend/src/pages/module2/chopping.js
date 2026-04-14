@@ -99,14 +99,14 @@ export default function Cleaning({ openMenu }) {
         "4. Make sure to change gloves in between each food by dragging the gloves to the volunteer.",
         "5. Make sure to clean the cutting board in between each item by clicking on the spray bottle.",
         "6. Now drag the beef thats on top of the fridge onto the cutting board. Make sure that you have fresh gloves and clean cutting board before you proceed.",
-        "7. The items you will clean and cut are the bell peppers and onions that are located in the cabinet and the beef that is located on the top of the fridge.",
+        "7. The items you will clean and cut are the bell peppers, onions, and beef, which are all located in the fridge.",
         "Click the '?' button in the bottom right side if you want to refer back to these instructions."
     ];
 
     const instructionTypewriter = useTypewriter(
         instructionTexts[instructionStep],
         gameStage === "instructions" && instructionStep >= 0,
-        30
+        25
     );
 
     const startPhaser = () => {
