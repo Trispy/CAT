@@ -959,7 +959,7 @@ function Module2Part1({ openMenu }) {
         true
     );
     const thermometerInstructions = useTypewriter(
-        "Drag the bottom of the thermometer hand to the light blue to light red area of the thermometer to set the fridge to the correct temperature. Click anywhere to click out of this textbox.",
+        "Drag the bottom of the thermometer hand to the light blue to light red area of the thermometer to set the fridge to the correct temperature. Click anywhere to continue.",
         thermometerState === "instructions"
     );
     const thermometerSuccessText = useTypewriter(
@@ -987,7 +987,7 @@ function Module2Part1({ openMenu }) {
         gameStage === "HandScene" && showSoapText)
     const soapSuccessText = useTypewriter("All clean! Now, let's put on gloves.",
         gameStage === "HandScene" && handsClean && timerDone)
-    const gloveText = useTypewriter("Make sure to put gloves on before touching any food or food-contact surfaces. Click anywhere to click out of the textbox.",
+    const gloveText = useTypewriter("Make sure to put gloves on before touching any food or food-contact surfaces. Click anywhere to start.",
         gameStage === "gloveStage" && gloveInstruction)
     const gloveSuccessText = useTypewriter("Gloved up!",
         gameStage === "gloveStage" && glovedHands)
