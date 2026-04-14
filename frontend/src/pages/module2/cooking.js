@@ -37,15 +37,15 @@ export default function Cooking({ openMenu }) {
   useEffect(() => {
       window.navigateToPage = navigate;
     class Cooking extends Phaser.Scene {
-      welcomeTexts = ["We'll practice by cooking a meal with the ingredients we just finished preparing."];
-      instructions = ["In this game, drag the bowls of prepared ingredients over to the pans on the stove.\nThen, wait until the thermometer reaches the safe green zone before moving to the next step."];
+      welcomeTexts = ["You will  practice by cooking a meal with the ingredients you just finished preparing."];
+      instructions = ["In this game, drag the bowls of prepared ingredients over to the pans on the stove.\nThen, wait until the thermometer reaches the safe green zone before moving to the next step"];
       gameMessages = ["Drag the bowl of raw beef into the empty pan!", 
         "Drag the bowl of raw peppers into the empty pan! Make sure to keep the vegetables separate from the beef.", 
-        "Draw the bowl of raw onions into the pan with peppers! It’s important to keep the vegetables separate from the meat.",
+        "Drag the bowl of raw onions into the pan with peppers! It’s important to keep the vegetables separate from the meat.",
         "Drag the meat thermometer to the center of the beef pan!",
         "Drag the vegetable thermometer to the center of the vegetable pan!",
-        "Wait for the ingredients to reach the green zone temperature before moving on!",
-        "Great job! The vegetables and beef have reached a safe internal temperature. Now, we can plate the food."];
+        "Wait for both ingredients to reach the green zone temperature!",
+        "Great job! The beef has reached a safe internal temperature. Now, we can plate the food."];
       mealMessages = ["Great job! The food is all plated.",
         "You’ve now reached the end of the food safety basics module. Click the next button to go back to the home page!"
       ];
