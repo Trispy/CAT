@@ -760,7 +760,7 @@ export default function Location({ openMenu }) {
 
                     <Textbox
                         width="70dvw"
-                        height="60dvh"
+                        height="70dvh"
                         placeholder={apronSuccessText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.8vw"
@@ -849,8 +849,8 @@ export default function Location({ openMenu }) {
                         }}
                     >
                         <Textbox
-                            width="70%"
-                            height="70%"
+                            width="70dvw"
+                            height="70dvh"
                             placeholder={gloveText}
                             placeHolderColor="#000000"
                             placeHolderfontSize="1.8vw"
