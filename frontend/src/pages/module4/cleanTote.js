@@ -30,6 +30,8 @@ import Settings from "../../components/settings";
 import plainBackground from "../../assets/Plainbackground.png";
 import faucet from "../../assets/M4G1/faucet.png";
 
+const API = process.env.REACT_APP_API_URL;
+
 export default function CleanTote({openMenu}) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();

@@ -38,6 +38,8 @@ import { defaultTypingSpeed } from "../../formatting";
 import Settings from "../../components/settings";
 import { useNavigate } from "react-router-dom";
 
+const API = process.env.REACT_APP_API_URL;
+
 export default function ServiceSetUps({ openMenu }) {
     const phaserGameRef = useRef(null);
     const navigate = useNavigate();
