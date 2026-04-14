@@ -98,7 +98,7 @@ export default function Cleaning({ openMenu }) {
         "3. Next, cut one of the vegetables.",
         "4. Make sure to change gloves in between each food by dragging the gloves to the volunteer.",
         "5. Make sure to clean the cutting board in between each item by clicking on the spray bottle.",
-        "6. Now drag the beef thats on top of the fridge onto the cutting board. Make sure that you have fresh gloves and clean cutting board before you proceed.",
+        "6. Now drag the beef package onto the cutting board. Make sure that you have fresh gloves and clean cutting board before you proceed.",
         "7. The items you will clean and cut are the bell peppers, onions, and beef, which are all located in the fridge.",
         "Click the '?' button in the bottom right side if you want to refer back to these instructions."
     ];
@@ -206,7 +206,7 @@ export default function Cleaning({ openMenu }) {
 
                 const close = this.add.text(
                     width * 0.84,
-                    height * 0.17,
+                    height * 0.20,
                     "X",
                     {
                         font: "40px Arial",

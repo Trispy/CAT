@@ -122,12 +122,12 @@ export default function Allergens({ openMenu }) {
 
                     const close = this.add.text(
                         width * 0.85,
-                        height * 0.15,
+                        height * 0.20,
                         "X",
                         {
                             font: "40px Arial",
                             backgroundColor: "#ff0000",
-                            padding: { x: 20, y: 10 }
+                            padding: { x: 30, y: 20 }
                         }
                     )
                     .setInteractive()

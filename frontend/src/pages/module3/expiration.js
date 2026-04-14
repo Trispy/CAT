@@ -133,7 +133,7 @@ export default function Expiration({ openMenu }) {
             ];
 
             instructions = [
-                "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the expiration date or best by date.\n\nIf the item should be discarded, drag the item to the box with the X. If it is good to be used, drag it to the box with the check.",
+                "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the expiration date or best by date.\n\nIf the item should be discarded, drag the item to the box with the ❌. If it is good to be used, drag it to the box with the ✅.",
                 "In this module, we will following the following rules for expiration dates and best by dates: ",
                 "Items with expiraton dates should be disposed of if the date is even one more day after the expiration date. Expiration date is a hard deadline.",
                 "For best by date, we will use a specific rule but many food banks use a different rule, so remember to consult your supervisor on the rules.",
@@ -185,7 +185,7 @@ export default function Expiration({ openMenu }) {
                 const text = this.add.text(
                     width / 2,
                     height / 2,
-                    this.instructions.join("\n\n"),
+                    allInstructions.join("\n\n"),
                     {
                         font: "30px Arial",
                         color: "#000",
