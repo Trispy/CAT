@@ -57,7 +57,7 @@ export default function TruckPack({ openMenu }) {
     const instructionTypewriter = useTypewriter(
         instructionTexts[instructionStep],
         gameStage === "instructions" && instructionStep >= 0,
-        30
+        25
     );
 
     const fridgeFailText = useTypewriter(

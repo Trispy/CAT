@@ -79,7 +79,7 @@ export default function CleanTote({ openMenu }) {
     const instructionTypewriter = useTypewriter(
         instructionTexts[instructionStep],
         gameStage === "instructions" && instructionStep >= 0,
-        30
+        25
     );
 
     const startPhaser = () => {
