@@ -33,7 +33,7 @@ export default function Expiration({ openMenu }) {
                 "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the expiration date or best by date.\n\nIf the item should be discarded, drag the item to the box with the ❌. If it is good to be used, drag it to the box with the ✅.",
                 "Items with expiraton dates should be disposed of if the date is even one more day after the expiration date. Expiration date is a hard deadline.",
                 "For best by date, we will use a specific rule, but many food banks use a different rule. Thus, remember to consult your supervisor on the rules.",
-                "For this module, items with best buy dates should be disposed of if the date is 6 months after the expiration date."
+                "For this game, items with best buy dates should be disposed of if the date is 6 months after the expiration date."
                 
             ];
     const today = new Date();
@@ -128,21 +128,21 @@ export default function Expiration({ openMenu }) {
             markY = 750;
 
             welcomeTexts = [
-                "In this module, you will learn when to dispose of foods based on expiration dates, sell by dates, and best by dates",
-                "You will only work with expiration dates and best by dates in this module. Sell by dates are for stores to know when to put an item out."
+                "In this game, you will learn when to dispose of foods based on date-labeling phrases.",
+                "You will only work with Use-By and Best-By dates in this game. Sell-By dates are for stores to know when to put an item on shelves."
             ];
 
             instructions = [
-                "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the expiration date or best by date.\n\nIf the item should be discarded, drag the item to the box with the X. If it is good to be used, drag it to the box with the check.",
-                "In this module, we will following the following rules for expiration dates and best by dates: ",
-                "Items with expiraton dates should be disposed of if the date is even one more day after the expiration date. Expiration date is a hard deadline.",
-                "For best by date, we will use a specific rule but many food banks use a different rule, so remember to consult your supervisor on the rules.",
-                "For this module, items with best buy dates should be disposed of if the date is 6 months after the expiration date."
+                "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the Use-By or Best-By date.\n\nIf the item should be discarded, drag the item to the box with the X. If it is good to be used, drag it to the box with the check.",
+                "In this game, we will be following the rules for Use-By and Best-By dates: ",
+                "Items that have passed their expiration date, even by a single day, must be disposed of. Expiration date is a hard deadline.",
+                "In this game, we will use a specific rule for best-by dates but many food banks use a different rule, so remember to consult your supervisor.",
+                "For the purposes of this minigame, the nonprofit has set the limit they will accept expired food to be 6 months. Look at the date on the package and determine if the current date is past 6 months after the Use-By or Best-By date."
                 
             ];
 
             transitions = [
-                "As a volunteer, you will may be hands on with all sorts of food products. While understanding when a package is good to use is important, it is equally as important to ask a supervisor if you have any questions, or aren't sure whether a package or can is bad."
+                "As a volunteer, you may work with all sorts of food products hands-on. While understanding when a package is good to use is important, it is equally as important to ask a supervisor if you have any questions, or aren't sure whether a package or can is bad."
             ];
 
             constructor() {
@@ -185,7 +185,7 @@ export default function Expiration({ openMenu }) {
                 const text = this.add.text(
                     width / 2,
                     height / 2,
-                    this.instructions.join("\n\n"),
+                    allInstructions.join("\n\n"),
                     {
                         font: "30px Arial",
                         color: "#000",
@@ -405,7 +405,7 @@ export default function Expiration({ openMenu }) {
                         expirationDate: addDays(today, -3),
                         type: "expiration",
                         correct: "dispose",
-                        reason: "1 day past"
+                        reason: "The visual appearance of the chicken indicates it is unsafe to eat, and it is 1 day past the recommended consumption date"
                     },
                     {
                         key: "beefexpired",
@@ -502,7 +502,7 @@ export default function Expiration({ openMenu }) {
                     }
                 }).setOrigin(0);
 
-                this.typewriteText("Welcome to the label interpretation module!");
+                this.typewriteText("In this section, you will learn how to interpret date labeling phrases.");
 
                 this.textbox.setSize(this.textboxImage.width, this.textboxImage.height);
                 this.textbox.add([this.textboxImage, this.textboxText]);
@@ -623,9 +623,9 @@ export default function Expiration({ openMenu }) {
                         let labelText = "";
 
                         if (item.type === "expiration") {
-                            labelText = `Expiration Date: ${formatDate(item.expirationDate)}\n\nToday's Date: ${formatDate(today)}`;
+                            labelText = `Use-By: ${formatDate(item.expirationDate)}\n\nToday's Date: ${formatDate(today)}`;
                         } else {
-                            labelText = `Best By: ${formatDate(item.bestByDate)}\n\nToday's Date: ${formatDate(today)}`;
+                            labelText = `Best-By: ${formatDate(item.bestByDate)}\n\nToday's Date: ${formatDate(today)}`;
                         }
 
                         this.showPopup(labelText);
@@ -638,10 +638,15 @@ export default function Expiration({ openMenu }) {
                     this.check.setVisible(true);
                 }
             typewriteText(text, type, speed = 25) {
-                if (type == "popup"){
+                if (type == "popup") {
                     this.showPopup(text);
                     return;
                 }
+
+                if (this.typingEvent) {
+                    this.typingEvent.remove();
+                }
+
                 this.textboxText.setText("");
                 this.next.disableInteractive();
                 this.xMark.disableInteractive();
@@ -649,7 +654,8 @@ export default function Expiration({ openMenu }) {
 
                 let i = 0;
 
-                this.time.addEvent({
+         
+                this.typingEvent = this.time.addEvent({
                     delay: speed,
                     repeat: text.length - 1,
                     callback: () => {

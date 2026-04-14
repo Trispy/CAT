@@ -37,15 +37,15 @@ export default function Cooking({ openMenu }) {
   useEffect(() => {
       window.navigateToPage = navigate;
     class Cooking extends Phaser.Scene {
-      welcomeTexts = ["We'll practice by cooking a meal with the ingredients we just finished preparing."];
+      welcomeTexts = ["You will practice by cooking a meal with the ingredients you just finished preparing."];
       instructions = ["In this game, drag the bowls of prepared ingredients over to the pans on the stove.\nThen, wait until the thermometer reaches the safe green zone before moving to the next step."];
       gameMessages = ["Drag the bowl of raw beef into the empty pan!", 
         "Drag the bowl of raw peppers into the empty pan! Make sure to keep the vegetables separate from the beef.", 
-        "Draw the bowl of raw onions into the pan with peppers! It’s important to keep the vegetables separate from the meat.",
+        "Drag the bowl of raw onions into the pan with peppers! It’s important to keep the vegetables separate from the meat.",
         "Drag the meat thermometer to the center of the beef pan!",
         "Drag the vegetable thermometer to the center of the vegetable pan!",
-        "Wait for the ingredients to reach the green zone temperature before moving on!",
-        "Great job! The vegetables and beef have reached a safe internal temperature. Now, we can plate the food."];
+        "Wait for both ingredients to reach the green zone temperature!",
+        "Great job! The beef has reached a safe internal temperature. Now, we can plate the food."];
       mealMessages = ["Great job! The food is all plated.",
         "You’ve now reached the end of the food safety basics module. Click the next button to go back to the home page!"
       ];
@@ -125,7 +125,7 @@ export default function Cooking({ openMenu }) {
         this.meatThermometerHand = this.add.image(0,0,'thermometerHand').setOrigin(0).setScale(0.3).setVisible(false).setAngle(90);
 
         this.next = this.add.image(1500, 835, 'next').setOrigin(0).setScale(0.35).setInteractive().setVisible(true);
-        this.typewriteText("In this section, we will practice cooking foods to their proper temperature.");
+        this.typewriteText("In this section, you will practice cooking foods to their proper temperature.");
         this.textbox.setSize(this.textboxImage.width, this.textboxImage.height);
         this.textbox.add([this.textboxImage, this.textboxText]);
         this.textbox.setScale(this.textboxScale);
@@ -195,70 +195,78 @@ export default function Cooking({ openMenu }) {
           }
         })
 
-        this.input.on('drop', (pointer, gameObject, dropZone) => {
-          if (gameObject === this.beefBowl && dropZone === this.beefPan) {
-              this.beefBowl.setVisible(false).disableInteractive();
-              this.beefPan.disableInteractive();
-              this.panBeef.setVisible(true);
-              this.hideIngredient(this.panBeef);
-              this.showIngredient(this.cookedBeef);
-              this.typewriteText(this.gameMessages[0]);
-              this.gameMessages.shift();
-              this.veggiePan.setVisible(true);
-              this.pepperBowl.setVisible(true);
-          }
-          else if (gameObject === this.pepperBowl && dropZone === this.veggiePan) {
-              this.pepperBowl.setVisible(false).disableInteractive();
-              this.panPepper.setVisible(true);
-              this.onionBowl.setVisible(true);
-              this.hideIngredient(this.panPepper);
-              this.showIngredient(this.cookedPepper);
-              this.typewriteText(this.gameMessages[0]);
-              this.gameMessages.shift();
-          }
-          else if (gameObject === this.onionBowl && (dropZone === this.veggiePan || dropZone === this.cookedPepper)) {
-              this.veggiePan.disableInteractive();
-              this.onionBowl.setVisible(false).disableInteractive();
-              this.panOnion.setVisible(true);
-              this.hideIngredient(this.panOnion);
-              this.showIngredient(this.cookedOnion);
-              this.typewriteText(this.gameMessages[0]);
-              this.meatThermometer.setVisible(true);
-              this.meatThermometerHand.setVisible(true);
-              this.gameMessages.shift();
-          }
-          else if (gameObject === this.meatThermometer && dropZone === this.cookedBeef) {
-              this.meatThermometer.x = this.cookedBeef.x;
-              this.meatThermometer.y = this.cookedBeef.y;
-              this.meatThermometerHand.x = this.meatThermometer.getCenter().x;
-              this.meatThermometerHand.y = this.meatThermometer.getCenter().y;
-              this.meatThermometer.disableInteractive();
-              this.typewriteText(this.gameMessages[0]);
-              this.gameMessages.shift();
-              this.veggieThermometer.setVisible(true);
-              this.veggieThermometerHand.setVisible(true);
-              this.growTemp(this.meatThermometerHand);
-
-          }
-        else if (gameObject === this.veggieThermometer && (dropZone === this.cookedPepper || dropZone === this.panPepper || dropZone === this.panOnion || dropZone === this.cookedOnion)) {
-              this.veggieThermometer.x = this.cookedOnion.x;
-              this.veggieThermometer.y = this.cookedOnion.y;
-              this.veggieThermometerHand.x = this.veggieThermometer.getCenter().x;
-              this.veggieThermometerHand.y = this.veggieThermometer.getCenter().y;
-              this.veggieThermometer.disableInteractive();
-              this.typewriteText(this.gameMessages[0]);
-              this.gameMessages.shift();
-              this.growTemp(this.veggieThermometerHand);
-          }
-    });
+    this.input.on('drop', (pointer, gameObject, dropZone) => {
+    if (gameObject === this.beefBowl && dropZone === this.beefPan) {
+        this.beefBowl.setVisible(false).disableInteractive();  // Disable interaction after drop
+        this.beefPan.disableInteractive();
+        this.panBeef.setVisible(true);
+        this.hideIngredient(this.panBeef);
+        this.showIngredient(this.cookedBeef);
+        this.typewriteText(this.gameMessages[0]);
+        this.gameMessages.shift();
+        this.veggiePan.setVisible(true);
+        this.pepperBowl.setVisible(true);
+    }
+    else if (gameObject === this.pepperBowl && dropZone === this.veggiePan) {
+        this.pepperBowl.setVisible(false).disableInteractive();  // Disable interaction after drop
+        this.panPepper.setVisible(true);
+        this.onionBowl.setVisible(true);
+        this.hideIngredient(this.panPepper);
+        this.showIngredient(this.cookedPepper);
+        this.typewriteText(this.gameMessages[0]);
+        this.gameMessages.shift();
+    }
+    else if (gameObject === this.onionBowl && (dropZone === this.veggiePan || dropZone === this.cookedPepper)) {
+        this.veggiePan.disableInteractive();
+        this.onionBowl.setVisible(false).disableInteractive();  // Disable interaction after drop
+        this.panOnion.setVisible(true);
+        this.hideIngredient(this.panOnion);
+        this.showIngredient(this.cookedOnion);
+        this.typewriteText(this.gameMessages[0]);
+        this.meatThermometer.setVisible(true);
+        this.meatThermometerHand.setVisible(true);
+        this.gameMessages.shift();
+    }
+    else if (gameObject === this.meatThermometer && dropZone === this.cookedBeef) {
+      dropZone.disableInteractive();
+        this.meatThermometer.x = this.cookedBeef.x;
+        this.meatThermometer.y = this.cookedBeef.y;
+        this.meatThermometerHand.x = this.meatThermometer.getCenter().x;
+        this.meatThermometerHand.y = this.meatThermometer.getCenter().y;
+        this.typewriteText(this.gameMessages[0]);
+        this.gameMessages.shift();
+        this.veggieThermometer.setVisible(true);
+        this.veggieThermometerHand.setVisible(true);
+        this.growTemp(this.meatThermometerHand);
+        // Disable interaction with the meat thermometer after it's dropped.
+        
+        this.input?.setDraggable(this.meatThermometer, false);
+        this.meatThermometer.disableInteractive();
+    }
+    else if (gameObject === this.veggieThermometer && (dropZone === this.cookedPepper || dropZone === this.panPepper || dropZone === this.panOnion || dropZone === this.cookedOnion)) {
+      dropZone.disableInteractive();
+        this.veggieThermometer.x = this.cookedOnion.x;
+        this.veggieThermometer.y = this.cookedOnion.y;
+        this.veggieThermometerHand.x = this.veggieThermometer.getCenter().x;
+        this.veggieThermometerHand.y = this.veggieThermometer.getCenter().y;
+        this.veggieThermometerHand.disableInteractive();
+        this.veggieThermometer.disableInteractive();
+        this.typewriteText(this.gameMessages[0]);
+        this.gameMessages.shift();
+        this.growTemp(this.veggieThermometerHand);
+        // Disable interaction with the veggie thermometer after it's dropped.
+        this.input?.setDraggable(this.veggieThermometer, false);
+        this.veggieThermometer.disableInteractive();
+    }
+});
     
       }
 growTemp(hand){
    if(hand === this.meatThermometerHand){
-    this.duration = 20000;
+    this.duration = 10000;
   }
   else{
-    this.duration = 10000;
+    this.duration = 8000;
   }
   this.tweens.add({
     targets: hand,

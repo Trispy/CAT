@@ -42,7 +42,7 @@ export default function Cans({ openMenu }) {
             ];
 
             instructions = [
-                "In the following game, the volunteer will sort items based on whether the packaging is damaged and should be discarded.\n\nIf the item is questionable, drag the item to the box with the X to ask a supervisor. If it is good to be used, drag it to the box with the check."
+                "In the following game, the volunteer will sort items based on whether the packaging is damaged and should be discarded.\n\nIf the item is questionable, drag the item to the box with the ❌ to ask a supervisor. If it is good to be used, drag it to the box with the ✅."
             ];
 
             transitions = [
@@ -97,12 +97,12 @@ export default function Cans({ openMenu }) {
 
                 const close = this.add.text(
                     width * 0.85,
-                    height * 0.15,
+                    height * 0.20,
                     "X",
                     {
                         font: "40px Arial",
                         backgroundColor: "#ff0000",
-                        padding: { x: 20, y: 10 }
+                        padding: { x: 30, y: 20 }
                     }
                 )
                     .setInteractive()
@@ -327,6 +327,11 @@ export default function Cans({ openMenu }) {
                     this.showPopup(text);
                     return;
                 }
+
+                if (this.typingEvent) {
+                    this.typingEvent.remove();
+                }
+
                 this.textboxText.setText("");
                 this.next.disableInteractive();
                 this.xMark.disableInteractive();
@@ -334,7 +339,8 @@ export default function Cans({ openMenu }) {
 
                 let i = 0;
 
-                this.time.addEvent({
+         
+                this.typingEvent = this.time.addEvent({
                     delay: speed,
                     repeat: text.length - 1,
                     callback: () => {

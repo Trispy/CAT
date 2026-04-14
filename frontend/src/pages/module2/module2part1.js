@@ -525,19 +525,19 @@ function Module2Part1({ openMenu }) {
 
                         if (droppedShelf === "drawer"
                         ) {
-                            setfridgeSuccessState("Thats correct! Veggies go in the crisper drawer to mantain freshness. Click anywhere to get out of the textbox.")
+                            setfridgeSuccessState("That's correct! Veggies go in the low-humidity crisper drawer to maintain freshness. Click anywhere to get out of the textbox.")
                             gameObject.destroy();
                         }
                         if (droppedShelf === "bottom") {
-                            setfridgeSuccessState("Thats correct! Meat goes on the bottom shelf to prevent cross-contamination. Click anywhere to get out of the textbox.")
+                            setfridgeSuccessState("That's correct! Meat goes on the bottom shelf to prevent cross-contamination. Click anywhere to get out of the textbox.")
                             gameObject.disableInteractive();
                         }
                         if (droppedShelf === "top") {
-                            setfridgeSuccessState("Thats correct! Ready made food goes on the top shelf because it is usually precooked. Click anywhere to get out of the textbox.")
+                            setfridgeSuccessState("That’s correct! Ready-Made and Ready-to-Eat food goes on the top shelf because it is usually precooked or does not need cooking. Click anywhere to get out of the textbox.")
                             gameObject.disableInteractive();
                         }
                         if (droppedShelf === "middle") {
-                            setfridgeSuccessState("Thats correct! Dairy goes on the middle shelf where the temperature is most consistent. Click anywhere to get out of the textbox.")
+                            setfridgeSuccessState("That's correct! Dairy goes on the middle shelf where the temperature is most consistent. Click anywhere to get out of the textbox.")
                             gameObject.disableInteractive();
                         }
 
@@ -553,13 +553,13 @@ function Module2Part1({ openMenu }) {
                         gameObject.x = gameObject.startX;
                         gameObject.y = gameObject.startY;
                         if (correct === "drawer") {
-                            setfridgefailState("Not quite! Veggies go in the crisper draw to maintain freshness.")
+                            setfridgefailState("Not quite! Veggies go in the low-humidity crisper drawer to maintain freshness.")
                         }
                         if (correct === "bottom") {
                             setfridgefailState("Not quite! Meat goes on the bottom shelf to prevent cross-contamination.")
                         }
                         if (correct === "top") {
-                            setfridgefailState("Not quite! Ready made food goes on the top shelf because it is usually precooked.")
+                            setfridgefailState("Not quite! Ready-Made and Ready-to-Eat food goes on the top shelf because it is usually precooked or does not need cooking.")
                         }
                         if (correct === "middle") {
                             setfridgefailState("Not quite! Dairy goes on the middle shelf where the temperature is most consistent.")
@@ -955,15 +955,15 @@ function Module2Part1({ openMenu }) {
     };
 
     const introText = useTypewriter(
-        "Let's move on to understanding food safety. Follow the instructions to complete each minigame.",
+        "Let's learn about food safety. Follow the instructions to complete each minigame.",
         true
     );
     const thermometerInstructions = useTypewriter(
-        "Drag the bottom of the thermometer hand to the light blue to light red area of the thermometer to set the fridge to the correct temperature. Click anywhere to click out of the textbox.",
+        "Drag the bottom of the thermometer hand to the light blue to light red area of the thermometer to set the fridge to the correct temperature. Click anywhere to continue.",
         thermometerState === "instructions"
     );
     const thermometerSuccessText = useTypewriter(
-        "Great job! You correctly identified the food's safety which is between 0 and 40 degrees. Click next to continue.",
+        "Great job! You correctly identified the food's safe temperature which is between 0 and 40 degrees Fahrenheit. Click next to continue.",
         thermometerState === "success"
     );
     const thermometerFailText = useTypewriter(
@@ -983,11 +983,11 @@ function Module2Part1({ openMenu }) {
         fridgeSuccessState,
         fridgeState === "success"
     );
-    const soapText = useTypewriter("Drag the soap to the hand to clean them. Click anywhere to click out of the textbox.",
+    const soapText = useTypewriter("Drag the soap to the hands to clean them. Click anywhere to click out of the textbox.",
         gameStage === "HandScene" && showSoapText)
-    const soapSuccessText = useTypewriter("All clean! Now lets put on some gloves.",
+    const soapSuccessText = useTypewriter("All clean! Now, let's put on gloves.",
         gameStage === "HandScene" && handsClean && timerDone)
-    const gloveText = useTypewriter("Make sure to put gloves on before touching any food. Click anywhere to click out of the textbox.",
+    const gloveText = useTypewriter("Make sure to put gloves on before touching any food or food-contact surfaces. Click anywhere to start.",
         gameStage === "gloveStage" && gloveInstruction)
     const gloveSuccessText = useTypewriter("Gloved up!",
         gameStage === "gloveStage" && glovedHands)

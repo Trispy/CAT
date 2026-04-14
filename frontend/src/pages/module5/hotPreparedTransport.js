@@ -82,7 +82,7 @@ export default function HotPrepTransport({ openMenu }) {
                 "Great job! You have successfully packaged hot prepared food for transport and reheated for serving!",
                 "Prepared food being transported should always be served, reheated, or refridgerated within 2 hours.",
                 "Also, remember to pack ready-to-eat items and raw items separately if both are being transported.",
-                "Click the next button to return to the modules map!"
+                "Click the next button to return to the map."
             ];
 
             constructor() {

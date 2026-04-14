@@ -49,14 +49,14 @@ export default function Allergens({ openMenu }) {
             welcomeTexts = [
                 "The nine common allergens are eggs, milk, fish, shellfish, wheat, peanuts, tree nuts, soybeans, and sesame.",
 
-                "It is important that you know how to read and understand allergen and ingredient information on food items, as some patrons may have allergies.",
+                "Some patrons have allergies, so it is important that you know how to read and understand allergen and ingredient information on food items.",
 
-                "We are about to practice reading allergen labels that feature these allergens."
+                "You will now practice reading allergen labels that feature the nine common allergens."
 
             ];
 
             instructions = [
-                "In the following game, a patron will tell you an allergy they have. Based on their allergy, you will determine whether or not they can have the shown item.\n\nIf they can consume the item, drag it into the ✅ box. If they cannot, drag it into the ❌ box."
+                "In the following game, a patron will inform you of their allergy. You will then determine whether or not they can consume the item shown.\n\nIf they can safely consume the item, drag it into the ✅ box. If they cannot, drag it into the ❌ box."
             ];
 
             transitions = [
@@ -122,12 +122,12 @@ export default function Allergens({ openMenu }) {
 
                     const close = this.add.text(
                         width * 0.85,
-                        height * 0.15,
+                        height * 0.20,
                         "X",
                         {
                             font: "40px Arial",
                             backgroundColor: "#ff0000",
-                            padding: { x: 20, y: 10 }
+                            padding: { x: 30, y: 20 }
                         }
                     )
                     .setInteractive()
@@ -326,7 +326,7 @@ export default function Allergens({ openMenu }) {
                     }
                 }).setOrigin(0);
 
-                this.typewriteText("In this section, we will look at the nine common allergens.");
+                this.typewriteText("In this section, you will learn to read ingredient labels and identify the nine common allergens.");
 
                 this.textbox.setSize(this.textboxImage.width, this.textboxImage.height);
                 this.textbox.add([this.textboxImage, this.textboxText]);
@@ -337,16 +337,16 @@ export default function Allergens({ openMenu }) {
                     {
                         question: "I’m allergic to fish. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        incorrectPopup: "Try again. Fish is one of the listed ingredients, so the patron should not be given this item.",
-                        correctPopup: "Correct! Fish is one of the listed ingredients, so the patron should not be given this item.",
+                        incorrectPopup: "Try again. Fish is one of the listed ingredients, so you should not give the patron this item.",
+                        correctPopup: "Correct! Fish is one of the listed ingredients, so you should not give the patron this item.",
                         itemType: this.fish,
                         person: this.guest1
                     },
                     {
                         question: "I’m allergic to shellfish. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        incorrectPopup: "Try again. The “may contain” statement lists shellfish. It is possible for the patron to have an allergic reaction to the item, so they should not be given it.",
-                        correctPopup: "Correct! The “may contain” statement lists shellfish. It is possible for the patron to have an allergic reaction to the item, so they should not be given it.",
+                        incorrectPopup: "Try again. The “may contain” statement lists shellfish, which means it is possible for the patron to have an allergic reaction to the item, so you should not give it to them.",
+                        correctPopup: "Correct! The “may contain” statement lists shellfish. It is possible for the patron to have an allergic reaction to the item, so you should not give it to them.",
                         itemType: this.shellfish,                        
                         person: this.guest2
 
@@ -363,48 +363,48 @@ export default function Allergens({ openMenu }) {
                     {
                         question: "I’m allergic to sesame. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        incorrectPopup: "Try again. Sesame oil is one of the listed ingredients, so the patron should not be given this item.",
-                        correctPopup: "Correct! Sesame oil is one of the listed ingredients, so the patron should not be given this item.",
+                        incorrectPopup: "Try again. Sesame oil is one of the listed ingredients, so you should not give the patron this item.",
+                        correctPopup: "Correct! Sesame oil is one of the listed ingredients, so you should not give the patron this item.",
                         itemType: this.sesame,
                         person: this.guest4
                     },
                     {
                         question: "I’m allergic to soy. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        incorrectPopup: "Try again. Soybeans is one of the listed ingredients, so the patron should not be given this item.",
-                        correctPopup: "Correct! Soybeans is one of the listed ingredients, so the patron should not be given this item.",
+                        incorrectPopup: "Try again. Soybeans are one of the listed ingredients, so you should not give the patron this item.",
+                        correctPopup: "Correct! Soybeans is one of the listed ingredients, so you should not give the patron this item.",
                         itemType: this.soy,
                         person: this.guest5
                     },
                     {
                         question: "I’m allergic to sesame. Is it ok for me to eat this?",
                         correctAnswer: "yes",
-                        incorrectPopup: "Try again. Sesame is not one of the listed ingredients. It is also not in the “may contain” statement. The patron can safely have this item.",
-                        correctPopup: "Correct! Sesame is not one of the listed ingredients. It is also not in the “may contain” statement. The patron can safely have this item.",
+                        incorrectPopup: "Try again. Sesame is not one of the listed ingredients. It is also not in the “may contain” statement. The patron can safely consume this item.",
+                        correctPopup: "Correct! Sesame is not one of the listed ingredients. It is also not in the “may contain” statement. The patron can safely consume  this item.",
                         itemType: this.nosesame,
                         person: this.guest6
                     },
                     {
                         question: "I’m allergic to wheat and eggs. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        incorrectPopup: "Try again. Wheat and eggs are both listed ingredients, so the patron should not be given this item.",
-                        correctPopup: "Correct! Wheat and eggs are both listed ingredients, so the patron should not be given this item.",
+                        incorrectPopup: "Try again. Wheat and eggs are both listed ingredients, so you should not give the patron this item.",
+                        correctPopup: "Correct! Wheat and eggs are both listed ingredients, so you should not give the patron this item.",
                         itemType: this.wheateggs,
                         person: this.guest7
                     },
                     {
                         question: "I’m allergic to tree nuts and peanuts. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        incorrectPopup: "Try again. Cashews is one of the listed ingredients and the “may contain” statement lists peanuts, so the patron should not be given the item.",
-                        correctPopup: "Correct! Cashews is one of the listed ingredients and the “may contain” statement lists peanuts, so the patron should not be given the item.",
+                        incorrectPopup: "Try again. Cashews is one of the listed ingredients and the “may contain” statement lists peanuts, so you should not give the patron this item.",
+                        correctPopup: "Correct! Cashews is one of the listed ingredients and the “may contain” statement lists peanuts, so you should not give the patron this item.",
                         itemType: this.nuts,
                         person: this.guest8
                     },
                     {
                         question: "I’m allergic to milk. Is it ok for me to eat this?",
                         correctAnswer: "no",
-                        incorrectPopup: "Try again. Milk is one of the listed ingredients, so the patron should not be given this item.",
-                        correctPopup: "Correct! Milk is one of the listed ingredients, so the patron should not be given this item.",
+                        incorrectPopup: "Try again. Milk is one of the listed ingredients, so you should not give the patron this item.",
+                        correctPopup: "Correct! Milk is one of the listed ingredients, so you should not give the patron this item.",
                         itemType: this.milk,
                         person: this.guest9
                     },
@@ -446,17 +446,25 @@ export default function Allergens({ openMenu }) {
 
             }
 
-            typewriteText(text, type, speed = 25) {
-                //removes old timer before new one starts
+            typewriteText(text, type, speed = 20) {
+                if (type == "popup") {
+                    this.showPopup(text);
+                    return;
+                }
+
+                
                 if (this.typingEvent) {
-                    this.typingEvent.remove(false);
+                    this.typingEvent.remove();
                 }
 
                 this.textboxText.setText("");
                 this.next.disableInteractive();
+                this.xMark.disableInteractive();
+                this.check.disableInteractive();
 
                 let i = 0;
 
+            
                 this.typingEvent = this.time.addEvent({
                     delay: speed,
                     repeat: text.length - 1,
@@ -466,6 +474,8 @@ export default function Allergens({ openMenu }) {
 
                         if (i === text.length) {
                             this.next.setInteractive();
+                            this.xMark.setInteractive();
+                            this.check.setInteractive();
                         }
                     }
                 });

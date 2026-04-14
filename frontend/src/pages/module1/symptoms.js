@@ -32,16 +32,15 @@ export default function Symptoms({ openMenu }) {
       markY = 650;
 
       welcomeTexts = [
-        "In this module, you will learn how to tell if you are fit to volunteer and about what hygiene practices you should follow before volunteering.",
+        "In this module, you will learn how to tell  when you are fit to volunteer and which  hygiene practices you should follow before and during volunteering.",
         "It's important to stay home when you are not feeling well. Let's see if the volunteer is fit for the job today!"
       ];
 
       instructions = [
-        "In the following game, the volunteer will share different symptoms with you, and you will determine if they should volunteer or stay home. \n\nIf they should stay home, tap the ❌, if they can volunteer, tap the ✅."
-      ];
+        "In the following game, the volunteer will share different symptoms with you, and you will determine if they can volunteer or should stay home. If they can volunteer, tap the green ✅, but if they should stay home, tap the red ❌."      ];
 
       transitions = [
-        "Great job identifying when you should stay home! In the next section, we'll get this volunteer ready for their shift."
+        "Great job identifying when volunteers should stay home! In the next section, you will prepare this volunteer for their shift."
       ];
 
       constructor() {
@@ -121,27 +120,27 @@ export default function Symptoms({ openMenu }) {
         // Scenario logic
         this.volunteerScenario = [
           {
-            question: "Hey! I have an upset stomach today, and I'm feeling a bit nauseous, am I still good to come in?",
+            question: "Hey! I have an upset stomach, and I'm feeling a bit nauseous. Can I volunteer today?",
             correctAnswer: "no",
-            popup: "No! If you are experiencing symptoms like nausea, diarrhea, vomiting, you must be symptom free for at least 24 hours before attempting to volunteer. Illnesses with these symptoms are really contagious and put customer and coworker health at risk.",
+            popup: "Try again. If you are experiencing symptoms like nausea, diarrhea, or vomiting, you cannot volunteer. You must be symptom free for at least 24 hours before volunteering because contagious illnesses put customer and coworker health at risk.",
             erinType: this.nausea
           },
           {
-            question: "Hey! I've been coughing and sneezing a lot lately, and my throat is feeling sore, am I still good to come in?",
+            question: "Hey! I've been coughing and sneezing a lot this morning, and my throat is feeling sore. Can I volunteer today?",
             correctAnswer: "no",
-            popup: "No! If you are experiencing symptoms like coughing, runny/stuffy nose, or sore throat you must be symptom free for at least 24 hours before attempting to volunteer.",
+            popup: "Try again. If you are experiencing symptoms like coughing, runny/stuffy nose, or sore throat, you must be symptom free for at least 24 hours before volunteering. ",
             erinType: this.runnyNose
           },
           {
-            question: "Hey! I was having chills last night, and today I'm feeling really achey, weak, and feverish, am I good to come in?",
+            question: "Hey! I was having chills last night, and today I'm feeling really achey, weak, and feverish. Can I volunteer today?",
             correctAnswer: "no",
-            popup: "No! If you are experiencing symptoms like chills and fever with body aches you must be symptom free for at least 24 hours before attempting to volunteer.",
+            popup: "Try again. If you are experiencing symptoms like chills and fever with body aches, you must be symptom free for at least 24 hours before volunteering.",
             erinType: this.fever
           },
           {
-            question: "I'm feeling really great today, am I good to volunteer?",
+            question: "I'm feeling really great today. Can I volunteer?",
             correctAnswer: "yes",
-            popup: "Yes! If you've been symptom free of any contagious illness for at least 24 hours and you're feeling great, you are good to volunteer!",
+            popup: "Try again. If you have been symptom free of any contagious illness for at least 24 hours and are feeling healthy, you can volunteer.",
             erinType: this.healthy
           }
         ];
@@ -203,7 +202,7 @@ export default function Symptoms({ openMenu }) {
         });
       }
 
-      typewriteText(text, speed = 25) {
+      typewriteText(text, speed = 20) {
         this.textboxText.setText("");
         this.next.disableInteractive();
         this.xMark.disableInteractive();
