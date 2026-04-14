@@ -447,16 +447,24 @@ export default function Allergens({ openMenu }) {
             }
 
             typewriteText(text, type, speed = 25) {
-                //removes old timer before new one starts
+                if (type == "popup") {
+                    this.showPopup(text);
+                    return;
+                }
+
+                
                 if (this.typingEvent) {
-                    this.typingEvent.remove(false);
+                    this.typingEvent.remove();
                 }
 
                 this.textboxText.setText("");
                 this.next.disableInteractive();
+                this.xMark.disableInteractive();
+                this.check.disableInteractive();
 
                 let i = 0;
 
+            
                 this.typingEvent = this.time.addEvent({
                     delay: speed,
                     repeat: text.length - 1,
@@ -466,6 +474,8 @@ export default function Allergens({ openMenu }) {
 
                         if (i === text.length) {
                             this.next.setInteractive();
+                            this.xMark.setInteractive();
+                            this.check.setInteractive();
                         }
                     }
                 });

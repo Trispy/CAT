@@ -327,6 +327,11 @@ export default function Cans({ openMenu }) {
                     this.showPopup(text);
                     return;
                 }
+
+                if (this.typingEvent) {
+                    this.typingEvent.remove();
+                }
+
                 this.textboxText.setText("");
                 this.next.disableInteractive();
                 this.xMark.disableInteractive();
@@ -334,7 +339,8 @@ export default function Cans({ openMenu }) {
 
                 let i = 0;
 
-                this.time.addEvent({
+         
+                this.typingEvent = this.time.addEvent({
                     delay: speed,
                     repeat: text.length - 1,
                     callback: () => {

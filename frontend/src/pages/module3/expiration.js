@@ -638,10 +638,15 @@ export default function Expiration({ openMenu }) {
                     this.check.setVisible(true);
                 }
             typewriteText(text, type, speed = 25) {
-                if (type == "popup"){
+                if (type == "popup") {
                     this.showPopup(text);
                     return;
                 }
+
+                if (this.typingEvent) {
+                    this.typingEvent.remove();
+                }
+
                 this.textboxText.setText("");
                 this.next.disableInteractive();
                 this.xMark.disableInteractive();
@@ -649,7 +654,8 @@ export default function Expiration({ openMenu }) {
 
                 let i = 0;
 
-                this.time.addEvent({
+         
+                this.typingEvent = this.time.addEvent({
                     delay: speed,
                     repeat: text.length - 1,
                     callback: () => {
