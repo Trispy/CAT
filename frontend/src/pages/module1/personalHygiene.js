@@ -92,12 +92,12 @@ useEffect(() => {
   startPhaser();
 }, []);
     const introText = useTypewriter(
-        "In the following game, we will be going through personal hygiene steps that are essential to do before volunteering. Progress in the game by dragging items to the correct area using your finger.",
+        "In the following game, you will complete  essential personal hygiene before volunteering. Progress in the game by using your finger to drag items to the correct area.",
         true
     );
 
     const clipperText = useTypewriter(
-        "Drag the nail clipper to the nails to cut the nails.",
+        "Drag the nail clipper over the nails to cut them.",
         showClipperText && !nailsTrimmed
     );
     const ringText = useTypewriter(
@@ -113,23 +113,23 @@ useEffect(() => {
     nailsTrimmed && !removeClipSuccess
     );
     const clothesText = useTypewriter(
-    "Now let's put on some clean clothes! Drag the shirt and pants onto the character to get them dressed. Click anywhere to continue.",
+    "Now put on some clean clothes! Drag the shirt and pants onto the character to get them dressed.",
     gameStage === "clothes" && ringRemoved
     );
     const clothesSuccessText = useTypewriter(
-    "Great job for putting on clean clothes! Click the next button to continue.",
+    "Great job putting on clean clothes! Click the next button to continue.",
     gameStage === "clothes" && clothesRemoved
     );
     const tiedHairText = useTypewriter(
-    "Last step! Drag the hair tie onto the character to tie up the hair. Click anywhere to continue.",
+    "Last step! Drag the hair tie onto the character to tie up their hair.",
     gameStage === "tyehair" && !hairTied
     );
     const tiedHairSuccessText = useTypewriter(
-    "Great job for tying up the hair! Click the next button to continue.",
+    "Great job tying up the hair! Click the next button to continue.",
     gameStage === "tyehair" && hairTied
     );
     const finalText = useTypewriter(
-        "I am ready for volunteering! Lets go to the volunteer location and finish up my personal hygiene.",
+        "I am ready to volunteer! Let’s go to the volunteer location and finish up my personal hygiene.",
         gameStage === "final"
     );
     const startPhaser = () => {
