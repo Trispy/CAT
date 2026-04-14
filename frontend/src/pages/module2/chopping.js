@@ -667,7 +667,7 @@ export default function Cleaning({ openMenu }) {
                     });
                     const clearedCount = cells.filter(c => c.cleared).length;
                     const percentCleared = clearedCount / cells.length;
-                    if (!sprayed && percentCleared > 0.13) {
+                    if (!sprayed && percentCleared > 0.03) {
                         bottleIcon.destroy();
                         dirtyBoardRT.destroy();
                         sprayed = true;
@@ -772,7 +772,7 @@ export default function Cleaning({ openMenu }) {
                     });
                     const clearedCount = cells2.filter(c => c.cleared).length;
                     const percentCleared = clearedCount / cells2.length;
-                    if (percentCleared > 0.10) {
+                    if (percentCleared > 0.03) {
                         ragIcon.destroy();
                         wetBoardRT.destroy();
                         bg.destroy();
@@ -902,7 +902,7 @@ export default function Cleaning({ openMenu }) {
                     });
                     const clearedCount = cells.filter(c => c.cleared).length;
                     const percentCleared = clearedCount / cells.length;
-                    if (!chopped && percentCleared > 0.20) {
+                    if (!chopped && percentCleared > 0.13) {
                         chopped = true;
                         setCutMaterials(cutfoodstring);
                         uncutRT.destroy();

@@ -687,7 +687,7 @@ export default function Location({ openMenu }) {
                 <div
                     style={{
                         position: "fixed",
-                        top: 0,
+                        top: -10,
                         left: 0,
                         width: "100dvw",
                         height: "100dvh",
@@ -699,7 +699,7 @@ export default function Location({ openMenu }) {
                 >
                     <Textbox
                         width="70dvw"
-                        height="70dvh"
+                        height="73dvh"
                         placeholder={instructionText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.8vw"

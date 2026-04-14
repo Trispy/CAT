@@ -292,6 +292,7 @@ useEffect(() => {
                
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     if (gameObject !== clipper) return;
+                    if (!longHandRT || trimmed) return;
 
                     
                     clipper.x = dragX;
@@ -324,9 +325,10 @@ useEffect(() => {
                 });
                 const clearedCount = cells.filter(c => c.cleared).length;
                 const percentCleared = clearedCount / cells.length;
-                if (!trimmed && percentCleared > 0.35) {
+                if (!trimmed && percentCleared > 0.28) {
                 trimmed = true;
                 setTrimmed(true);
+                longHandRT.destroy();
                  console.log("Nails fully trimmed!");
                 }
 
@@ -1128,7 +1130,7 @@ class FinalScene extends Phaser.Scene {
             >
                     <TextboxErin
                         width="70dvw"
-                        height="80dvh"
+                        height="75dvh"
                         placeholder={finalText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.6vw"
