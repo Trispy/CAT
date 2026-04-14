@@ -183,8 +183,11 @@ router.post('/updateComplete', async (req, res) => {
     if (module === "m1") user.finished_m1 = true;
     else if (module === "m2") user.finished_m2 = true;
     else if (module === "m3") user.finished_m3 = true;
+    else if (module === "m4") user.finished_m4 = true;
+    else if (module === "m5") user.finished_m5 = true;
+    else if (module === "m6") user.finished_m6 = true;
     await user.save();
-    res.status(200).json({ message: 'Module 1 summary created successfully with user: ', user });
+    res.status(200).json({ message: 'Module completed: ', module });
   }
   catch (error) {
     console.error('Error creating account:', error);

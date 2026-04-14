@@ -157,6 +157,17 @@ export default function Allergens({ openMenu }) {
 
                 this.bg1.setScale(scale);
 
+                this.xMark = this.add.image(this.bg1.width / 2 - this.bg1.width * 0.27, this.markY, "x")
+                    .setScale(0.5)
+                    .setInteractive({ pixelPerfect: true })
+                    .setVisible(false);
+
+                this.check = this.add.image(this.bg1.width / 2 + this.bg1.width * 0.30, this.markY, "check")
+                    .setScale(0.5)
+                    .setInteractive()
+                    .setVisible(false);
+                
+
                 this.erinX = this.bg1.width / 2 - 150;
                 this.erinY = this.bg1.height / 2;
 
@@ -276,16 +287,6 @@ export default function Allergens({ openMenu }) {
                 .setVisible(false);
 
                 // Buttons
-                this.xMark = this.add.image(this.bg1.width / 2 - this.bg1.width * 0.27, this.markY, "x")
-                    .setScale(0.5)
-                    .setInteractive({ pixelPerfect: true })
-                    .setVisible(false);
-
-                this.check = this.add.image(this.bg1.width / 2 + this.bg1.width * 0.30, this.markY, "check")
-                    .setScale(0.5)
-                    .setInteractive()
-                    .setVisible(false);
-                
                 this.next = this.add.image(
                     300 * 5.45,
                     175 * 5.00,
@@ -498,6 +499,10 @@ export default function Allergens({ openMenu }) {
                             }
                             else if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, xBounds)) {
                                 this.handleAnswer(this.volunteerScenario, this.xMark);
+                            }
+                            else {
+                                this.volunteerScenario[0].itemType.x = this.itemX;
+                                this.volunteerScenario[0].itemType.y = this.itemY;
                             }
                         });
                 };
