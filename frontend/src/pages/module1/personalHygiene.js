@@ -1130,7 +1130,7 @@ class FinalScene extends Phaser.Scene {
             >
                     <TextboxErin
                         width="70dvw"
-                        height="75dvh"
+                        height="80dvh"
                         placeholder={finalText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.6vw"
