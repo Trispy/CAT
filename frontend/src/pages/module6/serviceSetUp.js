@@ -50,7 +50,7 @@ export default function ServiceSetUps({ openMenu }) {
         class ServiceSetUp extends Phaser.Scene {
             textboxScale = 1;
 
-            iceboxX = 1350;
+            iceboxX = 1200;
             instructionsShown = false;
             gameMessageIndex = 0;
             iceboxY = 160;
@@ -87,14 +87,14 @@ export default function ServiceSetUps({ openMenu }) {
                 "It's above 165 °F. Drag the chicken to a hot holding dish!"                ,
                 "Check the temperature of the soup before putting it in a dish!",
                 "It's above 165 °F. Drag the soup to a hot holding dish!",
-                "Check the temperature of the watermelon before putting it in a dish!",
-                "It's below 40 °F. Drag the watermelon to a cooler!",
+                "Check the temperature of the watermelon before putting it in the cooler!",
+                "It's below 40 °F. Drag the watermelon to the cooler!",
                 "All food must be labeled! Drag the watermelon label to the cooler.",
                 "Drag the chicken label to the chicken dish!",
-                "Labels are needed to provide allergen information. Drag the soup label to the soup dish.",
-                "Drag the ladle to the red bowl in front of the soup.",
-                "Each item needs it's own utensil to prevent allergen mixing. Drag the tongs to the cooler.",
-                "The utensils should be on a clean surface. Drag the spatula to the bowl by the chicken dish.",
+                "Labels provide critical allergen information. Drag the soup label to the soup dish!",
+                "Drag the ladle to the red bowl in front of the soup!",
+                "Dedicated utensils prevent cross contact. Drag the tongs to the cooler bowl!",
+                "Only place utensils on clean surfaces. Drag the spatula to the bowl by the chicken dish!",
 
             ];
             transitions = [
@@ -629,7 +629,7 @@ export default function ServiceSetUps({ openMenu }) {
                         this.coldFood.setVisible(false);
                         //dropZone.disableInteractive();
                         this.input.setDraggable(this.soupBowl);
-                        this.tongsDish.setPosition(dropZone.x, dropZone.y);
+                        //this.tongsDish.setPosition(dropZone.x + 200, dropZone.y );
                         this.melonLabel.setVisible(true);
                         this.melonLabel.setInteractive();
                         this.input.setDraggable(this.melonLabel);
@@ -695,7 +695,7 @@ export default function ServiceSetUps({ openMenu }) {
                         this.chickenLabel.setInteractive();
                         this.input.setDraggable(this.chickenLabel);
                         dropZone.disableInteractive();
-                        this.tongsDish.setPosition(dropZone.x + 40, dropZone.y - 55);                        
+                        this.tongsDish.setPosition(dropZone.x + 250, dropZone.y + 105);                        
                     }
                     else if (gameObject === this.chickenLabel && (dropZone.texture.key ==="chickenDish")){
                         this.iterateGameMessage();
@@ -1010,7 +1010,7 @@ export default function ServiceSetUps({ openMenu }) {
                 this.typewriteText(this.gameMessages[0]);
                 this.gameMessages.shift();
         }
-            typewriteText(text, type, speed = 25) {
+            typewriteText(text, type, speed = 2) {
                 //removes old timer before new one starts
                 if (!text) return;
                 if (this.typingEvent) {

@@ -446,7 +446,7 @@ export default function Allergens({ openMenu }) {
 
             }
 
-            typewriteText(text, type, speed = 25) {
+            typewriteText(text, type, speed = 20) {
                 if (type == "popup") {
                     this.showPopup(text);
                     return;

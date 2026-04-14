@@ -202,7 +202,7 @@ export default function Symptoms({ openMenu }) {
         });
       }
 
-      typewriteText(text, speed = 25) {
+      typewriteText(text, speed = 20) {
         this.textboxText.setText("");
         this.next.disableInteractive();
         this.xMark.disableInteractive();
