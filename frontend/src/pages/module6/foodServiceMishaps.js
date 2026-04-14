@@ -954,7 +954,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                     this.textbox.setPosition(990,755);
                 }
             }
-            typewriteText(text, type, speed = 30) {
+            typewriteText(text, type, speed = 50) {
                 //removes old timer before new one starts
                 if (!text) return;
                 if (this.typingEvent) {

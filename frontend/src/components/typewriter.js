@@ -23,7 +23,7 @@ import { useEffect, useState, useRef } from "react";
 
 // Arisha's Version
 
-function useTypewriter(text, isActive = true, speed = 30) { //this is the type writer that actually types the text out one character at a time. It takes in the text to display, whether it should be active, and the speed of typing.
+function useTypewriter(text, isActive = true, speed = 50) { //this is the type writer that actually types the text out one character at a time. It takes in the text to display, whether it should be active, and the speed of typing.
     const [typedText, setTypedText] = useState("");
     
     useEffect(() => {

@@ -62,7 +62,7 @@ export default function CoolerPack({ openMenu }) {
     useEffect(() => {
         window.handleNext = handleNextClick;
     }, [gameStage]);
-    const introText = useTypewriter("In this game, we'll pack a cooler for trasport!",
+    const introText = useTypewriter("In this game, we'll pack a cooler for transport!",
         gameStage === "intro");
     const instructionTexts = [
         "The items in the fridge should be packed from the bottom up, starting with the raw meats, to the ready-to-eat food! The produce should go last.",
@@ -442,6 +442,9 @@ export default function CoolerPack({ openMenu }) {
                     instructions: instructionTexts
                 });
             }
+        }
+        else if (fridgeState === "complete") {
+            window.navigateToPage("/module4/packTruck")
         }
     };
     const handleInstructionClick = () => {
