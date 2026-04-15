@@ -74,7 +74,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                 "Make sure you wash your hands for at least 20 seconds!",
                 "Drag the glove box to the volunteer to put on clean gloves.",
                 "Great job! You've safely changed out of dirty gloves. Click next to continue.",
-                "Here, a spatula used for raw meat falls into a ready to eat soup. Drag the volunteer to the manager to learn what to do next!",
+                "A spatula used for raw meat falls into a Ready-to-Eat soup. Drag the volunteer to the manager to learn what to do next!",
                 "The soup must be discarded because it is contaminated. Drag the soup to the trash.",
                 "Drag the contaminated utensils in the sink to be washed!",
                 "Drag the contaminated bowl in the sink to be washed!",
@@ -85,8 +85,8 @@ export default function FoodServiceMishaps({ openMenu }) {
                 "They are both in the danger zone. Check the temperature log to see if they should be discarded.",
                 "They have been in the danger zone for less than two hours. Drag the watermelon to the fridge to put it away.",
                 "Drag the chicken to the stove to reheat it to at least 165 °F since it is about to be served.",
-                "Now, check the temperatures again.",
-                "The watermelon is out of the danger zone!",
+                "Now, check the temperatures again. Drag the thermometer to the watermelon.",
+                "The watermelon is out of the danger zone! Drag the new thermometer to the chicken.",
                 "The chicken is out of the danger zone! Click next to continue."
 
             ];
@@ -479,7 +479,7 @@ export default function FoodServiceMishaps({ openMenu }) {
 
                 this.textboxImage = this.add.image(0, 0, "textbox").setOrigin(0);
 
-                this.textboxText = this.add.text(100, 100, "", {
+                this.textboxText = this.add.text(100, 60, "", {
                     font: "bold 70px sans-serif",
                     color: "#000",
                     wordWrap: {
@@ -577,11 +577,11 @@ export default function FoodServiceMishaps({ openMenu }) {
                         this.input.setDraggable(this.erin, false);
                          if(!this.timerStart){
                             this.timerStart = true;
-                            let timeLeft = 20;
+                            let timeLeft = 10;
                             this.timerText = this.add.text(
                                 this.bg1.width * 0.81,
                                 this.bg1.height * 0.25,
-                                ":20",
+                                ":10",
                             {
                                 backgroundColor: "#000000",
                                 borderColor: "#ffffff",
@@ -808,7 +808,7 @@ export default function FoodServiceMishaps({ openMenu }) {
 
                 this.tempLog.on("pointerdown", () => {
                     this.iterateGameMessage(this.instructionStep + 1);
-                    this.showPopup("Item: Grilled Chicken, Date: Today, Time: 1 Hour Ago, Temp: 170 °F.\n\n\nItem: Watermelon, Date: Today, Time: One Hour Ago, Temp: 38°F.");
+                    this.showPopup("Item: Grilled Chicken, Date: Today, Time: 1 Hour Ago, Temp: 170 °F.\n\n\nItem: Watermelon, Date: Today, Time: 1 Hour Ago, Temp: 38°F.");
                    if(!this.logOpened){
                     this.logOpened = true;
                     this.coldFood.setInteractive();
@@ -944,17 +944,17 @@ export default function FoodServiceMishaps({ openMenu }) {
 
                 this.instructionStep = step;
 
-                this.textbox.setScale(0.6);
-                this.textboxText.setFontSize(90);
+                this.textbox.setScale(0.7);
+                this.textboxText.setFontSize(85);
                 this.textbox.setPosition(0,0);
 
                 this.typewriteText(this.gameMessages[this.instructionStep]);
 
                 if(section === "cupboard"){
-                    this.textbox.setPosition(990,755);
+                    this.textbox.setPosition(780,620);
                 }
             }
-            typewriteText(text, type, speed = 25) {
+            typewriteText(text, type, speed = 20) {
                 //removes old timer before new one starts
                 if (!text) return;
                 if (this.typingEvent) {
