@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const module4SummarySchema = new mongoose.Schema({
 
-  username: {type: String, required: true, unique: true},
-  cleanTote: { type: Boolean, required: true, unique: true },
+  username: {type: String, required: true},
+  cleanTote: { type: Boolean, required: true, default: false},
   sorting: {type: Boolean, required: true, default: false},
   packing: {type: Boolean, required: true, default: false}
 });

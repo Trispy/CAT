@@ -180,8 +180,8 @@ function App() {
           <Route path="/module4/packTruck" element={protect("module4", "packing", <TruckPack openMenu={() => setShowMenu(true)} />)} />
 
           <Route path="/module5" element={<M5Nav />} />
-          <Route path="/module5/coldPreparedTransport" element={protect("module5", "coldPreparedTransport", <ColdPrepTransport openMenu={() => setShowMenu(true)} />)} />
-          <Route path="/module5/hotPreparedTransport" element={protect("module5", "hotPreparedTransport", <HotPrepTransport openMenu={() => setShowMenu(true)} />)} />
+          <Route path="/module5/coldPreparedTransport" element={protect("module5", "cold", <ColdPrepTransport openMenu={() => setShowMenu(true)} />)} />
+          <Route path="/module5/hotPreparedTransport" element={protect("module5", "hot", <HotPrepTransport openMenu={() => setShowMenu(true)} />)} />
 
           <Route path="/module6" element={<M6Nav />} />
           <Route path="/module6/foodServiceMishaps" element={protect("module6", "foodServiceMishaps", <FoodServiceMishaps openMenu={() => setShowMenu(true)} />)} />

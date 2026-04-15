@@ -77,6 +77,25 @@ export default function Menu({ closeMenu }) {
   module6part1: "serviceSetup",
   module6part2: "foodServiceMishaps",
 };
+
+const labels = {
+  symptoms: "Symptoms",
+  personalHygiene: "Personal Hygiene",
+  location: "On Location",
+  module2part1: "Thermometer Use",
+  chopping: "Cleaning & Sanitizing",
+  cooking: "Cooking Temperatures",
+  cansort: "Can Sorting",
+  expiration: "Expiration Dates",
+  allergenIdentification: "Allergen Identification",
+  cleanTote: "Tote Cleaning",
+  sorting: "Cooler Packing",
+  packing: "Truck Packing",
+  coldPreparedTransport: "Cold Prepared Transport",
+  hotPreparedTransport: "Hot Prepared Transport",
+  serviceSetup: "Food Service Setup",
+  foodServiceMishaps: "Food Service Mishaps"
+}
  const getGames = (moduleObj) => {
       if (!summary) return [];
 
@@ -226,7 +245,7 @@ export default function Menu({ closeMenu }) {
                       opacity: game.clickable ? 1 : 0.6,
                     }}
                   >
-                    {game.name} {game.completed && "✔"}
+                    {labels[game.name] || game.name} {game.completed && "✔"}
                   </div>
                 ))}
               </div>
