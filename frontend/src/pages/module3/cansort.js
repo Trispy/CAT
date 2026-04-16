@@ -22,7 +22,7 @@ import mapbutton from "../../assets/mapbutton.png";
 import { useNavigate } from "react-router-dom";
 import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
-export default function Cans({ openMenu }) {
+export default function Cans({ openMenu, refreshSummary }) {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -315,7 +315,7 @@ export default function Cans({ openMenu }) {
                         this.cycleScenarios();
 
                     } else {
-                        moduleUpdate(`${API}/api/game/module3/canSorting/completed`);
+                        moduleUpdate(`${API}/api/game/module3/canSorting/completed`, refreshSummary);
                         window.navigateToPage("/module3/expiration");
                     }
                 });

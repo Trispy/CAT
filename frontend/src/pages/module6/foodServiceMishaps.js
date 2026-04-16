@@ -46,7 +46,7 @@ import { useNavigate } from "react-router-dom";
 
 const API = process.env.REACT_APP_API_URL;
 
-export default function FoodServiceMishaps({ openMenu }) {
+export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null);
     const navigate = useNavigate();
 
@@ -550,7 +550,7 @@ export default function FoodServiceMishaps({ openMenu }) {
                     else {
                         this.cleanUpScene();
                         callUpdate("m6");
-                        moduleUpdate(`${API}/api/game/module6/foodServiceMishaps/completed`);
+                        moduleUpdate(`${API}/api/game/module6/foodServiceMishaps/completed`, refreshSummary);
                         window.navigateToPage("/map");
                     }
                 });

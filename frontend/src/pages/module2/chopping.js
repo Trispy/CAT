@@ -33,7 +33,7 @@ import mapbutton from "../../assets/mapbutton.png";
 import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 
-export default function Cleaning({ openMenu }) {
+export default function Cleaning({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
@@ -920,7 +920,7 @@ export default function Cleaning({ openMenu }) {
             checkWin() {
                 if (numberOfCutMaterials.current === 3) {
                     this.showMes("Win condition met");
-                    moduleUpdate(`${API}/api/game/module2/chopping/completed`);
+                    moduleUpdate(`${API}/api/game/module2/chopping/completed`, refreshSummary);
                     navigate('/module2/cooking', { replace: true });
                 }
             }

@@ -31,7 +31,7 @@ import Settings from "../../components/settings";
 import { useNavigate } from "react-router-dom";
 const API = process.env.REACT_APP_API_URL;
 
-export default function Allergens({ openMenu }) {
+export default function Allergens({ openMenu, refreshSummary }) {
     const navigate = useNavigate();
 
            
@@ -439,7 +439,7 @@ export default function Allergens({ openMenu }) {
 
                     } else {
                         callUpdate("m3");
-                        await moduleUpdate(`${API}/api/game/module3/allergenIdentification/completed`);
+                        await moduleUpdate(`${API}/api/game/module3/allergenIdentification/completed`, refreshSummary);
                         navigate("/map");
                     }
                 });

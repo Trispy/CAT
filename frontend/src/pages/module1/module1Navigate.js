@@ -14,7 +14,7 @@ export default function M1Nav() {
             const response = await fetch(`${API}/api/game/module1/status`, {
                 method:"GET",
                 headers:{
-                ContentType:"Application/json",
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${jwt}`
                 }
             }
@@ -35,7 +35,9 @@ export default function M1Nav() {
         }
     };
 
+    useEffect(() => {
     nav();
+    }, []);
 
     return (
         <div>

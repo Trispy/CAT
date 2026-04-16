@@ -37,7 +37,7 @@ const API = process.env.REACT_APP_API_URL;
 
 
 
-function Module2Part1({ openMenu }) {
+function Module2Part1({ openMenu, refreshSummary }) {
     const [gameStage, setgameStage] = useState('intro');
     const phaserGameRef = useRef(null);
     const [thermometerState, setThermometerState] = useState("instructions");
@@ -949,7 +949,7 @@ function Module2Part1({ openMenu }) {
             setgameStage("gloveStage");
         }
         if (gameStage === "gloveStage") {
-            moduleUpdate(`${API}/api/game/module2/module2part1/completed`);
+            moduleUpdate(`${API}/api/game/module2/module2part1/completed`, refreshSummary);
             navigate('/module2/cleaning', { replace: true });
         }
     };

@@ -13,7 +13,7 @@ export default function M3Nav() {
             const response = await fetch(`${API}/api/game/module3/status`, {
                 method:"GET",
                 headers:{
-                ContentType:"Application/json",
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${jwt}`
                 }
             }
@@ -34,7 +34,9 @@ export default function M3Nav() {
         }
     };
 
-    nav();
+    useEffect(() => {
+  nav();
+}, []);
 
     return (
             <div>

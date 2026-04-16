@@ -40,7 +40,7 @@ import { useNavigate } from "react-router-dom";
 
 const API = process.env.REACT_APP_API_URL;
 
-export default function ServiceSetUps({ openMenu }) {
+export default function ServiceSetUps({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null);
     const navigate = useNavigate();
 
@@ -572,7 +572,7 @@ export default function ServiceSetUps({ openMenu }) {
                         this.transitions.shift();
                     }
                     else {
-                        moduleUpdate(`${API}/api/game/module6/serviceSetup/completed`);
+                        moduleUpdate(`${API}/api/game/module6/serviceSetup/completed`, refreshSummary);
                         navigate("/module6/foodServiceMishaps")
                         this.cleanupScene();
                     }

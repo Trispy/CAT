@@ -25,7 +25,7 @@ import fridgeSceneBackground from "../../assets/fridgescreen.png"
 import milk from "../../assets/milk.png"
 const API = process.env.REACT_APP_API_URL;
 
-export default function CoolerPack({ openMenu }) {
+export default function CoolerPack({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
@@ -621,7 +621,7 @@ export default function CoolerPack({ openMenu }) {
             {fridgeState === "complete" && (
                 <div
                     onClick={() => {
-                        moduleUpdate(`${API}/api/game/module4/sorting/completed`);
+                        moduleUpdate(`${API}/api/game/module4/sorting/completed`, refreshSummary);
                         window.navigateToPage("/module4/packTruck")
                     }}
                     style={overlayStyle}

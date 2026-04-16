@@ -18,7 +18,7 @@ import sceneBackground from "../../assets/M4G3/TruckBackground.png"
 
 const API = process.env.REACT_APP_API_URL;
 
-export default function TruckPack({ openMenu }) {
+export default function TruckPack({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
@@ -543,7 +543,7 @@ export default function TruckPack({ openMenu }) {
             {fridgeState === "complete" && (
                 <div
                     onClick={() => {
-                        moduleUpdate(`${API}/api/game/module4/packing/completed`);
+                        moduleUpdate(`${API}/api/game/module4/packing/completed`, refreshSummary);
                         callUpdate("m4");
                         window.navigateToPage("/map")
                     }}

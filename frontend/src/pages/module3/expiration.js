@@ -26,7 +26,7 @@ import Settings from "../../components/settings";
 import calendar from "../../assets/calendar.png";
 const API = process.env.REACT_APP_API_URL;
 
-export default function Expiration({ openMenu }) {
+export default function Expiration({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null);
     const navigate = useNavigate();
     let allInstructions = [
@@ -715,7 +715,7 @@ export default function Expiration({ openMenu }) {
 
                     this.currentIndex++;
                     if (this.currentIndex >= this.foodItems.length) {
-                        moduleUpdate(`${API}/api/game/module3/expiration/completed`);
+                        moduleUpdate(`${API}/api/game/module3/expiration/completed`, refreshSummary);
                         navigate("/module3/allergenIdentification");
                     } else {
                         this.loadNextItem();

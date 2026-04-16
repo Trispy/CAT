@@ -29,7 +29,7 @@ import Settings from "../../components/settings";
 import { useNavigate } from "react-router-dom";
 const API = process.env.REACT_APP_API_URL;
 
-export default function ColdPrepTransport({ openMenu }) {
+export default function ColdPrepTransport({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null);
     const navigate = useNavigate();
 
@@ -390,7 +390,7 @@ export default function ColdPrepTransport({ openMenu }) {
                     }
                     else {
                         this.cleanupScene();
-                        moduleUpdate(`${API}/api/game/module5/coldPreparedTransport/completed`);
+                        moduleUpdate(`${API}/api/game/module5/coldPreparedTransport/completed`, refreshSummary);
                         window.navigateToPage("/module5/hotPreparedTransport");
                     }
                 });

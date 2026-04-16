@@ -35,7 +35,7 @@ import { defaultTypingSpeed } from "../../formatting";
 import Settings from "../../components/settings";
 import { useNavigate } from "react-router-dom";
 const API = process.env.REACT_APP_API_URL;
-export default function HotPrepTransport({ openMenu }) {
+export default function HotPrepTransport({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null);
     const navigate = useNavigate();
 
@@ -489,7 +489,7 @@ export default function HotPrepTransport({ openMenu }) {
                     }
                     else {
                         this.cleanupScene();
-                        await moduleUpdate(`${API}/api/game/module5/hotPreparedTransport/completed`);
+                        await moduleUpdate(`${API}/api/game/module5/hotPreparedTransport/completed`, refreshSummary);
                         callUpdate("m5");
                         window.navigateToPage("/map");
                     }

@@ -32,7 +32,7 @@ import faucet from "../../assets/M4G1/faucet.png";
 
 const API = process.env.REACT_APP_API_URL;
 
-export default function CleanTote({ openMenu }) {
+export default function CleanTote({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
@@ -669,7 +669,7 @@ export default function CleanTote({ openMenu }) {
 
                     if (this.toteSanitized) {
                         this.showPopup("This tote is now ready for use!");
-                        moduleUpdate(`${API}/api/game/module4/cleanTote/completed`);
+                        moduleUpdate(`${API}/api/game/module4/cleanTote/completed`, refreshSummary);
                         navigate("/module4/coolerPack", { replace: true });
                     }
 

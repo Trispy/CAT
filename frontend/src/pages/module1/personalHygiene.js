@@ -33,7 +33,7 @@ const API = process.env.REACT_APP_API_URL;
 
 //has multiple scenes for each step of the personal hygiene process. Each scene has its own interactive elements and logic. The main component manages the overall game state and transitions between scenes based on user actions and progress.
 
-function PersonalHygiene({ openMenu }) {
+function PersonalHygiene({ openMenu, refreshSummary }) {
     const [gameStage, setGameStage] = useState("intro");
     const backgroundStyle = {
         backgroundImage: gameStage === "intro" ? `url(${firstBackground})` : "none",
@@ -867,7 +867,7 @@ class FinalScene extends Phaser.Scene {
         return;
     }
     if (gameStage === "final") {
-        moduleUpdate(`${API}/api/game/module1/personalHygiene/completed`);
+        moduleUpdate(`${API}/api/game/module1/personalHygiene/completed`, refreshSummary);
         navigate('/module1/onLocation', { replace: true });
     }
     

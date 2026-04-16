@@ -32,7 +32,7 @@ import {defaultTypingSpeed} from "../../formatting";
 import { useNavigate } from "react-router-dom";
 import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
-export default function Cooking({ openMenu }) {
+export default function Cooking({ openMenu, refreshSummary }) {
   const navigate = useNavigate();
   useEffect(() => {
       window.navigateToPage = navigate;
@@ -163,7 +163,7 @@ export default function Cooking({ openMenu }) {
         }
         else{
           callUpdate("m2");
-          await moduleUpdate(`${API}/api/game/module2/cooking/completed`);
+          await moduleUpdate(`${API}/api/game/module2/cooking/completed`, refreshSummary);
           navigate("/map");
         }  
 });

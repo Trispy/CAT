@@ -25,7 +25,7 @@ import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 
 
-export default function Location({ openMenu }) {
+export default function Location({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
 
@@ -632,7 +632,7 @@ export default function Location({ openMenu }) {
 
         if (gameStage === "finalStage") {
             callUpdate("m1");
-            await moduleUpdate(`${API}/api/game/module1/location/completed`);
+            await moduleUpdate(`${API}/api/game/module1/location/completed`, refreshSummary);
             navigate("/map");
         }
     };

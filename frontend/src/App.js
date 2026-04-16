@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { useState, useEffect } from 'react';
 
@@ -41,10 +41,10 @@ function App() {
   const [loading, setLoading] = useState(true);
 
 
-  useEffect(() => {
+  const fetchSummary = async () => {
     const token = localStorage.getItem("token");
 
-    fetch(`${API}/api/game/moduleSummary`, {
+    return fetch(`${API}/api/game/moduleSummary`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -56,58 +56,62 @@ function App() {
         setSummary(null);
         setLoading(false);
       });
-  }, []);
-
-
- const isUnlocked = (moduleKey, gameKey) => {
-  if (!summary) return null;
-
-  const moduleOrder = {
-    module1: ["symptoms", "personalHygiene", "location"],
-    module2: ["module2part1", "chopping", "cooking"],
-    module3: ["cansort", "expiration", "allergenIdentification"],
-    module4: ["cleanTote", "sorting", "packing"],
-    module5: ["cold", "hot"],
-    module6: ["serviceSetup", "foodServiceMishaps"]
   };
 
-  const allEntries = [];
+  // initial load
+  useEffect(() => {
+    fetchSummary();
+  }, []);
 
-  Object.keys(moduleOrder).forEach((mod) => {
-    moduleOrder[mod].forEach((key) => {
-      const val = summary[mod]?.[key];
-      allEntries.push([key, val]);
+  const isUnlocked = (moduleKey, gameKey) => {
+    if (!summary) return null;
+
+    const moduleOrder = {
+      module1: ["symptoms", "personalHygiene", "location"],
+      module2: ["module2part1", "chopping", "cooking"],
+      module3: ["cansort", "expiration", "allergenIdentification"],
+      module4: ["cleanTote", "sorting", "packing"],
+      module5: ["cold", "hot"],
+      module6: ["serviceSetup", "foodServiceMishaps"]
+    };
+
+    const allEntries = [];
+
+    Object.keys(moduleOrder).forEach((mod) => {
+      moduleOrder[mod].forEach((key) => {
+        const val = summary[mod]?.[key];
+        allEntries.push([key, val]);
+      });
     });
-  });
 
-  let lastTrue = -1;
-  allEntries.forEach(([_, val], i) => {
-    if (val === true) lastTrue = i;
-  });
+    let lastTrue = -1;
+    allEntries.forEach(([_, val], i) => {
+      if (val === true) lastTrue = i;
+    });
 
-  const nextIndex = lastTrue === -1 ? 0 : lastTrue + 1;
+    const nextIndex = lastTrue === -1 ? 0 : lastTrue + 1;
 
-  const globalIndex = allEntries.findIndex(([key]) => key === gameKey);
+    const globalIndex = allEntries.findIndex(([key]) => key === gameKey);
 
-  const val = summary[moduleKey]?.[gameKey];
+    const val = summary[moduleKey]?.[gameKey];
 
-  let clickable = val === true || globalIndex === nextIndex;
+    let clickable = val === true || globalIndex === nextIndex;
 
-  const unlockModules =
-    summary?.finished_m1 === true &&
-    summary?.finished_m2 === true;
+    const unlockModules =
+      summary?.finished_m1 === true &&
+      summary?.finished_m2 === true;
 
-  const isFirstGame = moduleOrder[moduleKey]?.[0] === gameKey;
+    const isFirstGame = moduleOrder[moduleKey]?.[0] === gameKey;
 
-  if (unlockModules && isFirstGame) {
-    clickable = true;
-  }
+    if (unlockModules && isFirstGame) {
+      clickable = true;
+    }
 
-  return clickable;
-};
+    return clickable;
+  };
+
   const Forbidden = () => (
-  <div
-    style={{
+    <div style={{
       height: "100vh",
       display: "flex",
       flexDirection: "column",
@@ -117,25 +121,23 @@ function App() {
       color: "white",
       fontFamily: "sans-serif",
       textAlign: "center"
-    }}
-  >
-    <h1 style={{ fontSize: "48px", marginBottom: "10px" }}>403</h1>
-    <h2 style={{ marginBottom: "10px" }}>Forbidden</h2>
-    <p>You do not have access to this game yet.</p>
-  </div>
-);
+    }}>
+      <h1 style={{ fontSize: "48px" }}>403</h1>
+      <h2>Forbidden</h2>
+      <p>You do not have access to this game yet.</p>
+    </div>
+  );
 
   const protect = (moduleKey, gameKey, element) => {
-  if (loading || !summary) return <div>Loading...</div>;
+    if (loading || !summary) return <div>Loading...</div>;
 
-  const unlocked = isUnlocked(moduleKey, gameKey);
+    const unlocked = isUnlocked(moduleKey, gameKey);
 
-  if (unlocked === null) return <div>Loading...</div>;
+    if (unlocked === null) return <div>Loading...</div>;
+    if (!unlocked) return <Forbidden />;
 
-  if (!unlocked) return <Forbidden />;
-
-  return element;
-};
+    return element;
+  };
 
   return (
     <BrowserRouter>
@@ -148,50 +150,56 @@ function App() {
           <Route path="/map" element={<Map openMenu={() => setShowMenu(true)} />} />
 
           <Route path="/module1" element={<M1Nav />} />
-          <Route path="/module1/symptoms" element={protect("module1", "symptoms", <Symptoms openMenu={() => setShowMenu(true)} />)} />
-          <Route path="/module1/personalHygiene" element={protect("module1", "personalHygiene", <PersonalHygiene openMenu={() => setShowMenu(true)} />)} />
-          <Route path="/module1/onLocation" element={protect("module1", "location", <Location openMenu={() => setShowMenu(true)} />)} />
+          <Route path="/module1/symptoms"
+            element={protect("module1", "symptoms",
+              <Symptoms openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+            )}
+          />
+          <Route path="/module1/personalHygiene"
+            element={protect("module1", "personalHygiene",
+              <PersonalHygiene openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+            )}
+          />
+          <Route path="/module1/onLocation"
+            element={protect("module1", "location",
+              <Location openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+            )}
+          />
 
           <Route path="/module2" element={<M2Nav />} />
-          <Route path="/module2/therm" element={protect("module2", "module2part1", <Module2Part1 openMenu={() => setShowMenu(true)} />)} />
-          <Route path="/module2/cleaning" element={protect("module2", "chopping", <Cleaning openMenu={() => setShowMenu(true)} />)} />
-          <Route path="/module2/cooking" element={protect("module2", "cooking", <Cooking openMenu={() => setShowMenu(true)} />)} />
+          <Route path="/module2/therm"
+            element={protect("module2", "module2part1",
+              <Module2Part1 openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+            )}
+          />
+          <Route path="/module2/cleaning"
+            element={protect("module2", "chopping",
+              <Cleaning openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+            )}
+          />
+          <Route path="/module2/cooking"
+            element={protect("module2", "cooking",
+              <Cooking openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+            )}
+          />
 
-          <Route path="/module3" element={<M3Nav />} />
-          <Route path="/module3/expiration" element={protect("module3", "expiration", <Expiration openMenu={() => setShowMenu(true)} />)} />
-          <Route path="/module3/canSorting" element={protect("module3", "cansort", <Can openMenu={() => setShowMenu(true)} />)} />
-          <Route path="/module3/allergenIdentification" element={protect("module3", "allergenIdentification", <Allergen openMenu={() => setShowMenu(true)} />)} />
-
-          <Route path="/module4" element={<M4Nav />} />
-          <Route path="/module4/toteCleaning" element={protect("module4", "cleanTote", <CleanTote openMenu={() => setShowMenu(true)} />)} />
-          <Route path="/module4/coolerPack" element={protect("module4", "sorting", <CoolerPack openMenu={() => setShowMenu(true)} />)} />
-          <Route path="/module4/packTruck" element={protect("module4", "packing", <TruckPack openMenu={() => setShowMenu(true)} />)} />
-
-          <Route path="/module5" element={<M5Nav />} />
-          <Route path="/module5/coldPreparedTransport" element={protect("module5", "cold", <ColdPrepTransport openMenu={() => setShowMenu(true)} />)} />
-          <Route path="/module5/hotPreparedTransport" element={protect("module5", "hot", <HotPrepTransport openMenu={() => setShowMenu(true)} />)} />
-
-          <Route path="/module6" element={<M6Nav />} />
-          <Route path="/module6/foodServiceMishaps" element={protect("module6", "foodServiceMishaps", <FoodServiceMishaps openMenu={() => setShowMenu(true)} />)} />
-          <Route path="/module6/foodServiceSetUp" element={protect("module6", "serviceSetup", <ServiceSetUps openMenu={() => setShowMenu(true)} />)} />
+         
 
         </Routes>
 
         {showMenu && (
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              backgroundColor: "rgba(0,0,0,0.85)",
-              height: "100%",
-              zIndex: 80000,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
+          <div style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            backgroundColor: "rgba(0,0,0,0.85)",
+            height: "100%",
+            zIndex: 80000,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}>
             <Menu closeMenu={() => setShowMenu(false)} />
 
             <div
@@ -202,8 +210,7 @@ function App() {
                 right: "120px",
                 fontSize: "60px",
                 color: "white",
-                cursor: "pointer",
-                zIndex: 80000
+                cursor: "pointer"
               }}
             >
               ✖

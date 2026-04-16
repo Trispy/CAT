@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 
-export default function Symptoms({ openMenu }) {
+export default function Symptoms({ openMenu, refreshSummary }) {
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -188,7 +188,7 @@ export default function Symptoms({ openMenu }) {
             this.check.setVisible(true);
             this.next.setVisible(false);
           } else {
-            moduleUpdate(`${API}/api/game/module1/symptoms/completed`);
+            moduleUpdate(`${API}/api/game/module1/symptoms/completed`, refreshSummary);
             window.navigateToPage("/module1/personalHygiene");
           }
         });
