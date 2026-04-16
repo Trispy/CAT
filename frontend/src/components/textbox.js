@@ -32,6 +32,7 @@ function Textbox({
           height: "70%",  
           display: "flex",
           justifyContent: "center",
+          transform: "translateY(-5px)",
           alignItems: "center",
           textAlign: "center",
           color: placeHolderColor || "black",
