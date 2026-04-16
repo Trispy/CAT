@@ -43,7 +43,7 @@ function App() {
 
   const fetchSummary = async () => {
     const token = localStorage.getItem("token");
-
+    setLoading(true);
     return fetch(`${API}/api/game/moduleSummary`, {
       headers: { Authorization: `Bearer ${token}` }
     })
