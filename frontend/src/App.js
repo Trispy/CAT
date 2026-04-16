@@ -85,7 +85,14 @@ const nameMap = {
   serviceSetup: "serviceSetup",
   foodServiceMishaps: "foodServiceMishaps",
 };
-
+const moduleOrder = {
+  module1: ["symptoms", "personalHygiene", "location"],
+  module2: ["module2part1", "chopping", "cooking"],
+  module3: ["cansort", "expiration", "allergenIdentification"],
+  module4: ["cleanTote", "sorting", "packing"],
+  module5: ["cold", "hot"],
+  module6: ["serviceSetup", "foodServiceMishaps"]
+};
     const allEntries = [];
     const modules = [
       summary.module1,
@@ -120,14 +127,13 @@ const nameMap = {
 
     const val = summary[moduleKey]?.[gameKey];
 
-    let clickable = val === true || globalIndex === nextIndex;
+    let clickable = val === true;
 
     const unlockModules =
       summary?.finished_m1 === true &&
       summary?.finished_m2 === true;
 
-    const moduleEntries = Object.entries(summary[moduleKey] || {});
-    const isFirstGame = moduleEntries[0]?.[0] === gameKey;
+    const isFirstGame = moduleOrder[moduleKey]?.[0] === gameKey;
 
     if (unlockModules && isFirstGame) {
       clickable = true;
