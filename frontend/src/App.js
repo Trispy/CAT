@@ -63,15 +63,22 @@ function App() {
     if (!summary) return false;
 
     const nameMap = {
-      module2part1: "module2part1",
-      module3part1: "cansort",
-      module3part2: "expiration",
-      module3part3: "allergenIdentification",
-      module4part1: "cleanTote",
+      symptoms: "symptoms",
+      personalHygiene: "personalHygiene",
+      location: "onLocation",
+      module2part1: "therm",
+      chopping: "chopping",
+      cooking: "cooking",
+      cansort: "cansort",
+      expiration: "expiration",
+      allergenIdentification: "allergenIdentification",
+      cleanTote: "toteCleaning",
+      sorting: "coolerPack",
+      packing: "packTruck",
       cold: "coldPreparedTransport",
       hot: "hotPreparedTransport",
-      module6part1: "serviceSetup",
-      module6part2: "foodServiceMishaps",
+      serviceSetup: "serviceSetup",
+      foodServiceMishaps: "foodServiceMishaps",
     };
 
     const allEntries = [];
