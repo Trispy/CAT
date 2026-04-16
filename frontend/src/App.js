@@ -182,7 +182,70 @@ function App() {
               <Cooking openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
             )}
           />
+          <Route path="/module3" element={<M3Nav />} />
 
+      <Route path="/module3/expiration"
+        element={protect("module3", "expiration",
+          <Expiration openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+        )}
+      />
+
+      <Route path="/module3/canSorting"
+        element={protect("module3", "cansort",
+          <Can openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+        )}
+      />
+
+      <Route path="/module3/allergenIdentification"
+        element={protect("module3", "allergenIdentification",
+          <Allergen openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+        )}
+      />
+      <Route path="/module4" element={<M4Nav />} />
+
+        <Route path="/module4/toteCleaning"
+          element={protect("module4", "cleanTote",
+            <CleanTote openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+          )}
+        />
+
+        <Route path="/module4/coolerPack"
+          element={protect("module4", "sorting",
+            <CoolerPack openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+          )}
+        />
+
+        <Route path="/module4/packTruck"
+          element={protect("module4", "packing",
+            <TruckPack openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+          )}
+        />
+        <Route path="/module5" element={<M5Nav />} />
+
+        <Route path="/module5/coldPreparedTransport"
+          element={protect("module5", "cold",
+            <ColdPrepTransport openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+          )}
+        />
+
+        <Route path="/module5/hotPreparedTransport"
+          element={protect("module5", "hot",
+            <HotPrepTransport openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+          )}
+        />
+        <Route path="/module6" element={<M6Nav />} />
+
+        <Route path="/module6/foodServiceMishaps"
+          element={protect("module6", "foodServiceMishaps",
+            <FoodServiceMishaps openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+          )}
+        />
+
+        <Route path="/module6/foodServiceSetUp"
+          element={protect("module6", "serviceSetup",
+            <ServiceSetUps openMenu={() => setShowMenu(true)} refreshSummary={fetchSummary} />
+          )}
+        />
          
 
         </Routes>
