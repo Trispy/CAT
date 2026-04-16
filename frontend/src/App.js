@@ -60,7 +60,7 @@ function App() {
 
 
  const isUnlocked = (moduleKey, gameKey) => {
-  if (!summary) return false;
+  if (!summary) return null;
 
   const moduleOrder = {
     module1: ["symptoms", "personalHygiene", "location"],
@@ -126,10 +126,16 @@ function App() {
 );
 
   const protect = (moduleKey, gameKey, element) => {
-    if (loading) return <div>Loading...</div>;
-    if (!isUnlocked(moduleKey, gameKey)) return <Forbidden />;
-    return element;
-  };
+  if (loading || !summary) return <div>Loading...</div>;
+
+  const unlocked = isUnlocked(moduleKey, gameKey);
+
+  if (unlocked === null) return <div>Loading...</div>;
+
+  if (!unlocked) return <Forbidden />;
+
+  return element;
+};
 
   return (
     <BrowserRouter>
