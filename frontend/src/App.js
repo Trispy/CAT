@@ -59,88 +59,52 @@ function App() {
   }, []);
 
 
-  const isUnlocked = (moduleKey, gameKey) => {
-    if (!summary) return false;
-//backend route mapping
-const nameMap = {
-  symptoms: "symptoms",
-  personalHygiene: "personalHygiene",
-  location: "location",
+ const isUnlocked = (moduleKey, gameKey) => {
+  if (!summary) return false;
 
-  module2part1: "module2part1",
-  chopping: "chopping",
-  cooking: "cooking",
-
-  cansort: "cansort",
-  expiration: "expiration",
-  allergenIdentification: "allergenIdentification",
-
-  cleanTote: "cleanTote",
-  sorting: "sorting",
-  packing: "packing",
-
-  cold: "cold",
-  hot: "hot",
-
-  serviceSetup: "serviceSetup",
-  foodServiceMishaps: "foodServiceMishaps",
-};
-const moduleOrder = {
-  module1: ["symptoms", "personalHygiene", "location"],
-  module2: ["module2part1", "chopping", "cooking"],
-  module3: ["cansort", "expiration", "allergenIdentification"],
-  module4: ["cleanTote", "sorting", "packing"],
-  module5: ["cold", "hot"],
-  module6: ["serviceSetup", "foodServiceMishaps"]
-};
-    const allEntries = [];
-    const modules = [
-      summary.module1,
-      summary.module2,
-      summary.module3,
-      summary.module4,
-      summary.module5,
-      summary.module6
-    ];
-
-    for (let m of modules) {
-      if (!m) continue;
-      for (let key in m) {
-        if (["_id", "username", "__v"].includes(key)) continue;
-        allEntries.push([key, m[key]]);
-      }
-    }
-
-    let lastTrue = -1;
-    allEntries.forEach(([_, val], i) => {
-      if (val === true) lastTrue = i;
-    });
-
-    const nextIndex = lastTrue === -1 ? 0 : lastTrue + 1;
-
-    const mappedGameKey = nameMap[gameKey] || gameKey;
-
-    const globalIndex = allEntries.findIndex(([key]) => {
-      const mapped = nameMap[key] || key;
-      return mapped === mappedGameKey;
-    });
-
-    const val = summary[moduleKey]?.[gameKey];
-
-    let clickable = val === true;
-
-    const unlockModules =
-      summary?.finished_m1 === true &&
-      summary?.finished_m2 === true;
-
-    const isFirstGame = moduleOrder[moduleKey]?.[0] === gameKey;
-
-    if (unlockModules && isFirstGame) {
-      clickable = true;
-    }
-
-    return clickable;
+  const moduleOrder = {
+    module1: ["symptoms", "personalHygiene", "location"],
+    module2: ["module2part1", "chopping", "cooking"],
+    module3: ["cansort", "expiration", "allergenIdentification"],
+    module4: ["cleanTote", "sorting", "packing"],
+    module5: ["cold", "hot"],
+    module6: ["serviceSetup", "foodServiceMishaps"]
   };
+
+  const allEntries = [];
+
+  Object.keys(moduleOrder).forEach((mod) => {
+    moduleOrder[mod].forEach((key) => {
+      const val = summary[mod]?.[key];
+      allEntries.push([key, val]);
+    });
+  });
+
+  let lastTrue = -1;
+  allEntries.forEach(([_, val], i) => {
+    if (val === true) lastTrue = i;
+  });
+
+  const nextIndex = lastTrue === -1 ? 0 : lastTrue + 1;
+
+  const globalIndex = allEntries.findIndex(([key]) => key === gameKey);
+
+  const val = summary[moduleKey]?.[gameKey];
+
+  let clickable = val === true || globalIndex === nextIndex;
+
+  const unlockModules =
+    summary?.finished_m1 === true &&
+    summary?.finished_m2 === true;
+
+  const isFirstGame = moduleOrder[moduleKey]?.[0] === gameKey;
+
+  if (unlockModules && isFirstGame) {
+    clickable = true;
+  }
+
+  return clickable;
+};
   const Forbidden = () => (
   <div
     style={{
