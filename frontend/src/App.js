@@ -110,6 +110,7 @@ function App() {
     return clickable;
   };
 
+  //can add forbidden in another
   const Forbidden = () => (
     <div style={{
       height: "100vh",
@@ -129,15 +130,14 @@ function App() {
   );
 
   const protect = (moduleKey, gameKey, element) => {
-    if (loading || !summary) return <div>Loading...</div>;
+  if (loading || !summary) return <div>Loading game...</div>;
 
-    const unlocked = isUnlocked(moduleKey, gameKey);
+  const unlocked = isUnlocked(moduleKey, gameKey);
 
-    if (unlocked === null) return <div>Loading...</div>;
-    if (!unlocked) return <Forbidden />;
+  if (!unlocked) return <div>Loading game...</div>;
 
-    return element;
-  };
+  return element;
+};
 
   return (
     <BrowserRouter>
