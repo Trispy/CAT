@@ -61,25 +61,30 @@ function App() {
 
   const isUnlocked = (moduleKey, gameKey) => {
     if (!summary) return false;
+//backend route mapping
+const nameMap = {
+  symptoms: "symptoms",
+  personalHygiene: "personalHygiene",
+  location: "location",
 
-    const nameMap = {
-      symptoms: "symptoms",
-      personalHygiene: "personalHygiene",
-      location: "onLocation",
-      module2part1: "therm",
-      chopping: "chopping",
-      cooking: "cooking",
-      cansort: "cansort",
-      expiration: "expiration",
-      allergenIdentification: "allergenIdentification",
-      cleanTote: "toteCleaning",
-      sorting: "coolerPack",
-      packing: "packTruck",
-      cold: "coldPreparedTransport",
-      hot: "hotPreparedTransport",
-      serviceSetup: "serviceSetup",
-      foodServiceMishaps: "foodServiceMishaps",
-    };
+  module2part1: "module2part1",
+  chopping: "chopping",
+  cooking: "cooking",
+
+  cansort: "cansort",
+  expiration: "expiration",
+  allergenIdentification: "allergenIdentification",
+
+  cleanTote: "cleanTote",
+  sorting: "sorting",
+  packing: "packing",
+
+  cold: "cold",
+  hot: "hot",
+
+  serviceSetup: "serviceSetup",
+  foodServiceMishaps: "foodServiceMishaps",
+};
 
     const allEntries = [];
     const modules = [
