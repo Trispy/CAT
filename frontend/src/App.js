@@ -64,51 +64,42 @@ function App() {
   }, []);
 
   const isUnlocked = (moduleKey, gameKey) => {
-    if (!summary) return null;
+  if (!summary) return null;
 
-    const moduleOrder = {
-      module1: ["symptoms", "personalHygiene", "location"],
-      module2: ["module2part1", "chopping", "cooking"],
-      module3: ["cansort", "expiration", "allergenIdentification"],
-      module4: ["cleanTote", "sorting", "packing"],
-      module5: ["cold", "hot"],
-      module6: ["serviceSetup", "foodServiceMishaps"]
-    };
-
-    const allEntries = [];
-
-    Object.keys(moduleOrder).forEach((mod) => {
-      moduleOrder[mod].forEach((key) => {
-        const val = summary[mod]?.[key];
-        allEntries.push([key, val]);
-      });
-    });
-
-    let lastTrue = -1;
-    allEntries.forEach(([_, val], i) => {
-      if (val === true) lastTrue = i;
-    });
-
-    const nextIndex = lastTrue === -1 ? 0 : lastTrue + 1;
-
-    const globalIndex = allEntries.findIndex(([key]) => key === gameKey);
-
-    const val = summary[moduleKey]?.[gameKey];
-
-    let clickable = val === true || globalIndex === nextIndex;
-
-    const unlockModules =
-      summary?.finished_m1 === true &&
-      summary?.finished_m2 === true;
-
-    const isFirstGame = moduleOrder[moduleKey]?.[0] === gameKey;
-
-    if (unlockModules && isFirstGame) {
-      clickable = true;
-    }
-
-    return clickable;
+  const moduleOrder = {
+    module1: ["symptoms", "personalHygiene", "location"],
+    module2: ["module2part1", "chopping", "cooking"],
+    module3: ["cansort", "expiration", "allergenIdentification"],
+    module4: ["cleanTote", "sorting", "packing"],
+    module5: ["cold", "hot"],
+    module6: ["serviceSetup", "foodServiceMishaps"]
   };
+
+  const val = summary[moduleKey]?.[gameKey];
+  const games = moduleOrder[moduleKey];
+  const index = games.indexOf(gameKey);
+
+  const m1Done = summary?.finished_m1 === true;
+  const m2Done = summary?.finished_m2 === true;
+  const unlockModules = m1Done && m2Done;
+
+  const isFirstGame = index === 0;
+
+  if (val === true) return true;
+
+
+  if (moduleKey === "module1" || moduleKey === "module2") {
+    if (index === 0) return true;
+    return summary[moduleKey]?.[games[index - 1]] === true;
+  }
+
+  if (!unlockModules) return false;
+
+
+  if (isFirstGame) return true;
+
+  return summary[moduleKey]?.[games[index - 1]] === true;
+};
 
   //can add forbidden in another
   const Forbidden = () => (
