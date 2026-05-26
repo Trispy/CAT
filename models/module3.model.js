@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const module3SummarySchema = new mongoose.Schema({
-
   username: {type: String, required: true},
   cansort: {type: Boolean, required: true, default: false}, 
   expiration: {type: Boolean, required: true, default: false}, 
