@@ -603,7 +603,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
                         let labelText = "";
 
                         if (item.type === "expiration") {
-                            labelText = `Expiration Date: ${formatDate(item.expirationDate)}\n\nToday's Date: ${formatDate(today)}`;
+                            labelText = `Use-By: ${formatDate(item.expirationDate)}\n\nToday's Date: ${formatDate(today)}`;
                         } else {
                             labelText = `Best By: ${formatDate(item.bestByDate)}\n\nToday's Date: ${formatDate(today)}`;
                         }
