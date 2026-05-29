@@ -22,7 +22,7 @@ function TextboxErin({
         backgroundRepeat: "no-repeat",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "flex-start",
         boxSizing: "border-box",
         padding: "2% 6%",   
       }}
@@ -33,7 +33,8 @@ function TextboxErin({
           paddingLeft: "33%",  
           paddingRight: "5%", 
           paddingBottom: "5%",
-          textAlign: "center",
+          paddingTop: "15%",
+          textAlign: "left",
           color: placeHolderColor || "black",
           fontSize: placeHolderfontSize || "30px",
           fontWeight: "bold",

@@ -3,13 +3,11 @@ import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
 import moduleUpdate from "../../components/moduleupdate.js";
+
 import thermometerhand from "../../assets/thermometerhand.png"
 import thermometer from "../../assets/thermometer.png"
 import thermometerBackground from "../../assets/thermometerbackground.png"
 import Loc from "../../assets/backopen.png";
-import Textbox from "../../components/textbox";
-import textbox from "../../assets/M1G1/Textbox.png";
-import useTypewriter from "../../components/typewriter";
 import nextButton from "../../assets/nextbutton.png";
 import sinkbg from "../../assets/M1G3/SinkBackground.png";
 import gloveBox from "../../assets/M1G3/gloveBox.png";
@@ -29,7 +27,11 @@ import sprayBottle from "../../assets/M2G2/Spraybottle.png";
 import rag from "../../assets/M2G2/rag.png";
 import wetCuttingBoard from "../../assets/M2G2/watercuttingboard.png";
 import knife from "../../assets/M2G2/Knife.png";
-import mapbutton from "../../assets/mapbutton.png";
+import textbox from "../../assets/M1G1/Textbox.png";
+
+import ProgressBar from "../../components/progressbar.js";
+import useTypewriter from "../../components/typewriter";
+import Textbox from "../../components/textbox";
 import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 
@@ -57,7 +59,6 @@ export default function Cleaning({ openMenu, refreshSummary }) {
         backgroundRepeat: 'no-repeat',
         backgroundColor: 'black'
     };
-
 
 
     const [showSoapText, setShowSoapText] = useState(false);
@@ -174,11 +175,10 @@ export default function Cleaning({ openMenu, refreshSummary }) {
                 this.load.image("rag", rag);
                 this.load.image("knife", knife);
                 this.load.image("gloveBox", gloveBox);
-                this.load.image("textbox", textbox);
                 this.load.image("thermometer", thermometer);
                 this.load.image("thermometerhand", thermometerhand);
                 this.load.image("thermometerbackground", thermometerBackground);
-
+                this.load.image("textbox", textbox);
             }
             showInstructions() {
                 const { width, height } = this.scale;
@@ -645,6 +645,8 @@ export default function Cleaning({ openMenu, refreshSummary }) {
 
                 let sprayed = false;
 
+                this.progressBar = new ProgressBar(this, {width, height});
+
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     if (gameObject !== bottleIcon) return;
 
@@ -667,7 +669,9 @@ export default function Cleaning({ openMenu, refreshSummary }) {
                     });
                     const clearedCount = cells.filter(c => c.cleared).length;
                     const percentCleared = clearedCount / cells.length;
+                    this.progressBar.setProgress(Math.min(percentCleared / 0.03), 1.0);
                     if (!sprayed && percentCleared > 0.03) {
+                        this.progressBar.destroy();
                         bottleIcon.destroy();
                         dirtyBoardRT.destroy();
                         sprayed = true;
@@ -750,10 +754,10 @@ export default function Cleaning({ openMenu, refreshSummary }) {
                     ragIcon.setScale(ragScale);
                 });
 
+                this.progressBar = new ProgressBar(this, {width, height});
+
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     if (gameObject !== ragIcon) return;
-
-
                     ragIcon.x = dragX;
                     ragIcon.y = dragY;
 
@@ -772,7 +776,9 @@ export default function Cleaning({ openMenu, refreshSummary }) {
                     });
                     const clearedCount = cells2.filter(c => c.cleared).length;
                     const percentCleared = clearedCount / cells2.length;
+                    this.progressBar.setProgress(Math.min(percentCleared / 0.03), 1.0);
                     if (percentCleared > 0.03) {
+                        this.progressBar.destroy();
                         ragIcon.destroy();
                         wetBoardRT.destroy();
                         bg.destroy();
@@ -1009,31 +1015,31 @@ export default function Cleaning({ openMenu, refreshSummary }) {
     }
 
     const handleNextClick = () => {
-    if (gameStage === "intro") {
-        setGameStage("instructions");
+        if (gameStage === "intro") {
+            setGameStage("instructions");
 
-        phaserGameRef.current?.scene.start("InstructionScene");
-    }
-    else if (gameStage === "instructions") { 
-        setGameStage("cleanStage");
+            phaserGameRef.current?.scene.start("InstructionScene");
+        }
+        else if (gameStage === "instructions") {
+            setGameStage("cleanStage");
 
-        phaserGameRef.current?.scene.start("CleanScene", {
-            instructions: instructionTexts
-        });
-    }
-    else if (gameStage === "instructions") {
-    if (instructionStep < instructionTexts.length - 1) {
-        setInstructionStep(prev => prev + 1);
-    } 
-    else {
-        setGameStage("cleanStage");
+            phaserGameRef.current?.scene.start("CleanScene", {
+                instructions: instructionTexts
+            });
+        }
+        else if (gameStage === "instructions") {
+            if (instructionStep < instructionTexts.length - 1) {
+                setInstructionStep(prev => prev + 1);
+            }
+            else {
+                setGameStage("cleanStage");
 
-        phaserGameRef.current?.scene.start("CleanScene", {
-            instructions: instructionTexts
-        });
-    }
-}
-};
+                phaserGameRef.current?.scene.start("CleanScene", {
+                    instructions: instructionTexts
+                });
+            }
+        }
+    };
     const handleInstructionClick = () => {
 
         if (instructionStep < instructionTexts.length - 1) {
@@ -1090,7 +1096,7 @@ export default function Cleaning({ openMenu, refreshSummary }) {
                         display: "block"
                     }}
                 />
-                  
+
                 <div
                     onClick={handleNextClick}
                     style={{
@@ -1135,8 +1141,8 @@ export default function Cleaning({ openMenu, refreshSummary }) {
             {gameStage === "instructions" && (
                 <div
                     onClick={(e) => {
-                    e.stopPropagation();
-                    handleInstructionClick();
+                        e.stopPropagation();
+                        handleInstructionClick();
                     }}
                     style={{
                         position: "fixed",
@@ -1176,42 +1182,42 @@ export default function Cleaning({ openMenu, refreshSummary }) {
                 }}
             />
             <div
-            style={{
-                position: "absolute",
-                top: "10px",
-                right: "190px",
-                display: "flex",
-                gap: "10px",
-                alignItems: "center",
-                zIndex: 30000
-            }}
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "190px",
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                    zIndex: 30000
+                }}
             >
 
-            {gameStage === "cleanStage" && (
-                <button
-                onClick={() => {
-                    if (phaserGameRef.current) {
-                    const scene = phaserGameRef.current.scene.getScene("CleanScene");
-                    if (scene?.scene?.isActive()) {
-                        scene.showInstructions();
-                    }
-                    }
-                }}
-                style={{
-                    font: "bold 20px sans-serif",
-                    backgroundColor: "#ffffff",
-                    color: "#5100ff",
-                    padding: "5px 9px",
-                    cursor: "pointer"
-                }}
-                >
-                ?
-                </button>
-            )}
+                {gameStage === "cleanStage" && (
+                    <button
+                        onClick={() => {
+                            if (phaserGameRef.current) {
+                                const scene = phaserGameRef.current.scene.getScene("CleanScene");
+                                if (scene?.scene?.isActive()) {
+                                    scene.showInstructions();
+                                }
+                            }
+                        }}
+                        style={{
+                            font: "bold 20px sans-serif",
+                            backgroundColor: "#ffffff",
+                            color: "#5100ff",
+                            padding: "5px 9px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        ?
+                    </button>
+                )}
 
-            <Settings openMenu={openMenu} />
+                <Settings openMenu={openMenu} />
             </div>
-         
+
 
         </div>
     );

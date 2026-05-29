@@ -25,7 +25,6 @@ import sauce from "../../assets/M3G3/Sauce.png";
 import seaweed from "../../assets/M3G3/Seaweed.png";
 import stock from "../../assets/M3G3/Stock.png";
 import yogurt from "../../assets/M3G3/Yogurt.png";
-import mapbutton from "../../assets/mapbutton.png";
 import Settings from "../../components/settings";
 
 import { useNavigate } from "react-router-dom";
@@ -34,7 +33,7 @@ const API = process.env.REACT_APP_API_URL;
 export default function Allergens({ openMenu, refreshSummary }) {
     const navigate = useNavigate();
 
-           
+
     useEffect(() => {
         window.navigateToPage = navigate;
 
@@ -80,66 +79,66 @@ export default function Allergens({ openMenu, refreshSummary }) {
                 this.load.image("next", next);
 
                 this.load.image("bar", bar);
-                this.load.image("cookies", cookies);                
-                this.load.image("crackers", crackers);                
+                this.load.image("cookies", cookies);
+                this.load.image("crackers", crackers);
                 this.load.image("guest1", guest1);
-                this.load.image("guest2", guest2);                
-                this.load.image("guest3", guest3);                
-                this.load.image("sauce", sauce);                
-                this.load.image("seaweed", seaweed);                
-                this.load.image("stock", stock);                
+                this.load.image("guest2", guest2);
+                this.load.image("guest3", guest3);
+                this.load.image("sauce", sauce);
+                this.load.image("seaweed", seaweed);
+                this.load.image("stock", stock);
                 this.load.image("yogurt", yogurt);
             }
-            
-            showPopup(inputText) {           
-                    const { width, height } = this.scale;
 
-                    const overlay = this.add.container(0, 0);
+            showPopup(inputText) {
+                const { width, height } = this.scale;
 
-                    //user can't interact with items while popup is open
-                    const blocker = this.add.rectangle(0, 0, width, height, 0x000000, 0.3)
+                const overlay = this.add.container(0, 0);
+
+                //user can't interact with items while popup is open
+                const blocker = this.add.rectangle(0, 0, width, height, 0x000000, 0.3)
                     .setOrigin(0)
                     .setInteractive();
 
-                    const bg = this.add.rectangle(
-                        width / 2,
-                        height / 2,
-                        width * 0.8,
-                        height * 0.8,
-                        0xffffff
-                    ).setStrokeStyle(4, 0x000000);
+                const bg = this.add.rectangle(
+                    width / 2,
+                    height / 2,
+                    width * 0.8,
+                    height * 0.8,
+                    0xffffff
+                ).setStrokeStyle(4, 0x000000);
 
-                    const text = this.add.text(
-                        width / 2,
-                        height / 2,
-                        inputText,
-                        {
-                            font: "bold 50px sans-serif",
-                            color: "#000",
-                            wordWrap: { width: width * 0.7 }
-                        }
-                    ).setOrigin(0.5);
+                const text = this.add.text(
+                    width / 2,
+                    height / 2,
+                    inputText,
+                    {
+                        font: "bold 50px sans-serif",
+                        color: "#000",
+                        wordWrap: { width: width * 0.7 }
+                    }
+                ).setOrigin(0.5);
 
-                    const close = this.add.text(
-                        width * 0.85,
-                        height * 0.20,
-                        "X",
-                        {
-                            font: "40px Arial",
-                            backgroundColor: "#ff0000",
-                            padding: { x: 30, y: 20 }
-                        }
-                    )
+                const close = this.add.text(
+                    width * 0.85,
+                    height * 0.20,
+                    "X",
+                    {
+                        font: "40px Arial",
+                        backgroundColor: "#ff0000",
+                        padding: { x: 30, y: 20 }
+                    }
+                )
                     .setInteractive()
                     .setOrigin(0.5);
 
-                    close.on("pointerdown", () => {
-                        overlay.destroy(true);
-                    });
+                close.on("pointerdown", () => {
+                    overlay.destroy(true);
+                });
 
-                    overlay.add([blocker, bg, text, close]);
-                    overlay.setDepth(30);
-                }
+                overlay.add([blocker, bg, text, close]);
+                overlay.setDepth(30);
+            }
 
             create() {
                 // Background
@@ -166,7 +165,7 @@ export default function Allergens({ openMenu, refreshSummary }) {
                     .setScale(0.5)
                     .setInteractive()
                     .setVisible(false);
-                
+
 
                 this.erinX = this.bg1.width / 2 - 150;
                 this.erinY = this.bg1.height / 2;
@@ -196,7 +195,7 @@ export default function Allergens({ openMenu, refreshSummary }) {
                     .setScale(this.itemScale)
                     .setVisible(false);
 
-                this.sesame = this.add.image(this.itemX, this.itemY, "seaweed")                    
+                this.sesame = this.add.image(this.itemX, this.itemY, "seaweed")
                     .setDepth(30)
                     .setOrigin(0)
                     .setScale(this.itemScale)
@@ -233,58 +232,58 @@ export default function Allergens({ openMenu, refreshSummary }) {
                     .setVisible(false);
 
                 this.guest1 = this.add.image(this.guestX, this.guestY, "guest1")
-                .setDepth(21)
-                .setOrigin(0)
-                .setScale(this.guestScale)
-                .setVisible(false);
-                
+                    .setDepth(21)
+                    .setOrigin(0)
+                    .setScale(this.guestScale)
+                    .setVisible(false);
+
                 this.guest2 = this.add.image(this.guestX, this.guestY, "guest2")
-                .setDepth(21)
-                .setOrigin(0)
-                .setScale(this.guestScale)
-                .setVisible(false);
+                    .setDepth(21)
+                    .setOrigin(0)
+                    .setScale(this.guestScale)
+                    .setVisible(false);
 
                 this.guest3 = this.add.image(this.guestX, this.guestY, "guest3")
-                .setDepth(21)
-                .setOrigin(0)
-                .setScale(this.guestScale)
-                .setVisible(false);
+                    .setDepth(21)
+                    .setOrigin(0)
+                    .setScale(this.guestScale)
+                    .setVisible(false);
 
                 this.guest4 = this.add.image(this.guestX, this.guestY, "guest1")
-                .setDepth(21)
-                .setOrigin(0)
-                .setScale(this.guestScale)
-                .setVisible(false);
+                    .setDepth(21)
+                    .setOrigin(0)
+                    .setScale(this.guestScale)
+                    .setVisible(false);
 
                 this.guest5 = this.add.image(this.guestX, this.guestY, "guest2")
-                .setDepth(21)
-                .setOrigin(0)
-                .setScale(this.guestScale)
-                .setVisible(false);
+                    .setDepth(21)
+                    .setOrigin(0)
+                    .setScale(this.guestScale)
+                    .setVisible(false);
 
                 this.guest6 = this.add.image(this.guestX, this.guestY, "guest3")
-                .setDepth(21)
-                .setOrigin(0)
-                .setScale(this.guestScale)
-                .setVisible(false);
+                    .setDepth(21)
+                    .setOrigin(0)
+                    .setScale(this.guestScale)
+                    .setVisible(false);
 
                 this.guest7 = this.add.image(this.guestX, this.guestY, "guest1")
-                .setDepth(21)
-                .setOrigin(0)
-                .setScale(this.guestScale)
-                .setVisible(false);
+                    .setDepth(21)
+                    .setOrigin(0)
+                    .setScale(this.guestScale)
+                    .setVisible(false);
 
                 this.guest8 = this.add.image(this.guestX, this.guestY, "guest2")
-                .setDepth(21)
-                .setOrigin(0)
-                .setScale(this.guestScale)
-                .setVisible(false);
+                    .setDepth(21)
+                    .setOrigin(0)
+                    .setScale(this.guestScale)
+                    .setVisible(false);
 
                 this.guest9 = this.add.image(this.guestX, this.guestY, "guest3")
-                .setDepth(21)
-                .setOrigin(0)
-                .setScale(this.guestScale)
-                .setVisible(false);
+                    .setDepth(21)
+                    .setOrigin(0)
+                    .setScale(this.guestScale)
+                    .setVisible(false);
 
                 // Buttons
                 this.next = this.add.image(
@@ -297,7 +296,7 @@ export default function Allergens({ openMenu, refreshSummary }) {
                     .setInteractive()
                     .setVisible(true);
 
-               
+
 
                 this.textboxErin = this.add.container(this.bg1.width / 2 - 640, 50);
 
@@ -332,7 +331,7 @@ export default function Allergens({ openMenu, refreshSummary }) {
                 this.textbox.add([this.textboxImage, this.textboxText]);
                 this.textbox.setScale(this.textboxScale);
 
-                 // Scenario logic
+                // Scenario logic
                 this.volunteerScenario = [
                     {
                         question: "I’m allergic to fish. Is it ok for me to eat this?",
@@ -347,7 +346,7 @@ export default function Allergens({ openMenu, refreshSummary }) {
                         correctAnswer: "no",
                         incorrectPopup: "Try again. The “may contain” statement lists shellfish, which means it is possible for the patron to have an allergic reaction to the item, so you should not give it to them.",
                         correctPopup: "Correct! The “may contain” statement lists shellfish. It is possible for the patron to have an allergic reaction to the item, so you should not give it to them.",
-                        itemType: this.shellfish,                        
+                        itemType: this.shellfish,
                         person: this.guest2
 
                     },
@@ -356,7 +355,7 @@ export default function Allergens({ openMenu, refreshSummary }) {
                         correctAnswer: "yes",
                         incorrectPopup: "Try again. Wheat is not one of the listed ingredients. It is also not listed in the “may contain” statement. The patron can safely have this item. ",
                         correctPopup: "Correct! Wheat is not one of the listed ingredients. It is also not listed in the “may contain” statement. The patron can safely have this item. ",
-                        itemType: this.nowheat,                        
+                        itemType: this.nowheat,
                         person: this.guest3
 
                     },
@@ -409,7 +408,7 @@ export default function Allergens({ openMenu, refreshSummary }) {
                         person: this.guest9
                     },
                 ];
-                
+
                 // Interactions
                 this.next.on('pointerdown', async () => {
                     if (this.welcomeTexts.length > 0) {
@@ -447,12 +446,12 @@ export default function Allergens({ openMenu, refreshSummary }) {
             }
 
             typewriteText(text, type, speed = 20) {
-                if (type == "popup") {
+                if (type === "popup") {
                     this.showPopup(text);
                     return;
                 }
 
-                
+
                 if (this.typingEvent) {
                     this.typingEvent.remove();
                 }
@@ -464,7 +463,7 @@ export default function Allergens({ openMenu, refreshSummary }) {
 
                 let i = 0;
 
-            
+
                 this.typingEvent = this.time.addEvent({
                     delay: speed,
                     repeat: text.length - 1,
@@ -482,43 +481,43 @@ export default function Allergens({ openMenu, refreshSummary }) {
             }
 
             cycleScenarios() {
-                    console.log(this.volunteerScenario);
-                        this.typewriteText(this.volunteerScenario[0].question);
-                        this.volunteerScenario[0].person.setVisible(true);
-                        this.volunteerScenario[0].itemType.setVisible(true);
-                        this.volunteerScenario[0].itemType.setInteractive({ useHandCursor: true });
-                        this.input.setDraggable(this.volunteerScenario[0].itemType);
+                console.log(this.volunteerScenario);
+                this.typewriteText(this.volunteerScenario[0].question);
+                this.volunteerScenario[0].person.setVisible(true);
+                this.volunteerScenario[0].itemType.setVisible(true);
+                this.volunteerScenario[0].itemType.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(this.volunteerScenario[0].itemType);
 
-                        this.xMark.setVisible(true);
-                        this.check.setVisible(true);
-                        this.next.setVisible(false);
+                this.xMark.setVisible(true);
+                this.check.setVisible(true);
+                this.next.setVisible(false);
 
-                        this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-                            gameObject.x = dragX;
-                            gameObject.y = dragY;
-                        });
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    gameObject.x = dragX;
+                    gameObject.y = dragY;
+                });
 
-                        this.volunteerScenario[0].itemType.on("dragend", () => {
+                this.volunteerScenario[0].itemType.on("dragend", () => {
 
-                            const itemBounds = this.volunteerScenario[0].itemType.getBounds();
-                            const checkBounds = this.check.getBounds();
-                            const xBounds = this.xMark.getBounds();
+                    const itemBounds = this.volunteerScenario[0].itemType.getBounds();
+                    const checkBounds = this.check.getBounds();
+                    const xBounds = this.xMark.getBounds();
 
-                            if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, checkBounds)) {
-                                this.handleAnswer(this.volunteerScenario, this.check);
-                            }
-                            else if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, xBounds)) {
-                                this.handleAnswer(this.volunteerScenario, this.xMark);
-                            }
-                            else {
-                                this.volunteerScenario[0].itemType.x = this.itemX;
-                                this.volunteerScenario[0].itemType.y = this.itemY;
-                            }
-                        });
-                };
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, checkBounds)) {
+                        this.handleAnswer(this.volunteerScenario, this.check);
+                    }
+                    else if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, xBounds)) {
+                        this.handleAnswer(this.volunteerScenario, this.xMark);
+                    }
+                    else {
+                        this.volunteerScenario[0].itemType.x = this.itemX;
+                        this.volunteerScenario[0].itemType.y = this.itemY;
+                    }
+                });
+            };
 
             handleAnswer(scenarios, button) {
-                
+
                 this.scenario = scenarios[0];
 
                 if (
@@ -530,7 +529,7 @@ export default function Allergens({ openMenu, refreshSummary }) {
                     this.textboxText.setColor("rgb(0, 133, 0)");
                     this.showPopup(this.scenario.correctPopup);
                     scenarios.shift();
-                    
+
                     if (scenarios.length > 0) {
                         this.textboxText.setColor("#000");
                         this.textbox.setScale(this.textboxScale);
@@ -552,7 +551,7 @@ export default function Allergens({ openMenu, refreshSummary }) {
                     this.showPopup(this.scenario.incorrectPopup);
 
                 }
-                
+
                 if (scenarios.length === 0) {
                     this.textboxText.setColor("#000");
                     this.textboxErin.setScale(1.05);
@@ -603,7 +602,7 @@ export default function Allergens({ openMenu, refreshSummary }) {
                 backgroundColor: "black"
             }}
         >
-            
+
             <div
                 id="phaser-game"
                 style={{
@@ -615,18 +614,18 @@ export default function Allergens({ openMenu, refreshSummary }) {
                     zIndex: 1
                 }}
             />
- <div
-  style={{
-    position: "absolute",
-    top: 0,
-    right: 180,
-    padding: "10px",
-    display: "flex",
-    zIndex: 30000
-  }}
->
-                  <Settings openMenu={openMenu}/>
-                </div>
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 180,
+                    padding: "10px",
+                    display: "flex",
+                    zIndex: 30000
+                }}
+            >
+                <Settings openMenu={openMenu} />
+            </div>
         </div>
     );
 }

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
 import moduleUpdate from "../../components/moduleupdate";
@@ -18,10 +19,11 @@ import xMark from "../../assets/M3G1/foodboxX.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import erinText from "../../assets/M3G1/erintextbox.png"
 import next from "../../assets/M1G1/nextbutton.png";
-import mapbutton from "../../assets/mapbutton.png";
-import { useNavigate } from "react-router-dom";
+
 import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
+
+
 export default function Cans({ openMenu, refreshSummary }) {
     const navigate = useNavigate();
 
@@ -323,7 +325,7 @@ export default function Cans({ openMenu, refreshSummary }) {
             }
 
             typewriteText(text, type, speed = 25) {
-                if (type == "popup") {
+                if (type === "popup") {
                     this.showPopup(text);
                     return;
                 }
@@ -339,7 +341,7 @@ export default function Cans({ openMenu, refreshSummary }) {
 
                 let i = 0;
 
-         
+
                 this.typingEvent = this.time.addEvent({
                     delay: speed,
                     repeat: text.length - 1,

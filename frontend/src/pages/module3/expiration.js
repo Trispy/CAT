@@ -10,112 +10,111 @@ import textbox from "../../assets/M1G1/Textbox.png";
 import erinText from "../../assets/M3G1/erintextbox.png"
 import next from "../../assets/M1G1/nextbutton.png";
 import { useNavigate } from "react-router-dom";
-import babyfood from "../../assets/M3G2/babyfood.png"; 
-import beefexpired from "../../assets/M3G2/beefexpired.png"; 
-import chickenexpired from "../../assets/M3G2/chickenexpired.png"; 
-import greens from "../../assets/M3G2/greens.png"; 
-import infantformula from "../../assets/M3G2/infantformula.png"; 
+import babyfood from "../../assets/M3G2/babyfood.png";
+import beefexpired from "../../assets/M3G2/beefexpired.png";
+import chickenexpired from "../../assets/M3G2/chickenexpired.png";
+import infantformula from "../../assets/M3G2/infantformula.png";
 import pasta from "../../assets/M3G2/pasta.png";
-import peanutbutter from "../../assets/M3G2/peanutbutter.png"; 
-import salad from "../../assets/M3G2/salad.png"; 
-import saltinecrackers from "../../assets/M3G2/saltinecrackers.png"; 
-import soup from "../../assets/M3G2/soup.png"; 
-import spoiledgreens from "../../assets/M3G2/spoiledgreen.png"; 
-import mapbutton from "../../assets/mapbutton.png";
-import Settings from "../../components/settings";
+import peanutbutter from "../../assets/M3G2/peanutbutter.png";
+import salad from "../../assets/M3G2/salad.png";
+import saltinecrackers from "../../assets/M3G2/saltinecrackers.png";
+import soup from "../../assets/M3G2/soup.png";
+import spoiledgreens from "../../assets/M3G2/spoiledgreen.png";
 import calendar from "../../assets/calendar.png";
+
+import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 
 export default function Expiration({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null);
     const navigate = useNavigate();
     let allInstructions = [
-                "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the expiration date or best by date.\n\nIf the item should be discarded, drag the item to the box with the ❌. If it is good to be used, drag it to the box with the ✅.",
-                "Items with expiraton dates should be disposed of if the date is even one more day after the expiration date. Expiration date is a hard deadline.",
-                "For best by date, we will use a specific rule, but many food banks use a different rule. Thus, remember to consult your supervisor on the rules.",
-                "For this game, items with best buy dates should be disposed of if the date is 6 months after the expiration date."
-                
-            ];
+        "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the expiration date or best by date.\n\nIf the item should be discarded, drag the item to the box with the ❌. If it is good to be used, drag it to the box with the ✅.",
+        "Items with expiraton dates should be disposed of if the date is even one more day after the expiration date. Expiration date is a hard deadline.",
+        "For best by date, we will use a specific rule, but many food banks use a different rule. Thus, remember to consult your supervisor on the rules.",
+        "For this game, items with best buy dates should be disposed of if the date is 6 months after the expiration date."
+
+    ];
     const today = new Date();
     const formatDate = (date) => {
-            return date.toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-            });
-        };
+        return date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        });
+    };
 
-        const addDays = (date, days) => {
-            const newDate = new Date(date);
-            newDate.setDate(newDate.getDate() + days);
-            return newDate;
-        };
+    const addDays = (date, days) => {
+        const newDate = new Date(date);
+        newDate.setDate(newDate.getDate() + days);
+        return newDate;
+    };
 
-        const addMonths = (date, months) => {
-            const newDate = new Date(date);
-            newDate.setMonth(newDate.getMonth() + months);
-            return newDate;
-        };
-        const NotepadCalendar = () => {
-            const today = new Date();
+    const addMonths = (date, months) => {
+        const newDate = new Date(date);
+        newDate.setMonth(newDate.getMonth() + months);
+        return newDate;
+    };
+    const NotepadCalendar = () => {
+        const today = new Date();
 
-            const month = today.toLocaleString("en-US", { month: "short" }).toUpperCase();
-            const day = today.getDate();
+        const month = today.toLocaleString("en-US", { month: "short" }).toUpperCase();
+        const day = today.getDate();
 
-            return (
+        return (
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 260,
+                    padding: "10px",
+                    display: "flex",
+                    width: "50px",
+                    height: "50px",
+                    zIndex: 30000
+                }}
+            >
+                <img
+                    src={calendar}
+                    alt="calendar"
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain"
+                    }}
+                />
+
+
                 <div
                     style={{
                         position: "absolute",
-                        top: 0,
-                        right: 260,
-                        padding: "10px",
-                        display: "flex",
-                        width: "50px",
-                        height: "50px",
-                        zIndex: 30000
+                        top: "40%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        fontSize: "8px",
+                        fontWeight: "bold",
+                        color: "#000"
                     }}
                 >
-                    <img
-                        src={calendar}
-                        alt="calendar"
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "contain"
-                        }}
-                    />
-
-                   
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: "40%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            fontSize: "8px",
-                            fontWeight: "bold",
-                            color: "#000"
-                        }}
-                    >
-                        {month}
-                    </div>
-
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: "60%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            fontSize: "12px",
-                            fontWeight: "bold",
-                            color: "#000"
-                        }}
-                    >
-                        {day}
-                    </div>
+                    {month}
                 </div>
+
+                <div
+                    style={{
+                        position: "absolute",
+                        top: "60%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        fontSize: "12px",
+                        fontWeight: "bold",
+                        color: "#000"
+                    }}
+                >
+                    {day}
+                </div>
+            </div>
         );
-};
+    };
     useEffect(() => {
         window.navigateToPage = navigate;
 
@@ -133,12 +132,12 @@ export default function Expiration({ openMenu, refreshSummary }) {
             ];
 
             instructions = [
-                "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the Use-By or Best-By date.\n\nIf the item should be discarded, drag the item to the box with the X. If it is good to be used, drag it to the box with the check.",
+                "In the following game, the volunteer will sort items based on whether or not the item should be disposed of based on the Use-By or Best-By date.\n\nIf the item should be discarded, drag the item to the box with the ❌. If it is good to be used, drag it to the box with the ✅.",
                 "In this game, we will be following the rules for Use-By and Best-By dates: ",
                 "Items that have passed their expiration date, even by a single day, must be disposed of. Expiration date is a hard deadline.",
                 "In this game, we will use a specific rule for best-by dates but many food banks use a different rule, so remember to consult your supervisor.",
                 "For the purposes of this minigame, the nonprofit has set the limit they will accept expired food to be 6 months. Look at the date on the package and determine if the current date is past 6 months after the Use-By or Best-By date."
-                
+
             ];
 
             transitions = [
@@ -156,25 +155,24 @@ export default function Expiration({ openMenu, refreshSummary }) {
                 this.load.image("textbox", textbox);
                 this.load.image("erinText", erinText);
                 this.load.image("next", next);
-                this.load.image("babyfood", babyfood); 
-                this.load.image("beefexpired", beefexpired); 
-                this.load.image("chickenexpired", chickenexpired); 
-                //this.load.image("greens", greens); 
-                this.load.image("infantformula", infantformula); 
-                this.load.image("pasta", pasta); 
-                this.load.image("peanutbutter", peanutbutter); 
-                this.load.image("salad", salad); 
-                this.load.image("saltinecrackers", saltinecrackers); 
-                this.load.image("soup", soup); 
-                this.load.image("spoiledgreens", spoiledgreens); 
+                this.load.image("babyfood", babyfood);
+                this.load.image("beefexpired", beefexpired);
+                this.load.image("chickenexpired", chickenexpired);
+                this.load.image("infantformula", infantformula);
+                this.load.image("pasta", pasta);
+                this.load.image("peanutbutter", peanutbutter);
+                this.load.image("salad", salad);
+                this.load.image("saltinecrackers", saltinecrackers);
+                this.load.image("soup", soup);
+                this.load.image("spoiledgreens", spoiledgreens);
             }
             showInstructions() {
-                    const { width, height } = this.scale;
+                const { width, height } = this.scale;
 
-                    const overlay = this.add.container(0, 0);
+                const overlay = this.add.container(0, 0);
 
 
-                  const bg = this.add.rectangle(
+                const bg = this.add.rectangle(
                     width / 2,
                     height / 2,
                     width * 0.7,
@@ -207,50 +205,50 @@ export default function Expiration({ openMenu, refreshSummary }) {
                     .setOrigin(0.5);
 
 
-                    close.on("pointerdown", () => {
-                        overlay.destroy(true);
-                    });
+                close.on("pointerdown", () => {
+                    overlay.destroy(true);
+                });
 
-                    overlay.add([bg, text, close]);
-                }
-            
+                overlay.add([bg, text, close]);
+            }
+
             showPopup(inputText) {
-                    const { width, height } = this.scale;
+                const { width, height } = this.scale;
 
-                    const overlay = this.add.container(0, 0);
-                    overlay.setDepth(1000);
+                const overlay = this.add.container(0, 0);
+                overlay.setDepth(1000);
 
-                    const bg = this.add.rectangle(
-                        width / 2,
-                        height / 2,
-                        width * 0.6,
-                        height * 0.6,
-                        0xffffff
-                    ).setStrokeStyle(4, 0x000000);
+                const bg = this.add.rectangle(
+                    width / 2,
+                    height / 2,
+                    width * 0.6,
+                    height * 0.6,
+                    0xffffff
+                ).setStrokeStyle(4, 0x000000);
 
-                    const text = this.add.text(
-                        width / 2,
-                        height / 2,
-                        inputText,
-                        {
-                            font: "bold 45px sans-serif",
-                            color: "#000",
-                            wordWrap: { width: width * 0.58}
-                        }
-                    ).setOrigin(0.5);
+                const text = this.add.text(
+                    width / 2,
+                    height / 2,
+                    inputText,
+                    {
+                        font: "bold 45px sans-serif",
+                        color: "#000",
+                        wordWrap: { width: width * 0.58 }
+                    }
+                ).setOrigin(0.5);
 
-                    const close = this.add.text(
-                        width * 0.78,
-                        height * 0.24,
-                        "X",
-                        {
-                            font: "40px Arial",
-                            backgroundColor: "#ff0000",
-                            stroke: "#000000",         
-                            strokeThickness: 4,
-                            padding: { x: 20, y: 10 }
-                        }
-                    )
+                const close = this.add.text(
+                    width * 0.78,
+                    height * 0.24,
+                    "X",
+                    {
+                        font: "40px Arial",
+                        backgroundColor: "#ff0000",
+                        stroke: "#000000",
+                        strokeThickness: 4,
+                        padding: { x: 20, y: 10 }
+                    }
+                )
                     .setInteractive()
                     .setOrigin(0.5);
 
@@ -258,22 +256,22 @@ export default function Expiration({ openMenu, refreshSummary }) {
                     overlay.destroy(true);
                     this.popupOpen = false;
 
-              
+
                     if (this.currentSprite && this.currentSprite.scene) {
                         this.currentSprite.setInteractive({ useHandCursor: true });
                         this.input.setDraggable(this.currentSprite, true);
                     }
-                  
+
                     if (this.shouldApplyShine && this.pendingShineTarget) {
                         this.pendingShineTarget.preFX.clear();
                         this.pendingShineTarget.preFX.addShine(1, 0.5, 5);
                         this.pendingShineTarget = null;
                         this.shouldApplyShine = false;
-                }
+                    }
                 });
 
-                    overlay.add([bg, text, close]);
-                }
+                overlay.add([bg, text, close]);
+            }
 
             create() {
                 // Background
@@ -286,7 +284,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
                 const scaleX = this.scale.width / this.bg1.width;
                 const scaleY = this.scale.height / this.bg1.height;
 
-              
+
                 const scale = Math.min(scaleX, scaleY);
 
                 this.bg1.setScale(scale);
@@ -329,7 +327,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
                     .setScale(this.erinScale)
                     .setVisible(false);
 
-                
+
 
                 this.infantformula = this.add.image(this.canX, this.canY, "infantformula")
                     .setOrigin(0)
@@ -359,7 +357,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
                     .setOrigin(0)
                     .setScale(this.erinScale)
                     .setVisible(false);
-               
+
                 // Buttons
                 this.xMark = this.add.image(this.bg1.width / 2 - this.bg1.width * 0.27, this.markY, "x")
                     .setScale(0.5)
@@ -380,7 +378,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
                     .setScale(0.35)
                     .setInteractive()
                     .setVisible(true);
-               
+
                 this.currentIndex = 0;
                 this.currentItem = null;
                 this.popupOpen = false;
@@ -391,14 +389,14 @@ export default function Expiration({ openMenu, refreshSummary }) {
                         expirationDate: addDays(today, -10),
                         type: "expiration",
                         correct: "dispose",
-                        reason: "8 days past expiration"
+                        reason: "10 days past expiration. Baby food expiration dates are hard deadlines."
                     },
                     {
                         key: "infantformula",
                         expirationDate: addDays(today, -15),
                         type: "expiration",
                         correct: "dispose",
-                        reason: "Expired"
+                        reason: "Expired. Formula expiration dates are hard deadlines."
                     },
                     {
                         key: "chickenexpired",
@@ -421,7 +419,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
                         correct: "keep",
                         reason: "Valid today"
                     },
-                  
+
                     {
                         key: "saltinecrackers",
                         bestByDate: addMonths(today, -2),
@@ -451,7 +449,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
                         reason: "~5 months past, can intact"
                     }
                 ];
-                                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     gameObject.x = dragX;
                     gameObject.y = dragY;
                 });
@@ -468,7 +466,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
                     } else if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, xBounds)) {
                         this.handleFoodAnswer(this.xMark);
                     }
-                     else {
+                    else {
                         this.tweens.add({
                             targets: gameObject,
                             x: this.startX,
@@ -487,7 +485,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
                 this.textboxErin.setScale(this.textboxScale);
                 this.textboxErinImage.setVisible(false);
 
-                
+
 
                 // Textbox
                 this.textbox = this.add.container(145, 112);
@@ -509,7 +507,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
                 this.textbox.setScale(this.textboxScale);
 
                 // Interactions
-               this.next.on("pointerdown", () => {
+                this.next.on("pointerdown", () => {
                     if (this.welcomeTexts.length > 0) {
                         this.typewriteText(this.welcomeTexts.shift());
                     } else if (this.instructions.length > 0) {
@@ -528,79 +526,79 @@ export default function Expiration({ openMenu, refreshSummary }) {
                 //this.loadNextItem();
 
             }
-           loadNextItem() {
-                    this.xMark.preFX.clear();
-                    this.check.preFX.clear();
-                    this.pendingShineTarget = null;
-                    this.shouldApplyShine = false;
-                    if (this.currentIndex >= this.foodItems.length) {
-                        this.typewriteText("All items sorted!");
-                        this.xMark.setVisible(false);
-                        this.check.setVisible(false);
-                        return;
+            loadNextItem() {
+                this.xMark.preFX.clear();
+                this.check.preFX.clear();
+                this.pendingShineTarget = null;
+                this.shouldApplyShine = false;
+                if (this.currentIndex >= this.foodItems.length) {
+                    this.typewriteText("All items sorted!");
+                    this.xMark.setVisible(false);
+                    this.check.setVisible(false);
+                    return;
+                }
+
+                const item = this.foodItems[this.currentIndex];
+                this.currentItem = item;
+
+
+                // hide all sprites
+                Object.values(this).forEach(obj => {
+                    if (obj?.texture?.key && this.foodItems.some(f => f.key === obj.texture.key)) {
+                        obj.setVisible(false);
                     }
+                });
 
-                    const item = this.foodItems[this.currentIndex];
-                    this.currentItem = item;
-                    
 
-                    // hide all sprites
-                    Object.values(this).forEach(obj => {
-                        if (obj?.texture?.key && this.foodItems.some(f => f.key === obj.texture.key)) {
-                            obj.setVisible(false);
-                        }
-                    });
-                    
+                const sprite = this[item.key];
+                if (!sprite) {
+                    console.error("❌ Sprite not found for key:", item.key);
+                    return;
+                }
+                this.currentSprite = sprite;
+                this.startX = sprite.x;
+                this.startY = sprite.y;
+                sprite.setVisible(true);
 
-                    const sprite = this[item.key];
-                                        if (!sprite) {
-                        console.error("❌ Sprite not found for key:", item.key);
-                        return;
+                if (this.seeDateButton) {
+                    this.seeDateButton.destroy();
+                }
+
+                const buttonWidth = 220;
+                const buttonHeight = 70;
+
+                const buttonBg = this.add.rectangle(
+                    sprite.x + sprite.displayWidth / 2,
+                    sprite.y - 50,
+                    buttonWidth,
+                    buttonHeight,
+                    0xffffff // fill
+                )
+                    .setStrokeStyle(4, 0x000000);
+
+                const buttonText = this.add.text(
+                    buttonBg.x,
+                    buttonBg.y,
+                    "SEE DATE",
+                    {
+                        font: "40px Arial",
+                        color: "#000"
                     }
-                    this.currentSprite = sprite;
-                    this.startX = sprite.x;
-                    this.startY = sprite.y;
-                    sprite.setVisible(true);
-                
-                    if (this.seeDateButton) {
-                        this.seeDateButton.destroy();
-                    }
+                ).setOrigin(0.5);
 
-                    const buttonWidth = 220;
-                    const buttonHeight = 70;
+                // Combine into one object
+                this.seeDateButton = this.add.container(0, 0, [buttonBg, buttonText]);
 
-                    const buttonBg = this.add.rectangle(
-                        sprite.x + sprite.displayWidth / 2,
-                        sprite.y - 50,
-                        buttonWidth,
-                        buttonHeight,
-                        0xffffff // fill
-                    )
-                    .setStrokeStyle(4, 0x000000); 
+                buttonBg.setInteractive({ useHandCursor: true });
 
-                    const buttonText = this.add.text(
-                        buttonBg.x,
-                        buttonBg.y,
-                        "SEE DATE",
-                        {
-                            font: "40px Arial",
-                            color: "#000"
-                        }
-                    ).setOrigin(0.5);
+                buttonBg.on("pointerdown", () => {
+                    if (this.popupOpen) return;
 
-                    // Combine into one object
-                    this.seeDateButton = this.add.container(0, 0, [buttonBg, buttonText]);
+                    this.popupOpen = true;
 
-                    buttonBg.setInteractive({ useHandCursor: true });
+                    const item = this.currentItem;
 
-                    buttonBg.on("pointerdown", () => {
-                        if (this.popupOpen) return;
-
-                        this.popupOpen = true;
-
-                        const item = this.currentItem;
-
-                        let labelText = "";
+                    let labelText = "";
 
                         if (item.type === "expiration") {
                             labelText = `Use-By: ${formatDate(item.expirationDate)}\n\nToday's Date: ${formatDate(today)}`;
@@ -608,37 +606,37 @@ export default function Expiration({ openMenu, refreshSummary }) {
                             labelText = `Best By: ${formatDate(item.bestByDate)}\n\nToday's Date: ${formatDate(today)}`;
                         }
 
-                        this.showPopup(labelText);
+                    this.showPopup(labelText);
 
-                        this.seeDateButton.destroy();
-                        
-                    });
-                    this.seeDateButton.on("pointerdown", () => {
-                        if (this.popupOpen) return;
+                    this.seeDateButton.destroy();
 
-                        this.popupOpen = true;
+                });
+                this.seeDateButton.on("pointerdown", () => {
+                    if (this.popupOpen) return;
 
-                        const item = this.currentItem;
+                    this.popupOpen = true;
 
-                        let labelText = "";
+                    const item = this.currentItem;
 
-                        if (item.type === "expiration") {
-                            labelText = `Use-By: ${formatDate(item.expirationDate)}\n\nToday's Date: ${formatDate(today)}`;
-                        } else {
-                            labelText = `Best-By: ${formatDate(item.bestByDate)}\n\nToday's Date: ${formatDate(today)}`;
-                        }
+                    let labelText = "";
 
-                        this.showPopup(labelText);
+                    if (item.type === "expiration") {
+                        labelText = `Use-By: ${formatDate(item.expirationDate)}\n\nToday's Date: ${formatDate(today)}`;
+                    } else {
+                        labelText = `Best-By: ${formatDate(item.bestByDate)}\n\nToday's Date: ${formatDate(today)}`;
+                    }
 
-                        // remove button after click
-                        this.seeDateButton.destroy();
-                    });
+                    this.showPopup(labelText);
 
-                    this.xMark.setVisible(true);
-                    this.check.setVisible(true);
-                }
+                    // remove button after click
+                    this.seeDateButton.destroy();
+                });
+
+                this.xMark.setVisible(true);
+                this.check.setVisible(true);
+            }
             typewriteText(text, type, speed = 25) {
-                if (type == "popup") {
+                if (type === "popup") {
                     this.showPopup(text);
                     return;
                 }
@@ -654,7 +652,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
 
                 let i = 0;
 
-         
+
                 this.typingEvent = this.time.addEvent({
                     delay: speed,
                     repeat: text.length - 1,
@@ -672,37 +670,37 @@ export default function Expiration({ openMenu, refreshSummary }) {
             }
 
             cycleScenarios() {
-                    console.log(this.volunteerScenario);
-                        this.typewriteText(this.volunteerScenario[0].question);
+                console.log(this.volunteerScenario);
+                this.typewriteText(this.volunteerScenario[0].question);
 
-                        this.volunteerScenario[this.volunteerScenario.length - 1].damageType.setVisible(false);
-                        this.volunteerScenario[0].damageType.setVisible(true);
-                        this.volunteerScenario[0].damageType.setInteractive({ useHandCursor: true });
-                        this.input.setDraggable(this.volunteerScenario[0].damageType);
+                this.volunteerScenario[this.volunteerScenario.length - 1].damageType.setVisible(false);
+                this.volunteerScenario[0].damageType.setVisible(true);
+                this.volunteerScenario[0].damageType.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(this.volunteerScenario[0].damageType);
 
-                        this.xMark.setVisible(true);
-                        this.check.setVisible(true);
-                        this.next.setVisible(false);
+                this.xMark.setVisible(true);
+                this.check.setVisible(true);
+                this.next.setVisible(false);
 
-                        this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-                            gameObject.x = dragX;
-                            gameObject.y = dragY;
-                        });
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    gameObject.x = dragX;
+                    gameObject.y = dragY;
+                });
 
-                        this.volunteerScenario[0].damageType.on("dragend", () => {
+                this.volunteerScenario[0].damageType.on("dragend", () => {
 
-                            const itemBounds = this.volunteerScenario[0].damageType.getBounds();
-                            const checkBounds = this.check.getBounds();
-                            const xBounds = this.xMark.getBounds();
+                    const itemBounds = this.volunteerScenario[0].damageType.getBounds();
+                    const checkBounds = this.check.getBounds();
+                    const xBounds = this.xMark.getBounds();
 
-                            if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, checkBounds)) {
-                                this.handleFoodAnswer(this.check);
-                            }
-                            else if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, xBounds)) {
-                                this.handleFoodAnswer(this.xMark);
-                            }
-                        });
-                };
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, checkBounds)) {
+                        this.handleFoodAnswer(this.check);
+                    }
+                    else if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, xBounds)) {
+                        this.handleFoodAnswer(this.xMark);
+                    }
+                });
+            };
 
             handleFoodAnswer(button) {
                 const correct =
@@ -733,7 +731,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
 
                     this.shouldApplyShine = true;
                     this.pendingShineTarget = button === this.xMark ? this.check : this.xMark;
-                                            
+
                 }
             }
         }
@@ -775,7 +773,7 @@ export default function Expiration({ openMenu, refreshSummary }) {
                 backgroundColor: "black"
             }}
         >
-           
+
             <div
                 id="phaser-game"
                 style={{
@@ -788,40 +786,40 @@ export default function Expiration({ openMenu, refreshSummary }) {
                 }}
             />
             <NotepadCalendar />
-                    <div
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 180,
-                        padding: "10px",
-                        display: "flex",
-                        gap: "10px",
-                        zIndex: 30000
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 180,
+                    padding: "10px",
+                    display: "flex",
+                    gap: "10px",
+                    zIndex: 30000
+                }}
+            >
+
+
+                <button
+                    onClick={() => {
+                        if (phaserGameRef.current) {
+                            const scene = phaserGameRef.current.scene.getScene("CanScene");
+                            if (scene) {
+                                scene.showInstructions();
+                            }
+                        }
                     }}
-                    >
-            
-                       
-                    <button
-                            onClick={() => {
-                                if (phaserGameRef.current) {
-                                const scene = phaserGameRef.current.scene.getScene("CanScene");
-                                if (scene) {
-                                    scene.showInstructions();
-                                }
-                                }
-                            }}
-                            style={{
-                                font: "bold 20px sans-serif",
-                                backgroundColor: "#ffffff",
-                                color: "#5100ff",
-                                padding: "5px 9px",
-                                cursor: "pointer"
-                            }}
-                            >
-                            ?
-                            </button>
-                     
-            
+                    style={{
+                        font: "bold 20px sans-serif",
+                        backgroundColor: "#ffffff",
+                        color: "#5100ff",
+                        padding: "5px 9px",
+                        cursor: "pointer"
+                    }}
+                >
+                    ?
+                </button>
+
+
                 <Settings openMenu={openMenu} />
             </div>
         </div>

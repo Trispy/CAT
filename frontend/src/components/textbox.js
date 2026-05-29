@@ -34,7 +34,7 @@ function Textbox({
           justifyContent: "center",
           transform: "translateY(-5px)",
           alignItems: "center",
-          textAlign: "center",
+          textAlign: "left",
           color: placeHolderColor || "black",
           fontSize: placeHolderfontSize || "30px",
           fontWeight: "bold",

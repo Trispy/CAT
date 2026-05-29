@@ -1,6 +1,6 @@
 
-import { useState, useEffect} from "react";
-import { useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Menu from "../../components/menu.js";
 const API = process.env.REACT_APP_API_URL;
 
@@ -12,10 +12,10 @@ export default function M1Nav() {
         try {
             const jwt = localStorage.getItem("token");
             const response = await fetch(`${API}/api/game/module1/status`, {
-                method:"GET",
-                headers:{
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${jwt}`
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${jwt}`
                 }
             }
             )
@@ -36,7 +36,7 @@ export default function M1Nav() {
     };
 
     useEffect(() => {
-    nav();
+        nav();
     }, []);
 
     return (
@@ -59,7 +59,7 @@ export default function M1Nav() {
                 {showMenu && (
                     <div>
                         <div
-                        style={{
+                            style={{
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center"

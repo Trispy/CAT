@@ -5,14 +5,8 @@ import Phaser from "phaser";
 import moduleUpdate from "../../components/moduleupdate.js";
 
 import Loc from "../../assets/Background1.png";
-import Textbox from "../../components/textbox";
-import useTypewriter from "../../components/typewriter";
 import nextButton from "../../assets/nextbutton.png";
 import onion from "../../assets/M2G2/onion.png";
-import mapbutton from "../../assets/mapbutton.png";
-import Settings from "../../components/settings";
-
-import module2Background from "../../assets/finalbackground.png"
 import readymadefood1 from "../../assets/readymadefood1.png"
 import readymadefood2 from "../../assets/readymadefood2.png"
 import egg from "../../assets/egg.png"
@@ -23,14 +17,18 @@ import chickenpackage from "../../assets/packagedchicken.png"
 import chicken from "../../assets/chicken.png"
 import fridgeSceneBackground from "../../assets/fridgescreen.png"
 import milk from "../../assets/milk.png"
+
+import Textbox from "../../components/textbox";
+import useTypewriter from "../../components/typewriter";
+import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 
 export default function CoolerPack({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
-    window.navigateToPage = navigate;
-}, [navigate]);
+        window.navigateToPage = navigate;
+    }, [navigate]);
     useEffect(() => {
         return () => {
             if (phaserGameRef.current) {
@@ -44,21 +42,12 @@ export default function CoolerPack({ openMenu, refreshSummary }) {
     }, []);
 
     const [gameStage, setGameStage] = useState("intro");
-    const backgroundStyle = {
-        backgroundImage: gameStage === "CoolerStage" ? "none" : `url(${Loc})`,
-        minHeight: '100vh',
-        backgroundSize: 'contain',
-        backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: 'black'
-    };
 
     const [fridgeState, setFridgeState] = useState("playing");
     const [fridgefailState, setfridgefailState] = useState('');
     const [fridgeSuccessState, setfridgeSuccessState] = useState('');
 
     const [instructionStep, setInstructionStep] = useState(0);
-    const numberOfCutMaterials = useRef(0);
     useEffect(() => {
         window.handleNext = handleNextClick;
     }, [gameStage]);
@@ -157,7 +146,7 @@ export default function CoolerPack({ openMenu, refreshSummary }) {
 
                 const overlay = this.add.container(0, 0);
 
- const bg = this.add.rectangle(
+                const bg = this.add.rectangle(
                     width / 2,
                     height / 2,
                     width * 0.7,
@@ -274,7 +263,7 @@ export default function CoolerPack({ openMenu, refreshSummary }) {
                 this.input.setDraggable(bellpepper);
 
 
-                let foodItems = [
+                /*let foodItems = [
                     { key: "chickenpackage", sprite: chickenpkg },
                     { key: "beefpackage", sprite: beefpkg },
                     { key: "onion", sprite: onion },
@@ -283,9 +272,9 @@ export default function CoolerPack({ openMenu, refreshSummary }) {
                     { key: "egg", sprite: egg },
                     { key: "milk", sprite: milk },
                     { key: "bellpepper", sprite: bellpepper }
-                ];
+                ];*/
 
-                let fooditems = [chickenpkg, beefpkg, onion, ready1, ready2, egg, milk, bellpepper];
+                //let fooditems = [chickenpkg, beefpkg, onion, ready1, ready2, egg, milk, bellpepper];
                 const correctShelf = {
                     chickenpackage: "bottom",
                     beefpackage: "bottom",
@@ -297,8 +286,6 @@ export default function CoolerPack({ openMenu, refreshSummary }) {
                     milk: "middle"
                 };
 
-                let currentFood = null;
-                let currentSprite = null;
                 let foodAway = 0;
 
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
@@ -331,17 +318,14 @@ export default function CoolerPack({ openMenu, refreshSummary }) {
 
                         const group = correctShelf[gameObject.texture.key];
 
-                        console.log(foodAway);
-
                         if (droppedShelf === group) {
-                            foodItems = foodItems.filter(item => item !== currentFood);
+                            //foodItems = foodItems.filter(item => item !== currentFood);
                             if (foodAway >= 7) {
                                 setFridgeState("complete");
 
                             } else {
                                 setFridgeState("success");
                             }
-                            currentFood = null;
 
                             if (droppedShelf === "drawer"
                             ) {
@@ -359,11 +343,6 @@ export default function CoolerPack({ openMenu, refreshSummary }) {
 
                             gameObject.destroy();
                             foodAway += 1;
-
-                            console.log("Correct!");
-                            currentFood = null;
-                            currentSprite = null;
-
                         }
                         else {
                             setFridgeState("fail"); // React textbox trigger
@@ -473,7 +452,6 @@ export default function CoolerPack({ openMenu, refreshSummary }) {
                 alignItems: "center",
                 backgroundColor: "black",
                 backgroundRepeat: "no-repeat",
-                backgroundColor: "black",
                 height: "100dvh",
                 overflowY: "auto",
                 overflowX: "hidden",
@@ -657,41 +635,41 @@ export default function CoolerPack({ openMenu, refreshSummary }) {
 
                 }}
             />
-                    <div
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 180,
-                        padding: "10px",
-                        display: "flex",
-                        gap: "10px",
-                        zIndex: 30000
-                    }}
-                    >
-
-            {gameStage === "CoolerStage" && (
-                <button
-                onClick={() => {
-                    if (phaserGameRef.current) {
-                    const scene = phaserGameRef.current.scene.getScene("CoolerScene");
-                    if (scene) {
-                        scene.showInstructions();
-                    }
-                    }
-                }}
+            <div
                 style={{
-                    font: "bold 20px sans-serif",
-                    backgroundColor: "#ffffff",
-                    color: "#5100ff",
-                    padding: "5px 9px",
-                    cursor: "pointer"
+                    position: "absolute",
+                    top: 0,
+                    right: 180,
+                    padding: "10px",
+                    display: "flex",
+                    gap: "10px",
+                    zIndex: 30000
                 }}
-                >
-                ?
-                </button>
-            )}
+            >
 
-            <Settings openMenu={openMenu} />
+                {gameStage === "CoolerStage" && (
+                    <button
+                        onClick={() => {
+                            if (phaserGameRef.current) {
+                                const scene = phaserGameRef.current.scene.getScene("CoolerScene");
+                                if (scene) {
+                                    scene.showInstructions();
+                                }
+                            }
+                        }}
+                        style={{
+                            font: "bold 20px sans-serif",
+                            backgroundColor: "#ffffff",
+                            color: "#5100ff",
+                            padding: "5px 9px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        ?
+                    </button>
+                )}
+
+                <Settings openMenu={openMenu} />
             </div>
 
 

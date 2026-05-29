@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
 import moduleUpdate from "../../components/moduleupdate";
@@ -25,8 +26,8 @@ import { defaultFont } from "../../formatting";
 import { defaultFontSize } from "../../formatting";
 import { defaultFontColor } from "../../formatting";
 import { defaultTypingSpeed } from "../../formatting";
+
 import Settings from "../../components/settings";
-import { useNavigate } from "react-router-dom";
 const API = process.env.REACT_APP_API_URL;
 
 export default function ColdPrepTransport({ openMenu, refreshSummary }) {
@@ -47,11 +48,11 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
             zoomedX = 0;
             zoomedY = 0;
             zoomedScale = 1;
-            zoomedX1 = 400; 
-            zoomedY1 = -20; 
+            zoomedX1 = 400;
+            zoomedY1 = -20;
             instructionsShown = false;
-            
-            
+
+
             welcomeTexts = [
                 "We will be learning about how to transport cold prepared food and hot prepared food.",
                 "In this game, we'll practice setting up a cooler for cold prepared food."
@@ -88,71 +89,71 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                 this.load.image("textbox", textbox);
                 this.load.image("erinText", erinText);
                 this.load.image("next", next);
-                this.load.image("prepFood1", prepFood1);                
-                this.load.image("prepFood2", prepFood2);                
+                this.load.image("prepFood1", prepFood1);
+                this.load.image("prepFood2", prepFood2);
                 this.load.image("bg2", bg2);
                 this.load.image("bg3", bg3);
                 this.load.image("bg4", bg4);
                 this.load.image("bg5", bg5);
-                this.load.image("ice", ice);        
-                this.load.image("openBox", iceBox);  
-                this.load.image("closedBox", closedBox);                
-                this.load.image("emptyBox", emptyBox);  
+                this.load.image("ice", ice);
+                this.load.image("openBox", iceBox);
+                this.load.image("closedBox", closedBox);
+                this.load.image("emptyBox", emptyBox);
                 this.load.image("therm", thermometer);
-                this.load.image("hand", hand);              
+                this.load.image("hand", hand);
 
             }
-            
-            showPopup(inputText) {           
-                    const { width, height } = this.scale;
 
-                    const overlay = this.add.container(0, 0);
+            showPopup(inputText) {
+                const { width, height } = this.scale;
 
-                    //user can't interact with items while popup is open
-                    const blocker = this.add.rectangle(0, 0, width, height, 0x000000, 0.3)
+                const overlay = this.add.container(0, 0);
+
+                //user can't interact with items while popup is open
+                const blocker = this.add.rectangle(0, 0, width, height, 0x000000, 0.3)
                     .setOrigin(0)
                     .setInteractive();
 
-                    const bg = this.add.rectangle(
-                        width / 2,
-                        height / 2,
-                        width * 0.7,
-                        height * 0.7,
-                        0xffffff
-                    ).setStrokeStyle(4, 0x000000);
+                const bg = this.add.rectangle(
+                    width / 2,
+                    height / 2,
+                    width * 0.7,
+                    height * 0.7,
+                    0xffffff
+                ).setStrokeStyle(4, 0x000000);
 
-                    const text = this.add.text(
-                        width / 2,
-                        height / 2,
-                        inputText,
-                        {
-                            font: "40px Arial",
-                            color: "#000",
-                            wordWrap: { width: width * 0.58  }
-                        }
-                    ).setOrigin(0.5);
+                const text = this.add.text(
+                    width / 2,
+                    height / 2,
+                    inputText,
+                    {
+                        font: "40px Arial",
+                        color: "#000",
+                        wordWrap: { width: width * 0.58 }
+                    }
+                ).setOrigin(0.5);
 
-                    const close = this.add.text(
+                const close = this.add.text(
                     width * 0.82,
                     height * 0.20,
-                        "X",
-                        {
-                            font: "bold 40px sans-serif",
-                            backgroundColor: "#ff0000",
-                            padding: { x: 20, y: 10 }
-                        }
-                    )
+                    "X",
+                    {
+                        font: "bold 40px sans-serif",
+                        backgroundColor: "#ff0000",
+                        padding: { x: 20, y: 10 }
+                    }
+                )
                     .setInteractive()
                     .setOrigin(0.5);
 
-                    close.on("pointerdown", () => {
-                        overlay.destroy(true);
-                    });
+                close.on("pointerdown", () => {
+                    overlay.destroy(true);
+                });
 
-                    overlay.add([blocker, bg, text, close]);
-                    overlay.setDepth(1000);
-                }
-                showInstructions() {
+                overlay.add([blocker, bg, text, close]);
+                overlay.setDepth(1000);
+            }
+            showInstructions() {
                 const { width, height } = this.scale;
 
                 const overlay = this.add.container(0, 0);
@@ -198,13 +199,13 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
             }
             create() {
                 // Background
-                
+
                 this.bg1 = this.add.image(
                     this.scale.width / 2,
                     this.scale.height / 2,
                     "bg1"
                 );
-                   // Help Button
+                // Help Button
                 /*const helpButton = this.add.text(
                     this.scale.width * 0.89,
                     this.scale.height * 0.07,
@@ -249,96 +250,96 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                     .setVisible(true);
 
                 this.emptyBox = this.add.image(
-                    this.iceboxX - 205, 
-                    this.iceboxY + 20, 
+                    this.iceboxX - 205,
+                    this.iceboxY + 20,
                     "emptyBox")
-                .setOrigin(0)
-                .setScale(this.iceboxScale * 0.98)
-                .setVisible(true);
+                    .setOrigin(0)
+                    .setScale(this.iceboxScale * 0.98)
+                    .setVisible(true);
 
                 this.closedBox = this.add.image(
-                    this.iceboxX - 205, 
-                    this.iceboxY + 20, 
+                    this.iceboxX - 205,
+                    this.iceboxY + 20,
                     "closedBox")
-                .setOrigin(0)
-                .setScale(this.iceboxScale* 0.98)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(this.iceboxScale * 0.98)
+                    .setVisible(false);
 
-                 this.openBox = this.add.image(
-                    this.iceboxX - 205, 
-                    this.iceboxY + 20, 
+                this.openBox = this.add.image(
+                    this.iceboxX - 205,
+                    this.iceboxY + 20,
                     "openBox")
-                .setOrigin(0)
-                .setScale(this.iceboxScale* 0.98)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(this.iceboxScale * 0.98)
+                    .setVisible(false);
 
                 this.erin = this.add.image(
-                    this.erinX, 
-                    this.erinY, 
+                    this.erinX,
+                    this.erinY,
                     "healthy")
-                .setOrigin(0)
-                .setScale(this.erinScale)
-                .setVisible(false);
-                
+                    .setOrigin(0)
+                    .setScale(this.erinScale)
+                    .setVisible(false);
+
                 this.therm = this.add.image(
-                    50, 
-                    100, 
+                    50,
+                    100,
                     "therm")
-                .setOrigin(0)
-                .setAngle(-25)
-                .setScale(0.7)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setAngle(-25)
+                    .setScale(0.7)
+                    .setVisible(false);
                 this.therm.startX = this.therm.x;
                 this.therm.startY = this.therm.y;
 
                 this.hand = this.add.image(
-                    this.therm.getCenter().x, 
-                    this.therm.getCenter().y -50, 
+                    this.therm.getCenter().x,
+                    this.therm.getCenter().y - 50,
                     "hand")
-                .setAngle(270)
-                .setOrigin(0)
-                .setScale(0.7)
-                .setVisible(false);
+                    .setAngle(270)
+                    .setOrigin(0)
+                    .setScale(0.7)
+                    .setVisible(false);
 
                 this.ice = this.add.image(
-                    50, 
-                    100, 
+                    50,
+                    100,
                     "ice")
-                .setOrigin(0)
-                .setScale(0.7)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(0.7)
+                    .setVisible(false);
                 this.ice.startX = this.ice.x;
                 this.ice.startY = this.ice.y;
 
                 this.prepFood1 = this.add.image(
-                    1450, 
-                    250, 
+                    1450,
+                    250,
                     "prepFood1")
-                .setOrigin(0)
-                .setScale(0.2)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(0.2)
+                    .setVisible(false);
 
                 this.prepFood2 = this.add.image(
-                    1450, 
-                    450, 
+                    1450,
+                    450,
                     "prepFood2")
-                .setOrigin(0)
-                .setScale(0.2)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(0.2)
+                    .setVisible(false);
                 this.prepFood1.startX = this.prepFood1.x;
                 this.prepFood1.startY = this.prepFood1.y;
                 this.prepFood2.startX = this.prepFood2.x;
                 this.prepFood2.startY = this.prepFood2.y;
 
-                this.coolertop1 = this.add.rectangle(650,10, 1000, 350).setOrigin(0);
+                this.coolertop1 = this.add.rectangle(650, 10, 1000, 350).setOrigin(0);
                 //this.coolertop1.setStrokeStyle(4, 0o0);
                 this.coolertop1.setVisible(false);
 
-                this.coolertop2 = this.add.rectangle(650,10, 1000, 350).setOrigin(0);
+                this.coolertop2 = this.add.rectangle(650, 10, 1000, 350).setOrigin(0);
                 //this.coolertop2.setStrokeStyle(4, 0o0);
                 this.coolertop2.setVisible(false);
 
-                this.coolertop3 = this.add.rectangle(650,10, 1000, 350).setOrigin(0);
+                this.coolertop3 = this.add.rectangle(650, 10, 1000, 350).setOrigin(0);
                 //this.coolertop3.setStrokeStyle(4, 0o0);
                 this.coolertop3.setVisible(false);
 
@@ -370,21 +371,21 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                 this.textbox.setSize(this.textboxImage.width, this.textboxImage.height);
                 this.textbox.add([this.textboxImage, this.textboxText]);
                 this.textbox.setScale(this.textboxScale);
-              
+
                 // Interactions
                 this.next.on("pointerdown", () => {
                     if (this.welcomeTexts.length > 0) {
                         this.typewriteText(this.welcomeTexts[0]);
                         this.welcomeTexts.shift();
                     }
-                    else if(!this.instructionsShown){
+                    else if (!this.instructionsShown) {
                         this.showPopup(this.instructions[0]);
-                        this.instructionsShown = true; 
+                        this.instructionsShown = true;
                         if (this.emptyBox) this.emptyBox.setInteractive();
                         this.next.setVisible(false);
                         this.iterateGameMessage();
                     }
-                    else if (this.transitions.length > 0){
+                    else if (this.transitions.length > 0) {
                         this.typewriteText(this.transitions[0]);
                         this.transitions.shift();
                     }
@@ -399,29 +400,27 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                     //this.erin.setVisible(false);
                     this.iterateGameMessage();
                     this.emptyBox.setScale(this.zoomedScale);
-                    this.emptyBox.setPosition(this.zoomedX,this.zoomedY);
+                    this.emptyBox.setPosition(this.zoomedX, this.zoomedY);
                     this.bg1.setTexture("bg2");
                     this.ice.setInteractive();
                     this.ice.setVisible(true);
                     this.input.setDraggable(this.ice);
                     this.emptyBox.disableInteractive();
-                    console.log("empty");
                 });
 
-               this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-                            gameObject.x = dragX;
-                            gameObject.y = dragY;
-                            if(gameObject === this.therm){
-                                this.hand.x = this.therm.getCenter().x;
-                                this.hand.y = this.therm.getCenter().y - 50;
-                            }
-                        });
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    gameObject.x = dragX;
+                    gameObject.y = dragY;
+                    if (gameObject === this.therm) {
+                        this.hand.x = this.therm.getCenter().x;
+                        this.hand.y = this.therm.getCenter().y - 50;
+                    }
+                });
                 this.timerStart = false;
                 //tap the lid to close the box
                 this.ice.on("dragend", () => {
-                     if(this.checkBounds(this.ice)){
-                        if(this.emptyBox){
-                            console.log("hi");
+                    if (this.checkBounds(this.ice)) {
+                        if (this.emptyBox) {
                             this.ice.setVisible(false);
                             this.openBox.setVisible(true);
                             this.openBox.setScale(this.zoomedScale);
@@ -430,44 +429,44 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                             this.coolertop1.setVisible(true);
                             this.iterateGameMessage();
                         }
-                        else if(this.openBox){
-                        this.iterateGameMessage();
-                        this.ice.setVisible(false);
-                        this.prepFood1.setVisible(false);
-                        this.prepFood2.setVisible(false);
-                        this.coolertop3.setInteractive();
-                        this.coolertop3.setVisible(true);
-                    }
+                        else if (this.openBox) {
+                            this.iterateGameMessage();
+                            this.ice.setVisible(false);
+                            this.prepFood1.setVisible(false);
+                            this.prepFood2.setVisible(false);
+                            this.coolertop3.setInteractive();
+                            this.coolertop3.setVisible(true);
+                        }
                     }
                     else {
-                    this.tweens.add({
-                        targets: this.ice,
-                        x: this.ice.startX,
-                        y: this.ice.startY,
-                        duration: 300,
-                        ease: "Power2"
-                    });
-                }
+                        this.tweens.add({
+                            targets: this.ice,
+                            x: this.ice.startX,
+                            y: this.ice.startY,
+                            duration: 300,
+                            ease: "Power2"
+                        });
+                    }
                 });
 
-                this.coolertop1.on("pointerdown", () =>{
+                this.coolertop1.on("pointerdown", () => {
                     this.iterateGameMessage();
                     this.coolertop1.disableInteractive();
                     this.coolertop1.destroy();
-                       this.bg1.setTexture("bg3");
-                        this.emptyBox.setVisible(false);
-                        this.emptyBox.disableInteractive();
-                        this.emptyBox = null;
-                        this.openBox.setVisible(false);
-                        this.closedBox.setVisible(true);
-                        //this.erin.setVisible(true);
-                        if(!this.timerStart){
-                            this.timerStart = true;
-                            let timeLeft = 10;
-                            this.timerText = this.add.text(
-                                this.bg1.width * 0.81,
-                                this.bg1.height * 0.25,
-                                ":10",
+                    this.bg1.setTexture("bg3");
+                    this.emptyBox.setVisible(false);
+                    this.emptyBox.disableInteractive();
+                    this.emptyBox = null;
+                    this.openBox.setVisible(false);
+                    this.closedBox.setVisible(true);
+                    //this.erin.setVisible(true);
+                    if (!this.timerStart) {
+                        this.timerStart = true;
+                        let timeLeft = 10;
+                        this.timerText = this.add.text(
+                            this.bg1.width * 0.81,
+                            this.bg1.height * 0.25,
+                            ":10",
                             {
                                 backgroundColor: "#000000",
                                 borderColor: "#ffffff",
@@ -475,7 +474,7 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                                 fontSize: "52px",
                                 color: "#ff0000",
                                 fontStyle: "bold"
-                                
+
                             }
                         ).setOrigin(0.5);
                         this.timerText.setDepth(1000);
@@ -494,11 +493,12 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                                     this.iterateGameMessage();
                                 }
 
-                            }});
-                }
+                            }
+                        });
+                    }
                 })
 
-                this.coolertop2.on("pointerdown", ()=>{
+                this.coolertop2.on("pointerdown", () => {
                     this.iterateGameMessage();
                     this.therm.setVisible(false);
                     this.hand.setVisible(false);
@@ -514,9 +514,9 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                     this.openBox.setVisible(true);
                     this.openBox.setScale(this.iceboxScale);
                     this.openBox.setPosition(this.iceboxX - 205, this.iceboxY + 20);
-                    
+
                 })
-                  this.closedBox.on("pointerdown", () => {
+                this.closedBox.on("pointerdown", () => {
                     this.iterateGameMessage();
                     this.timerText.destroy();
                     //this.erin.setVisible(false);
@@ -528,26 +528,25 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                     this.hand.setVisible(true);
                     this.input.setDraggable(this.therm);
                     this.closedBox.disableInteractive();
-                    console.log("closed");
                 });
                 this.therm.on("dragend", () => {
-                    if(this.checkBounds(this.therm)){
+                    if (this.checkBounds(this.therm)) {
                         this.growTemp(this.hand);
                     }
                     else {
-  
-                    this.tweens.add({
-                        targets: this.therm,
-                        x: this.therm.startX,
-                        y: this.therm.startY,
-                        duration: 300,
-                        ease: "Power2"
-                    });
-                }
+
+                        this.tweens.add({
+                            targets: this.therm,
+                            x: this.therm.startX,
+                            y: this.therm.startY,
+                            duration: 300,
+                            ease: "Power2"
+                        });
+                    }
                 });
 
-                this.prepFood1.on("dragend", () =>{
-                       if (this.checkBounds(this.prepFood1)) {
+                this.prepFood1.on("dragend", () => {
+                    if (this.checkBounds(this.prepFood1)) {
                         this.prepFood1.setScale(0.13);
                         this.food1Placed = true;
                     } else {
@@ -570,9 +569,9 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                         this.iterateGameMessage();
                     }
 
-                    });
-                this.prepFood2.on("dragend", () =>{
-                  if (this.checkBounds(this.prepFood2)) {
+                });
+                this.prepFood2.on("dragend", () => {
+                    if (this.checkBounds(this.prepFood2)) {
                         this.prepFood2.setScale(0.13);
                         this.food2Placed = true;
                     } else {
@@ -600,16 +599,15 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                     //this.erin.setVisible(false);
                     this.iterateGameMessage();
                     this.openBox.setScale(this.zoomedScale);
-                    this.openBox.setPosition(this.zoomedX,this.zoomedY);
+                    this.openBox.setPosition(this.zoomedX, this.zoomedY);
                     this.prepFood1.setScale(0.4);
                     this.prepFood2.setScale(0.4);
                     this.bg1.setTexture("bg4");
                     this.ice.setVisible(true);
-                    this.ice.setPosition(50,100);
-                    console.log("open");
+                    this.ice.setPosition(50, 100);
                 });
-          
-                this.coolertop3.on("pointerdown", () =>{
+
+                this.coolertop3.on("pointerdown", () => {
                     this.bg1.setTexture("bg3");
                     this.openBox.setVisible(false);
                     this.ice.setVisible(false);
@@ -623,79 +621,77 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                     this.coolertop3.disableInteractive();
                     this.coolertop3.destroy();
                 })
-        }
-        cleanupScene() {
-            const objects = [
-                this.bg1,
-                this.next,
-                this.emptyBox,
-                this.closedBox,
-                this.openBox,
-                this.erin,
-                this.therm,
-                this.hand,
-                this.ice,
-                this.prepFood1,
-                this.prepFood2,
-                this.coolertop1,
-                this.coolertop2,
-                this.coolertop3,
-                this.textbox,
-                this.textboxImage,
-                this.textboxText,
-                this.textboxErin,
-                this.textboxErinImage,
-                this.timerText
-            ];
+            }
+            cleanupScene() {
+                const objects = [
+                    this.bg1,
+                    this.next,
+                    this.emptyBox,
+                    this.closedBox,
+                    this.openBox,
+                    this.erin,
+                    this.therm,
+                    this.hand,
+                    this.ice,
+                    this.prepFood1,
+                    this.prepFood2,
+                    this.coolertop1,
+                    this.coolertop2,
+                    this.coolertop3,
+                    this.textbox,
+                    this.textboxImage,
+                    this.textboxText,
+                    this.textboxErin,
+                    this.textboxErinImage,
+                    this.timerText
+                ];
 
-            objects.forEach(obj => {
-                if (obj && obj.destroy) {
-                    obj.destroy(true);
-                }
-            });
+                objects.forEach(obj => {
+                    if (obj && obj.destroy) {
+                        obj.destroy(true);
+                    }
+                });
 
-            if (this.typingEvent) this.typingEvent.remove(false);
-            this.time.removeAllEvents();
+                if (this.typingEvent) this.typingEvent.remove(false);
+                this.time.removeAllEvents();
 
-            this.input.removeAllListeners();
+                this.input.removeAllListeners();
 
-            this.tweens.killAll();
+                this.tweens.killAll();
 
-            this.scene.stop();
-        }
-        iterateGameMessage(){
-            if (this.gameMessages.length === 0) return;
-            this.textbox.setScale(0.6);
-            this.textboxText.setFontSize(90);
-            this.textbox.setPosition(500,720);
-            this.typewriteText(this.gameMessages[0]);
-            this.gameMessages.shift();
-        }
-        growTemp(hand){
-            this.tweens.add({
-                targets: hand,
-                angle: -235,
-                duration: 5000,
-                ease:'Linear',
-                onComplete: () => {
-                    this.coolertop2.setInteractive();
-                    this.coolertop2.setVisible(true);
-                    this.iterateGameMessage();
-                }
-            })
-        }
-        checkBounds(draggedItem){
-                this.rect1 = this.add.rectangle(940,550, 800, 250);
-                this.rect2 = this.add.rectangle(730,500, 450, 390);
+                this.scene.stop();
+            }
+            iterateGameMessage() {
+                if (this.gameMessages.length === 0) return;
+                this.textbox.setScale(0.6);
+                this.textboxText.setFontSize(90);
+                this.textbox.setPosition(500, 720);
+                this.typewriteText(this.gameMessages[0]);
+                this.gameMessages.shift();
+            }
+            growTemp(hand) {
+                this.tweens.add({
+                    targets: hand,
+                    angle: -235,
+                    duration: 5000,
+                    ease: 'Linear',
+                    onComplete: () => {
+                        this.coolertop2.setInteractive();
+                        this.coolertop2.setVisible(true);
+                        this.iterateGameMessage();
+                    }
+                })
+            }
+            checkBounds(draggedItem) {
+                this.rect1 = this.add.rectangle(940, 550, 800, 250);
+                this.rect2 = this.add.rectangle(730, 500, 450, 390);
                 const itemBounds = draggedItem.getBounds();
                 //this.rect1.setStrokeStyle(4, 0o0);
                 //this.rect2.setStrokeStyle(4, 0o0);
                 let targetBounds = this.openBox.getBounds();
-                if(draggedItem === this.prepFood1|| draggedItem === this.prepFood2){
-                     targetBounds =  this.rect2.getBounds();                
-                }    
-                console.log(itemBounds);
-                console.log(targetBounds);
+                if (draggedItem === this.prepFood1 || draggedItem === this.prepFood2) {
+                    targetBounds = this.rect2.getBounds();
+                }
                 if (Phaser.Geom.Intersects.RectangleToRectangle(itemBounds, targetBounds)) {
                     return true;
                 }
@@ -727,9 +723,9 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                 });
             }
 
-            
 
-            
+
+
         }
 
         const config = {
@@ -777,37 +773,37 @@ export default function ColdPrepTransport({ openMenu, refreshSummary }) {
                     zIndex: 1
                 }}
             />
-                    <div
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 180,
-                        padding: "10px",
-                        display: "flex",
-                        gap: "10px",
-                        zIndex: 30000
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 180,
+                    padding: "10px",
+                    display: "flex",
+                    gap: "10px",
+                    zIndex: 30000
+                }}
+            >
+
+                <button
+                    onClick={() => {
+                        if (phaserGameRef.current) {
+                            const scene = phaserGameRef.current.scene.getScene("ColdPrepTransportScene");
+                            scene.showInstructions();
+                        }
                     }}
-                    >
-           
-                           <button
-                           onClick={() => {
-                               if (phaserGameRef.current) {
-                               const scene = phaserGameRef.current.scene.getScene("ColdPrepTransportScene");
-                               scene.showInstructions();
-                               }
-                           }}
-                           style={{
-                               font: "bold 20px sans-serif",
-                               backgroundColor: "#ffffff",
-                               color: "#5100ff",
-                               padding: "5px 9px",
-                               cursor: "pointer"
-                           }}
-                           >
-                           ?
-                           </button>
-                       <Settings openMenu={openMenu} />
-                       </div>
+                    style={{
+                        font: "bold 20px sans-serif",
+                        backgroundColor: "#ffffff",
+                        color: "#5100ff",
+                        padding: "5px 9px",
+                        cursor: "pointer"
+                    }}
+                >
+                    ?
+                </button>
+                <Settings openMenu={openMenu} />
+            </div>
         </div>
     );
 }

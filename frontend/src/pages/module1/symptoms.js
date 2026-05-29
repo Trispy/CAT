@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
 import moduleUpdate from "../../components/moduleupdate";
@@ -13,16 +14,16 @@ import xMark from "../../assets/M1G1/X.png";
 import textbox from "../../assets/M1G1/Textbox.png";
 import next from "../../assets/M1G1/nextbutton.png";
 import mapbutton from "../../assets/mapbutton.png";
-import { useNavigate } from "react-router-dom";
+
 import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 
 export default function Symptoms({ openMenu, refreshSummary }) {
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     window.navigateToPage = navigate;
-    
+
     class Symptom extends Phaser.Scene {
       erinX = 1300;
       erinY = 175;
@@ -37,7 +38,7 @@ export default function Symptoms({ openMenu, refreshSummary }) {
       ];
 
       instructions = [
-        "In the following game, the volunteer will share different symptoms with you, and you will determine if they can volunteer or should stay home. If they can volunteer, tap the green ✅, but if they should stay home, tap the red ❌."      ];
+        "In the following game, the volunteer will share different symptoms with you, and you will determine if they can volunteer or should stay home. If they can volunteer, tap the green ✅, but if they should stay home, tap the red ❌."];
 
       transitions = [
         "Great job identifying when volunteers should stay home! In the next section, you will prepare this volunteer for their shift."
@@ -156,7 +157,7 @@ export default function Symptoms({ openMenu, refreshSummary }) {
           font: "bold 70px sans-serif",
           color: "#000",
           wordWrap: {
-            width: this.textboxImage.width * 0.9
+            width: this.textboxImage.width * 0.85
           }
         }).setOrigin(0);
 
@@ -246,15 +247,15 @@ export default function Symptoms({ openMenu, refreshSummary }) {
             this.xMark.preFX.clear();
           }
         } else {
-          if (button === this.xMark) {
-            this.check.preFX.addShine(1, 0.5, 5);
-          } else {
-            this.xMark.preFX.addShine(1, 0.5, 5);
-          }
-
           this.textboxText.setFontSize(this.textFontSize * 0.7);
           this.textboxText.setColor("rgb(252, 0, 0)");
-          this.typewriteText(this.scenario.popup + "\nTap the ❌ button to continue.");
+          if (button === this.xMark) {
+            this.check.preFX.addShine(1, 0.5, 5);
+            this.typewriteText(this.scenario.popup + "\nTap the ✓ button to continue.");
+          } else {
+            this.xMark.preFX.addShine(1, 0.5, 5);
+            this.typewriteText(this.scenario.popup + "\nTap the ❌ button to continue.");
+          }
         }
 
         if (scenarios.length === 0) {
@@ -315,19 +316,19 @@ export default function Symptoms({ openMenu, refreshSummary }) {
           zIndex: 1
         }}
       />
-     
-   <div
-  style={{
-    position: "absolute",
-    top: 0,
-    right: 180,
-    padding: "10px",
-    display: "flex",
-    zIndex: 30000
-  }}
->
-      <Settings openMenu={openMenu}/>
-    </div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 180,
+          padding: "10px",
+          display: "flex",
+          zIndex: 30000
+        }}
+      >
+        <Settings openMenu={openMenu} />
+      </div>
     </div>
   );
 }

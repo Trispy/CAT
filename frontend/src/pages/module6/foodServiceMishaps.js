@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
 import callUpdate from "../../components/callupdate";
@@ -37,14 +38,15 @@ import emptyBowl from "../../assets/M6G2/emptyBowl.png";
 import newSpatula from "../../assets/M6G2/newSpatula.png";
 import tempLog from "../../assets/M6G2/TempLog.png";
 import chickenPan from "../../assets/M5G2/ChickenPan.png";
+
 import { defaultFont } from "../../formatting";
 import { defaultFontSize } from "../../formatting";
 import { defaultFontColor } from "../../formatting";
 import { defaultTypingSpeed } from "../../formatting";
-import Settings from "../../components/settings";
-import { useNavigate } from "react-router-dom";
 
+import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
+
 
 export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null);
@@ -58,7 +60,7 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
             erinX = 630;
             erinY = 340;
             erinScale = 1.35;
-        
+
             instructionsShown = false;
             instructionStep = 0;
             itemScale = 0.5;
@@ -95,13 +97,13 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
             ];
             transitions2 = [
                 "Moving on"
-             ];
+            ];
             transitions3 = [
                 "Great job! You made sure the food items you found were not in the danger zone for more than two hours.",
                 "If they had been in the temperature danger zone for more than two hours, they would have needed to be discarded.",
                 "You've now completed the food service module. Click the next button to return to the modules map."
-                
-             ];
+
+            ];
             constructor() {
                 super("ServiceSetUpsScene");
             }
@@ -113,31 +115,31 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                 this.load.image("textbox", textbox);
                 this.load.image("erinText", erinText);
                 this.load.image("next", next);
-                this.load.image("ice", ice);        
-                this.load.image("openBox", iceBox);  
-                this.load.image("closedBox", closedBox);                
-                this.load.image("emptyBox", emptyBox);  
+                this.load.image("ice", ice);
+                this.load.image("openBox", iceBox);
+                this.load.image("closedBox", closedBox);
+                this.load.image("emptyBox", emptyBox);
                 this.load.image("therm", thermometer);
-                this.load.image("coldTherm", coldThermometer);                
-                this.load.image("hand", hand);   
+                this.load.image("coldTherm", coldThermometer);
+                this.load.image("hand", hand);
                 this.load.image("chaferDish", chaferDish);
-                
-                this.load.image("soupDish", soupDish);         
-                this.load.image("chickenBowl", chickenBowl);  
-                this.load.image("soupBowl", soupBowl);    
-                this.load.image("coldFood", coldFood);  
-                this.load.image("spatula", spatula);        
-                this.load.image("ladle", ladle); 
-                this.load.image("tongs", tongs);     
+
+                this.load.image("soupDish", soupDish);
+                this.load.image("chickenBowl", chickenBowl);
+                this.load.image("soupBowl", soupBowl);
+                this.load.image("coldFood", coldFood);
+                this.load.image("spatula", spatula);
+                this.load.image("ladle", ladle);
+                this.load.image("tongs", tongs);
                 this.load.image("utensilDish", utensilsDish);
                 this.load.image("cookedChicken", chickenDish);
-                this.load.image("erinGloved", erinGloved);      
-                this.load.image("erinNotGloved", erinNotGloved);      
+                this.load.image("erinGloved", erinGloved);
+                this.load.image("erinNotGloved", erinNotGloved);
                 this.load.image("erinDirtyGloved", erinDirtyGloved);
                 this.load.image("trashcan", trashCan);
                 this.load.image("gloveBox", gloveBox);
                 this.load.image("mascot", mascot);
-                
+
                 this.load.image("newSpatula", newSpatula);
                 this.load.image("emptyBowl", emptyBowl);
                 this.load.image("tempLog", tempLog);
@@ -145,62 +147,62 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
 
 
             }
-            
-            showPopup(inputText) {           
-                    const { width, height } = this.scale;
 
-                    const overlay = this.add.container(0, 0);
+            showPopup(inputText) {
+                const { width, height } = this.scale;
 
-                    //user can't interact with items while popup is open
-                    const blocker = this.add.rectangle(0, 0, width, height, 0x000000, 0.3)
+                const overlay = this.add.container(0, 0);
+
+                //user can't interact with items while popup is open
+                const blocker = this.add.rectangle(0, 0, width, height, 0x000000, 0.3)
                     .setOrigin(0)
                     .setInteractive();
 
-                    const bg = this.add.rectangle(
-                        width / 2,
-                        height / 2,
-                        width * 0.7,
-                        height * 0.7,
-                        0xffffff
-                    ).setStrokeStyle(4, 0x000000);
+                const bg = this.add.rectangle(
+                    width / 2,
+                    height / 2,
+                    width * 0.7,
+                    height * 0.7,
+                    0xffffff
+                ).setStrokeStyle(4, 0x000000);
 
-                    const text = this.add.text(
-                        width / 2,
-                        height / 2,
-                        inputText,
-                        {
-                            font: "55px Arial",
-                            color: "#000",
-                            wordWrap: { width: width * 0.7 }
-                        }
-                    ).setOrigin(0.5);
+                const text = this.add.text(
+                    width / 2,
+                    height / 2,
+                    inputText,
+                    {
+                        font: "55px Arial",
+                        color: "#000",
+                        wordWrap: { width: width * 0.7 }
+                    }
+                ).setOrigin(0.5);
 
-                    const close = this.add.text(
+                const close = this.add.text(
                     width * 0.82,
                     height * 0.20,
-                        "X",
-                        {
-                            font: "bold 40px sans-serif",
-                            backgroundColor: "#ff0000",
-                            padding: { x: 20, y: 10 }
-                        }
-                    )
+                    "X",
+                    {
+                        font: "bold 40px sans-serif",
+                        backgroundColor: "#ff0000",
+                        padding: { x: 20, y: 10 }
+                    }
+                )
                     .setInteractive()
                     .setOrigin(0.5);
 
-                    close.on("pointerdown", () => {
-                        overlay.destroy(true);
-                    });
+                close.on("pointerdown", () => {
+                    overlay.destroy(true);
+                });
 
-                    overlay.add([blocker, bg, text, close]);
-                    overlay.setDepth(1000);
-                }
-           showInstructions() {
+                overlay.add([blocker, bg, text, close]);
+                overlay.setDepth(1000);
+            }
+            showInstructions() {
                 const { width, height } = this.scale;
 
                 const overlay = this.add.container(0, 0);
                 overlay.setDepth(1000);
- const bg = this.add.rectangle(
+                const bg = this.add.rectangle(
                     width / 2,
                     height / 2,
                     width * 0.7,
@@ -240,14 +242,14 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                 overlay.add([bg, text, close]);
             }
             create() {    // Background
-                
+
                 this.bg1 = this.add.image(
                     this.scale.width / 2,
                     this.scale.height / 2,
                     "bg1"
                 );
                 //this.bg1.setScale(1.5);
-                   // Help Button
+                // Help Button
                 /*const helpButton = this.add.text(
                     this.scale.width * 0.89,
                     this.scale.height * 0.09,
@@ -282,21 +284,21 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                 //this.erinY = this.bg1.height / 2 + 45;
 
                 // Characters
-                this.space1 = this.add.rectangle(0,0,500, 1700).setOrigin(0);
+                this.space1 = this.add.rectangle(0, 0, 500, 1700).setOrigin(0);
                 //this.space1.setStrokeStyle(10, 0x000000, 1);
                 this.space1.setVisible(true);
 
-                
+
 
                 this.trashcan = this.add.image(
                     950,
-                    600, 
+                    600,
                     "trashcan")
-                .setOrigin(0)
-                .setScale(0.23)
-                .setVisible(true);
+                    .setOrigin(0)
+                    .setScale(0.23)
+                    .setVisible(true);
 
-                 this.space2 = this.add.rectangle(this.trashcan.x,0, 400, 1700).setOrigin(0);
+                this.space2 = this.add.rectangle(this.trashcan.x, 0, 400, 1700).setOrigin(0);
                 //this.space2.setStrokeStyle(10, 0x000000, 1);
                 this.space2.setVisible(true);
 
@@ -305,172 +307,172 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                     175 * 4.35,
                     "next"
                 )
-                .setOrigin(0)
-                .setScale(0.35)
-                .setInteractive({useHandCursor: true})
-                .setVisible(true);
+                    .setOrigin(0)
+                    .setScale(0.35)
+                    .setInteractive({ useHandCursor: true })
+                    .setVisible(true);
 
                 this.erinNotGloved = this.add.image(
                     this.erinX,
                     this.erinY,
                     "erinNotGloved"
                 )
-                .setOrigin(0)
-                .setScale(this.erinScale)
-                .setVisible(false);
-                
-                
+                    .setOrigin(0)
+                    .setScale(this.erinScale)
+                    .setVisible(false);
+
+
                 this.erinGloved = this.add.image(
                     this.erinX,
                     this.erinY,
                     "erinGloved"
                 )
-                .setOrigin(0)
-                .setScale(this.erinScale)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(this.erinScale)
+                    .setVisible(false);
 
-                
-                
+
+
                 this.manager = this.add.image(
                     this.erinX + 750,
                     this.erinY + 250,
                     "mascot"
                 )
-                .setOrigin(0)
-                .setScale(0.3)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(0.3)
+                    .setVisible(false);
 
-                this.space3 = this.add.rectangle(this.manager.x,0, 500, 1600).setOrigin(0);
+                this.space3 = this.add.rectangle(this.manager.x, 0, 500, 1600).setOrigin(0);
                 //this.space3.setStrokeStyle(10, 0x000000, 1);
                 this.space3.setVisible(true);
-            
-                 this.chickenBowl= this.add.image(
+
+                this.chickenBowl = this.add.image(
                     320,
                     370,
                     "chickenBowl"
                 )
-                .setOrigin(0)
-                .setScale(this.itemScale)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(this.itemScale)
+                    .setVisible(false);
 
-                
-                 this.erin = this.add.image(
+
+                this.erin = this.add.image(
                     this.erinX,
                     this.erinY + 200,
                     "erinDirtyGloved"
                 )
-                .setOrigin(0)
-                .setScale(this.erinScale)
-                .setVisible(true);
+                    .setOrigin(0)
+                    .setScale(this.erinScale)
+                    .setVisible(true);
 
-                this.soupBowl= this.add.image(
+                this.soupBowl = this.add.image(
                     680,
                     400,
                     "soupBowl"
                 )
-                .setOrigin(0)
-                .setScale(this.itemScale)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(this.itemScale)
+                    .setVisible(false);
 
-                this.coldFood= this.add.image(
+                this.coldFood = this.add.image(
                     680,
                     450,
                     "coldFood"
                 )
-                .setOrigin(0)
-                .setScale(this.itemScale / 2.5)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(this.itemScale / 2.5)
+                    .setVisible(false);
 
-                
+
                 this.hotTherm1 = this.add.image(
-                    780, 
-                    700, 
+                    780,
+                    700,
                     "therm")
-                .setOrigin(0)
-                .setInteractive()
-                .setAngle(0)
-                .setScale(0.35)
-                .setVisible(false);
-              
+                    .setOrigin(0)
+                    .setInteractive()
+                    .setAngle(0)
+                    .setScale(0.35)
+                    .setVisible(false);
 
-                 this.coldTherm = this.add.image(
-                    580, 
-                    50, 
+
+                this.coldTherm = this.add.image(
+                    580,
+                    50,
                     "coldTherm")
-                .setOrigin(0)
-                .setInteractive()
-                .setScale(0.35)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setInteractive()
+                    .setScale(0.35)
+                    .setVisible(false);
 
                 this.hotHand1 = this.add.image(
                     this.hotTherm1.getCenter().x - 20,
-                    this.hotTherm1.getCenter().y + 10, 
+                    this.hotTherm1.getCenter().y + 10,
                     "hand")
-                .setAngle(120)
-                .setOrigin(0)
-                .setScale(0.4)
-                .setVisible(false);
+                    .setAngle(120)
+                    .setOrigin(0)
+                    .setScale(0.4)
+                    .setVisible(false);
 
-                
+
                 this.coldHand = this.add.image(
-                this.coldTherm.getCenter().x + 5,
-                this.coldTherm.getCenter().y - 25, 
+                    this.coldTherm.getCenter().x + 5,
+                    this.coldTherm.getCenter().y - 25,
                     "hand")
-                .setAngle(-180)
-                .setOrigin(0)
-                .setScale(0.4)
-                .setVisible(false);
+                    .setAngle(-180)
+                    .setOrigin(0)
+                    .setScale(0.4)
+                    .setVisible(false);
 
-            
-                 this.tongs = this.add.image(
+
+                this.tongs = this.add.image(
                     550,
-                    370, 
+                    370,
                     "tongs")
-                .setOrigin(0)
-                .setScale(this.itemScale * 2)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(this.itemScale * 2)
+                    .setVisible(false);
 
-                 this.spatula = this.add.image(
+                this.spatula = this.add.image(
                     this.itemX,
-                    this.itemY, 
+                    this.itemY,
                     "spatula")
-                .setOrigin(0)
-                .setScale(this.itemScale * 2.5)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(this.itemScale * 2.5)
+                    .setVisible(false);
 
-                 this.ladle = this.add.image(
+                this.ladle = this.add.image(
                     this.itemX,
-                    this.itemY, 
+                    this.itemY,
                     "ladle")
-                .setOrigin(0)
-                .setScale(this.itemScale * 2.5)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(this.itemScale * 2.5)
+                    .setVisible(false);
 
-                
-                 this.gloveBox = this.add.image(
+
+                this.gloveBox = this.add.image(
                     this.erinX - 200,
-                    this.erinY + 50, 
+                    this.erinY + 50,
                     "gloveBox")
-                .setOrigin(0)
-                .setScale(0.1)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(0.1)
+                    .setVisible(false);
 
-                 this.tempLog = this.add.image(
+                this.tempLog = this.add.image(
                     this.erinX + 870,
                     this.erinY - 10,
                     "tempLog")
-                .setOrigin(0)
-                .setScale(0.5)
-                .setVisible(false);
-                
-                this.chickenPan= this.add.image(
+                    .setOrigin(0)
+                    .setScale(0.5)
+                    .setVisible(false);
+
+                this.chickenPan = this.add.image(
                     1000,
                     410,
                     "chickenPan"
                 )
-                .setOrigin(0)
-                .setScale(this.itemScale)
-                .setVisible(false);
+                    .setOrigin(0)
+                    .setScale(this.itemScale)
+                    .setVisible(false);
 
                 // Textbox
 
@@ -494,7 +496,7 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
 
                 // Interactions
                 this.next.on("pointerdown", () => {
-                    if(!this.instructionsShown){
+                    if (!this.instructionsShown) {
                         this.instructionsShown = true;
                         this.iterateGameMessage(0);
                         this.showPopup(this.instructions[0]);
@@ -506,10 +508,10 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                         this.erin.setScale(1);
                         this.erin.setInteractive();
                         this.input.setDraggable(this.erin);
-                        this.trashcan.setInteractive({dropZone: true});
-                        this.space2.setInteractive({dropZone: true});                        
+                        this.trashcan.setInteractive({ dropZone: true });
+                        this.space2.setInteractive({ dropZone: true });
                     }
-                    else if (this.transitions1.length > 0){
+                    else if (this.transitions1.length > 0) {
                         this.iterateGameMessage(this.instructionStep + 1);
                         this.transitions1.shift();
                         this.next.setVisible(false);
@@ -522,9 +524,9 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                         this.ladle.setVisible(true);
                         this.spatula.setVisible(true);
                         this.allowSpatula = true;
-                        this.space3.setInteractive({dropZone: true});
-                    }    
-                    else if(this.transitions2.length > 0) {
+                        this.space3.setInteractive({ dropZone: true });
+                    }
+                    else if (this.transitions2.length > 0) {
                         this.trashcan.setVisible(false);
                         this.iterateGameMessage(this.instructionStep + 1, "cupboard");
                         this.spatula.setVisible(false);
@@ -538,15 +540,15 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                         this.coldFood.input.dropZone = true;
                         this.input.setDraggable(this.coldTherm);
                         this.coldTherm.setInteractive();
-                    }  
-                    else if (this.transitions3.length > 0){    
+                    }
+                    else if (this.transitions3.length > 0) {
                         //helpButton.setVisible(false);
                         this.textboxText.setFontSize("70px");
                         this.textbox.setPosition(150, 100);
                         this.textbox.setScale(this.textboxScale);
                         this.typewriteText(this.transitions3[0]);
                         this.transitions3.shift();
-                    }          
+                    }
                     else {
                         this.cleanUpScene();
                         callUpdate("m6");
@@ -555,10 +557,10 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                     }
                 });
 
-                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     gameObject.x = dragX;
                     gameObject.y = dragY;
-                    if(gameObject === this.hotTherm1 || gameObject === this.hotTherm2 || gameObject === this.coldTherm){
+                    if (gameObject === this.hotTherm1 || gameObject === this.hotTherm2 || gameObject === this.coldTherm) {
                         this.centerHands();
                     }
                 });
@@ -570,68 +572,69 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                 this.hotTempCheck = false;
 
                 this.input.on("drop", (pointer, gameObject, dropZone) => {
-                    if(gameObject === this.erin && dropZone === this.space1){
+                    if (gameObject === this.erin && dropZone === this.space1) {
                         dropZone.disableInteractive();
                         this.iterateGameMessage(this.instructionStep + 1);
                         this.erin.setPosition(dropZone.x, this.erinY);
                         this.input.setDraggable(this.erin, false);
-                         if(!this.timerStart){
+                        if (!this.timerStart) {
                             this.timerStart = true;
                             let timeLeft = 10;
                             this.timerText = this.add.text(
                                 this.bg1.width * 0.81,
                                 this.bg1.height * 0.25,
                                 ":10",
-                            {
-                                backgroundColor: "#000000",
-                                borderColor: "#ffffff",
-                                borderWidth: 4,
-                                fontSize: "52px",
-                                color: "#ff0000",
-                                fontStyle: "bold"
-                            }
-                        ).setOrigin(0.5);
-                        this.timerText.setDepth(1000);
-                        this.time.addEvent({
-                            delay: 1000, //one second
-                            loop: true,
-                            callback: () => {
-                                if (timeLeft <= 0) return;
-                                timeLeft--;
-                                this.timerText.setText(":" + timeLeft.toString());
-
-                                if (timeLeft <= 0) {
-                                    this.timerText.setText("Done!");
-                                    this.iterateGameMessage(this.instructionStep + 1);
-                                    this.gloveBox.setVisible(true);
-                                    this.gloveBox.setInteractive();
-                                    this.input.setDraggable(this.gloveBox);
-                                    this.erin.input.dropZone = true;
+                                {
+                                    backgroundColor: "#000000",
+                                    borderColor: "#ffffff",
+                                    borderWidth: 4,
+                                    fontSize: "52px",
+                                    color: "#ff0000",
+                                    fontStyle: "bold"
                                 }
+                            ).setOrigin(0.5);
+                            this.timerText.setDepth(1000);
+                            this.time.addEvent({
+                                delay: 1000, //one second
+                                loop: true,
+                                callback: () => {
+                                    if (timeLeft <= 0) return;
+                                    timeLeft--;
+                                    this.timerText.setText(":" + timeLeft.toString());
 
-                            }});
-                }
-                        
+                                    if (timeLeft <= 0) {
+                                        this.timerText.setText("Done!");
+                                        this.iterateGameMessage(this.instructionStep + 1);
+                                        this.gloveBox.setVisible(true);
+                                        this.gloveBox.setInteractive();
+                                        this.input.setDraggable(this.gloveBox);
+                                        this.erin.input.dropZone = true;
+                                    }
+
+                                }
+                            });
+                        }
+
                     }
-                    else if(gameObject === this.erin && dropZone === this.space2){
+                    else if (gameObject === this.erin && dropZone === this.space2) {
                         this.iterateGameMessage(this.instructionStep + 1);
                         //this.trashcan.setVisible(false);
                         this.erin.setPosition(dropZone.x, this.erinY);
                         this.erin.setTexture("erinNotGloved");
-                        this.space1.setInteractive({dropZone: true});
+                        this.space1.setInteractive({ dropZone: true });
                         dropZone.disableInteractive();
                     }
-                    else if (gameObject === this.gloveBox && dropZone.texture.key === "erinNotGloved"){
+                    else if (gameObject === this.gloveBox && dropZone.texture.key === "erinNotGloved") {
                         this.timerText?.destroy();
-                       this.iterateGameMessage(this.instructionStep + 1);
+                        this.iterateGameMessage(this.instructionStep + 1);
                         this.erin.setTexture("erinGloved");
                         dropZone.disableInteractive();
                         this.gloveBox.setVisible(false);
                         this.next.setVisible(true);
                         this.erin.input.dropZone = false;
                     }
-                     else if (gameObject === this.erin && dropZone === this.space3){
-            
+                    else if (gameObject === this.erin && dropZone === this.space3) {
+
                         this.iterateGameMessage(this.instructionStep + 1);
                         this.erin.setPosition(this.manager.x, this.manager.y / 1.5);
                         this.space2.setInteractive();
@@ -639,9 +642,9 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                         this.input.setDraggable(this.soupBowl);
                         dropZone.disableInteractive();
                         this.erin.disableInteractive();
-                        
-                     }
-                    else if (gameObject === this.soupBowl && dropZone === this.space2){
+
+                    }
+                    else if (gameObject === this.soupBowl && dropZone === this.space2) {
                         this.soupBowl.setTexture("emptyBowl");
                         this.soupBowl.setPosition(680, 400);
                         this.soupBowl.disableInteractive();
@@ -649,7 +652,7 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                         this.iterateGameMessage(this.instructionStep + 1);
                         this.ladle.setInteractive();
                         this.input.setDraggable(this.ladle);
-                        
+
                         this.spatula.setInteractive();
                         this.input.setDraggable(this.spatula);
                         this.allowSpatula = true;
@@ -657,64 +660,64 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                         this.space1.setInteractive();
                         dropZone.disableInteractive();
 
-                     }
-                     else if (gameObject === this.spatula && dropZone === this.space1){
+                    }
+                    else if (gameObject === this.spatula && dropZone === this.space1) {
 
-                       
-                            if(!this.allowSpatula){
-                                return;
-                            }
 
-                            this.spatula.setVisible(false);
-
-                            if(!this.utensilWashed){    
-                                this.utensilWashed = true;
-                                return;
-                            }
-
-                            this.soupBowl.setInteractive();
-                            this.input.setDraggable(this.soupBowl);
-
-                            this.allowSpatula = false; 
-
-                            this.iterateGameMessage(this.instructionStep + 1);
+                        if (!this.allowSpatula) {
+                            return;
                         }
-                      else if (gameObject === this.ladle && dropZone === this.space1){
-                            this.ladle.setVisible(false);
-                        if(!this.utensilWashed){
+
+                        this.spatula.setVisible(false);
+
+                        if (!this.utensilWashed) {
                             this.utensilWashed = true;
                             return;
                         }
-                            this.soupBowl.setInteractive();
-                            this.input.setDraggable(this.soupBowl);
-                            this.iterateGameMessage(this.instructionStep + 1);
-                     }
-                     else if(gameObject === this.soupBowl && dropZone === this.space1){
-                         this.iterateGameMessage(this.instructionStep + 1, "cupboard");
-                                 this.spatula.setTexture("newSpatula");
-                            this.spatula.setPosition(this.itemX, this.itemY - 400);
-                            this.spatula.setVisible(true);
-                            this.utensilWashed = false;
-                              this.chickenBowl.setInteractive({dropZone: true});
-                            //dropZone.disableInteractive();
-                            this.erin.setPosition(0, this.erinY);
-                            this.manager.setVisible(false);
-                            this.soupBowl.setVisible(false);
-                     }
-                     else if(gameObject === this.spatula && dropZone === this.chickenBowl){
+
+                        this.soupBowl.setInteractive();
+                        this.input.setDraggable(this.soupBowl);
+
+                        this.allowSpatula = false;
+
+                        this.iterateGameMessage(this.instructionStep + 1);
+                    }
+                    else if (gameObject === this.ladle && dropZone === this.space1) {
+                        this.ladle.setVisible(false);
+                        if (!this.utensilWashed) {
+                            this.utensilWashed = true;
+                            return;
+                        }
+                        this.soupBowl.setInteractive();
+                        this.input.setDraggable(this.soupBowl);
+                        this.iterateGameMessage(this.instructionStep + 1);
+                    }
+                    else if (gameObject === this.soupBowl && dropZone === this.space1) {
+                        this.iterateGameMessage(this.instructionStep + 1, "cupboard");
+                        this.spatula.setTexture("newSpatula");
+                        this.spatula.setPosition(this.itemX, this.itemY - 400);
+                        this.spatula.setVisible(true);
+                        this.utensilWashed = false;
+                        this.chickenBowl.setInteractive({ dropZone: true });
+                        //dropZone.disableInteractive();
+                        this.erin.setPosition(0, this.erinY);
+                        this.manager.setVisible(false);
+                        this.soupBowl.setVisible(false);
+                    }
+                    else if (gameObject === this.spatula && dropZone === this.chickenBowl) {
                         this.iterateGameMessage(this.instructionStep + 1);
                         this.spatula.setPosition(this.chickenBowl.x, this.chickenBowl.y - 50);
                         this.spatula.setAngle(-30);
                         this.spatula.disableInteractive();
                         dropZone.disableInteractive();
                         this.next.setVisible(true);
-                     }
-                      else if(gameObject === this.coldTherm && dropZone === this.coldFood){
+                    }
+                    else if (gameObject === this.coldTherm && dropZone === this.coldFood) {
                         this.coldTherm.setPosition(dropZone.x, dropZone.y - 150);
                         this.centerHands();
                         dropZone.disableInteractive();
                         this.coldTherm.disableInteractive();
-                        if(!this.coldTempCheck){
+                        if (!this.coldTempCheck) {
                             this.coldTempCheck = true;
                             this.lowerTemp(this.coldHand);
                             return;
@@ -723,25 +726,24 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                         //this.coldHand.setAngle(-180);
                         this.lowerTemp(this.coldHand, "good");
 
-                        
-                     }
-                     else if(gameObject === this.hotTherm1 && dropZone === this.chickenBowl){
-                          this.hotTherm1.setPosition(dropZone.x, dropZone.y - 30);
+
+                    }
+                    else if (gameObject === this.hotTherm1 && dropZone === this.chickenBowl) {
+                        this.hotTherm1.setPosition(dropZone.x, dropZone.y - 30);
                         this.centerHands();
                         dropZone.disableInteractive();
                         this.hotTherm1.disableInteractive();
-                        if(!this.hotTempCheck){
+                        if (!this.hotTempCheck) {
                             this.hotTempCheck = true;
                             this.growTemp(this.hotHand1);
-                            console.log("Hi");
                             return;
 
                         }
-                    
-                     //this.hotHand1.setAngle(75);
-                       this.growTemp(this.hotHand1, "good");
-                     }
-                     else if(gameObject === this.coldFood && dropZone === this.space3){
+
+                        //this.hotHand1.setAngle(75);
+                        this.growTemp(this.hotHand1, "good");
+                    }
+                    else if (gameObject === this.coldFood && dropZone === this.space3) {
                         this.iterateGameMessage(this.instructionStep + 1, "cupboard");
                         this.coldFood.setVisible(false);
                         this.chickenBowl.setInteractive();
@@ -751,57 +753,58 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                         dropZone.disableInteractive();
                         this.space2.setInteractive();
                         this.space2.input.dropZone = true;
-                     }
-                     else if(gameObject === this.chickenBowl && dropZone === this.space2){
+                    }
+                    else if (gameObject === this.chickenBowl && dropZone === this.space2) {
                         this.chickenBowl.setVisible(false);
                         this.chickenPan.setVisible(true);
-                                         if(!this.tempStart){
-                                            
+                        if (!this.tempStart) {
+
                             this.tempStart = true;
                             let timeLeft = 7;
                             this.timerText = this.add.text(
                                 this.bg1.width * 1,
                                 this.bg1.height * 0.3,
                                 ":7",
-                            {
-                                backgroundColor: "#000000",
-                                borderColor: "#ffffff",
-                                borderWidth: 4,
-                                fontSize: "52px",
-                                color: "#ff0000",
-                                fontStyle: "bold"
-                            }
-                        ).setOrigin(0.5);
-                        this.timerText.setDepth(1000);
-                        this.time.addEvent({
-                            delay: 1000, //one second
-                            loop: true,
-                            callback: () => {
-                                if (timeLeft <= 0) return;
-                                timeLeft--;
-                                this.timerText.setText(":" + timeLeft.toString());
+                                {
+                                    backgroundColor: "#000000",
+                                    borderColor: "#ffffff",
+                                    borderWidth: 4,
+                                    fontSize: "52px",
+                                    color: "#ff0000",
+                                    fontStyle: "bold"
+                                }
+                            ).setOrigin(0.5);
+                            this.timerText.setDepth(1000);
+                            this.time.addEvent({
+                                delay: 1000, //one second
+                                loop: true,
+                                callback: () => {
+                                    if (timeLeft <= 0) return;
+                                    timeLeft--;
+                                    this.timerText.setText(":" + timeLeft.toString());
 
-                                if (timeLeft <= 0) {
-                                    this.chickenPan.setVisible(false);
-                                    this.chickenBowl.setVisible(true);
-                                    this.coldFood.setVisible(true);
-                                    //this.showThermometer(this.hotTherm1);]
-                                    // this.hotTherm1.setPosition(780, 70);
-                                    this.iterateGameMessage(this.instructionStep + 1, "cupboard");
-                                    this.showThermometer(this.coldTherm);
-                                    this.coldTherm.setPosition(580, 50);
-                                    this.centerHands();
-                                    this.chickenBowl.setPosition(320, 370);
-                                    this.coldFood.setPosition(680,450);
-                                    this.input.setDraggable(this.coldFood, false);
-                                    this.coldFood.input.dropZone = true;
+                                    if (timeLeft <= 0) {
+                                        this.chickenPan.setVisible(false);
+                                        this.chickenBowl.setVisible(true);
+                                        this.coldFood.setVisible(true);
+                                        //this.showThermometer(this.hotTherm1);]
+                                        // this.hotTherm1.setPosition(780, 70);
+                                        this.iterateGameMessage(this.instructionStep + 1, "cupboard");
+                                        this.showThermometer(this.coldTherm);
+                                        this.coldTherm.setPosition(580, 50);
+                                        this.centerHands();
+                                        this.chickenBowl.setPosition(320, 370);
+                                        this.coldFood.setPosition(680, 450);
+                                        this.input.setDraggable(this.coldFood, false);
+                                        this.coldFood.input.dropZone = true;
+
+                                    }
 
                                 }
+                            });
+                        }
 
-                            }});
-                }
-                        
-                     }
+                    }
 
 
                 });
@@ -809,149 +812,149 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                 this.tempLog.on("pointerdown", () => {
                     this.iterateGameMessage(this.instructionStep + 1);
                     this.showPopup("Item: Grilled Chicken, Date: Today, Time: 1 Hour Ago, Temp: 170 °F.\n\n\nItem: Watermelon, Date: Today, Time: 1 Hour Ago, Temp: 38°F.");
-                   if(!this.logOpened){
-                    this.logOpened = true;
-                    this.coldFood.setInteractive();
-                    this.input.setDraggable(this.coldFood);
-                    this.coldFood.input.dropZone = false;
-                    this.space3.setInteractive();
-                    this.space3.input.dropZone = true;
-                    this.hotTherm1.setVisible(false);
-                    
-                    this.hotHand1.setVisible(false);
-                    this.coldHand.setVisible(false);
-                    this.coldTherm.setVisible(false);
+                    if (!this.logOpened) {
+                        this.logOpened = true;
+                        this.coldFood.setInteractive();
+                        this.input.setDraggable(this.coldFood);
+                        this.coldFood.input.dropZone = false;
+                        this.space3.setInteractive();
+                        this.space3.input.dropZone = true;
+                        this.hotTherm1.setVisible(false);
 
-                   }
+                        this.hotHand1.setVisible(false);
+                        this.coldHand.setVisible(false);
+                        this.coldTherm.setVisible(false);
+
+                    }
 
                 }
-            );
+                );
 
-               
 
-            
+
+
             }
 
             cleanUpScene() {
-    // Stop all input listeners
-    this.input.off("drag");
-    this.input.off("drop");
+                // Stop all input listeners
+                this.input.off("drag");
+                this.input.off("drop");
 
-    // Kill all tweens
-    this.tweens.killAll();
+                // Kill all tweens
+                this.tweens.killAll();
 
-    // Remove all timed events
-    this.time.removeAllEvents();
+                // Remove all timed events
+                this.time.removeAllEvents();
 
-    // Destroy typing event if it exists
-    if (this.typingEvent) {
-        this.typingEvent.remove(false);
-        this.typingEvent = null;
-    }
-
-    // Destroy timer text
-    if (this.timerText) {
-        this.timerText.destroy();
-        this.timerText = null;
-    }
-
-    // Destroy ALL game objects manually (only if they exist)
-    const objects = [
-        this.bg1,
-        this.trashcan,
-        this.next,
-        this.erin,
-        this.erinGloved,
-        this.erinNotGloved,
-        this.manager,
-        this.chickenBowl,
-        this.soupBowl,
-        this.coldFood,
-        this.hotTherm1,
-        this.coldTherm,
-        this.hotHand1,
-        this.coldHand,
-        this.tongs,
-        this.spatula,
-        this.ladle,
-        this.gloveBox,
-        this.tempLog,
-        this.chickenPan,
-        this.textboxImage,
-        this.textboxText
-    ];
-
-    objects.forEach(obj => {
-        if (obj && obj.destroy) {
-            obj.destroy();
-        }
-    });
-
-    // Destroy containers separately
-    if (this.textbox) {
-        this.textbox.destroy(true);
-        this.textbox = null;
-    }
-
-    // Destroy rectangles / zones
-    const zones = [
-        this.space1,
-        this.space2,
-        this.space3
-    ];
-
-    zones.forEach(zone => {
-        if (zone && zone.destroy) {
-            zone.destroy();
-        }
-    });
-
-    // Clear references
-    this.bg1 = null;
-    this.erin = null;
-    this.manager = null;
-    this.chickenBowl = null;
-    this.soupBowl = null;
-    this.coldFood = null;
-}
-                 showThermometer(therm){
-                this.timerText.setVisible(false);
-                if(therm === this.hotTherm1){
-
-                this.hotTherm1.setVisible(true);
-                this.hotHand1.setVisible(true);
-                this.hotTherm1.setInteractive({useHandCursor: true});
-                this.input.setDraggable(this.hotTherm1);
+                // Destroy typing event if it exists
+                if (this.typingEvent) {
+                    this.typingEvent.remove(false);
+                    this.typingEvent = null;
                 }
-                else if (therm === this.coldTherm){
-                    
-                this.coldTherm.setVisible(true);
-                this.coldHand.setVisible(true);
 
-                this.coldTherm.setInteractive({useHandCursor: true});
-                this.input.setDraggable(this.coldTherm);
+                // Destroy timer text
+                if (this.timerText) {
+                    this.timerText.destroy();
+                    this.timerText = null;
                 }
-                
+
+                // Destroy ALL game objects manually (only if they exist)
+                const objects = [
+                    this.bg1,
+                    this.trashcan,
+                    this.next,
+                    this.erin,
+                    this.erinGloved,
+                    this.erinNotGloved,
+                    this.manager,
+                    this.chickenBowl,
+                    this.soupBowl,
+                    this.coldFood,
+                    this.hotTherm1,
+                    this.coldTherm,
+                    this.hotHand1,
+                    this.coldHand,
+                    this.tongs,
+                    this.spatula,
+                    this.ladle,
+                    this.gloveBox,
+                    this.tempLog,
+                    this.chickenPan,
+                    this.textboxImage,
+                    this.textboxText
+                ];
+
+                objects.forEach(obj => {
+                    if (obj && obj.destroy) {
+                        obj.destroy();
+                    }
+                });
+
+                // Destroy containers separately
+                if (this.textbox) {
+                    this.textbox.destroy(true);
+                    this.textbox = null;
+                }
+
+                // Destroy rectangles / zones
+                const zones = [
+                    this.space1,
+                    this.space2,
+                    this.space3
+                ];
+
+                zones.forEach(zone => {
+                    if (zone && zone.destroy) {
+                        zone.destroy();
+                    }
+                });
+
+                // Clear references
+                this.bg1 = null;
+                this.erin = null;
+                this.manager = null;
+                this.chickenBowl = null;
+                this.soupBowl = null;
+                this.coldFood = null;
             }
-         
+            showThermometer(therm) {
+                this.timerText.setVisible(false);
+                if (therm === this.hotTherm1) {
+
+                    this.hotTherm1.setVisible(true);
+                    this.hotHand1.setVisible(true);
+                    this.hotTherm1.setInteractive({ useHandCursor: true });
+                    this.input.setDraggable(this.hotTherm1);
+                }
+                else if (therm === this.coldTherm) {
+
+                    this.coldTherm.setVisible(true);
+                    this.coldHand.setVisible(true);
+
+                    this.coldTherm.setInteractive({ useHandCursor: true });
+                    this.input.setDraggable(this.coldTherm);
+                }
+
+            }
+
             centerHands() {
                 this.hotHand1.setPosition(this.hotTherm1.getCenter().x - 20, this.hotTherm1.getCenter().y + 10);
                 //this.hotHand2.setPosition(this.hotTherm2.getCenter().x - 20, this.hotTherm2.getCenter().y + 10);
                 this.coldHand.setPosition(this.coldTherm.getCenter().x + 5, this.coldTherm.getCenter().y - 25);
-    }
-            iterateGameMessage(step, section){
+            }
+            iterateGameMessage(step, section) {
                 if (!this.gameMessages || step >= this.gameMessages.length) return;
 
                 this.instructionStep = step;
 
                 this.textbox.setScale(0.7);
                 this.textboxText.setFontSize(85);
-                this.textbox.setPosition(0,0);
+                this.textbox.setPosition(0, 0);
 
                 this.typewriteText(this.gameMessages[this.instructionStep]);
 
-                if(section === "cupboard"){
-                    this.textbox.setPosition(780,620);
+                if (section === "cupboard") {
+                    this.textbox.setPosition(780, 620);
                 }
             }
             typewriteText(text, type, speed = 20) {
@@ -980,58 +983,58 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                 });
             }
 
-            
-        lowerTemp(hand, val){
-             this.ang = -160;
-            if(val === "good"){
-                this.ang = -235;
-            }
-            this.tweens.add({
-                targets: hand,
-                angle: this.ang,
-                duration: 5000,
-                ease:'Linear',
-                onComplete: () => {
-                    this.iterateGameMessage(this.instructionStep + 1, "cupboard");
-                    this.hotTherm1.setVisible(true);
-                    this.hotHand1.setVisible(true);
-                          this.hotTherm1.setPosition(580, 50);
-                                    this.centerHands();
+
+            lowerTemp(hand, val) {
+                this.ang = -160;
+                if (val === "good") {
+                    this.ang = -235;
+                }
+                this.tweens.add({
+                    targets: hand,
+                    angle: this.ang,
+                    duration: 5000,
+                    ease: 'Linear',
+                    onComplete: () => {
+                        this.iterateGameMessage(this.instructionStep + 1, "cupboard");
+                        this.hotTherm1.setVisible(true);
+                        this.hotHand1.setVisible(true);
+                        this.hotTherm1.setPosition(580, 50);
+                        this.centerHands();
 
                         this.hotTherm1.setInteractive();
                         this.chickenBowl.setInteractive();
                         this.chickenBowl.input.dropZone = true;
                         this.input.setDraggable(this.hotTherm1);
-                }
-            })
-        }
-        
-
-   growTemp(hand, val){
-    this.ang= 230;
-    if (val === "good"){
-        this.ang = 290;
-    }
-           hand.setAngle(75);
-            this.tweens.add({
-                targets: hand,
-                angle: this.ang,
-                duration: 5000,
-                ease:'Linear',
-                onComplete: () => {
-                    
-                       this.iterateGameMessage(this.instructionStep + 1);
-                    if(val === "good"){
-                        this.tempLog.disableInteractive();
-                        this.next.setVisible(true);
                     }
-            
-            this.tempLog.setVisible(true);
-            this.tempLog.setInteractive();
+                })
+            }
+
+
+            growTemp(hand, val) {
+                this.ang = 230;
+                if (val === "good") {
+                    this.ang = 290;
                 }
-            })
-        }
-            
+                hand.setAngle(75);
+                this.tweens.add({
+                    targets: hand,
+                    angle: this.ang,
+                    duration: 5000,
+                    ease: 'Linear',
+                    onComplete: () => {
+
+                        this.iterateGameMessage(this.instructionStep + 1);
+                        if (val === "good") {
+                            this.tempLog.disableInteractive();
+                            this.next.setVisible(true);
+                        }
+
+                        this.tempLog.setVisible(true);
+                        this.tempLog.setInteractive();
+                    }
+                })
+            }
+
         }
 
         const config = {
@@ -1082,39 +1085,39 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                     zIndex: 1
                 }}
             />
-                    <div
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 180,
-                        padding: "10px",
-                        display: "flex",
-                        gap: "10px",
-                        zIndex: 30000
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 180,
+                    padding: "10px",
+                    display: "flex",
+                    gap: "10px",
+                    zIndex: 30000
+                }}
+            >
+
+                <button
+                    onClick={() => {
+                        if (phaserGameRef.current) {
+                            const scene = phaserGameRef.current.scene.getScene("ServiceSetUpsScene");
+                            if (scene) {
+                                scene.showInstructions();
+                            }
+                        }
                     }}
-                    >
-            
-                            <button
-                            onClick={() => {
-                                if (phaserGameRef.current) {
-                                const scene = phaserGameRef.current.scene.getScene("ServiceSetUpsScene");
-                                if (scene) {
-                                    scene.showInstructions();
-                                }
-                                }
-                            }}
-                            style={{
-                                font: "bold 20px sans-serif",
-                                backgroundColor: "#ffffff",
-                                color: "#5100ff",
-                                padding: "5px 9px",
-                                cursor: "pointer"
-                            }}
-                            >
-                            ?
-                            </button>
-                        <Settings openMenu={openMenu} />
-                        </div>     
+                    style={{
+                        font: "bold 20px sans-serif",
+                        backgroundColor: "#ffffff",
+                        color: "#5100ff",
+                        padding: "5px 9px",
+                        cursor: "pointer"
+                    }}
+                >
+                    ?
+                </button>
+                <Settings openMenu={openMenu} />
+            </div>
         </div>
     );
 }

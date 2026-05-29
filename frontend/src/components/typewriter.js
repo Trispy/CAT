@@ -29,7 +29,6 @@ function useTypewriter(text, isActive = true, speed = 25) { //this is the type w
     useEffect(() => {
         if (!text || !isActive) return;
 
-        
         setTypedText("");
 
         let i = 0;

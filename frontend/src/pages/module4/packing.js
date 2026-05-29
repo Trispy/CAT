@@ -5,25 +5,23 @@ import Phaser from "phaser";
 import callUpdate from "../../components/callupdate.js";
 import moduleUpdate from "../../components/moduleupdate.js";
 
-import Textbox from "../../components/textbox";
-import useTypewriter from "../../components/typewriter";
 import nextButton from "../../assets/nextbutton.png";
-import mapbutton from "../../assets/mapbutton.png";
-import Settings from "../../components/settings";
-
 import dirtyProduce from "../../assets/M4G3/dirtyProduceTote.png";
 import cleanProduce from "../../assets/M4G3/cleanProduceTote.png";
 import cooler from "../../assets/M5G1/closedcooler.png";
 import sceneBackground from "../../assets/M4G3/TruckBackground.png"
 
+import Textbox from "../../components/textbox";
+import useTypewriter from "../../components/typewriter";
+import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 
 export default function TruckPack({ openMenu, refreshSummary }) {
     const phaserGameRef = useRef(null); // this prevents multiple Phaser instances
     const navigate = useNavigate();
     useEffect(() => {
-    window.navigateToPage = navigate;
-}, [navigate]);
+        window.navigateToPage = navigate;
+    }, [navigate]);
     useEffect(() => {
         return () => {
             if (phaserGameRef.current) {
@@ -43,7 +41,6 @@ export default function TruckPack({ openMenu, refreshSummary }) {
     const [fridgeSuccessState, setfridgeSuccessState] = useState('');
 
     const [instructionStep, setInstructionStep] = useState(0);
-    const numberOfCutMaterials = useRef(0);
     useEffect(() => {
         window.handleNext = handleNextClick;
     }, [gameStage]);
@@ -51,7 +48,7 @@ export default function TruckPack({ openMenu, refreshSummary }) {
         gameStage === "intro");
     const instructionTexts = [
         "There is a tote of dirty produce, a tote of clean produce, and a cooler packed with raw meat. Anything that could contaminate something else should be put on the bottom.",
-        "Click the '?' button in the bottom right side if you want to refer back to these instructions."
+        "Click the '?' button in the top right side if you want to refer back to these instructions."
     ];
 
     const instructionTypewriter = useTypewriter(
@@ -134,7 +131,7 @@ export default function TruckPack({ openMenu, refreshSummary }) {
 
                 const overlay = this.add.container(0, 0);
 
- const bg = this.add.rectangle(
+                const bg = this.add.rectangle(
                     width / 2,
                     height / 2,
                     width * 0.7,
@@ -175,12 +172,12 @@ export default function TruckPack({ openMenu, refreshSummary }) {
             }
             create(data) {
                 const { width, height } = this.scale;
-                    this.instructions =  [
-                        "Sort the following items...",
-                        "1. Raw meat goes on the bottom...",
-                        "2. Dirty produce goes on the bottom...",
-                        "3. Clean produce goes on the top..."
-                    ];
+                this.instructions = [
+                    "Sort the following items...",
+                    "1. Raw meat goes on the bottom...",
+                    "2. Dirty produce goes on the bottom...",
+                    "3. Clean produce goes on the top..."
+                ];
                 /*const helpButton = this.add.text(
                     width * 0.89,
                     height * 0.07,
@@ -219,13 +216,6 @@ export default function TruckPack({ openMenu, refreshSummary }) {
                 dirtyIcon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(dirtyIcon);
 
-                let foodItems = [
-                    { key: "coolerImg", sprite: coolerIcon },
-                    { key: "cleanProduce", sprite: cleanIcon },
-                    { key: "dirtyProduce", sprite: dirtyIcon }
-                ];
-
-                let fooditems = [coolerIcon, cleanIcon, dirtyIcon];
                 const correctShelf = {
                     coolerImg: "bottom",
                     dirtyProduce: "bottom",
@@ -277,7 +267,6 @@ export default function TruckPack({ openMenu, refreshSummary }) {
                     const correct = correctShelf[gameObject.texture.key];
 
                     if (droppedShelf === correct) {
-                        console.log(items);
                         if (items <= 0) {
                             setFridgeState("complete");
 
@@ -293,8 +282,6 @@ export default function TruckPack({ openMenu, refreshSummary }) {
                             setfridgeSuccessState("Thats correct! Clean produce goes on the top shelf so no contaminants fall on it. Click anywhere to get out of the textbox.")
                             gameObject.disableInteractive();
                         }
-
-                        console.log("Correct!");
                     }
                     else {
                         setFridgeState("fail"); // React textbox trigger
@@ -395,7 +382,6 @@ export default function TruckPack({ openMenu, refreshSummary }) {
                 alignItems: "center",
                 backgroundColor: "black",
                 backgroundRepeat: "no-repeat",
-                backgroundColor: "black",
                 height: "100dvh",
                 overflowY: "auto",
                 overflowX: "hidden",
@@ -577,45 +563,45 @@ export default function TruckPack({ openMenu, refreshSummary }) {
                     width: "100vw",
                     height: "100dvh",
                     zIndex: 1,
-                   
+
 
                 }}
             />
-                    <div
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 180,
-                        padding: "10px",
-                        display: "flex",
-                        gap: "10px",
-                        zIndex: 30000
-                    }}
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 180,
+                    padding: "10px",
+                    display: "flex",
+                    gap: "10px",
+                    zIndex: 30000
+                }}
+            >
+
+                {gameStage === "CoolerStage" && (
+                    <button
+                        onClick={() => {
+                            if (phaserGameRef.current) {
+                                const scene = phaserGameRef.current.scene.getScene("PackingScene");
+                                if (scene) { scene.showInstructions(); }
+
+                            }
+                        }}
+                        style={{
+                            font: "bold 20px sans-serif",
+                            backgroundColor: "#ffffff",
+                            color: "#5100ff",
+                            padding: "5px 9px",
+                            cursor: "pointer"
+                        }}
                     >
- 
-             {gameStage === "CoolerStage" && (
-                 <button
-                 onClick={() => {
-                     if (phaserGameRef.current) {
-                     const scene = phaserGameRef.current.scene.getScene("PackingScene");
-                     if (scene){scene.showInstructions();}
-                     
-                     }
-                 }}
-                 style={{
-                     font: "bold 20px sans-serif",
-                     backgroundColor: "#ffffff",
-                     color: "#5100ff",
-                     padding: "5px 9px",
-                     cursor: "pointer"
-                 }}
-                 >
-                 ?
-                 </button>
-             )}
- 
-             <Settings openMenu={openMenu} />
-             </div>  
+                        ?
+                    </button>
+                )}
+
+                <Settings openMenu={openMenu} />
+            </div>
 
 
         </div>

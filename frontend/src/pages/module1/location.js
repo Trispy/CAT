@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
+
 import callUpdate from "../../components/callupdate";
 import moduleUpdate from "../../components/moduleupdate";
+
 import Loc from "../../assets/Background1.png";
 import plainClothes from "../../assets/Tieduphair.png";
 import apron from "../../assets/M1G3/apron.png";
 import apronOn from "../../assets/M2G2/noGlove.png";
-import Textbox from "../../components/textbox";
 import useTypewriter from "../../components/typewriter";
 import nextButton from "../../assets/nextbutton.png";
 import cleanHand from "../../assets/M1G3/handClean.png";
@@ -21,6 +22,9 @@ import handLeft from "../../assets/M1G3/handLeft.png";
 import handRight from "../../assets/M1G3/handRight.png";
 import sudImg from "../../assets/M1G3/sud.png";
 import mapbutton from "../../assets/mapbutton.png";
+
+import ProgressBar from "../../components/progressbar";
+import Textbox from "../../components/textbox";
 import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 
@@ -37,14 +41,14 @@ export default function Location({ openMenu, refreshSummary }) {
             }
         };
     }, []);
-        const hasInitialized = useRef(false);
+    const hasInitialized = useRef(false);
 
-        useEffect(() => {
-            if (!hasInitialized.current) {
-                startPhaser();
-                hasInitialized.current = true;
-            }
-        }, []);
+    useEffect(() => {
+        if (!hasInitialized.current) {
+            startPhaser();
+            hasInitialized.current = true;
+        }
+    }, []);
     //backgroundImage: `url(${Loc})`,
     const backgroundStyle = {
         backgroundImage: `url(${Loc})`,
@@ -62,7 +66,7 @@ export default function Location({ openMenu, refreshSummary }) {
     const [gloveInstruction, setGloveInstruction] = useState(false);
     const [glovedHands, setGlovedHands] = useState(false);
     const [timerDone, setTimerDone] = useState(false);
-    
+
 
     const introText = useTypewriter("We've arrived at the volunteer location, let's finish getting ready.",
         gameStage === "intro");
@@ -72,7 +76,7 @@ export default function Location({ openMenu, refreshSummary }) {
         gameStage === "apron" && fullyDressed)
     const finalText = useTypewriter("You have now completed the basic hygiene module. Let's move on to the basic food safety module!",
         gameStage === "finalStage")
-    const soapText = useTypewriter("Drag the soap to the hands and rub it around to clean them. Click anywhere to click out of the textbox.",
+    const soapText = useTypewriter("Drag the soap to the hands and rub it around to clean them. You must wash your hands for at least 20 seconds. Click anywhere to click out of the textbox.",
         gameStage === "soapyHands" && showSoapText)
     const soapSuccessText = useTypewriter("All clean! Now lets put on some gloves.",
         gameStage === "soapyHands" && handsClean)
@@ -244,7 +248,7 @@ export default function Location({ openMenu, refreshSummary }) {
                 let timerStarted = false;
 
                 const timerText = this.add.text(
-                    width * 0.77,
+                    width * 0.785,
                     height * 0.07,
                     ":20",
                     {
@@ -257,7 +261,7 @@ export default function Location({ openMenu, refreshSummary }) {
                     }
                 ).setOrigin(0.5);
                 timerText.setDepth(1000);
-                const timerEvent =this.time.addEvent({
+                const timerEvent = this.time.addEvent({
                     delay: 1000, //one second
                     loop: true,
                     paused: true,
@@ -301,8 +305,6 @@ export default function Location({ openMenu, refreshSummary }) {
                 dirtyHand.setScale(scale1);
 
 
-
-
                 const handZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                     width / 2 - width * 0.30,
                     height / 2 - height * 0.37,
@@ -311,9 +313,11 @@ export default function Location({ openMenu, refreshSummary }) {
                 );
 
 
-
                 const gridSize = 40; // size of each cell
                 const cells = [];
+
+                this.progressBar = new ProgressBar(this, {width, height});
+
 
                 for (let x = handZone.x; x < handZone.right; x += gridSize) {
                     for (let y = handZone.y; y < handZone.bottom; y += gridSize) {
@@ -373,10 +377,10 @@ export default function Location({ openMenu, refreshSummary }) {
 
                     const localX = (dragX - dirtyHandRT.x) / dirtyHandRT.scaleX + dirtyHandRT.width / 2;
                     const localY = (dragY - dirtyHandRT.y) / dirtyHandRT.scaleY + dirtyHandRT.height / 2;
-                        if (!timerStarted) {
-                            timerStarted = true;
-                            timerEvent.paused = false; 
-                        }
+                    if (!timerStarted) {
+                        timerStarted = true;
+                        timerEvent.paused = false;
+                    }
 
                     if (Math.random() < 0.2) {
                         const sud = this.add.image(dragX, dragY, "sudImg");
@@ -408,6 +412,7 @@ export default function Location({ openMenu, refreshSummary }) {
                     });
                     const clearedCount = cells.filter(c => c.cleared).length;
                     const percentCleared = clearedCount / cells.length;
+                    this.progressBar.setProgress(Math.min(percentCleared / 0.45, 1.00));
                     if (!handsClean && percentCleared > 0.45) {
                         setHandsClean(true);
                         console.log("Hands fully clean.");
@@ -427,6 +432,7 @@ export default function Location({ openMenu, refreshSummary }) {
                     if (dirtyHandRT) {
                         dirtyHandRT.destroy();
                     }
+                    this.progressBar.destroy();
                 });
 
             }
@@ -673,7 +679,7 @@ export default function Location({ openMenu, refreshSummary }) {
                         zIndex: 10000
                     }}
                 >
-                    
+
                     <Textbox
                         width="70dvw"
                         height="70dvh"
@@ -748,14 +754,14 @@ export default function Location({ openMenu, refreshSummary }) {
             />
 
             {gameStage === "apron" && fullyDressed && (
-                            <div
-                style={{
-                    position: "fixed",
-                    right: "15vw",
-                    bottom: "10vh",
-                    zIndex: 10000
-                }}
-            >
+                <div
+                    style={{
+                        position: "fixed",
+                        right: "15vw",
+                        bottom: "10vh",
+                        zIndex: 10000
+                    }}
+                >
 
 
                     <Textbox
@@ -908,20 +914,20 @@ export default function Location({ openMenu, refreshSummary }) {
                 </div>
 
             )}
-           <div
-  style={{
-    position: "absolute",
-    top: 0,
-    right: 180,
-    padding: "10px",
-    display: "flex",
-    zIndex: 30000
-  }}
->
-                  <Settings openMenu={openMenu}/>
-                </div>
-           
-              
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 180,
+                    padding: "10px",
+                    display: "flex",
+                    zIndex: 30000
+                }}
+            >
+                <Settings openMenu={openMenu} />
+            </div>
+
+
         </div>
 
     );

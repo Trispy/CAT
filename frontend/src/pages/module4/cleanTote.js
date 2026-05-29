@@ -4,14 +4,9 @@ import Phaser from "phaser";
 
 import moduleUpdate from "../../components/moduleupdate.js";
 
-import Loc from "../../assets/M4G1/blank.png";
-import Textbox from "../../components/textbox";
-import textbox from "../../assets/M1G1/Textbox.png";
-import useTypewriter from "../../components/typewriter";
 import sinkbg from "../../assets/M1G3/SinkBackground.png";
 import sprayBottle from "../../assets/M2G2/Spraybottle.png";
 import rag from "../../assets/M2G2/rag.png";
-import mapbutton from "../../assets/mapbutton.png";
 import cleanToteImg from "../../assets/M4G1/cleanTote.png";
 import sudsyTote from "../../assets/M4G1/sudsyTote.png";
 import dirtyTote from "../../assets/M4G1/dirtyTote.png";
@@ -26,10 +21,12 @@ import leaf8 from "../../assets/M4G1/leaf8.png";
 import trashCan from "../../assets/M4G1/trashCan.png";
 import sanitizer from "../../assets/M4G1/sanitizerOutlined.png";
 import spray from "../../assets/M4G1/spray.png";
-import Settings from "../../components/settings";
 import plainBackground from "../../assets/Plainbackground.png";
 import faucet from "../../assets/M4G1/faucet.png";
 
+import Textbox from "../../components/textbox";
+import useTypewriter from "../../components/typewriter";
+import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 
 export default function CleanTote({ openMenu, refreshSummary }) {
@@ -46,17 +43,6 @@ export default function CleanTote({ openMenu, refreshSummary }) {
     useEffect(() => {
         startPhaser();
     }, []);
-
-    const overlayStyle = {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        zIndex: 15000,
-        backgroundColor: "rgba(0,0,0,0)",
-        cursor: "pointer"
-    };
 
     const [gameStage, setGameStage] = useState("intro");
 
@@ -129,7 +115,6 @@ export default function CleanTote({ openMenu, refreshSummary }) {
                 this.load.image("volLocation", plainBackground);
                 this.load.image("sinkbg", sinkbg);
                 this.load.image("sprayBottle", sprayBottle);
-                this.load.image("textbox", textbox);
                 this.load.image("faucet", faucet);
                 this.load.image("cleanToteImg", cleanToteImg);
                 this.load.image("dirtyToteImg", dirtyTote);
@@ -235,6 +220,36 @@ export default function CleanTote({ openMenu, refreshSummary }) {
 
                 const toteZone = toteIcon.getBounds();
 
+                const bottleIcon = this.add.image(
+                    width * 0.10,
+                    height * 0.7,
+                    "sprayBottle"
+                );
+                const bottleScale = (width * 0.15) / bottleIcon.width;
+                bottleIcon.setScale(bottleScale);
+                bottleIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(bottleIcon);
+
+                const sanitizerIcon = this.add.image(
+                    width * 0.90,
+                    height * 0.30,
+                    "sanitizer"
+                );
+                const sanitizerScale = (width * 0.15) / sanitizerIcon.width;
+                sanitizerIcon.setScale(sanitizerScale);
+                sanitizerIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(sanitizerIcon);
+
+                const sinkIcon = this.add.image(
+                    width * 0.13,
+                    height * 0.2,
+                    "faucet"
+                );
+                const sinkScale = (width * 0.40) / sinkIcon.width;
+                sinkIcon.setScale(sinkScale);
+                sinkIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(sinkIcon);
+
                 this.leaves = [];
 
                 const leaf1Icon = this.add.image(
@@ -325,36 +340,6 @@ export default function CleanTote({ openMenu, refreshSummary }) {
 
                 this.leaves.push(leaf8Icon);
 
-                const bottleIcon = this.add.image(
-                    width * 0.10,
-                    height * 0.7,
-                    "sprayBottle"
-                );
-                const bottleScale = (width * 0.15) / bottleIcon.width;
-                bottleIcon.setScale(bottleScale);
-                bottleIcon.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(bottleIcon);
-
-                const sanitizerIcon = this.add.image(
-                    width * 0.90,
-                    height * 0.30,
-                    "sanitizer"
-                );
-                const sanitizerScale = (width * 0.15) / sanitizerIcon.width;
-                sanitizerIcon.setScale(sanitizerScale);
-                sanitizerIcon.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(sanitizerIcon);
-
-                const sinkIcon = this.add.image(
-                    width * 0.13,
-                    height * 0.2,
-                    "faucet"
-                );
-                const sinkScale = (width * 0.40) / sinkIcon.width;
-                sinkIcon.setScale(sinkScale);
-                sinkIcon.setInteractive({ useHandCursor: true });
-                this.input.setDraggable(sinkIcon);
-
                 const trashCanIcon = this.add.image(
                     width * 0.90,
                     height * 0.7,
@@ -382,10 +367,8 @@ export default function CleanTote({ openMenu, refreshSummary }) {
 
                             if (this.leaves.length === 0) {
                                 noDebris = true;
-                                console.log("All icons trashed!");
                             }
                         }
-
                     }
                     else if (gameObject === bottleIcon) {
                         if (!noDebris) {
@@ -441,9 +424,9 @@ export default function CleanTote({ openMenu, refreshSummary }) {
                                 this.showPopup("Drag the sink icon to the tote to rinse before sanitizing.");
                             }
                             else {
-                                    this.wash("cleanToteImg", "cleanToteImg", "sanitizer");
-                                    cleanToteIcon.preFX.addShine(3, 0.5, 5);
-                                    sanitizerIcon.destroy();
+                                this.wash("cleanToteImg", "cleanToteImg", "sanitizer");
+                                cleanToteIcon.preFX.addShine(3, 0.5, 5);
+                                sanitizerIcon.destroy();
                             }
                         }
                     }
@@ -490,17 +473,6 @@ export default function CleanTote({ openMenu, refreshSummary }) {
 
                 sinkIcon.setInteractive({ useHandCursor: true });
                 this.input.setDraggable(sinkIcon);
-
-                const waterZone = new Phaser.Geom.Polygon( //interactive sink area
-                    [
-                        { x: width * 0.25, y: height / 2 - height * 0.045 },
-                        { x: width * 0.25 + width * 0.5, y: height / 2 - height * 0.045 },
-                        { x: width * 0.25 + width * 0.5, y: height / 2 - height * 0.045 + height * 0.20 },
-                        { x: width * 0.25 + width * 0.45, y: height / 2 - height * 0.045 + height * 0.27 },
-                        { x: width * 0.25 + width * 0.05, y: height / 2 - height * 0.045 + height * 0.27 },
-                        { x: width * 0.25, y: height / 2 - height * 0.045 + height * 0.20 },
-                    ]
-                );
 
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     if (gameObject === sinkIcon) {

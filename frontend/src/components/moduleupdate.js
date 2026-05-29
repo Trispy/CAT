@@ -14,9 +14,6 @@ const res = await fetch(link, {
 
 const data = await res.json();
 
-console.log("MODULE UPDATE STATUS:", res.status);
-console.log("MODULE UPDATE RESPONSE:", data);
-
 if (!res.ok) {
   console.error("Module update failed:", data);
 }

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Phaser from "phaser";
 
 import callUpdate from "../../components/callupdate";
@@ -15,8 +16,6 @@ import thermometer from "../../assets/M2Cooking/CookingThermometer.png";
 import vegThermometer from "../../assets/M2Cooking/VegThermometer.png";
 import meatThermometer from "../../assets/M2Cooking/MeatThermometer.png";
 
-import erinTextbox from "../../assets/M2Cooking/ErinTextbox.png";
-import textbox from "../../assets/M1G1/Textbox.png";
 import fryingPan from "../../assets/M2Cooking/FryingPan.png";
 import fullMeal from "../../assets/M2Cooking/FullMeal.png";
 import mealbg from "../../assets/M2Cooking/MealScene.png";
@@ -25,23 +24,25 @@ import panOnion from "../../assets/M2Cooking/Pan_Onions.png";
 import panPepper from "../../assets/M2Cooking/Pan_Peppers.png";
 import thermometerHand from "../../assets/M2Cooking/ThermometerHand.png";
 import next from "../../assets/M1G1/nextbutton.png";
-import mapbutton from "../../assets/mapbutton.png";
-import {defaultFontSize} from "../../formatting";
-import {defaultFontColor} from "../../formatting";
-import {defaultTypingSpeed} from "../../formatting";
-import { useNavigate } from "react-router-dom";
+import erinTextbox from "../../assets/M2Cooking/ErinTextbox.png";
+
+import { defaultFontSize } from "../../formatting";
+import { defaultFontColor } from "../../formatting";
+import { defaultTypingSpeed } from "../../formatting";
+
 import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 export default function Cooking({ openMenu, refreshSummary }) {
   const navigate = useNavigate();
   useEffect(() => {
-      window.navigateToPage = navigate;
+    window.navigateToPage = navigate;
     class Cooking extends Phaser.Scene {
       welcomeTexts = ["You will practice by cooking a meal with the ingredients you just finished preparing."];
       instructions = ["In this game, drag the bowls of prepared ingredients over to the pans on the stove.\nThen, wait until the thermometer reaches the safe green zone before moving to the next step."];
-      gameMessages = ["Drag the bowl of raw beef into the empty pan!", 
-        "Drag the bowl of raw peppers into the empty pan! Make sure to keep the vegetables separate from the beef.", 
+      gameMessages = [
+        "Drag the bowl of raw peppers into the empty pan! Make sure to keep the vegetables separate from the beef.",
         "Drag the bowl of raw onions into the pan with peppers! It’s important to keep the vegetables separate from the meat.",
+        "Drag the bowl of raw beef into the empty pan!",
         "Drag the meat thermometer to the center of the beef pan!",
         "Drag the vegetable thermometer to the center of the vegetable pan!",
         "Wait for both ingredients to reach the green zone temperature!",
@@ -54,7 +55,7 @@ export default function Cooking({ openMenu, refreshSummary }) {
       textboxScale = 0.9;
       textboxX = 160;
       textboxY = 200;
-        constructor() {
+      constructor() {
         super("CookingScene");
       }
 
@@ -70,59 +71,57 @@ export default function Cooking({ openMenu, refreshSummary }) {
         this.load.image("vegThermometer", vegThermometer);
         this.load.image("meatThermometer", meatThermometer);
 
-        this.load.image("erinTextbox", erinTextbox);
-        this.load.image("textbox", textbox);
         this.load.image("fryingPan", fryingPan);
         this.load.image("fullMeal", fullMeal);
         this.load.image("mealbg", mealbg);
         this.load.image("panBeef", panBeef);
         this.load.image("panOnion", panOnion);
         this.load.image("panPepper", panPepper);
-        this.load.image("thermometerHand", thermometerHand);        
+        this.load.image("thermometerHand", thermometerHand);
         this.load.image("next", next);
-
+        this.load.image("erinTextbox", erinTextbox);
       }
 
-      create (){  
-        this.stoveBg = this.add.image(0,0,'stoveBg').setOrigin(0).setScale(1);
-       
-        this.beefPan = this.add.image(950,245,'fryingPan').setOrigin(0).setScale(1).setInteractive({dropZone: true}).setVisible(false);
-        this.veggiePan = this.add.image(475,515,'fryingPan').setOrigin(0).setScale(1.1).setInteractive({dropZone: true}).setVisible(false);
+      create() {
+        this.stoveBg = this.add.image(0, 0, 'stoveBg').setOrigin(0).setScale(1);
 
-        this.beefBowl = this.add.image(this.bowlX,this.bowlY, 'beefBowl').setOrigin(0).setScale(1).setInteractive({draggable: true}).setVisible(false);
-        this.onionBowl = this.add.image(this.bowlX,this.bowlY,'onionBowl').setOrigin(0).setScale(1).setInteractive({draggable: true}).setVisible(false);
-        this.pepperBowl = this.add.image(this.bowlX,this.bowlY,'pepperBowl').setOrigin(0).setScale(1).setInteractive({draggable: true}).setVisible(false);
-      
-        this.panBeef = this.add.image(this.beefPan.x * 1.1, this.beefPan.y * 1.27,'panBeef').setOrigin(0).setScale(1).setInteractive({dropZone: true}).setVisible(false);
-        this.cookedBeef = this.add.image(this.beefPan.x * 1.1,this.beefPan.y * 1.27,'cookedBeef').setOrigin(0).setScale(1).setInteractive({dropZone: true}).setAlpha(0);
-        
-        this.panOnion = this.add.image(this.veggiePan.x * 1.2,this.veggiePan.y * 1.16,'panOnion').setOrigin(0).setScale(1).setInteractive({dropZone: true}).setVisible(false);
-        this.panPepper = this.add.image(this.veggiePan.x * 1.2,this.veggiePan.y * 1.26,'panPepper').setOrigin(0).setScale(1).setInteractive({dropZone: true}).setVisible(false);
-        this.cookedOnion = this.add.image(this.veggiePan.x * 1.2,this.veggiePan.y * 1.16,'cookedOnion').setOrigin(0).setScale(1).setInteractive({dropZone: true}).setAlpha(0);
-        this.cookedPepper = this.add.image(this.veggiePan.x * 1.2,this.veggiePan.y * 1.26,'cookedPepper').setOrigin(0).setScale(1).setInteractive({dropZone: true}).setAlpha(0);
-        
-        this.fullMeal = this.add.image(0,0,'fullMeal').setOrigin(0).setScale(1).setInteractive().setVisible(false);
-        this.mealbg = this.add.image(0,0,'mealbg').setOrigin(0).setScale(1).setInteractive().setVisible(false);
+        this.beefPan = this.add.image(950, 245, 'fryingPan').setOrigin(0).setScale(1).setInteractive({ dropZone: true }).setVisible(false);
+        this.veggiePan = this.add.image(475, 515, 'fryingPan').setOrigin(0).setScale(1.1).setInteractive({ dropZone: true }).setVisible(false);
+
+        this.beefBowl = this.add.image(this.bowlX, this.bowlY, 'beefBowl').setOrigin(0).setScale(1).setInteractive({ draggable: true }).setVisible(false);
+        this.onionBowl = this.add.image(this.bowlX, this.bowlY, 'onionBowl').setOrigin(0).setScale(1).setInteractive({ draggable: true }).setVisible(false);
+        this.pepperBowl = this.add.image(this.bowlX, this.bowlY, 'pepperBowl').setOrigin(0).setScale(1).setInteractive({ draggable: true }).setVisible(false);
+
+        this.panBeef = this.add.image(this.beefPan.x * 1.1, this.beefPan.y * 1.27, 'panBeef').setOrigin(0).setScale(1).setInteractive({ dropZone: true }).setVisible(false);
+        this.cookedBeef = this.add.image(this.beefPan.x * 1.1, this.beefPan.y * 1.27, 'cookedBeef').setOrigin(0).setScale(1).setInteractive({ dropZone: true }).setAlpha(0);
+
+        this.panOnion = this.add.image(this.veggiePan.x * 1.2, this.veggiePan.y * 1.16, 'panOnion').setOrigin(0).setScale(1).setInteractive({ dropZone: true }).setVisible(false);
+        this.panPepper = this.add.image(this.veggiePan.x * 1.2, this.veggiePan.y * 1.26, 'panPepper').setOrigin(0).setScale(1).setInteractive({ dropZone: true }).setVisible(false);
+        this.cookedOnion = this.add.image(this.veggiePan.x * 1.2, this.veggiePan.y * 1.16, 'cookedOnion').setOrigin(0).setScale(1).setInteractive({ dropZone: true }).setAlpha(0);
+        this.cookedPepper = this.add.image(this.veggiePan.x * 1.2, this.veggiePan.y * 1.26, 'cookedPepper').setOrigin(0).setScale(1).setInteractive({ dropZone: true }).setAlpha(0);
+
+        this.fullMeal = this.add.image(0, 0, 'fullMeal').setOrigin(0).setScale(1).setInteractive().setVisible(false);
+        this.mealbg = this.add.image(0, 0, 'mealbg').setOrigin(0).setScale(1).setInteractive().setVisible(false);
 
 
         this.textbox = this.add.container(this.textboxX, this.textboxY);
-        this.textboxImage = this.add.image(0,0, 'erinTextbox').setOrigin(0);
-        this.textboxText = this.add.text(585, 100, "", {
-        fontFamily: "sans-serif",
-        fontSize: defaultFontSize,
-        color: defaultFontColor,
-        fontStyle: "bold", 
-        align: 'left',
-        wordWrap: {
+        this.textboxImage = this.add.image(0, 0, 'erinTextbox').setOrigin(0);
+        this.textboxText = this.add.text(600, 100, "", {
+          fontFamily: "sans-serif",
+          fontSize: defaultFontSize,
+          color: defaultFontColor,
+          fontStyle: "bold",
+          align: 'left',
+          wordWrap: {
             width: this.textboxImage.width * 0.60
-      }
-    }).setOrigin(0);
-    
-        this.meatThermometer = this.add.image(this.bowlX,this.bowlY,'meatThermometer').setOrigin(0).setScale(0.3).setInteractive({draggable: true}).setVisible(false);
-        this.veggieThermometer = this.add.image(this.bowlX,this.bowlY,'vegThermometer').setOrigin(0).setScale(0.3).setInteractive({draggable: true}).setVisible(false);
+          }
+        }).setOrigin(0);
 
-        this.veggieThermometerHand = this.add.image( this.veggieThermometer.getCenter().x,this.veggieThermometer.getCenter().y,'thermometerHand').setOrigin(0).setScale(0.3).setVisible(false).setAngle(90);
-        this.meatThermometerHand = this.add.image(0,0,'thermometerHand').setOrigin(0).setScale(0.3).setVisible(false).setAngle(90);
+        this.meatThermometer = this.add.image(this.bowlX, this.bowlY, 'meatThermometer').setOrigin(0).setScale(0.3).setInteractive({ draggable: true }).setVisible(false);
+        this.veggieThermometer = this.add.image(this.bowlX, this.bowlY, 'vegThermometer').setOrigin(0).setScale(0.3).setInteractive({ draggable: true }).setVisible(false);
+
+        this.veggieThermometerHand = this.add.image(this.veggieThermometer.getCenter().x, this.veggieThermometer.getCenter().y, 'thermometerHand').setOrigin(0).setScale(0.3).setVisible(false).setAngle(90);
+        this.meatThermometerHand = this.add.image(0, 0, 'thermometerHand').setOrigin(0).setScale(0.3).setVisible(false).setAngle(90);
 
         this.next = this.add.image(1500, 835, 'next').setOrigin(0).setScale(0.35).setInteractive().setVisible(true);
         this.typewriteText("In this section, you will practice cooking foods to their proper temperature.");
@@ -131,63 +130,63 @@ export default function Cooking({ openMenu, refreshSummary }) {
         this.textbox.setScale(this.textboxScale);
 
         this.next.on('pointerdown', async () => {
-        if(this.welcomeTexts.length > 0) {
+          if (this.welcomeTexts.length > 0) {
             this.typewriteText(this.welcomeTexts[0]);
             this.welcomeTexts.shift();
-        }
-        else if (this.instructions.length > 0) {
+          }
+          else if (this.instructions.length > 0) {
             this.textbox.setScale(1.05);
             this.textbox.x = 65;
             this.typewriteText(this.instructions[0], defaultTypingSpeed, 60);
             this.instructions.shift();
-        }
-        else if (this.gameMessages.length > 0){
-          this.textbox.setScale(0.57);
-          this.typewriteText(this.gameMessages[0], defaultTypingSpeed);
-          this.beefPan.setVisible(true);
-          this.beefBowl.setVisible(true);
-          this.gameMessages.shift();
-          this.next.setVisible(false);
-        }
-        else if (this.mealMessages.length > 0){
-          this.meatThermometer.setVisible(false);
-          this.meatThermometerHand.setVisible(false);
-          this.veggieThermometer.setVisible(false);
-          this.veggieThermometerHand.setVisible(false);
-          this.mealbg.setVisible(true);
-          this.textbox.setScale(0.7);
-          this.textbox.x = 350;
-          this.textbox.y = 50
-          this.typewriteText(this.mealMessages[0]);
-          this.mealMessages.shift();
-        }
-        else{
-          callUpdate("m2");
-          await moduleUpdate(`${API}/api/game/module2/cooking/completed`, refreshSummary);
-          navigate("/map");
-        }  
-});
+          }
+          else if (this.gameMessages.length > 0) {
+            this.textbox.setScale(0.57);
+            this.typewriteText(this.gameMessages[0], defaultTypingSpeed);
+            this.veggiePan.setVisible(true);
+            this.pepperBowl.setVisible(true);
+            this.gameMessages.shift();
+            this.next.setVisible(false);
+          }
+          else if (this.mealMessages.length > 0) {
+            this.meatThermometer.setVisible(false);
+            this.meatThermometerHand.setVisible(false);
+            this.veggieThermometer.setVisible(false);
+            this.veggieThermometerHand.setVisible(false);
+            this.mealbg.setVisible(true);
+            this.textbox.setScale(0.7);
+            this.textbox.x = 350;
+            this.textbox.y = 50
+            this.typewriteText(this.mealMessages[0]);
+            this.mealMessages.shift();
+          }
+          else {
+            callUpdate("m2");
+            await moduleUpdate(`${API}/api/game/module2/cooking/completed`, refreshSummary);
+            navigate("/map");
+          }
+        });
 
-        this.input.on('drag', (pointer, gameObject, x, y) =>{
-          if(gameObject === this.beefBowl){
+        this.input.on('drag', (pointer, gameObject, x, y) => {
+          if (gameObject === this.beefBowl) {
             this.beefBowl.x = x;
             this.beefBowl.y = y;
           }
-          if (gameObject === this.pepperBowl){
+          if (gameObject === this.pepperBowl) {
             this.pepperBowl.x = x;
             this.pepperBowl.y = y;
           }
-          if (gameObject === this.onionBowl){
+          if (gameObject === this.onionBowl) {
             this.onionBowl.x = x;
             this.onionBowl.y = y;
           }
-          if(gameObject === this.veggieThermometer){
+          if (gameObject === this.veggieThermometer) {
             this.veggieThermometer.x = x;
             this.veggieThermometer.y = y;
             this.veggieThermometerHand.x = this.veggieThermometer.getCenter().x;
             this.veggieThermometerHand.y = this.veggieThermometer.getCenter().y;
           }
-          if(gameObject === this.meatThermometer){
+          if (gameObject === this.meatThermometer) {
             this.meatThermometer.x = x;
             this.meatThermometer.y = y;
             this.meatThermometerHand.x = this.meatThermometer.getCenter().x;
@@ -195,169 +194,169 @@ export default function Cooking({ openMenu, refreshSummary }) {
           }
         })
 
-    this.input.on('drop', (pointer, gameObject, dropZone) => {
-    if (gameObject === this.beefBowl && dropZone === this.beefPan) {
-        this.beefBowl.setVisible(false).disableInteractive();  // Disable interaction after drop
-        this.beefPan.disableInteractive();
-        this.panBeef.setVisible(true);
-        this.hideIngredient(this.panBeef);
-        this.showIngredient(this.cookedBeef);
-        this.typewriteText(this.gameMessages[0]);
-        this.gameMessages.shift();
-        this.veggiePan.setVisible(true);
-        this.pepperBowl.setVisible(true);
-    }
-    else if (gameObject === this.pepperBowl && dropZone === this.veggiePan) {
-        this.pepperBowl.setVisible(false).disableInteractive();  // Disable interaction after drop
-        this.panPepper.setVisible(true);
-        this.onionBowl.setVisible(true);
-        this.hideIngredient(this.panPepper);
-        this.showIngredient(this.cookedPepper);
-        this.typewriteText(this.gameMessages[0]);
-        this.gameMessages.shift();
-    }
-    else if (gameObject === this.onionBowl && (dropZone === this.veggiePan || dropZone === this.cookedPepper)) {
-        this.veggiePan.disableInteractive();
-        this.onionBowl.setVisible(false).disableInteractive();  // Disable interaction after drop
-        this.panOnion.setVisible(true);
-        this.hideIngredient(this.panOnion);
-        this.showIngredient(this.cookedOnion);
-        this.typewriteText(this.gameMessages[0]);
-        this.meatThermometer.setVisible(true);
-        this.meatThermometerHand.setVisible(true);
-        this.gameMessages.shift();
-    }
-    else if (gameObject === this.meatThermometer && dropZone === this.cookedBeef) {
-      dropZone.disableInteractive();
-        this.meatThermometer.x = this.cookedBeef.x;
-        this.meatThermometer.y = this.cookedBeef.y;
-        this.meatThermometerHand.x = this.meatThermometer.getCenter().x;
-        this.meatThermometerHand.y = this.meatThermometer.getCenter().y;
-        this.typewriteText(this.gameMessages[0]);
-        this.gameMessages.shift();
-        this.veggieThermometer.setVisible(true);
-        this.veggieThermometerHand.setVisible(true);
-        this.growTemp(this.meatThermometerHand);
-        // Disable interaction with the meat thermometer after it's dropped.
-        
-        this.input?.setDraggable(this.meatThermometer, false);
+        this.input.on('drop', (pointer, gameObject, dropZone) => {
+          if (gameObject === this.pepperBowl && dropZone === this.veggiePan) {
+            this.pepperBowl.setVisible(false).disableInteractive();  // Disable interaction after drop
+            this.panPepper.setVisible(true);
+            this.onionBowl.setVisible(true);
+            this.hideIngredient(this.panPepper);
+            this.showIngredient(this.cookedPepper);
+            this.typewriteText(this.gameMessages[0]);
+            this.gameMessages.shift();
+          }
+          else if (gameObject === this.onionBowl && (dropZone === this.veggiePan || dropZone === this.cookedPepper)) {
+            this.veggiePan.disableInteractive();
+            this.onionBowl.setVisible(false).disableInteractive();  // Disable interaction after drop
+            this.panOnion.setVisible(true);
+            this.hideIngredient(this.panOnion);
+            this.showIngredient(this.cookedOnion);
+            this.typewriteText(this.gameMessages[0]);
+            this.gameMessages.shift();
+            this.beefPan.setVisible(true);
+            this.beefBowl.setVisible(true);
+          }
+          else if (gameObject === this.beefBowl && dropZone === this.beefPan) {
+            this.beefBowl.setVisible(false).disableInteractive();  // Disable interaction after drop
+            this.beefPan.disableInteractive();
+            this.panBeef.setVisible(true);
+            this.hideIngredient(this.panBeef);
+            this.showIngredient(this.cookedBeef);
+            this.typewriteText(this.gameMessages[0]);
+            this.meatThermometer.setVisible(true);
+            this.meatThermometerHand.setVisible(true);
+            this.gameMessages.shift();
+          }
+          else if (gameObject === this.meatThermometer && dropZone === this.cookedBeef) {
+            dropZone.disableInteractive();
+            this.meatThermometer.x = this.cookedBeef.x;
+            this.meatThermometer.y = this.cookedBeef.y;
+            this.meatThermometerHand.x = this.meatThermometer.getCenter().x;
+            this.meatThermometerHand.y = this.meatThermometer.getCenter().y;
+            this.typewriteText(this.gameMessages[0]);
+            this.gameMessages.shift();
+            this.veggieThermometer.setVisible(true);
+            this.veggieThermometerHand.setVisible(true);
+            this.growTemp(this.meatThermometerHand);
+            // Disable interaction with the meat thermometer after it's dropped.
+
+            this.input?.setDraggable(this.meatThermometer, false);
+            this.meatThermometer.disableInteractive();
+          }
+          else if (gameObject === this.veggieThermometer && (dropZone === this.cookedPepper || dropZone === this.panPepper || dropZone === this.panOnion || dropZone === this.cookedOnion)) {
+            dropZone.disableInteractive();
+            this.veggieThermometer.x = this.cookedOnion.x;
+            this.veggieThermometer.y = this.cookedOnion.y;
+            this.veggieThermometerHand.x = this.veggieThermometer.getCenter().x;
+            this.veggieThermometerHand.y = this.veggieThermometer.getCenter().y;
+            this.veggieThermometerHand.disableInteractive();
+            this.veggieThermometer.disableInteractive();
+            this.typewriteText(this.gameMessages[0]);
+            this.gameMessages.shift();
+            this.growTemp(this.veggieThermometerHand);
+            // Disable interaction with the veggie thermometer after it's dropped.
+            this.input?.setDraggable(this.veggieThermometer, false);
+            this.veggieThermometer.disableInteractive();
+          }
+        });
+
+      }
+      growTemp(hand) {
+        if (hand === this.meatThermometerHand) {
+          this.duration = 10000;
+        }
+        else {
+          this.duration = 8000;
+        }
+        this.tweens.add({
+          targets: hand,
+          angle: 300,
+          duration: this.duration,
+          ease: 'Linear',
+          onComplete: () => {
+            if (hand === this.meatThermometerHand) {
+              this.meatCooked = true;
+            }
+            if (hand === this.veggieThermometerHand) {
+              this.vegCooked = true;
+            }
+
+            if (this.meatCooked && this.vegCooked) {
+              this.typewriteText(this.gameMessages[0]);
+              this.gameMessages.shift();
+              this.next.setVisible(true);
+            }
+          }
+        })
+        return true;
+      }
+      hideIngredient(raw) {
+        if (raw === this.panBeef) {
+          this.duration = 20000;
+        }
+        else {
+          this.duration = 10000;
+        }
+        this.tweens.add({
+          targets: raw,
+          alpha: 0,
+          duration: this.duration,
+          ease: 'Linear',
+          onComplete: () => {
+            raw.setVisible(false);
+          }
+        })
+      }
+      showIngredient(cooked) {
+        if (cooked === this.cookedBeef) {
+          this.duration = 20000;
+        }
+        else {
+          this.duration = 10000;
+        }
+        this.tweens.add({
+          targets: cooked,
+          alpha: 1,
+          duration: this.duration,
+          ease: 'Linear'
+        })
+      }
+      typewriteText(text, speed = defaultTypingSpeed, fontSize = null) {
+        this.textboxText.setText("");
+        this.isTyping = true;
+        this.next.disableInteractive();
+        this.beefBowl.disableInteractive();
+        this.onionBowl.disableInteractive();
+        this.pepperBowl.disableInteractive();
         this.meatThermometer.disableInteractive();
-    }
-    else if (gameObject === this.veggieThermometer && (dropZone === this.cookedPepper || dropZone === this.panPepper || dropZone === this.panOnion || dropZone === this.cookedOnion)) {
-      dropZone.disableInteractive();
-        this.veggieThermometer.x = this.cookedOnion.x;
-        this.veggieThermometer.y = this.cookedOnion.y;
-        this.veggieThermometerHand.x = this.veggieThermometer.getCenter().x;
-        this.veggieThermometerHand.y = this.veggieThermometer.getCenter().y;
-        this.veggieThermometerHand.disableInteractive();
         this.veggieThermometer.disableInteractive();
-        this.typewriteText(this.gameMessages[0]);
-        this.gameMessages.shift();
-        this.growTemp(this.veggieThermometerHand);
-        // Disable interaction with the veggie thermometer after it's dropped.
-        this.input?.setDraggable(this.veggieThermometer, false);
-        this.veggieThermometer.disableInteractive();
-    }
-});
-    
-      }
-growTemp(hand){
-   if(hand === this.meatThermometerHand){
-    this.duration = 10000;
-  }
-  else{
-    this.duration = 8000;
-  }
-  this.tweens.add({
-    targets: hand,
-    angle: 300,
-    duration: this.duration,
-    ease:'Linear',
-    onComplete: () => {
-      if(hand === this.meatThermometerHand){
-        this.meatCooked = true;
-      }
-      if(hand === this.veggieThermometerHand) {
-        this.vegCooked = true;
-      }
+        if (fontSize) {
+          this.textboxText.setFontSize(fontSize);
+        } else {
+          this.textboxText.setFontSize(defaultFontSize);
+        }
 
-      if(this.meatCooked && this.vegCooked){
-        this.typewriteText(this.gameMessages[0]);
-        this.gameMessages.shift();
-        this.next.setVisible(true);
+        let i = 0;
+        this.time.addEvent({
+          delay: speed,
+          repeat: text.length - 1,
+          callback: () => {
+            this.textboxText.text += text[i];
+            i++;
+            if (i === text.length) {
+              this.isTyping = false;
+              this.next.setInteractive();
+              this.beefBowl.setInteractive();
+              this.onionBowl.setInteractive();
+              this.pepperBowl.setInteractive();
+              this.meatThermometer.setInteractive();
+              this.veggieThermometer.setInteractive();
+            }
+          }
+        });
       }
     }
-  })
-  return true;
-}
-hideIngredient(raw){
-  if(raw === this.panBeef){
-    this.duration = 20000;
-  }
-  else{
-    this.duration = 10000;
-  }
-  this.tweens.add({
-    targets: raw,
-    alpha: 0,
-    duration: this.duration,
-    ease:'Linear',
-    onComplete: () => {
-      raw.setVisible(false);
-    }
-  })
-}
-showIngredient(cooked){
-   if(cooked === this.cookedBeef){
-    this.duration = 20000;
-  }
-  else{
-    this.duration = 10000;
-  }
-  this.tweens.add({
-    targets: cooked,
-    alpha: 1,
-    duration: this.duration,
-    ease:'Linear'
-  })
-}
-typewriteText(text, speed = defaultTypingSpeed, fontSize = null) {
-  this.textboxText.setText("");
-  this.isTyping = true;
-  this.next.disableInteractive();
-  this.beefBowl.disableInteractive();
-  this.onionBowl.disableInteractive();
-  this.pepperBowl.disableInteractive();
-  this.meatThermometer.disableInteractive();
-  this.veggieThermometer.disableInteractive();
-  if (fontSize) {
-    this.textboxText.setFontSize(fontSize); 
-  } else {
-    this.textboxText.setFontSize(defaultFontSize);
-  }
 
-  let i = 0;
-  this.time.addEvent({
-    delay: speed,
-    repeat: text.length - 1,
-    callback: () => {
-      this.textboxText.text += text[i];
-      i++;
-      if (i === text.length) {
-        this.isTyping = false;
-        this.next.setInteractive();
-        this.beefBowl.setInteractive();
-        this.onionBowl.setInteractive();
-        this.pepperBowl.setInteractive();
-        this.meatThermometer.setInteractive();
-        this.veggieThermometer.setInteractive();
-      }
-    }
-  });
-}
-}
-
- const config = {
+    const config = {
       type: Phaser.AUTO,
       scale: {
         mode: Phaser.Scale.FIT,
@@ -382,7 +381,7 @@ typewriteText(text, speed = defaultTypingSpeed, fontSize = null) {
   }, []);
 
   return (
- <div
+    <div
       style={{
         height: "100vh",
         overflow: "hidden",
@@ -401,19 +400,19 @@ typewriteText(text, speed = defaultTypingSpeed, fontSize = null) {
           zIndex: 1
         }}
       />
- <div
-  style={{
-    position: "absolute",
-    top: 0,
-    right: 180,
-    padding: "10px",
-    display: "flex",
-    zIndex: 30000
-  }}
->
-            <Settings openMenu={openMenu}/>
-          </div>
-       
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 180,
+          padding: "10px",
+          display: "flex",
+          zIndex: 30000
+        }}
+      >
+        <Settings openMenu={openMenu} />
+      </div>
+
     </div>
-);
+  );
 }

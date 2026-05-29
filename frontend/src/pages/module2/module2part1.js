@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
+import Phaser from "phaser";
 
 import moduleUpdate from "../../components/moduleupdate";
-import Textbox from "../../components/textbox";
 
 import module2Background from "../../assets/finalbackground.png"
-import Phaser from "phaser";
 import thermometerhand from "../../assets/thermometerhand.png"
 import thermometer from "../../assets/thermometer.png"
 import thermometerBackground from "../../assets/thermometerbackground.png"
@@ -31,7 +30,9 @@ import gloveBox from "../../assets/M1G3/gloveBox.png";
 import handLeft from "../../assets/M1G3/handLeft.png";
 import handRight from "../../assets/M1G3/handRight.png";
 import sudImg from "../../assets/M1G3/sud.png";
-import mapbutton from "../../assets/mapbutton.png";
+
+import ProgressBar from "../../components/progressbar";
+import Textbox from "../../components/textbox";
 import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 
@@ -46,7 +47,6 @@ function Module2Part1({ openMenu, refreshSummary }) {
     const [fridgefailState, setfridgefailState] = useState('');
     const [fridgeSuccessState, setfridgeSuccessState] = useState('');
     const [fridgeInstructionsState, setFridgeInstructionsState] = useState("instructions");
-    const [showfridgeSuccess, setshowfridgeSuccess] = useState(false);
     const [handsClean, setHandsClean] = useState(false);
     const [showSoapText, setShowSoapText] = useState(false);
     const [glovedHands, setGlovedHands] = useState(false);
@@ -400,7 +400,7 @@ function Module2Part1({ openMenu, refreshSummary }) {
                     { key: "bellpepper", sprite: bellpepper }
                 ];
 
-                let fooditems = [chickenpkg, beefpkg, onion, ready1, ready2, egg, milk, bellpepper];
+                //let fooditems = [chickenpkg, beefpkg, onion, ready1, ready2, egg, milk, bellpepper];
                 const correctShelf = {
                     chickenpackage: "bottom",
                     beefpackage: "bottom",
@@ -453,7 +453,7 @@ function Module2Part1({ openMenu, refreshSummary }) {
 
                 box.setInteractive({ useHandCursor: true });
                 let currentFood = null;
-                let currentSprite = null;
+                //let currentSprite = null;
                 box.on("pointerdown", () => {
 
                     if (currentFood !== null) return;
@@ -478,7 +478,7 @@ function Module2Part1({ openMenu, refreshSummary }) {
                     sprite.foodKey = randomFood.key;
 
                     currentFood = randomFood;
-                    currentSprite = sprite;
+                    //currentSprite = sprite;
 
                 });
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
@@ -543,7 +543,7 @@ function Module2Part1({ openMenu, refreshSummary }) {
 
                         console.log("Correct!");
                         currentFood = null;
-                        currentSprite = null;
+                        //currentSprite = null;
 
                     }
                     else {
@@ -576,7 +576,6 @@ function Module2Part1({ openMenu, refreshSummary }) {
 
             preload() { //actually load the images for the scene. This is where you would add any new assets you want to use in this scene.
                 this.load.image("sinkbg", sinkbg);
-
                 this.load.image("cleanHand", cleanHand);
                 this.load.image("dirtyHand", dirtyHand);
                 this.load.image("soapSprite", soapSprite);
@@ -587,9 +586,9 @@ function Module2Part1({ openMenu, refreshSummary }) {
                 const { width, height } = this.scale;
                 let timeLeft = 20;
                 let timerStarted = false;
-                
+
                 const timerText = this.add.text(
-                    width * 0.77,
+                    width * 0.785,
                     height * 0.07,
                     ":20",
                     {
@@ -602,22 +601,19 @@ function Module2Part1({ openMenu, refreshSummary }) {
                     }
                 ).setOrigin(0.5);
                 timerText.setDepth(1000);
-                const timerEvent =this.time.addEvent({
+                const timerEvent = this.time.addEvent({
                     delay: 1000, //one second
                     loop: true,
-                    paused: true, 
+                    paused: true,
                     callback: () => {
                         if (timeLeft <= 0) return;
                         timeLeft--;
                         timerText.setText(":" + timeLeft.toString());
 
                         if (timeLeft <= 0) {
-
                             timerText.setText("Done!");
                             setTimerDone(true);
-
                         }
-
                     }
                 });
                 this.input.addPointer(3);
@@ -646,16 +642,12 @@ function Module2Part1({ openMenu, refreshSummary }) {
                 dirtyHand.setScale(scale1);
 
 
-
-
                 const handZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
                     width / 2 - width * 0.30,
                     height / 2 - height * 0.37,
                     width * 0.60,
                     height * 0.85
                 );
-
-
 
                 const gridSize = 40; // size of each cell
                 const cells = [];
@@ -701,6 +693,7 @@ function Module2Part1({ openMenu, refreshSummary }) {
                 const baseScale = soapMaxWidth / soap.width;
                 soap.setScale(baseScale);
 
+                this.progressBar = new ProgressBar(this, {width, height});
 
                 this.input.setDraggable(soap);
 
@@ -720,9 +713,9 @@ function Module2Part1({ openMenu, refreshSummary }) {
                     const localY = (dragY - dirtyHandRT.y) / dirtyHandRT.scaleY + dirtyHandRT.height / 2;
 
                     if (!timerStarted) {
-                            timerStarted = true;
-                            timerEvent.paused = false; 
-                        }
+                        timerStarted = true;
+                        timerEvent.paused = false;
+                    }
                     if (Math.random() < 0.2) {
                         const sud = this.add.image(dragX, dragY, "sudImg");
 
@@ -753,6 +746,7 @@ function Module2Part1({ openMenu, refreshSummary }) {
                     });
                     const clearedCount = cells.filter(c => c.cleared).length;
                     const percentCleared = clearedCount / cells.length;
+                    this.progressBar.setProgress(Math.min(percentCleared / 0.45, 1.00));
                     if (!handsClean && percentCleared > 0.45) {
                         setHandsClean(true);
                         console.log("Hands fully clean.");
@@ -772,6 +766,7 @@ function Module2Part1({ openMenu, refreshSummary }) {
                     if (dirtyHandRT) {
                         dirtyHandRT.destroy();
                     }
+                    this.progressBar.destroy();
                 });
 
             }
@@ -1159,8 +1154,8 @@ function Module2Part1({ openMenu, refreshSummary }) {
                 <div
                     style={{
                         position: "fixed",
-                            right: "15vw",
-                            bottom: "10vh",
+                        right: "15vw",
+                        bottom: "10vh",
                         zIndex: 15000
                     }}
                 >
@@ -1379,41 +1374,41 @@ function Module2Part1({ openMenu, refreshSummary }) {
                     </div>
                 </div>
             )}
-           <div
-  style={{
-    position: "absolute",
-    top: 0,
-    right: 180,
-    padding: "10px",
-    display: "flex",
-    gap: "10px",
-    zIndex: 30000
-  }}
->
-
-            {gameStage === "FridgeScene" && (
-                <button
-                onClick={() => {
-                    if (phaserGameRef.current) {
-                    const scene = phaserGameRef.current.scene.getScene("FridgeScene");
-                    if (scene) {
-                        scene.showInstructions();
-                    }
-                    }
-                }}
+            <div
                 style={{
-                    font: "bold 20px sans-serif",
-                    backgroundColor: "#ffffff",
-                    color: "#5100ff",
-                    padding: "5px 9px",
-                    cursor: "pointer"
+                    position: "absolute",
+                    top: 0,
+                    right: 180,
+                    padding: "10px",
+                    display: "flex",
+                    gap: "10px",
+                    zIndex: 30000
                 }}
-                >
-                ?
-                </button>
-            )}
+            >
 
-            <Settings openMenu={openMenu} />
+                {gameStage === "FridgeScene" && (
+                    <button
+                        onClick={() => {
+                            if (phaserGameRef.current) {
+                                const scene = phaserGameRef.current.scene.getScene("FridgeScene");
+                                if (scene) {
+                                    scene.showInstructions();
+                                }
+                            }
+                        }}
+                        style={{
+                            font: "bold 20px sans-serif",
+                            backgroundColor: "#ffffff",
+                            color: "#5100ff",
+                            padding: "5px 9px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        ?
+                    </button>
+                )}
+
+                <Settings openMenu={openMenu} />
             </div>
 
         </div>

@@ -2,10 +2,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import "../user/login.css";
+
+import moduleUpdate from "../../components/moduleupdate";
+
 import hand from "../../assets/M1G2/hand-long.png";
 import handTrimmed from "../../assets/M1G2/hand-trimmed.png";
-import Textbox from "../../components/textbox";
-import useTypewriter from "../../components/typewriter";
 import nextButton from "../../assets/nextbutton.png";
 import Phaser from "phaser";
 import nailclipper from "../../assets/M1G2/NailClippers.png";
@@ -25,9 +26,10 @@ import shoes from "../../assets/M1G2/Shoes.png";
 import tieduphair from "../../assets/Tieduphair.png";
 import hairtie from "../../assets/M1G2/Hairtie.png";
 import erintextbox from "../../assets/erintextbox.png";
+
+import Textbox from "../../components/textbox";
+import useTypewriter from "../../components/typewriter";
 import TextboxErin from "../../components/textboxerin";
-import moduleUpdate from "../../components/moduleupdate";
-import mapbutton from "../../assets/mapbutton.png";
 import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
 
@@ -46,7 +48,7 @@ function PersonalHygiene({ openMenu, refreshSummary }) {
 
     const [showClipperText, setShowClipperText] = useState(false);
     const [nailsTrimmed, setNailsTrimmed] = useState(false);
-    
+
     const [removeClipSuccess, setRemoveClipSuccess] = useState(false);
     const [showRingText, setShowRingText] = useState(false);
     const [ringRemoved, setRingRemoved] = useState(false);
@@ -84,13 +86,13 @@ function PersonalHygiene({ openMenu, refreshSummary }) {
 
             return () => clearInterval(interval);
 
-    }, [text, isActive, speed]);
+        }, [text, isActive, speed]);
 
-    return typedText;
-}
-useEffect(() => {
-  startPhaser();
-}, []);
+        return typedText;
+    }
+    useEffect(() => {
+        startPhaser();
+    }, []);
     const introText = useTypewriter(
         "In the following game, you will complete essential personal hygiene before volunteering. Progress in the game by using your finger to drag items to the correct area.",
         true
@@ -101,32 +103,32 @@ useEffect(() => {
         showClipperText && !nailsTrimmed
     );
     const ringText = useTypewriter(
-    "Click the ring to remove the ring from the finger, then drag it into the bowl.",
-    gameStage === "rings" && !showRingText
+        "Click the ring to remove the ring from the finger, then drag it into the bowl.",
+        gameStage === "rings" && !showRingText
     );
-   const ringSuccessText = useTypewriter(
-    "Great job removing the ring! Click the next button to continue.",
-    showRingText
+    const ringSuccessText = useTypewriter(
+        "Great job removing the ring! Click the next button to continue.",
+        showRingText
     );
     const clipperSuccessText = useTypewriter(
-    "Great job clipping the nails! Click the next button to continue.",
-    nailsTrimmed && !removeClipSuccess
+        "Great job clipping the nails! Click the next button to continue.",
+        nailsTrimmed && !removeClipSuccess
     );
     const clothesText = useTypewriter(
-    "Now put on some clean clothes! Drag the shirt and pants onto the character to get them dressed. Click anywhere to continue.",
-    gameStage === "clothes" && ringRemoved
+        "Now put on some clean clothes! Drag the shirt and pants onto the character to get them dressed. Click anywhere to continue.",
+        gameStage === "clothes" && ringRemoved
     );
     const clothesSuccessText = useTypewriter(
-    "Great job putting on clean clothes! Click the next button to continue.",
-    gameStage === "clothes" && clothesRemoved
+        "Great job putting on clean clothes! Click the next button to continue.",
+        gameStage === "clothes" && clothesRemoved
     );
     const tiedHairText = useTypewriter(
-    "Last step! Drag the hair tie onto the character to tie up their hair. Click anywhere to continue.",
-    gameStage === "tyehair" && !hairTied
+        "Last step! Drag the hair tie onto the character to tie up their hair. Click anywhere to continue.",
+        gameStage === "tyehair" && !hairTied
     );
     const tiedHairSuccessText = useTypewriter(
-    "Great job tying up the hair! Click the next button to continue.",
-    gameStage === "tyehair" && hairTied
+        "Great job tying up the hair! Click the next button to continue.",
+        gameStage === "tyehair" && hairTied
     );
     const finalText = useTypewriter(
         "I am ready to volunteer! Let’s go to the volunteer location and finish up my personal hygiene.",
@@ -134,25 +136,25 @@ useEffect(() => {
     );
     const startPhaser = () => {
 
-        if (phaserGameRef.current) return; 
-        
+        if (phaserGameRef.current) return;
+
 
         const setTrimmed = setNailsTrimmed;
         class IntroScene extends Phaser.Scene {
-        constructor() {
-            super("IntroScene");
-        }
+            constructor() {
+                super("IntroScene");
+            }
 
-        preload() {
-            this.load.image("introBg", firstBackground);
-        }
+            preload() {
+                this.load.image("introBg", firstBackground);
+            }
 
-        create() {
-            const { width, height } = this.scale;
+            create() {
+                const { width, height } = this.scale;
 
-            this.add.image(width / 2, height / 2, "introBg")
-            .setDisplaySize(width, height);
-        }
+                this.add.image(width / 2, height / 2, "introBg")
+                    .setDisplaySize(width, height);
+            }
         }
 
         class ClipperScene extends Phaser.Scene {
@@ -179,7 +181,7 @@ useEffect(() => {
                 this.load.image("cleanClothesOn", cleanClothesOn);
                 this.load.image("tieduphair", tieduphair);
                 this.load.image("hairtie", hairtie);
-                this.load.image("erininstructions", erintextbox); 
+                this.load.image("erininstructions", erintextbox);
                 this.load.image("ringonfinger", ringonfinger);
 
             }
@@ -189,57 +191,57 @@ useEffect(() => {
 
                 this.add.image(width / 2, height / 2, "bathroombg")
                     .setDisplaySize(width, height);
-              // Bottom layer (trimmed hand)
-              
+                // Bottom layer (trimmed hand)
+
                 const trimmedHand = this.add.image(
                     width / 2,
-                    height / 2 + height * 0.05, 
+                    height / 2 + height * 0.05,
                     "handTrimmed"
                 )
-                const handMaxWidth = width * 0.8;   
+                const handMaxWidth = width * 0.8;
                 const scale = handMaxWidth / trimmedHand.width;
                 trimmedHand.setScale(scale);
-                
+
 
                 const longHandImage = this.add.image(
                     width / 2,
-                    height / 2 + height * 0.05,  
+                    height / 2 + height * 0.05,
                     "hand"
                 );
 
                 const scale1 = (width * 0.8) / longHandImage.width;
                 longHandImage.setScale(scale1);
-            
+
 
                 longHandImage.setVisible(false);
                 const ringOnFinger1 = this.add.image(
                     width / 2 + width * 0.005,
                     height / 2 - height * 0.15,
                     "ringonfinger"
-                ).setVisible(true); 
+                ).setVisible(true);
 
                 ringOnFinger1.setScale((width * 0.37) / ringOnFinger1.width);
                 ringOnFinger1.setDepth(10);
                 const nailZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
-                    width / 2 - width * 0.15, 
-                    height / 2 - height * 0.47,  
+                    width / 2 - width * 0.15,
+                    height / 2 - height * 0.47,
                     width * 0.40,
-                    height * 0.35      
+                    height * 0.35
                 );
-              
 
-            const gridSize = 20; // size of each cell
-            const cells = [];
 
-            for (let x = nailZone.x; x < nailZone.right; x += gridSize) {
-                for (let y = nailZone.y; y < nailZone.bottom; y += gridSize) {
-                    cells.push({
-                        x,
-                        y,
-                        cleared: false
-                    });
+                const gridSize = 20; // size of each cell
+                const cells = [];
+
+                for (let x = nailZone.x; x < nailZone.right; x += gridSize) {
+                    for (let y = nailZone.y; y < nailZone.bottom; y += gridSize) {
+                        cells.push({
+                            x,
+                            y,
+                            cleared: false
+                        });
+                    }
                 }
-            }
                 let trimmed = false;
 
                 // Create render texture same size as long hand
@@ -256,19 +258,19 @@ useEffect(() => {
                     longHandImage.displayWidth / 2,
                     longHandImage.displayHeight / 2
                 );
-             
+
                 // Remove temporary image
                 longHandImage.destroy();
                 const eraseBrush = this.make.graphics({ x: 0, y: 0, add: false });
                 eraseBrush.fillStyle(0xffffff);
                 eraseBrush.fillCircle(0, 0, 25);
-                                        
+
                 // Store original position
                 const clipperStartX = trimmedHand.x + trimmedHand.displayWidth / 2 + width * 0.05;
                 const clipperStartY = trimmedHand.y;
 
                 // Create nail clipper
-            const clipper = this.add.image(
+                const clipper = this.add.image(
                     clipperStartX,
                     clipperStartY,
                     "nailclipper"
@@ -289,202 +291,202 @@ useEffect(() => {
                 clipper.on("dragend", () => {
                     clipper.setScale(baseScale);
                 });
-               
+
                 this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
                     if (gameObject !== clipper) return;
                     if (!longHandRT || trimmed) return;
 
-                    
+
                     clipper.x = dragX;
                     clipper.y = dragY;
 
-                    
+
                     const tipOffsetX = -clipper.displayWidth * 0.28;
                     const tipOffsetY = clipper.displayHeight * 0.18;
 
                     const tipX = dragX + tipOffsetX;
                     const tipY = dragY + tipOffsetY;
-                 
+
 
                     const localX = (tipX - longHandRT.x) / longHandRT.scaleX + longHandRT.width / 2;
                     const localY = (tipY - longHandRT.y) / longHandRT.scaleY + longHandRT.height / 2;
 
-                
-                longHandRT.erase(eraseBrush, localX, localY);
-                cells.forEach(cell => {
-                if (!cell.cleared) {
-                    if (
-                        dragX > cell.x &&
-                        dragX < cell.x + gridSize &&
-                        dragY > cell.y &&
-                        dragY < cell.y + gridSize
-                    ) {
-                        cell.cleared = true;
+
+                    longHandRT.erase(eraseBrush, localX, localY);
+                    cells.forEach(cell => {
+                        if (!cell.cleared) {
+                            if (
+                                dragX > cell.x &&
+                                dragX < cell.x + gridSize &&
+                                dragY > cell.y &&
+                                dragY < cell.y + gridSize
+                            ) {
+                                cell.cleared = true;
+                            }
+                        }
+                    });
+                    const clearedCount = cells.filter(c => c.cleared).length;
+                    const percentCleared = clearedCount / cells.length;
+                    if (!trimmed && percentCleared > 0.28) {
+                        trimmed = true;
+                        setTrimmed(true);
+                        longHandRT.destroy();
+                        console.log("Nails fully trimmed!");
                     }
-                }
+
                 });
-                const clearedCount = cells.filter(c => c.cleared).length;
-                const percentCleared = clearedCount / cells.length;
-                if (!trimmed && percentCleared > 0.28) {
-                trimmed = true;
-                setTrimmed(true);
-                longHandRT.destroy();
-                 console.log("Nails fully trimmed!");
-                }
-
-            });
 
 
 
-            // Show textbox when scene loads
-         
+                // Show textbox when scene loads
 
-            // when clipper is clicked hide the textbox
-            clipper.on("pointerdown", () => {
-                setShowClipperText(false);
-            });
-        this.events.on("shutdown", () => {
-            this.input.removeAllListeners();
-        });
+
+                // when clipper is clicked hide the textbox
+                clipper.on("pointerdown", () => {
+                    setShowClipperText(false);
+                });
+                this.events.on("shutdown", () => {
+                    this.input.removeAllListeners();
+                });
+            }
         }
-    }
 
-    class RingScene extends Phaser.Scene {
+        class RingScene extends Phaser.Scene {
             constructor() {
                 super("RingScene");
             }
 
             create() {
-        const { width, height } = this.scale;
+                const { width, height } = this.scale;
 
-        this.add.image(width/2, height/2, "bathroombg")
-            .setDisplaySize(width, height);
+                this.add.image(width / 2, height / 2, "bathroombg")
+                    .setDisplaySize(width, height);
 
-        const trimmedHand = this.add.image(
-            width/2,
-            height/2 + height * 0.05,
-            "handTrimmed"
-        );
-
-        const scale = (width * 0.8) / trimmedHand.width;
-        trimmedHand.setScale(scale);
-
-        // Ring on finger
-        const ringOnFinger1 = this.add.image(
-            width / 2 + width * 0.005,
-            height / 2 - height * 0.15,
-            "ringonfinger"
-        ).setInteractive({ useHandCursor: true });
-
-        ringOnFinger1.setScale((width * 0.37) / ringOnFinger1.width);
-
-        // Actual draggable ring
-        const ring1 = this.add.image(
-            ringOnFinger1.x,
-            ringOnFinger1.y,
-            "ring"
-        );
-
-        ring1.setScale((width * 0.43) / ring1.width);
-        ring1.setVisible(false);
-        ring1.setDepth(200); 
-        const ringStart = { x: ring1.x, y: ring1.y };
-
-        // Bowl
-        const bowlImage = this.add.image(
-            width/2,
-            height * 0.65,
-            "bowl"
-        );
-
-        const bowlScale = (width * 1) / bowlImage.width;
-        bowlImage.setScale(bowlScale);
-
-        let wasDragged = false;
-        const bowlZone = new Phaser.Geom.Rectangle(
-            bowlImage.x - bowlImage.displayWidth * 0.49,
-            bowlImage.y - bowlImage.displayHeight * 0.20,
-            bowlImage.displayWidth * 0.20,
-            bowlImage.displayHeight * 0.30
-        );
-      
-
-
-        // Click ring on finger
-        ringOnFinger1.on("pointerdown", () => {
-
-            ringOnFinger1.setVisible(false);
-            ring1.setVisible(true);
-
-            ring1.setInteractive({ useHandCursor: true });
-            this.input.setDraggable(ring1);
-
-        });
-
-        // Drag ring
-        this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-
-            if (gameObject !== ring1) return;
-
-            wasDragged = true;
-
-            gameObject.x = dragX;
-            gameObject.y = dragY;
-
-        });
-
-        // Release ring
-        this.input.on("dragend", (pointer, gameObject) => {
-            const x = gameObject.x;
-            const y = gameObject.y;
-            if (gameObject !== ring1) return;
-            if (!wasDragged) return;
-
-            const ringBounds = ring1.getBounds();
-
-            if (
-                (Phaser.Geom.Intersects.RectangleToRectangle(ringBounds, bowlZone))
-            ) {
-
-                // SUCCESS
-                ring1.disableInteractive();
-
-                setShowRingText(true);
-                setRingRemoved(true);
-
-            } else {
-
-                // SNAP BACK
-                ring1.setPosition(
-                    ringStart.x,
-                    ringStart.y
+                const trimmedHand = this.add.image(
+                    width / 2,
+                    height / 2 + height * 0.05,
+                    "handTrimmed"
                 );
 
+                const scale = (width * 0.8) / trimmedHand.width;
+                trimmedHand.setScale(scale);
+
+                // Ring on finger
+                const ringOnFinger1 = this.add.image(
+                    width / 2 + width * 0.005,
+                    height / 2 - height * 0.15,
+                    "ringonfinger"
+                ).setInteractive({ useHandCursor: true });
+
+                ringOnFinger1.setScale((width * 0.37) / ringOnFinger1.width);
+
+                // Actual draggable ring
+                const ring1 = this.add.image(
+                    ringOnFinger1.x,
+                    ringOnFinger1.y,
+                    "ring"
+                );
+
+                ring1.setScale((width * 0.43) / ring1.width);
+                ring1.setVisible(false);
+                ring1.setDepth(200);
+                const ringStart = { x: ring1.x, y: ring1.y };
+
+                // Bowl
+                const bowlImage = this.add.image(
+                    width / 2,
+                    height * 0.65,
+                    "bowl"
+                );
+
+                const bowlScale = (width * 1) / bowlImage.width;
+                bowlImage.setScale(bowlScale);
+
+                let wasDragged = false;
+                const bowlZone = new Phaser.Geom.Rectangle(
+                    bowlImage.x - bowlImage.displayWidth * 0.49,
+                    bowlImage.y - bowlImage.displayHeight * 0.20,
+                    bowlImage.displayWidth * 0.20,
+                    bowlImage.displayHeight * 0.30
+                );
+
+
+
+                // Click ring on finger
+                ringOnFinger1.on("pointerdown", () => {
+
+                    ringOnFinger1.setVisible(false);
+                    ring1.setVisible(true);
+
+                    ring1.setInteractive({ useHandCursor: true });
+                    this.input.setDraggable(ring1);
+
+                });
+
+                // Drag ring
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+
+                    if (gameObject !== ring1) return;
+
+                    wasDragged = true;
+
+                    gameObject.x = dragX;
+                    gameObject.y = dragY;
+
+                });
+
+                // Release ring
+                this.input.on("dragend", (pointer, gameObject) => {
+                    const x = gameObject.x;
+                    const y = gameObject.y;
+                    if (gameObject !== ring1) return;
+                    if (!wasDragged) return;
+
+                    const ringBounds = ring1.getBounds();
+
+                    if (
+                        (Phaser.Geom.Intersects.RectangleToRectangle(ringBounds, bowlZone))
+                    ) {
+
+                        // SUCCESS
+                        ring1.disableInteractive();
+
+                        setShowRingText(true);
+                        setRingRemoved(true);
+
+                    } else {
+
+                        // SNAP BACK
+                        ring1.setPosition(
+                            ringStart.x,
+                            ringStart.y
+                        );
+
+                    }
+
+                    wasDragged = false;
+
+                });
+
+                this.events.on("shutdown", () => {
+                    this.input.removeAllListeners();
+                });
+            }
+        }
+
+        class ClothesScene extends Phaser.Scene {
+            constructor() {
+                super("ClothesScene");
             }
 
-            wasDragged = false;
+            create() {
+                const { width, height } = this.scale;
+                let clothingStep = 0;
+                const createClickIndicator = (target) => {
 
-    });
+                    const indicatorContainer = this.add.container(target.x, target.y);
 
-    this.events.on("shutdown", () => {
-        this.input.removeAllListeners();
-    });
-}
-    }
-    
-    class ClothesScene extends Phaser.Scene {
-    constructor() {
-        super("ClothesScene");
-    }
-
-    create() {
-        const { width, height } = this.scale;
-        let clothingStep = 0; 
-        const createClickIndicator = (target) => {
-
-            const indicatorContainer = this.add.container(target.x, target.y);
-
-            const radius = Math.max(target.displayWidth, target.displayHeight) / 2 + 10;
+                    const radius = Math.max(target.displayWidth, target.displayHeight) / 2 + 10;
                     const circle = this.add.circle(0, 0, radius, 0xFFFF00, 0.45);
                     const text = this.add.text(0, -80, "DRAG THIS", {
                         fontSize: "28px",
@@ -493,420 +495,420 @@ useEffect(() => {
                     }).setOrigin(0.5);
 
                     indicatorContainer.add([circle, text]);
-            
-            this.tweens.add({
-                targets: circle,
-                alpha: { from: 0.2, to: 0.8 },
-                duration: 600,
-                yoyo: true,
-                repeat: -1
-            });
 
-            return indicatorContainer;
-        };
-      
-        this.add.image(width / 2, height / 2, "dresserbg")
-            .setDisplaySize(width, height);
+                    this.tweens.add({
+                        targets: circle,
+                        alpha: { from: 0.2, to: 0.8 },
+                        duration: 600,
+                        yoyo: true,
+                        repeat: -1
+                    });
 
-        // Character (starts dirty)
-        const character = this.add.image(
-            width * 0.25 + width * 0.20,
-            height * 0.65,
-            "dirtyClothes"
-        );
+                    return indicatorContainer;
+                };
 
-        const charScale = (height * 0.7) / character.height;
-        character.setScale(charScale);
-        let currentIndicator = null;
+                this.add.image(width / 2, height / 2, "dresserbg")
+                    .setDisplaySize(width, height);
 
-       // shirt icon on dresser
-        const shirtIcon = this.add.image(
-            width * 0.75 - width * 0.043,
-            height * 0.35 - height * 0.045,
-            "shirt"
-        );
+                // Character (starts dirty)
+                const character = this.add.image(
+                    width * 0.25 + width * 0.20,
+                    height * 0.65,
+                    "dirtyClothes"
+                );
 
-        const shirtScale = (width * 0.095) / shirtIcon.width;
-        shirtIcon.setScale(shirtScale);
+                const charScale = (height * 0.7) / character.height;
+                character.setScale(charScale);
+                let currentIndicator = null;
 
-        // Make draggable immediately
-        shirtIcon.setInteractive({ useHandCursor: true });
-        this.input.setDraggable(shirtIcon);
-
-        this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-            if (gameObject === shirtIcon && clothingStep === 0) {
-                gameObject.x = dragX;
-                gameObject.y = dragY;
-            }
-        });
-
-        shirtIcon.on("dragend", () => {
-
-            const shirtBounds = shirtIcon.getBounds();
-            const charBounds = character.getBounds();
-
-            if (Phaser.Geom.Intersects.RectangleToRectangle(shirtBounds, charBounds)) {
-
-                character.setTexture("shirtOn");
-                shirtIcon.destroy();
-                clothingStep = 1;
-
-                if (currentIndicator) currentIndicator.destroy();
-                currentIndicator = createClickIndicator(pantsIcon);
-
-            } else {
-
-                shirtIcon.setPosition(
+                // shirt icon on dresser
+                const shirtIcon = this.add.image(
                     width * 0.75 - width * 0.043,
-                    height * 0.35 - height * 0.045
+                    height * 0.35 - height * 0.045,
+                    "shirt"
                 );
-            }
-        });
 
-        // pants on dresser
+                const shirtScale = (width * 0.095) / shirtIcon.width;
+                shirtIcon.setScale(shirtScale);
 
-        const pantsIcon = this.add.image(
-            width * 0.75 - width * 0.03,
-            height * 0.55,
-            "pants"
-        );
-        const pantsScale = (width * 0.065) / pantsIcon.width;
-        pantsIcon.setScale(pantsScale);
-        
-        pantsIcon.setInteractive({ useHandCursor: true });
-        this.input.setDraggable(pantsIcon);
+                // Make draggable immediately
+                shirtIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(shirtIcon);
 
-        this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-            if (gameObject === pantsIcon && clothingStep === 1) {
-                gameObject.x = dragX;
-                gameObject.y = dragY;
-            }
-        });
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    if (gameObject === shirtIcon && clothingStep === 0) {
+                        gameObject.x = dragX;
+                        gameObject.y = dragY;
+                    }
+                });
 
-        pantsIcon.on("dragend", () => {
+                shirtIcon.on("dragend", () => {
 
-            const pantsBounds = pantsIcon.getBounds();
-            const charBounds = character.getBounds();
+                    const shirtBounds = shirtIcon.getBounds();
+                    const charBounds = character.getBounds();
 
-            if (Phaser.Geom.Intersects.RectangleToRectangle(pantsBounds, charBounds)) {
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(shirtBounds, charBounds)) {
 
-                character.setTexture("shirtPantsOn");
-                pantsIcon.destroy();
-                clothingStep = 2;
+                        character.setTexture("shirtOn");
+                        shirtIcon.destroy();
+                        clothingStep = 1;
 
-                if (currentIndicator) currentIndicator.destroy();
-                currentIndicator = createClickIndicator(shoesIcon);
+                        if (currentIndicator) currentIndicator.destroy();
+                        currentIndicator = createClickIndicator(pantsIcon);
 
-            } else {
+                    } else {
 
-                pantsIcon.setPosition(
+                        shirtIcon.setPosition(
+                            width * 0.75 - width * 0.043,
+                            height * 0.35 - height * 0.045
+                        );
+                    }
+                });
+
+                // pants on dresser
+
+                const pantsIcon = this.add.image(
                     width * 0.75 - width * 0.03,
-                    height * 0.55
+                    height * 0.55,
+                    "pants"
                 );
-            }
-        });
-        // shoes on dresser
-         const shoesIcon = this.add.image(
-            width * 0.75 + width * 0.078,
-            height * 0.75 - height * 0.045,
-            "shoes"
-        )
-        const shoesScale = (width * 0.078) / shoesIcon.width;
-        shoesIcon.setScale(shoesScale);
-        shoesIcon.setInteractive({ useHandCursor: true });
-        this.input.setDraggable(shoesIcon);
+                const pantsScale = (width * 0.065) / pantsIcon.width;
+                pantsIcon.setScale(pantsScale);
 
-        this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-            if (gameObject === shoesIcon && clothingStep === 2) {
-                gameObject.x = dragX;
-                gameObject.y = dragY;
-            }
-        });
+                pantsIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(pantsIcon);
 
-        shoesIcon.on("dragend", () => {
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    if (gameObject === pantsIcon && clothingStep === 1) {
+                        gameObject.x = dragX;
+                        gameObject.y = dragY;
+                    }
+                });
 
-            const shoeBounds = shoesIcon.getBounds();
-            const charBounds = character.getBounds();
+                pantsIcon.on("dragend", () => {
 
-            if (Phaser.Geom.Intersects.RectangleToRectangle(shoeBounds, charBounds)) {
+                    const pantsBounds = pantsIcon.getBounds();
+                    const charBounds = character.getBounds();
 
-                character.setTexture("cleanClothesOn");
-                shoesIcon.destroy();
-                clothingStep = 3;
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(pantsBounds, charBounds)) {
 
-                if (currentIndicator) currentIndicator.destroy();
-                setClothesRemoved(true);
+                        character.setTexture("shirtPantsOn");
+                        pantsIcon.destroy();
+                        clothingStep = 2;
 
-            } else {
+                        if (currentIndicator) currentIndicator.destroy();
+                        currentIndicator = createClickIndicator(shoesIcon);
 
-                shoesIcon.setPosition(
+                    } else {
+
+                        pantsIcon.setPosition(
+                            width * 0.75 - width * 0.03,
+                            height * 0.55
+                        );
+                    }
+                });
+                // shoes on dresser
+                const shoesIcon = this.add.image(
                     width * 0.75 + width * 0.078,
-                    height * 0.75 - height * 0.045
+                    height * 0.75 - height * 0.045,
+                    "shoes"
+                )
+                const shoesScale = (width * 0.078) / shoesIcon.width;
+                shoesIcon.setScale(shoesScale);
+                shoesIcon.setInteractive({ useHandCursor: true });
+                this.input.setDraggable(shoesIcon);
+
+                this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                    if (gameObject === shoesIcon && clothingStep === 2) {
+                        gameObject.x = dragX;
+                        gameObject.y = dragY;
+                    }
+                });
+
+                shoesIcon.on("dragend", () => {
+
+                    const shoeBounds = shoesIcon.getBounds();
+                    const charBounds = character.getBounds();
+
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(shoeBounds, charBounds)) {
+
+                        character.setTexture("cleanClothesOn");
+                        shoesIcon.destroy();
+                        clothingStep = 3;
+
+                        if (currentIndicator) currentIndicator.destroy();
+                        setClothesRemoved(true);
+
+                    } else {
+
+                        shoesIcon.setPosition(
+                            width * 0.75 + width * 0.078,
+                            height * 0.75 - height * 0.045
+                        );
+                    }
+                });
+                this.events.on("startClothes", () => {
+
+                    clothingStep = 0;
+
+                    // Enable shirt only now
+                    shirtIcon.setInteractive({ useHandCursor: true });
+
+                    // This creates flashing indicator
+                    currentIndicator = createClickIndicator(shirtIcon);
+
+                });
+                this.events.on("shutdown", () => {
+                    this.input.removeAllListeners();
+                });
+            }
+        }
+        class TiedHairScene extends Phaser.Scene {
+            constructor() {
+                super("TiedHairScene");
+            }
+
+            create() {
+                const { width, height } = this.scale;
+                let currentIndicator = null;
+
+                const createClickIndicator = (target) => { //actually highlights which icon to click by creating a flashing circle
+
+                    const indicatorContainer = this.add.container(target.x, target.y);
+
+                    const radius = Math.max(target.displayWidth, target.displayHeight) / 2 + 10;
+                    const circle = this.add.circle(0, 0, radius, 0xffffff, 0.3);
+                    const text = this.add.text(0, -80, "CLICK HERE", {
+                        fontSize: "28px",
+                        color: "#ffffff",
+                        fontStyle: "bold"
+                    }).setOrigin(0.5);
+
+                    indicatorContainer.add([circle, text]);
+
+
+                    this.tweens.add({
+                        targets: circle,
+                        alpha: { from: 0.2, to: 0.8 },
+                        duration: 600,
+                        yoyo: true,
+                        repeat: -1
+                    });
+
+                    return indicatorContainer;
+                };
+                this.input.enabled = false;
+
+                this.time.delayedCall(100, () => {
+                    this.input.enabled = true;
+                });
+
+                this.add.image(width / 2, height / 2, "dresserbg")
+                    .setDisplaySize(width, height);
+
+
+                const character = this.add.image(
+                    width / 2,
+                    height * 0.65,
+                    "cleanClothesOn"
                 );
+
+                const charScale = (height * 0.7) / character.height;
+                character.setScale(charScale);
+
+
+                const hairTie = this.add.image(
+                    width * 0.85 - width * 0.10,
+                    height * 0.75 - height * 0.30,
+                    "hairtie"
+                );
+
+
+                const hairTieScale = (width * 0.12) / hairTie.width;
+                hairTie.setScale(hairTieScale);
+                hairTie.disableInteractive();
+
+                let wasDragged = false;
+                hairTie.on("drag", (pointer, dragX, dragY) => {
+                    hairTie.x = dragX;
+                    hairTie.y = dragY;
+                    wasDragged = true;
+                });
+
+                hairTie.on("dragend", () => {
+                    if (!wasDragged) return;
+                    const hairBounds = hairTie.getBounds();
+                    const charBounds = character.getBounds();
+
+                    if (Phaser.Geom.Intersects.RectangleToRectangle(
+                        hairBounds,
+                        charBounds
+                    )) {
+                        character.setTexture("tieduphair");
+                        hairTie.destroy();
+
+                        setHairTied(true);
+                        setShowTyedHairText(false);
+                    }
+                });
+                hairTie.on("pointerdown", () => {
+                    if (currentIndicator) {
+                        currentIndicator.destroy();
+                        currentIndicator = null;
+                    }
+                });
+                this.events.on("startHairTie", () => {
+
+                    hairTie.setInteractive({ useHandCursor: true });
+                    this.input.setDraggable(hairTie);
+
+                    currentIndicator = createClickIndicator(hairTie);
+                    this.events.on("update", () => {
+                        if (currentIndicator && hairTie) {
+                            currentIndicator.x = hairTie.x;
+                            currentIndicator.y = hairTie.y;
+                        }
+                    });
+                });
+                this.events.on("shutdown", () => {
+                    this.input.removeAllListeners();
+                });
+
             }
-        });
-            this.events.on("startClothes", () => {
-
-            clothingStep = 0;
-
-            // Enable shirt only now
-            shirtIcon.setInteractive({ useHandCursor: true });
-
-            // This creates flashing indicator
-            currentIndicator = createClickIndicator(shirtIcon);
-
-            });
-            this.events.on("shutdown", () => {
-            this.input.removeAllListeners();
-        });
-    }
-}
-class TiedHairScene extends Phaser.Scene {
-    constructor() {
-        super("TiedHairScene");
-    }
-
-    create() {
-        const { width, height } = this.scale;
-        let currentIndicator = null;
-
-        const createClickIndicator = (target) => { //actually highlights which icon to click by creating a flashing circle
-
-            const indicatorContainer = this.add.container(target.x, target.y);
-
-            const radius = Math.max(target.displayWidth, target.displayHeight) / 2 + 10;
-            const circle = this.add.circle(0, 0, radius, 0xffffff, 0.3);
-            const text = this.add.text(0, -80, "CLICK HERE", {
-                fontSize: "28px",
-                color: "#ffffff",
-                fontStyle: "bold"
-            }).setOrigin(0.5);
-
-            indicatorContainer.add([circle, text]);
-
-            
-            this.tweens.add({
-                targets: circle,
-                alpha: { from: 0.2, to: 0.8 },
-                duration: 600,
-                yoyo: true,
-                repeat: -1
-            });
-
-            return indicatorContainer;
+        }
+        class FinalScene extends Phaser.Scene {
+            constructor() {
+                super("FinalScene");
+            }
+            create() {
+                const { width, height } = this.scale;
+                this.add.image(width / 2, height / 2, "bg").setDisplaySize(width, height);
+            };
+        } const config = {
+            type: Phaser.AUTO,
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: 1920,
+                height: 1080
+            },
+            render: {
+                pixelArt: false,
+                antialias: true
+            },
+            audio: { noAudio: true },
+            transparent: false,
+            backgroundColor: "#000000",
+            scene: [IntroScene, ClipperScene, RingScene, ClothesScene, TiedHairScene, FinalScene],
+            parent: "phaser-game"
         };
-        this.input.enabled = false;
 
-        this.time.delayedCall(100, () => {
-            this.input.enabled = true;
-        });
-        
-        this.add.image(width / 2, height / 2, "dresserbg")
-            .setDisplaySize(width, height);
+        phaserGameRef.current = new Phaser.Game(config);
 
-        
-        const character = this.add.image(
-            width / 2,
-            height * 0.65,
-            "cleanClothesOn"
-        );
-
-        const charScale = (height * 0.7) / character.height;
-        character.setScale(charScale);
-
-        
-        const hairTie = this.add.image(
-            width * 0.85 - width * 0.10,
-            height * 0.75 - height * 0.30,
-            "hairtie"
-        );
-        
-        
-        const hairTieScale = (width * 0.12) / hairTie.width;
-        hairTie.setScale(hairTieScale);
-        hairTie.disableInteractive();
-       
-        let wasDragged = false; 
-        hairTie.on("drag", (pointer, dragX, dragY) => {
-            hairTie.x = dragX;
-            hairTie.y = dragY;
-            wasDragged = true;
-        });
-
-        hairTie.on("dragend", () => {
-            if (!wasDragged) return;
-            const hairBounds = hairTie.getBounds();
-            const charBounds = character.getBounds();
-
-            if (Phaser.Geom.Intersects.RectangleToRectangle(
-                hairBounds,
-                charBounds
-            )) {
-                character.setTexture("tieduphair");
-                hairTie.destroy();
-
-                setHairTied(true);
-                setShowTyedHairText(false);
+        setTimeout(() => {
+            if (phaserGameRef.current) {
+                setGameStage("intro");
+                phaserGameRef.current.scene.start("IntroScene");
             }
-        });
-        hairTie.on("pointerdown", () => {
-            if (currentIndicator) {
-                currentIndicator.destroy();
-                currentIndicator = null;
-            }
-        });
-        this.events.on("startHairTie", () => {
-
-            hairTie.setInteractive({ useHandCursor: true });
-            this.input.setDraggable(hairTie);
-
-            currentIndicator = createClickIndicator(hairTie);
-            this.events.on("update", () => {
-            if (currentIndicator && hairTie) {
-                currentIndicator.x = hairTie.x;
-                currentIndicator.y = hairTie.y;
-            }
-        });
-        });
-        this.events.on("shutdown", () => {
-            this.input.removeAllListeners();
-        });
-
-    }
-}
-class FinalScene extends Phaser.Scene {
-    constructor() {
-        super("FinalScene");
-    }
-    create () {
-        const { width, height } = this.scale;
-        this.add.image(width / 2, height / 2, "bg").setDisplaySize(width, height);
-    }; 
-}const config = {
-        type: Phaser.AUTO,
-        scale: {
-            mode: Phaser.Scale.FIT,
-            autoCenter: Phaser.Scale.CENTER_BOTH,
-            width: 1920,
-            height: 1080
-        },
-        render: {
-            pixelArt: false,
-            antialias: true
-        },
-        audio: {noAudio: true},
-        transparent: false,
-        backgroundColor: "#000000",
-        scene: [IntroScene, ClipperScene, RingScene, ClothesScene, TiedHairScene, FinalScene],
-        parent: "phaser-game"
+        }, 100);
+        // Show textbox AFTER Phaser starts
+        setShowClipperText(true);
     };
 
-                phaserGameRef.current = new Phaser.Game(config);
-
-                setTimeout(() => {
-                    if (phaserGameRef.current) {
-                        setGameStage("intro");
-                        phaserGameRef.current.scene.start("IntroScene");
-                    }
-                }, 100);
-                // Show textbox AFTER Phaser starts
-                setShowClipperText(true);
-        };
-        
 
     const handleNextClick = () => { //handles the logic for transitioning between scenes based on the current game stage and user actions. It checks the current game stage and relevant state variables to determine if the user has completed the necessary actions to move to the next stage, then updates the game stage and starts the appropriate Phaser scene.
-    
-    if (gameStage === "intro") {
-        setGameStage("clipper");
 
-        if (phaserGameRef.current) {
-            phaserGameRef.current.scene.start("ClipperScene");
+        if (gameStage === "intro") {
+            setGameStage("clipper");
+
+            if (phaserGameRef.current) {
+                phaserGameRef.current.scene.start("ClipperScene");
+            }
+
+            return;
         }
+        if (gameStage === "clipper" && nailsTrimmed) {
+            setGameStage("rings");
+            setRemoveClipSuccess(true);
 
-        return;
-    }
-    if (gameStage === "clipper" && nailsTrimmed) {
-        setGameStage("rings");
-        setRemoveClipSuccess(true);
-
-        if (phaserGameRef.current) {
-            phaserGameRef.current.scene.start("RingScene");
+            if (phaserGameRef.current) {
+                phaserGameRef.current.scene.start("RingScene");
+            }
         }
-    }
-    if (gameStage === "rings" && ringRemoved) {
-        setGameStage("clothes");
-        setShowRingText(false);
-        setHairInstructionDismissed(false);
-        setShowClothesText(true);
-        setClothesInstructionsDone(false);
+        if (gameStage === "rings" && ringRemoved) {
+            setGameStage("clothes");
+            setShowRingText(false);
+            setHairInstructionDismissed(false);
+            setShowClothesText(true);
+            setClothesInstructionsDone(false);
 
-        if (phaserGameRef.current) {
-            phaserGameRef.current.scene.start("ClothesScene");
+            if (phaserGameRef.current) {
+                phaserGameRef.current.scene.start("ClothesScene");
+            }
         }
-    }
-    if (gameStage === "clothes" && clothesRemoved) {
-        setHairTied(false);
-        setGameStage("tyehair");
-        setShowTyedHairText(true);
-        setClothesRemoved(false);
-        
-        if (phaserGameRef.current) {
+        if (gameStage === "clothes" && clothesRemoved) {
+            setHairTied(false);
+            setGameStage("tyehair");
+            setShowTyedHairText(true);
+            setClothesRemoved(false);
+
+            if (phaserGameRef.current) {
                 phaserGameRef.current.scene.start("TiedHairScene");
+            }
+            return;
         }
-        return;
-    }
-    if (gameStage === "tyehair" && hairTied) {
-        setGameStage("final");
-        setShowTyedHairText(false);
-        setHairTied(false);
-        setShowFinalText(true);
-        if (phaserGameRef.current) {
+        if (gameStage === "tyehair" && hairTied) {
+            setGameStage("final");
+            setShowTyedHairText(false);
+            setHairTied(false);
+            setShowFinalText(true);
+            if (phaserGameRef.current) {
                 phaserGameRef.current.scene.start("FinalScene");
+            }
+
+            return;
         }
-        
-        return;
-    }
-    if (gameStage === "final") {
-        moduleUpdate(`${API}/api/game/module1/personalHygiene/completed`, refreshSummary);
-        navigate('/module1/onLocation', { replace: true });
-    }
-    
-};
+        if (gameStage === "final") {
+            moduleUpdate(`${API}/api/game/module1/personalHygiene/completed`, refreshSummary);
+            navigate('/module1/onLocation', { replace: true });
+        }
+
+    };
     const isNextDisabled =
-            (gameStage === "clipper" && !nailsTrimmed) ||
-            (gameStage === "rings" && !ringRemoved) ||
-            (gameStage === "clothes" && !clothesRemoved) ||
-            (gameStage === "tyehair" && !hairTied);
+        (gameStage === "clipper" && !nailsTrimmed) ||
+        (gameStage === "rings" && !ringRemoved) ||
+        (gameStage === "clothes" && !clothesRemoved) ||
+        (gameStage === "tyehair" && !hairTied);
 
     return (
-    
-  <div
-    className="form"
-    style={{
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      backgroundColor: "black",
-      height: "100dvh",
-      overflow: "hidden",
-      position: "relative"
-    }}
-  >
-     
-        {gameStage === "intro" && (
+
         <div
-        style={{
-            position: "fixed", 
-            top: -10,
-            left: 0,
-            width: "100dvw",
-            height: "100dvh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 10000
-        }}
+            className="form"
+            style={{
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundColor: "black",
+                height: "100dvh",
+                overflow: "hidden",
+                position: "relative"
+            }}
         >
+
+            {gameStage === "intro" && (
+                <div
+                    style={{
+                        position: "fixed",
+                        top: -10,
+                        left: 0,
+                        width: "100dvw",
+                        height: "100dvh",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 10000
+                    }}
+                >
                     <Textbox
                         width="70dvw"
                         height="82dvh"
@@ -914,248 +916,247 @@ class FinalScene extends Phaser.Scene {
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.8vw"
                     />
-        </div>
-        )}
-    
-       
+                </div>
+            )}
 
-        <button
-            className="next-button"
-            disabled={isNextDisabled}
-            onClick={handleNextClick}
-            style={{
-                position: "absolute",
-                bottom: "5%",
-                right: "15%",
-                opacity: isNextDisabled ? 0.5 : 1,
-                pointerEvents: isNextDisabled ? "none" : "auto",
-                background: "none",
-                border: "none",
-                padding: 0,
-                zIndex: 20000
-            }}
-        >
-            <img 
-                src={nextButton} 
-                alt="Next" 
-                style={{ 
-                    width: "20vw",
-                    minWidth: "120px"
-                }} 
-            />
-        </button>
 
-        
-        <div
-        id="phaser-game"
-        style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100dvw",
-            height: "100dvh",
-            zIndex: 1
-        }}
-        />
 
- {gameStage === "clipper" && showClipperText && !nailsTrimmed && (
-            <div
+            <button
+                className="next-button"
+                disabled={isNextDisabled}
+                onClick={handleNextClick}
                 style={{
-                    position: "fixed",
-                    right: "18vw",
-                    bottom: "40vh",
-                    zIndex: 10000
+                    position: "absolute",
+                    bottom: "5%",
+                    right: "15%",
+                    opacity: isNextDisabled ? 0.5 : 1,
+                    pointerEvents: isNextDisabled ? "none" : "auto",
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                    zIndex: 20000
                 }}
             >
-                <Textbox
-                    width="30dvw"
-                    height="40dvh"
-                    placeholder={clipperText}
-                    placeHolderColor="#000000"
-                    placeHolderfontSize="1.3vw"
+                <img
+                    src={nextButton}
+                    alt="Next"
+                    style={{
+                        width: "20vw",
+                        minWidth: "120px"
+                    }}
                 />
-            </div>
-        )}
-    
-        {nailsTrimmed && (
+            </button>
+
+
             <div
+                id="phaser-game"
                 style={{
                     position: "fixed",
-                    right: "18vw",
-                    bottom: "25vh",
-                    zIndex: 10000
+                    top: 0,
+                    left: 0,
+                    width: "100dvw",
+                    height: "100dvh",
+                    zIndex: 1
                 }}
-            >
-                {!removeClipSuccess && (
+            />
+
+            {gameStage === "clipper" && showClipperText && !nailsTrimmed && (
+                <div
+                    style={{
+                        position: "fixed",
+                        right: "18vw",
+                        bottom: "40vh",
+                        zIndex: 10000
+                    }}
+                >
                     <Textbox
                         width="30dvw"
                         height="40dvh"
-                        placeholder={clipperSuccessText}
+                        placeholder={clipperText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.3vw"
                     />
-                )}
+                </div>
+            )}
 
-                {nailsTrimmed && removeClipSuccess && !showRingText && (gameStage === "rings") && (
-                    <Textbox
-                        width="30dvw"
-                        height="40dvh"
-                        placeholder={ringText}
-                        placeHolderColor="#000000"
-                        placeHolderfontSize="1.3vw"
-                    />
-                )}
+            {nailsTrimmed && (
+                <div
+                    style={{
+                        position: "fixed",
+                        right: "18vw",
+                        bottom: "25vh",
+                        zIndex: 10000
+                    }}
+                >
+                    {!removeClipSuccess && (
+                        <Textbox
+                            width="30dvw"
+                            height="40dvh"
+                            placeholder={clipperSuccessText}
+                            placeHolderColor="#000000"
+                            placeHolderfontSize="1.3vw"
+                        />
+                    )}
 
-                {showRingText && (
-                    <Textbox
-                        width="30dvw"
-                        height="42dvh"
-                        placeholder={ringSuccessText}
-                        placeHolderColor="#000000"
-                        placeHolderfontSize="1.3vw"
-                    />
-                )}
+                    {nailsTrimmed && removeClipSuccess && !showRingText && (gameStage === "rings") && (
+                        <Textbox
+                            width="30dvw"
+                            height="40dvh"
+                            placeholder={ringText}
+                            placeHolderColor="#000000"
+                            placeHolderfontSize="1.3vw"
+                        />
+                    )}
 
-                {clothesRemoved && (
-                    <Textbox
-                        width="30dvw"
-                        height="50dvh"
-                        placeholder={clothesSuccessText}
-                        placeHolderColor="#000000"
-                        placeHolderfontSize="1.3vw"
-                    />
-                )}
+                    {showRingText && (
+                        <Textbox
+                            width="30dvw"
+                            height="42dvh"
+                            placeholder={ringSuccessText}
+                            placeHolderColor="#000000"
+                            placeHolderfontSize="1.3vw"
+                        />
+                    )}
 
-                {gameStage === "tyehair" && hairTied && !showTyedHairText && (
-                    <Textbox
-                        width="30dvw"
-                        height="42dvh"
-                        placeholder={tiedHairSuccessText}
-                        placeHolderColor="#000000"
-                        placeHolderfontSize="1.3vw"
-                    />
-                )}
+                    {clothesRemoved && (
+                        <Textbox
+                            width="30dvw"
+                            height="50dvh"
+                            placeholder={clothesSuccessText}
+                            placeHolderColor="#000000"
+                            placeHolderfontSize="1.3vw"
+                        />
+                    )}
 
-                {showClothesText && gameStage === "clothes" && !clothesInstructionsDone && (
-                    <div
-                        onClick={() => {
-                            setClothesInstructionsDone(true);
-                            setShowClothesText(false);
-                            if (phaserGameRef.current) {
-                                const scene = phaserGameRef.current.scene.getScene("ClothesScene");
-                                if (scene) {
-                                    scene.events.emit("startClothes");
-                                }
-                            }
-                        }}
-                        style={{
-                            position: "fixed",
-                            top: 0,
-                            left: 0,
-                            width: "100vw",
-                            height: "100vh",
-                            zIndex: 15000,
-                            cursor: "pointer"
-                        }}
-                    >
+                    {gameStage === "tyehair" && hairTied && !showTyedHairText && (
+                        <Textbox
+                            width="30dvw"
+                            height="42dvh"
+                            placeholder={tiedHairSuccessText}
+                            placeHolderColor="#000000"
+                            placeHolderfontSize="1.3vw"
+                        />
+                    )}
+
+                    {showClothesText && gameStage === "clothes" && !clothesInstructionsDone && (
                         <div
+                            onClick={() => {
+                                setClothesInstructionsDone(true);
+                                setShowClothesText(false);
+                                if (phaserGameRef.current) {
+                                    const scene = phaserGameRef.current.scene.getScene("ClothesScene");
+                                    if (scene) {
+                                        scene.events.emit("startClothes");
+                                    }
+                                }
+                            }}
                             style={{
                                 position: "fixed",
-                                right: "18vw",
-                                bottom: "25vh"
+                                top: 0,
+                                left: 0,
+                                width: "100vw",
+                                height: "100vh",
+                                zIndex: 15000,
+                                cursor: "pointer"
                             }}
                         >
-                            <Textbox
-                                width="50dvw"
-                                height="60dvh"
-                                placeholder={clothesText}
-                                placeHolderColor="#000000"
-                                placeHolderfontSize="1.3vw"
-                            />
+                            <div
+                                style={{
+                                    position: "fixed",
+                                    right: "18vw",
+                                    bottom: "25vh"
+                                }}
+                            >
+                                <Textbox
+                                    width="50dvw"
+                                    height="60dvh"
+                                    placeholder={clothesText}
+                                    placeHolderColor="#000000"
+                                    placeHolderfontSize="1.3vw"
+                                />
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {gameStage === "tyehair" && !hairInstructionDismissed && !hairTied && (
-                    <div
-                        onClick={() => {
-                            setHairInstructionDismissed(true);
-                            if (phaserGameRef.current) {
-                                const scene = phaserGameRef.current.scene.getScene("TiedHairScene");
-                                if (scene) {
-                                    scene.events.emit("startHairTie");
-                                }
-                            }
-                        }}
-                        style={{
-                            position: "fixed",
-                            top: 0,
-                            left: 0,
-                            width: "100dvw",
-                            height: "100dvh",
-                            zIndex: 15000,
-                            cursor: "pointer"
-                        }}
-                    >
+                    {gameStage === "tyehair" && !hairInstructionDismissed && !hairTied && (
                         <div
+                            onClick={() => {
+                                setHairInstructionDismissed(true);
+                                if (phaserGameRef.current) {
+                                    const scene = phaserGameRef.current.scene.getScene("TiedHairScene");
+                                    if (scene) {
+                                        scene.events.emit("startHairTie");
+                                    }
+                                }
+                            }}
                             style={{
                                 position: "fixed",
-                                right: "18vw",
-                                bottom: "25vh"
+                                top: 0,
+                                left: 0,
+                                width: "100dvw",
+                                height: "100dvh",
+                                zIndex: 15000,
+                                cursor: "pointer"
                             }}
                         >
-                            <Textbox
-                                width="40dvw"
-                                height="50dvh"
-                                placeholder={tiedHairText}
-                                placeHolderColor="#000000"
-                                placeHolderfontSize="1.3vw"
-                            />
+                            <div
+                                style={{
+                                    position: "fixed",
+                                    right: "18vw",
+                                    bottom: "25vh"
+                                }}
+                            >
+                                <Textbox
+                                    width="40dvw"
+                                    height="50dvh"
+                                    placeholder={tiedHairText}
+                                    placeHolderColor="#000000"
+                                    placeHolderfontSize="1.3vw"
+                                />
+                            </div>
                         </div>
-                    </div>
-                )}
-            </div>
-        )}
-          
+                    )}
+                </div>
+            )}
 
-        {showFinalText && gameStage === "final" && (
-           <div
-                style={{
-                      position: "fixed",
-            position: "fixed", 
-            top: -10,
-            left: 0,
-            width: "100dvw",
-            height: "100dvh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 10000
-                }}
-            >
+
+            {showFinalText && gameStage === "final" && (
+                <div
+                    style={{
+                        position: "fixed",
+                        top: -10,
+                        left: 0,
+                        width: "100dvw",
+                        height: "100dvh",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 10000
+                    }}
+                >
                     <TextboxErin
                         width="60dvw"
-                        height="85dvh"
+                        height="75dvh"
                         placeholder={finalText}
                         placeHolderColor="#000000"
                         placeHolderfontSize="1.8vw"
                     />
+                </div>
+            )}
+            <div
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 180,
+                    padding: "10px",
+                    display: "flex",
+                    zIndex: 30000
+                }}
+            >
+                <Settings openMenu={openMenu} />
+            </div>
+
         </div>
-        )}
-  <div
-  style={{
-    position: "absolute",
-    top: 0,
-    right: 180,
-    padding: "10px",
-    display: "flex",
-    zIndex: 30000
-  }}
->
-          <Settings openMenu={openMenu}/>
-        </div>
-        
-  </div>
     );
 }
 
