@@ -233,6 +233,7 @@ router.get('/moduleSummary', requireAuth, async (req, res) => {
         expiration: mod3?.expiration ?? false,
         allergenIdentification: mod3?.allergenIdentification ?? false
       },
+
       finished_m4: user.finished_m4,
       module4: {
         cleanTote: mod4?.cleanTote ?? false,
@@ -245,6 +246,7 @@ router.get('/moduleSummary', requireAuth, async (req, res) => {
         cold: mod5?.cold ?? false,
         hot: mod5?.hot ?? false,
       },
+
       finished_m6: user.finished_m6,
       module6: {
         serviceSetup: mod6?.serviceSetup ?? false,

@@ -912,7 +912,6 @@ export default function Location({ openMenu, refreshSummary }) {
                         placeHolderfontSize="1.8vw"
                     />
                 </div>
-
             )}
             <div
                 style={{

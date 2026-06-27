@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import map from "../../assets/Maprenovated.png";
 import "./map.css";
 import Phaser from "phaser";
+
+import map from "../../assets/Maprenovated.png";
 import menubutton from "../../assets/menubutton.png";
+import finishedbutton from "../../assets/finishedButton.png"
+
 import Menu from "../../components/menu.js";
 import Settings from "../../components/settings";
 const API = process.env.REACT_APP_API_URL;
@@ -57,29 +60,19 @@ function Map({ openMenu }) {
     useEffect(() => {
         if (!summary) return;
 
-        const isModule2Done =
+        const isModule1Done =
             summary.finished_m1;
-        const isModule3Done =
+        const isModule2Done =
             summary.finished_m1 && 
             summary.finished_m2; 
-        const isModule4Done =
-            summary.finished_m1 && 
-            summary.finished_m2; 
-        const isModule5Done =
-            summary.finished_m1 && 
-            summary.finished_m2
-        const isModule6Done =
-            summary.finished_m1 && 
-            summary.finished_m2
-        
 
         const unlocked = {
             module1: true,
-            module2: isModule2Done,
-            module3: isModule3Done, 
-            module4: isModule4Done,
-            module5: isModule5Done,
-            module6: isModule6Done
+            module2: isModule1Done,
+            module3: isModule2Done, 
+            module4: isModule2Done,
+            module5: isModule2Done,
+            module6: isModule2Done
         };
 
         window.navigateToPage = navigate;
@@ -131,7 +124,6 @@ function Map({ openMenu }) {
                 // mod 2
                 const x1 = this.map.x - this.map.displayWidth / 2 + this.map.displayWidth * 0.53;
                 const y1 = this.map.y - this.map.displayHeight / 2 + this.map.displayHeight * 0.4;
-
                 if (unlocked.module2) {
                     const mod2 = this.add.circle(x1, y1, 50, 0xfff600);
 
@@ -152,7 +144,6 @@ function Map({ openMenu }) {
                 // mod 3
                 const x2 = this.map.x - this.map.displayWidth / 2 + this.map.displayWidth * 0.85;
                 const y2 = this.map.y - this.map.displayHeight / 2 + this.map.displayHeight * 0.4;
-
                 if (unlocked.module3) {
                     const mod3 = this.add.circle(x2, y2, 50, 0xfff600);
 
@@ -169,10 +160,10 @@ function Map({ openMenu }) {
                         window.navigateToPage("/module3");
                     });
                 }
+
                 // mod 4
                 const x4 = this.map.x - this.map.displayWidth / 2 + this.map.displayWidth * 0.67;
                 const y4 = this.map.y - this.map.displayHeight / 2 + this.map.displayHeight * 0.70;
-
                 if (unlocked.module4) {
                     const mod4 = this.add.circle(x4, y4, 50, 0xfff600);
 
@@ -189,10 +180,10 @@ function Map({ openMenu }) {
                         window.navigateToPage("/module4");
                     });
                 }
+
                 // mod 5
                 const x5 = this.map.x - this.map.displayWidth / 2 + this.map.displayWidth * 0.40;
                 const y5 = this.map.y - this.map.displayHeight / 2 + this.map.displayHeight * 0.70;
-
                 if (unlocked.module5) {
                     const mod5 = this.add.circle(x5, y5, 50, 0xfff600);
 
@@ -209,10 +200,10 @@ function Map({ openMenu }) {
                         window.navigateToPage("/module5");
                     });
                 }
+
                 // mod 6
                 const x6 = this.map.x - this.map.displayWidth / 2 + this.map.displayWidth * 0.10;
                 const y6 = this.map.y - this.map.displayHeight / 2 + this.map.displayHeight * 0.70;
-
                 if (unlocked.module6) {
                     const mod6 = this.add.circle(x6, y6, 50, 0xfff600);
 
@@ -229,7 +220,6 @@ function Map({ openMenu }) {
                         window.navigateToPage("/module6");
                     });
                 } 
-
             }
         }
 
@@ -259,6 +249,15 @@ function Map({ openMenu }) {
         };
 
     }, [summary, navigate]);
+
+    const finishButton = 
+            summary.finished_m3 || summary.finished_m4 || summary.finished_m5 || summary.finished_m6
+
+    const handleClick = async (e) => { //handles the logic for transitioning between scenes based on the current game stage and user actions. It checks the current game stage and relevant state variables to determine if the user has completed the necessary actions to move to the next stage, then updates the game stage and starts the appropriate Phaser scene.
+        e.stopPropagation();
+
+        window.location.href = "https://ufl.qualtrics.com/jfe/form/SV_3P0DtQFafwtfKbI";
+    };
 
     return (
         <div
@@ -291,9 +290,32 @@ function Map({ openMenu }) {
                   }}
                 >
                   <Settings openMenu={openMenu}/>
-                </div>
+            </div>
 
-            
+            {finishButton && (
+            <button
+                className="finished-button"
+                onClick={handleClick}
+                style={{
+                    position: "absolute",
+                    bottom: "5%",
+                    right: "15%",
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                    zIndex: 20000
+                }}
+            >
+                <img
+                    src={finishedbutton}
+                    alt="Finished Button"
+                    style={{
+                        width: "10vw",
+                        minWidth: "120px"
+                    }}
+                />
+            </button>
+            )}
         </div>
     );
 }
