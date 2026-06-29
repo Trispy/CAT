@@ -810,10 +810,10 @@ export default function FoodServiceMishaps({ openMenu, refreshSummary }) {
                 });
 
                 this.tempLog.on("pointerdown", () => {
-                    this.iterateGameMessage(this.instructionStep + 1);
                     this.showPopup("Item: Grilled Chicken, Date: Today, Time: 1 Hour Ago, Temp: 170 °F.\n\n\nItem: Watermelon, Date: Today, Time: 1 Hour Ago, Temp: 38°F.");
                     if (!this.logOpened) {
                         this.logOpened = true;
+                        this.iterateGameMessage(this.instructionStep + 1);
                         this.coldFood.setInteractive();
                         this.input.setDraggable(this.coldFood);
                         this.coldFood.input.dropZone = false;

@@ -28,7 +28,7 @@ export default function Settings({ openMenu }) {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setOpen(false);
-    navigate("/login");
+    window.location.replace("https://www.volunteerverse.org/");
   };
 
   // Close when clicking outside
