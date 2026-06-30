@@ -202,7 +202,6 @@ function PersonalHygiene({ openMenu, refreshSummary }) {
                 const scale = handMaxWidth / trimmedHand.width;
                 trimmedHand.setScale(scale);
 
-
                 const longHandImage = this.add.image(
                     width / 2,
                     height / 2 + height * 0.05,
@@ -211,7 +210,6 @@ function PersonalHygiene({ openMenu, refreshSummary }) {
 
                 const scale1 = (width * 0.8) / longHandImage.width;
                 longHandImage.setScale(scale1);
-
 
                 longHandImage.setVisible(false);
                 const ringOnFinger1 = this.add.image(
@@ -222,24 +220,50 @@ function PersonalHygiene({ openMenu, refreshSummary }) {
 
                 ringOnFinger1.setScale((width * 0.37) / ringOnFinger1.width);
                 ringOnFinger1.setDepth(10);
-                const nailZone = new Phaser.Geom.Rectangle( //actual nail area for clipping
-                    width / 2 - width * 0.15,
-                    height / 2 - height * 0.47,
-                    width * 0.40,
-                    height * 0.35
-                );
+                const nailZone = [
+                    new Phaser.Geom.Rectangle( //actual nail area for clipping
+                        width / 2 - width * 0.14,
+                        height / 2 - height * 0.28,
+                        width * 0.03,
+                        height * 0.05
+                    ),
+                    new Phaser.Geom.Rectangle( //actual nail area for clipping
+                        width / 2 - width * 0.06,
+                        height / 2 - height * 0.38,
+                        width * 0.02,
+                        height * 0.05
+                    ),
+                    new Phaser.Geom.Rectangle( //actual nail area for clipping
+                        width / 2 - width * 0.01,
+                        height / 2 - height * 0.41,
+                        width * 0.02,
+                        height * 0.05
+                    ),
+                    new Phaser.Geom.Rectangle( //actual nail area for clipping
+                        width / 2 + width * 0.06,
+                        height / 2 - height * 0.38,
+                        width * 0.02,
+                        height * 0.05
+                    ),
+                    new Phaser.Geom.Rectangle( //actual nail area for clipping
+                        width / 2 + width * 0.15,
+                        height / 2 - height * 0.14,
+                        width * 0.02,
+                        height * 0.05
+                    ),
+                ]
 
-
-                const gridSize = 20; // size of each cell
+                const gridSize = 15; // size of each cell
                 const cells = [];
-
-                for (let x = nailZone.x; x < nailZone.right; x += gridSize) {
-                    for (let y = nailZone.y; y < nailZone.bottom; y += gridSize) {
-                        cells.push({
-                            x,
-                            y,
-                            cleared: false
-                        });
+                for(const nailZoneCurr of nailZone) {
+                    for (let x = nailZoneCurr.x; x < nailZoneCurr.right; x += gridSize) {
+                        for (let y = nailZoneCurr.y; y < nailZoneCurr.bottom; y += gridSize) {
+                            cells.push({
+                                x,
+                                y,
+                                cleared: false
+                            });
+                        }
                     }
                 }
                 let trimmed = false;
@@ -280,8 +304,6 @@ function PersonalHygiene({ openMenu, refreshSummary }) {
                 const baseScale = clipperMaxWidth / clipper.width;
                 clipper.setScale(baseScale);
 
-
-
                 this.input.setDraggable(clipper);
 
                 clipper.on("dragstart", () => {
@@ -301,8 +323,8 @@ function PersonalHygiene({ openMenu, refreshSummary }) {
                     clipper.y = dragY;
 
 
-                    const tipOffsetX = -clipper.displayWidth * 0.28;
-                    const tipOffsetY = clipper.displayHeight * 0.18;
+                    const tipOffsetX = -clipper.displayWidth * 0.33;
+                    const tipOffsetY = clipper.displayHeight * 0.23;
 
                     const tipX = dragX + tipOffsetX;
                     const tipY = dragY + tipOffsetY;
@@ -311,15 +333,14 @@ function PersonalHygiene({ openMenu, refreshSummary }) {
                     const localX = (tipX - longHandRT.x) / longHandRT.scaleX + longHandRT.width / 2;
                     const localY = (tipY - longHandRT.y) / longHandRT.scaleY + longHandRT.height / 2;
 
-
                     longHandRT.erase(eraseBrush, localX, localY);
                     cells.forEach(cell => {
                         if (!cell.cleared) {
                             if (
-                                dragX > cell.x &&
-                                dragX < cell.x + gridSize &&
-                                dragY > cell.y &&
-                                dragY < cell.y + gridSize
+                                tipX > cell.x &&
+                                tipX < cell.x + gridSize &&
+                                tipY > cell.y &&
+                                tipY < cell.y + gridSize
                             ) {
                                 cell.cleared = true;
                             }
@@ -327,7 +348,8 @@ function PersonalHygiene({ openMenu, refreshSummary }) {
                     });
                     const clearedCount = cells.filter(c => c.cleared).length;
                     const percentCleared = clearedCount / cells.length;
-                    if (!trimmed && percentCleared > 0.28) {
+                    console.log(percentCleared);
+                    if (!trimmed && percentCleared > 0.5) {
                         trimmed = true;
                         setTrimmed(true);
                         longHandRT.destroy();
