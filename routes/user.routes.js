@@ -63,13 +63,13 @@ router.post('/createaccount', async (req, res) => {
 });
 router.post('/login', async (req, res) => {
   try {
-    const { username, email } = req.body;
+    const { email } = req.body;
 
-    if (!username || !email) {
-      return res.status(400).json({ message: 'Username and email are required' });
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
     }
 
-    const user = await User.findOne({ username, email });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });

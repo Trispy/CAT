@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Home } from './pages/user/home.js';
 import { CreateAccount } from './pages/user/createAccount.js';
 import { Login } from './pages/user/login.js';
+import { Logging } from './pages/user/logging.js';
 import Symptoms from './pages/module1/symptoms.js';
 import PersonalHygiene from './pages/module1/personalHygiene.js';
 import Module2Part1 from './pages/module2/module2part1.js';
@@ -138,6 +139,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/createaccount" element={<CreateAccount />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/logging" element={<Logging />} />
           <Route path="/map" element={<Map openMenu={() => setShowMenu(true)} />} />
 
           <Route path="/module1" element={<M1Nav />} />

@@ -20,7 +20,6 @@ export default function M1Nav() {
             }
             )
             const data = await response.json();
-            console.log(data);
             // parse data
             if (!data.symptoms)
                 navigate('/module1/symptoms', { replace: true });
