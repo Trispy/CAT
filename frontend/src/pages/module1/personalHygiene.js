@@ -348,21 +348,15 @@ function PersonalHygiene({ openMenu, refreshSummary }) {
                     });
                     const clearedCount = cells.filter(c => c.cleared).length;
                     const percentCleared = clearedCount / cells.length;
-                    console.log(percentCleared);
                     if (!trimmed && percentCleared > 0.5) {
                         trimmed = true;
                         setTrimmed(true);
                         longHandRT.destroy();
-                        console.log("Nails fully trimmed!");
                     }
 
                 });
 
-
-
                 // Show textbox when scene loads
-
-
                 // when clipper is clicked hide the textbox
                 clipper.on("pointerdown", () => {
                     setShowClipperText(false);

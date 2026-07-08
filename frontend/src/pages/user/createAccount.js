@@ -18,10 +18,8 @@ function CreateAccount() {
       })
       
       if (!response.ok) throw new Error(response.status)
-      
       const user = await response.json()
-      console.log('Created:', user)
-      navigate('/login', { replace: true });
+
     } catch (error) {
       console.error(error)
       console.error(error.message)
@@ -33,10 +31,10 @@ function CreateAccount() {
     <form onSubmit={handleSubmit}>
 
         <label class='input' type='text' name="username" placeholder="Your username..">
-        Username: <input name="username" onChange={(e) => setFormData({ ...formData, username: e.target.value })}/>
+        Username (Case Sensitive): <input name="username" onChange={(e) => setFormData({ ...formData, username: e.target.value })}/>
         </label>
         <label class='input' type='text' name="email" placeholder="Your email..">
-        Email: <input name="email" onChange={(e) => setFormData({ ...formData, email: e.target.value })}/>
+        Email: <input name="email" onChange={(e) => setFormData({ ...formData, email: e.target.value.toLowerCase() })}/>
         </label>
         <label class='input' type='text' name="firstName" placeholder="Your first name..">
         First Name: <input name="firstName" onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}/>
@@ -58,3 +56,52 @@ function CreateAccount() {
 }
 
 export { CreateAccount };
+
+/*
+    try {
+        const add = await fetch(`${API}/api/users/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+        });
+
+        const text = await add.text();
+        
+            // Try parsing manually (so it doesn't crash silently)
+            let data;
+            try {
+            data = JSON.parse(text);
+            } catch (err) {
+            console.error("JSON parse failed:", err);
+            }
+
+        if (add.status === 200) {
+            sessionStorage.setItem("name", data.user.firstName);
+            sessionStorage.setItem("username", data.user.username);
+            sessionStorage.setItem("m1", data.user.finished_m1);
+            sessionStorage.setItem("m2", data.user.finished_m2);
+            sessionStorage.setItem("m3", data.user.finished_m3);
+            sessionStorage.setItem("m4", data.user.finished_m4);
+            sessionStorage.setItem("m5", data.user.finished_m5);
+            sessionStorage.setItem("m6", data.user.finished_m6);
+
+            localStorage.setItem("token", data.token);
+
+            console.log("JWT Token:", data.token);
+
+    
+            window.location.href = "/map";
+        }
+        else if (add.status === 400) {
+            setMissing(true);
+            setNoUser(false);
+        }
+        else if (add.status === 404) {
+            window.location.href = "/createaccount";
+        }
+
+    } catch (err) {
+        c
+*/

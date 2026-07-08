@@ -10,7 +10,7 @@ function Login() {
     const [missing, setMissing] = useState(false);
     const navigate = useNavigate();
     const handleEmail = (e) => {
-        setEmail(e.target.value);
+        setEmail(e.target.value.toLowerCase());
     };
     const handleUsername = (e) => {
         setUsername(e.target.value);
@@ -33,10 +33,6 @@ function Login() {
             body: JSON.stringify(userData),
         });
 
-       
-        
-
-  
         const text = await add.text();
         
             // Try parsing manually (so it doesn't crash silently)
@@ -48,7 +44,7 @@ function Login() {
             }
 
         if (add.status === 200) {
-         
+            sessionStorage.setItem("name", data.user.firstName);
             sessionStorage.setItem("username", data.user.username);
             sessionStorage.setItem("m1", data.user.finished_m1);
             sessionStorage.setItem("m2", data.user.finished_m2);
@@ -57,7 +53,6 @@ function Login() {
             sessionStorage.setItem("m5", data.user.finished_m5);
             sessionStorage.setItem("m6", data.user.finished_m6);
 
-          
             localStorage.setItem("token", data.token);
 
             console.log("JWT Token:", data.token);
@@ -70,8 +65,7 @@ function Login() {
             setNoUser(false);
         }
         else if (add.status === 404) {
-            setNoUser(true);
-            setMissing(false);
+            window.location.href = "/createaccount";
         }
 
     } catch (err) {
@@ -83,10 +77,6 @@ function Login() {
         <div className='form'>
             <h1>Log In</h1>
             <form onSubmit={handleSubmit}>
-                <label class='input' type='text' name="username" placeholder="Your username..">
-                    Username: <input name="username" onChange={handleUsername} />
-                </label>
-
                 <label class='input' type='text' name="email" placeholder="Your email..">
                     Email: <input name="email" onChange={handleEmail} />
                 </label>

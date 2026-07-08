@@ -415,7 +415,6 @@ export default function Location({ openMenu, refreshSummary }) {
                     this.progressBar.setProgress(Math.min(percentCleared / 0.45, 1.00));
                     if (!handsClean && percentCleared > 0.45) {
                         setHandsClean(true);
-                        console.log("Hands fully clean.");
                         dirtyHandRT.setVisible(false);
                     }
 

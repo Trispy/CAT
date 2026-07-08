@@ -66,6 +66,7 @@ function Map({ openMenu }) {
             summary.finished_m1 && 
             summary.finished_m2; 
 
+        //TODO: reduce to three variables
         const unlocked = {
             module1: true,
             module2: isModule1Done,
