@@ -8,7 +8,8 @@ const API = process.env.REACT_APP_API_URL;
 function CreateAccount() {
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', username: '' })
   const navigate = useNavigate();
-  const validEmail = true;
+  const [validEmail, setValidEmail] = useState(true);
+  const [emailUsed, setemailUsed] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +22,14 @@ function CreateAccount() {
       })
 
       console.log(responseCreate.status)
-      if (responseCreate.status === 501) validEmail = false;
+      if (responseCreate.status === 501) {
+        setValidEmail(false);
+        setemailUsed(false);
+      }
+      if (responseCreate.status === 404) {
+        setValidEmail(true);
+        setemailUsed(true);
+      }
       if (responseCreate.status !== 201) throw new Error(responseCreate.status)
       const user = await responseCreate.json()
 
@@ -70,16 +78,21 @@ function CreateAccount() {
 
       <input type="submit" value="Create a New Account" />
       {!validEmail ? (
-        <p>No such user</p>
+        <p>Invalid email address</p>
       ) : (
         <p></p>
       )}
-      <p className='home'>Already have an account?</p>
-      <div className="home">
-        <Link to="/login">
-          <input type="submit" value="Login" />
-        </Link>
-      </div>
+      {emailUsed ? (
+        <p>Email address already in use.
+          <div>
+            <Link to="/login">
+              Log in?
+            </Link>
+          </div>
+        </p>
+      ) : (
+        <p></p>
+      )}
     </form>
 
   </div>;
