@@ -53,8 +53,17 @@ router.post('/createaccount', async (req, res) => {
       foodServiceMishaps: false,
     })
 
+    const token = jwt.sign(
+      {
+        userId: user._id,
+        username: user.username
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
     await user.save();
-    res.status(201).json({ message: 'Account created successfully with user: ', user });
+    res.status(201).json({ message: 'Account created successfully with user: ', user, token });
   }
   catch (error) {
     console.error('Error creating account:', error);

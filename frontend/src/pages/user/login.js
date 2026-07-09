@@ -58,7 +58,7 @@ function Login() {
             console.log("JWT Token:", data.token);
 
     
-            window.location.href = "/map";
+            window.location.href = "/logging";
         }
         else if (add.status === 400) {
             setMissing(true);

@@ -10,7 +10,7 @@ function Logging() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        window.navigateToPage("/map");
+        window.location.href = "/map";
 };
 
     return (
@@ -20,7 +20,7 @@ function Logging() {
                 <input type="submit" value="Log In" />
                 <div className="home">
                     <Link to="/createaccount">
-                        <input type="submit" value="Create a New Account" />
+                        Not you?
                     </Link>
                 </div>
             </form>
