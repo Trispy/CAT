@@ -9,6 +9,13 @@ const Module4 = require('../models/module4.model');
 const Module5 = require('../models/module5.model');
 const Module6 = require('../models/module6.model');
 
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ValidationError";
+  }
+}
+
 
 router.post('/createaccount', async (req, res) => {
   try {
@@ -16,6 +23,9 @@ router.post('/createaccount', async (req, res) => {
     if (!firstName || !lastName || !username || !email) {
       return res.status(400).json({ message: 'All fields are needed' });
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) throw new ValidationError("Invalid Email Address");
 
     const user = new User({ firstName, lastName, username, email });
     await Module1.create({
@@ -66,10 +76,12 @@ router.post('/createaccount', async (req, res) => {
     res.status(201).json({ message: 'Account created successfully with user: ', user, token });
   }
   catch (error) {
-    console.error('Error creating account:', error);
-    res.status(500).json({ message: 'Server error' });
+    if (error instanceof ValidationError) res.status(501).json({ message: 'Invalid Email' });
+    else res.status(500).json({ message: 'Server error' });
   }
 });
+
+
 router.post('/login', async (req, res) => {
   try {
     const { email } = req.body;
