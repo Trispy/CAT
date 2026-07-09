@@ -15,7 +15,7 @@ function Logging() {
 
     return (
         <div className='form'>
-            <h1>Welcome Back, {name}</h1>
+            <h1>Welcome, {name}</h1>
             <form onSubmit={handleSubmit}>
                 <input type="submit" value="Log In" />
                 <div className="home">

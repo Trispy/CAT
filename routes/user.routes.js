@@ -27,6 +27,12 @@ router.post('/createaccount', async (req, res) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) throw new ValidationError("Invalid Email Address");
 
+    const user = await User.findOne({ email });
+
+    if (user) {
+      return res.status(404).json({ message: 'User already exists' });
+    }
+
     const user = new User({ firstName, lastName, username, email });
     await Module1.create({
       username: user.username,
