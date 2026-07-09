@@ -3,9 +3,12 @@ import Button from '../../components/button';
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from "react";
 const API = process.env.REACT_APP_API_URL;
+
+
 function CreateAccount() {
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', username: '' })
   const navigate = useNavigate();
+  const validEmail = true;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,6 +21,7 @@ function CreateAccount() {
       })
 
       console.log(responseCreate.status)
+      if (responseCreate.status === 501) validEmail = false;
       if (responseCreate.status !== 201) throw new Error(responseCreate.status)
       const user = await responseCreate.json()
 
@@ -31,16 +35,17 @@ function CreateAccount() {
       sessionStorage.setItem("m5", user.user.finished_m5);
       sessionStorage.setItem("m6", user.user.finished_m6);
 
+      console.log(user)
+
       localStorage.setItem("token", user.token);
 
       console.log("JWT Token:", user.token);
 
 
-      // window.location.href = "/logging";
+      window.location.href = "/logging";
 
 
     } catch (error) {
-      console.log(formData.email)
       console.error(error)
       console.error(error.message)
     }
@@ -64,6 +69,11 @@ function CreateAccount() {
       </label>
 
       <input type="submit" value="Create a New Account" />
+      {!validEmail ? (
+        <p>No such user</p>
+      ) : (
+        <p></p>
+      )}
       <p className='home'>Already have an account?</p>
       <div className="home">
         <Link to="/login">
