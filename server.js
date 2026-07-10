@@ -1,10 +1,11 @@
 const express = require('express');
-const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const userRoutes = require('./routes/user.routes');
 const gameRoutes = require('./routes/game.routes');
 const app = express();
+import { rateLimit } from 'express-rate-limit'
+
 app.use(cors());
 app.use(express.json());
 let MONGODB_URI = '';
