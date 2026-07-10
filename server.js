@@ -14,7 +14,7 @@ if (process.env.MONGODB_URI) {
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes window
-  max: 100, // Limit each IP to 100 requests per window
+  max: 100, // INCREASE FOR MORE REQUESTS IF GETTING 429
   statusCode: 429,
   message: {
     error: "Too Many Requests",
