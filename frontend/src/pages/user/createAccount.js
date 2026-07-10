@@ -8,7 +8,8 @@ const API = process.env.REACT_APP_API_URL;
 function CreateAccount() {
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', username: '' })
   const navigate = useNavigate();
-  const validEmail = true;
+  const [validEmail, setValidEmail] = useState(true);
+  const [emailUsed, setemailUsed] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +22,14 @@ function CreateAccount() {
       })
 
       console.log(responseCreate.status)
-      if (responseCreate.status === 501) validEmail = false;
+      if (responseCreate.status === 501) {
+        setValidEmail(false);
+        setemailUsed(false);
+      }
+      if (responseCreate.status === 404) {
+        setValidEmail(true);
+        setemailUsed(true);
+      }
       if (responseCreate.status !== 201) throw new Error(responseCreate.status)
       const user = await responseCreate.json()
 
@@ -70,68 +78,24 @@ function CreateAccount() {
 
       <input type="submit" value="Create a New Account" />
       {!validEmail ? (
-        <p>No such user</p>
+        <p>Invalid email address</p>
       ) : (
         <p></p>
       )}
-      <p className='home'>Already have an account?</p>
-      <div className="home">
-        <Link to="/login">
-          <input type="submit" value="Login" />
-        </Link>
-      </div>
+      {emailUsed ? (
+        <p>Email address already in use.
+          <div>
+            <Link to="/login">
+              Log in?
+            </Link>
+          </div>
+        </p>
+      ) : (
+        <p></p>
+      )}
     </form>
 
   </div>;
 }
 
 export { CreateAccount };
-
-/*
-    try {
-        const add = await fetch(`${API}/api/users/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData),
-        });
-
-        const text = await add.text();
-        
-            // Try parsing manually (so it doesn't crash silently)
-            let data;
-            try {
-            data = JSON.parse(text);
-            } catch (err) {
-            console.error("JSON parse failed:", err);
-            }
-
-        if (add.status === 200) {
-            sessionStorage.setItem("name", data.user.firstName);
-            sessionStorage.setItem("username", data.user.username);
-            sessionStorage.setItem("m1", data.user.finished_m1);
-            sessionStorage.setItem("m2", data.user.finished_m2);
-            sessionStorage.setItem("m3", data.user.finished_m3);
-            sessionStorage.setItem("m4", data.user.finished_m4);
-            sessionStorage.setItem("m5", data.user.finished_m5);
-            sessionStorage.setItem("m6", data.user.finished_m6);
-
-            localStorage.setItem("token", data.token);
-
-            console.log("JWT Token:", data.token);
-
-    
-            window.location.href = "/map";
-        }
-        else if (add.status === 400) {
-            setMissing(true);
-            setNoUser(false);
-        }
-        else if (add.status === 404) {
-            window.location.href = "/createaccount";
-        }
-
-    } catch (err) {
-        c
-*/
